@@ -42,6 +42,8 @@ coverage/
 publish/
 AppPackages/
 BundleArtifacts/
+*.pubxml.user
+*.publishsettings
 
 # Generated files
 Generated Files/
