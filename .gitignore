@@ -1,0 +1,56 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+out/
+artifacts/
+
+# Visual Studio / VS Code
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider / ReSharper
+.idea/
+_ReSharper*/
+*.DotSettings.user
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+!**/packages/build/
+
+# Logs and diagnostics
+*.log
+*.tlog
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test and coverage output
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+
+# Publish and deployment output
+publish/
+AppPackages/
+BundleArtifacts/
+
+# Generated files
+Generated Files/
+*.g.cs
+*.cache
+
+# Local settings / secrets
+appsettings.Local.json
+secrets.json
+
+# Node modules (if added later for tooling)
+node_modules/
