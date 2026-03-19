@@ -56,3 +56,6 @@ secrets.json
 
 # Node modules (if added later for tooling)
 node_modules/
+
+config.json
+.github
