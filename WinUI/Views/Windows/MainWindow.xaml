@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="WinUI.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WinUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:WinUI.Views.UserControls"
+    mc:Ignorable="d"
+    Title="PlayPoint POS">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.RowSpan="4">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0.5" EndPoint="0.8,0.5">
+                    <GradientStop Color="#FF6B35" Offset="0.0" />
+                    <GradientStop Color="#FFE5D9" Offset="0.88" />
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <Border x:Name="PatternHost" Grid.RowSpan="4">
+            <Border.Background>
+                <ImageBrush
+                    ImageSource="ms-appx:///Assets/pattern.png"
+                    Stretch="None"
+                    AlignmentX="Left"
+                    AlignmentY="Top"
+                    />
+            </Border.Background>
+        </Border>
+
+        <Grid x:Name="TitleBarDragRegion" Grid.Row="0">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0.5" EndPoint="0.8,0.5">
+                    <GradientStop Color="#FF6B35" Offset="0.0" />
+                    <GradientStop Color="#FFE5D9" Offset="0.88" />
+                </LinearGradientBrush>
+            </Grid.Background>
+        </Grid>
+
+        <controls:HeaderControl 
+            Grid.Row="1" 
+            DataContext="{x:Bind ViewModel, Mode=OneWay}"
+            Visibility="{x:Bind GetVisibility(ViewModel.IsNavigationVisible), Mode=OneWay}" 
+            />
+
+        <controls:NavbarControl
+            Grid.Row="2" 
+            DataContext="{x:Bind ViewModel, Mode=OneWay}"
+            Visibility="{x:Bind GetVisibility(ViewModel.IsNavigationVisible), Mode=OneWay}" 
+            />
+
+        <Frame Grid.Row="3" x:Name="MainFrame" Navigated="MainFrame_Navigated" />
+
+        <controls:NotificationControl x:Name="NotificationToast"
+                 Grid.Row="3"
+                 HorizontalAlignment="Right"
+                 VerticalAlignment="Bottom"
+                 Margin="0,0,24,24"
+                 Width="360" />
+    </Grid>
+</Window>

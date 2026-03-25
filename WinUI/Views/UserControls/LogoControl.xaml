@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="WinUI.Views.UserControls.LogoControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WinUI.Views.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    PointerEntered="OnPointerEntered"
+    PointerExited="OnPointerExited"
+    >
+
+    <Viewbox Stretch="Uniform">
+
+        <Grid Width="150" Height="70">
+
+            <Border
+                x:Name="RootBorder"
+                CornerRadius="12"
+                Background="Transparent"
+                >
+
+                <Border.Shadow>
+                    <ThemeShadow />
+                </Border.Shadow>
+
+                <Border
+                    CornerRadius="12"
+                    Background="#FFFFFF"
+                    BorderBrush="#FFE5D9"
+                    BorderThickness="0.5"
+                    Padding="16"
+                    >
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Width="36" Height="36">
+
+                            <Border
+                                CornerRadius="8"
+                                Background="#FF6B35"
+                                >
+
+                                <Border.Shadow>
+                                    <ThemeShadow />
+                                </Border.Shadow>
+
+                                <Border Width="20" Height="20"
+                                        Background="#FFFFFF"
+                                        CornerRadius="5"
+                                        >
+
+                                    <Canvas x:Name="DotsCanvas"
+                                            RenderTransformOrigin="0.5,0.5"
+                                            >
+
+                                        <Canvas.RenderTransform>
+                                            <RotateTransform x:Name="DotsRotate" />
+                                        </Canvas.RenderTransform>
+
+                                        <Ellipse Width="4" Height="4"
+                                                 Fill="#FF6B35"
+                                                 Canvas.Left="3"
+                                                 Canvas.Top="3"
+                                                 />
+
+                                        <Ellipse Width="4" Height="4"
+                                                 Fill="#FF6B35"
+                                                 Canvas.Left="13"
+                                                 Canvas.Top="3"
+                                                 />
+
+                                        <Ellipse Width="4" Height="4"
+                                                 Fill="#FF6B35"
+                                                 Canvas.Left="3"
+                                                 Canvas.Top="13"
+                                                 />
+
+                                        <Ellipse Width="4" Height="4"
+                                                 Fill="#FF6B35"
+                                                 Canvas.Left="13"
+                                                 Canvas.Top="13"
+                                                 />
+
+                                        <Ellipse Width="4" Height="4"
+                                                 Fill="#FF6B35"
+                                                 Canvas.Left="13"
+                                                 Canvas.Top="13"
+                                                 />
+
+                                        <Ellipse Width="4" Height="4"
+                                                 Fill="#FF6B35"
+                                                 Canvas.Left="8"
+                                                 Canvas.Top="8"
+                                                 />
+
+                                    </Canvas>
+
+                                </Border>
+
+                            </Border>
+
+                        </Grid>
+
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Spacing="2"
+                            >
+
+                            <TextBlock
+                                Text="PlayPoint"
+                                FontSize="14"
+                                FontWeight="Bold"
+                                Foreground="#2D3748"
+                                HorizontalAlignment="Center"
+                                />
+
+                            <TextBlock
+                                Text="BOARDGAME POS"
+                                FontSize="8"
+                                FontWeight="SemiBold"
+                                Foreground="#A0AEC0" 
+                                HorizontalAlignment="Center"
+                                />
+
+                        </StackPanel>
+
+                    </Grid>
+
+                </Border>
+
+            </Border>
+            
+        </Grid>
+        
+    </Viewbox>
+</UserControl>

@@ -52,19 +52,21 @@ Dự án sử dụng [Conventional Commits](https://www.conventionalcommits.org/
 
 ## 🗂 Cấu trúc thư mục
 
+Dự án sử dụng Clean Architecture
+
 Dưới đây là cấu trúc thư mục chính của dự án PlayPointPOS:
 
 ```text
 PlayPointPOS/
-├── API/                # Dự án GraphQL API (ASP.NET Core)
+├── API/                # Dự án GraphQL API (ASP.NET Core), xử lý request từ WinUI
 │   ├── Program.cs
 │   ├── appsettings.json
 │   └── ...
-├── Application/        # Thư mục chứa các service, logic nghiệp vụ
+├── Application/        # Thư mục chứa các service, logic nghiệp vụ, chỉ phụ thuộc Domain
 │   └── ...
-├── Domain/             # Thư mục chứa các entity, domain model
+├── Domain/             # Thư mục chứa các entity, domain model, chứa logic cốt lõi nhất, không phụ thuộc layer nào khác
 │   └── ...
-├── Infrastructure/     # Thư mục chứa các lớp truy cập dữ liệu, repository
+├── Infrastructure/     # Thư mục chứa các lớp truy cập dữ liệu, repository, thực thi các Interface định nghĩa ở lớp trong
 │   └── ...
 ├── IntegrationTests/   # Thư mục chứa các test tích hợp
 │   └── ...

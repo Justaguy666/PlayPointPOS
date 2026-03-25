@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="WinUI.Views.UserControls.HeaderControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WinUI.Views.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:WinUI.Views.UserControls" 
+    mc:Ignorable="d">
+
+    <Grid Height="80" Padding="0">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0.5,1">
+                <GradientStop Color="#FFFF6B35" Offset="0.0"/>
+                <GradientStop Color="#FFFF8C61" Offset="1.0"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Doanh thu hôm nay (Today's Revenue) -->
+        <StackPanel Grid.Column="0" Margin="32,0,48,0" Padding="0,16" VerticalAlignment="Center">
+            <TextBlock Text="{Binding TodayRevenueLabelDisplay}" Foreground="White" FontSize="14" />
+            <TextBlock Text="{Binding TodayRevenue}" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,2,0,0" />
+        </StackPanel>
+
+        <!-- Đang hoạt động (Active Tables) -->
+        <StackPanel Grid.Column="1" Margin="0,0,48,0" Padding="0,16" VerticalAlignment="Center">
+            <TextBlock Text="{Binding ActiveTablesLabelDisplay}" Foreground="White" FontSize="14" />
+            <TextBlock Text="{Binding ActiveTables}" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,2,0,0" />
+        </StackPanel>
+
+        <!-- Đã đặt chỗ (Reserved Tables) -->
+        <StackPanel Grid.Column="2" Padding="0,16" VerticalAlignment="Center">
+            <TextBlock Text="{Binding ReservedTablesLabelDisplay}" Foreground="White" FontSize="14" />
+            <TextBlock Text="{Binding ReservedTables}" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,2,0,0" />
+        </StackPanel>
+
+        <!-- Logo (smaller size as per requirements) -->
+        <controls:LogoControl Grid.Column="4" Width="170" Height="60" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center" />
+
+    </Grid>
+</UserControl>
