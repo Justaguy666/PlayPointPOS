@@ -9,7 +9,8 @@
     xmlns:controls="using:WinUI.Views.UserControls"
     mc:Ignorable="d">
 
-    <Grid>
+    <ScrollViewer>
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -25,7 +26,7 @@
 
             <TextBlock
                 Text="{x:Bind ViewModel.WelcomeTextDisplay}"
-                FontSize="24"
+                FontSize="{StaticResource FontSizeExtraExtraExtraLarge}"
                 FontWeight="Light"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center" />
@@ -40,17 +41,18 @@
             Margin="0,0,0,16">
             <TextBlock
                 Text="{x:Bind ViewModel.AppVersionDisplay}"
-                FontSize="18"
-                FontWeight="Medium"
+                FontSize="{StaticResource FontSizeSmall}"
+                FontWeight="Normal"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center" />
 
             <TextBlock
                 Text="{x:Bind ViewModel.CopyrightDisplay}"
-                FontSize="18"
-                FontWeight="Normal"
+                FontSize="{StaticResource FontSizeMedium}"
+                FontWeight="Medium"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center" />
         </StackPanel>
     </Grid>
+    </ScrollViewer>
 </Page>

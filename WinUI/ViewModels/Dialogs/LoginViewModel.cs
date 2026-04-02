@@ -1,21 +1,20 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Application.Interfaces;
 using Application.Navigation;
 using Application.Navigation.Requests;
 using Application.Services;
+using Application.UseCases.Auth;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
+using WinUI.ViewModels;
 
 namespace WinUI.ViewModels.Dialogs;
 
-public partial class LoginViewModel : ObservableObject
+public partial class LoginViewModel : LocalizedViewModelBase
 {
-    private readonly ILocalizationService _loc;
     private readonly IDialogService _dialogService;
-    private readonly IRepository<Account> _accountRepo;
+    private readonly LoginUserUseCase _loginUseCase;
     private readonly INavigationService _navigationService;
     private readonly INotificationService _notificationService;
     private readonly MainViewModel _mainViewModel;
@@ -55,6 +54,9 @@ public partial class LoginViewModel : ObservableObject
     public partial string LoginButtonDisplay { get; set; } = string.Empty;
 
     [ObservableProperty]
+    public partial string CloseTooltipDisplay { get; set; } = string.Empty;
+
+    [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
     [NotifyPropertyChangedFor(nameof(CanLoginExecute))]
     [NotifyPropertyChangedFor(nameof(IsNotLoggingIn))]
@@ -87,33 +89,33 @@ public partial class LoginViewModel : ObservableObject
     }
 
     public LoginViewModel(
-        ILocalizationService loc,
+        ILocalizationService localizationService,
         IDialogService dialogService,
-        IRepository<Account> accountRepo,
+        LoginUserUseCase loginUseCase,
         INavigationService navigationService,
         INotificationService notificationService,
         MainViewModel mainViewModel)
+        : base(localizationService)
     {
-        _loc = loc;
         _dialogService = dialogService;
-        _accountRepo = accountRepo;
+        _loginUseCase = loginUseCase;
         _navigationService = navigationService;
         _notificationService = notificationService;
         _mainViewModel = mainViewModel;
 
-        _loc.LanguageChanged += UpdateTexts;
-        UpdateTexts();
+        RefreshLocalizedText();
     }
 
-    private void UpdateTexts()
+    protected override void RefreshLocalizedText()
     {
-        TitleDisplay = _loc.GetString("LoginDialogTitleText");
-        EmailLabelDisplay = _loc.GetString("LoginDialogEmailLabelText");
-        EmailPlaceholderDisplay = _loc.GetString("LoginDialogEmailPlaceholderText");
-        PasswordLabelDisplay = _loc.GetString("LoginDialogPasswordLabelText");
-        PasswordPlaceholderDisplay = _loc.GetString("LoginDialogPasswordPlaceholderText");
-        RememberMeLabelDisplay = _loc.GetString("LoginDialogRememberMeLabelText");
-        LoginButtonDisplay = _loc.GetString("LoginDialogLoginButtonText");
+        TitleDisplay = LocalizationService.GetString("LoginDialogTitleText");
+        EmailLabelDisplay = LocalizationService.GetString("LoginDialogEmailLabelText");
+        EmailPlaceholderDisplay = LocalizationService.GetString("LoginDialogEmailPlaceholderText");
+        PasswordLabelDisplay = LocalizationService.GetString("LoginDialogPasswordLabelText");
+        PasswordPlaceholderDisplay = LocalizationService.GetString("LoginDialogPasswordPlaceholderText");
+        RememberMeLabelDisplay = LocalizationService.GetString("LoginDialogRememberMeLabelText");
+        LoginButtonDisplay = LocalizationService.GetString("LoginDialogLoginButtonText");
+        CloseTooltipDisplay = LocalizationService.GetString("CloseTooltipText");
     }
 
     [RelayCommand(CanExecute = nameof(CanLogin))]
@@ -125,15 +127,12 @@ public partial class LoginViewModel : ObservableObject
 
         try
         {
-            var accounts = await _accountRepo.GetAllAsync();
-            var account = accounts.FirstOrDefault(a =>
-                a.Email.Equals(Email, StringComparison.OrdinalIgnoreCase) &&
-                a.PasswordHash == Password);
+            var result = await _loginUseCase.ExecuteAsync(Email, Password);
 
-            if (account != null)
+            if (result.Success)
             {
-                LoggedInAccount = account;
-                LoginSucceededInternal?.Invoke(account);
+                LoggedInAccount = result.Account;
+                LoginSucceededInternal?.Invoke(result.Account!);
                 CloseRequestedInternal?.Invoke();
 
                 // Navigate to Dashboard
@@ -142,14 +141,14 @@ public partial class LoginViewModel : ObservableObject
 
                 // Toast notification
                 await _notificationService.SendAsync(
-                    _loc.GetString("LoginSuccessTitle"),
-                    string.Format(_loc.GetString("LoginSuccessMessage"), account.Email),
+                    LocalizationService.GetString("LoginSuccessTitle"),
+                    string.Format(LocalizationService.GetString("LoginSuccessMessage"), result.Account!.Email),
                     NotificationType.Success);
             }
             else
             {
                 HasError = true;
-                ErrorMessage = _loc.GetString("LoginDialogErrorText");
+                ErrorMessage = result.Message ?? LocalizationService.GetString("LoginDialogErrorText");
             }
         }
         catch (Exception ex)
@@ -166,4 +165,10 @@ public partial class LoginViewModel : ObservableObject
         !IsLoggingIn &&
         !string.IsNullOrWhiteSpace(Email) &&
         !string.IsNullOrWhiteSpace(Password);
+
+    [RelayCommand]
+    private void Close()
+    {
+        CloseRequestedInternal?.Invoke();
+    }
 }

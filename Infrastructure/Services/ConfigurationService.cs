@@ -25,15 +25,18 @@ public class ConfigurationService : IConfigurationService
 
     public async Task LoadAsync()
     {
-        if (!File.Exists(_configFilePath)) return;
+        if (!File.Exists(_configFilePath))
+            return;
 
         try
         {
             var json = await File.ReadAllTextAsync(_configFilePath);
-            if (string.IsNullOrWhiteSpace(json)) return;
+            if (string.IsNullOrWhiteSpace(json))
+                return;
 
             var data = JsonSerializer.Deserialize<ConfigData>(json, _jsonOptions);
-            if (data == null) return;
+            if (data == null)
+                return;
 
             ServerAddress = data.ServerAddress ?? string.Empty;
             RememberMe = data.RememberMe;
@@ -45,7 +48,7 @@ public class ConfigurationService : IConfigurationService
         }
         catch
         {
-            // Config file corrupt — start fresh
+            // Config file corrupt - start fresh.
         }
     }
 
@@ -62,13 +65,13 @@ public class ConfigurationService : IConfigurationService
             RememberMe = rememberMe,
         };
 
-        var directory = Path.GetDirectoryName(_configFilePath);
+        string? directory = Path.GetDirectoryName(_configFilePath);
         if (!string.IsNullOrEmpty(directory))
         {
             Directory.CreateDirectory(directory);
         }
 
-        var json = JsonSerializer.Serialize(data, _jsonOptions);
+        string json = JsonSerializer.Serialize(data, _jsonOptions);
         await File.WriteAllTextAsync(_configFilePath, json);
     }
 

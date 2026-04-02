@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="WinUI.Views.UserControls.Dashboard.PopularCardControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:WinUI.ViewModels.UserControls.Dashboard"
+    mc:Ignorable="d">
+
+    <Border
+        Padding="24"
+        Background="{StaticResource WhiteBrush}"
+        BorderBrush="{StaticResource LightGrayBrush}"
+        BorderThickness="1"
+        CornerRadius="12"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch">
+        <StackPanel Spacing="16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" Spacing="4"
+                            VerticalAlignment="Center" >
+                    <PathIcon
+                        Width="24"
+                        Height="24"
+                        Data="{Binding TitleIconState, Converter={StaticResource IconConverter}}"
+                        Foreground="{StaticResource PrimaryOrangeBrush}"
+                        VerticalAlignment="Center" />
+                    <TextBlock
+                        FontSize="{StaticResource FontSizeMedium}"
+                        FontWeight="Bold"
+                        Foreground="{StaticResource PrimaryOrangeBrush}"
+                        Text="{Binding Title}"
+                        TextWrapping="NoWrap" 
+                        VerticalAlignment="Center" />
+                </StackPanel>
+
+                <Button
+                    Grid.Column="1"
+                    Width="Auto"
+                    Height="Auto"
+                    Padding="0"
+                    Background="{StaticResource TransparentBrush}"
+                    BorderBrush="{StaticResource TransparentBrush}"
+                    BorderThickness="1"
+                    Command="{Binding ShowMoreCommand}"
+                    CornerRadius="9999"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
+
+                    <Button.Resources>
+                        <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeBrush"/>
+                        <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeBrush"/>
+                        <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
+                        <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
+                    </Button.Resources>
+                    
+                    <PathIcon
+                        Width="24"
+                        Height="24"
+                        Data="{Binding ShowMoreIconState, Converter={StaticResource IconConverter}}"
+                        Foreground="{StaticResource DarkGrayBrush}"
+                        VerticalAlignment="Center" />
+                </Button>
+            </Grid>
+
+            <ItemsControl ItemsSource="{Binding Items}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:PopularCardItemViewModel">
+                        <Border
+                            Margin="0,0,0,12"
+                            Padding="16"
+                            Background="{StaticResource WhiteBrush}"
+                            BorderBrush="{StaticResource LighterGrayBrush}"
+                            BorderThickness="1"
+                            CornerRadius="12">
+                            <Grid ColumnSpacing="16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border
+                                    Width="32"
+                                    Height="32"
+                                    Background="{StaticResource DashboardStatCardIconBadgeBrush}"
+                                    CornerRadius="16"
+                                    VerticalAlignment="Center">
+                                    <TextBlock
+                                        FontSize="{StaticResource FontSizeLarge}"
+                                        FontWeight="Bold"
+                                        Foreground="{StaticResource PrimaryOrangeBrush}"
+                                        HorizontalAlignment="Center"
+                                        Text="{x:Bind Rank}"
+                                        VerticalAlignment="Center" />
+                                </Border>
+
+                                <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center">
+                                    <TextBlock
+                                        FontSize="{StaticResource FontSizeLarge}"
+                                        FontWeight="Bold"
+                                        Foreground="{StaticResource BlackBrush}"
+                                        Text="{x:Bind Name}"
+                                        TextWrapping="WrapWholeWords" />
+
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock
+                                            FontSize="{StaticResource FontSizeMedium}"
+                                            Foreground="{StaticResource DashboardMutedTextBrush}"
+                                            Text="{x:Bind ActivityText}" />
+                                        <TextBlock
+                                            FontSize="{StaticResource FontSizeMedium}"
+                                            Foreground="{StaticResource DashboardMutedTextBrush}"
+                                            Text="&#x2022;" />
+                                        <TextBlock
+                                            FontSize="{StaticResource FontSizeMedium}"
+                                            Foreground="{StaticResource DashboardMutedTextBrush}"
+                                            Text="{x:Bind AmountText}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Border>
+</UserControl>

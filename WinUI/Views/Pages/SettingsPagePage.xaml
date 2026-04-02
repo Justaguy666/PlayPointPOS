@@ -6,9 +6,103 @@
     xmlns:local="using:WinUI.Views.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:WinUI.ViewModels.Pages"
+    d:DataContext="{d:DesignInstance Type=vm:SettingsPageViewModel, IsDesignTimeCreatable=False}"
     mc:Ignorable="d">
 
-    <Grid>
+    <ScrollViewer>
+        <Grid Padding="24,36">
+            <Border
+                MaxWidth="880"
+                Padding="24"
+                Background="{StaticResource WhiteBrush}"
+                BorderBrush="{StaticResource LightGrayBrush}"
+                BorderThickness="1"
+                CornerRadius="12"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top">
+                <StackPanel Spacing="20">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="{x:Bind ViewModel.TitleDisplay, Mode=OneWay}"
+                                   FontSize="{StaticResource FontSizeExtraLarge}"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource PrimaryOrangeBrush}" />
+                        <TextBlock Text="{x:Bind ViewModel.DescriptionDisplay, Mode=OneWay}"
+                                   FontSize="{StaticResource FontSizeMedium}"
+                                   Foreground="{StaticResource DashboardMutedTextBrush}"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
 
-    </Grid>
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Spacing="8">
+                            <TextBlock Text="{x:Bind ViewModel.LanguageLabelDisplay, Mode=OneWay}"
+                                       FontWeight="SemiBold"
+                                       FontSize="{StaticResource LabelFontSize}"
+                                       Foreground="{StaticResource BlackBrush}" />
+                            <ComboBox ItemsSource="{x:Bind ViewModel.LanguageOptions, Mode=OneWay}"
+                                      DisplayMemberPath="DisplayName"
+                                      SelectedValuePath="Value"
+                                      SelectedValue="{x:Bind ViewModel.Language, Mode=TwoWay}"
+                                      FontSize="{StaticResource ValueFontSize}"
+                                      Padding="10,6"
+                                      BorderBrush="{StaticResource LightGrayBrush}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Spacing="8">
+                            <TextBlock Text="{x:Bind ViewModel.CurrencyLabelDisplay, Mode=OneWay}"
+                                       FontWeight="SemiBold"
+                                       FontSize="{StaticResource LabelFontSize}"
+                                       Foreground="{StaticResource BlackBrush}" />
+                            <ComboBox ItemsSource="{x:Bind ViewModel.CurrencyOptions, Mode=OneWay}"
+                                      DisplayMemberPath="DisplayName"
+                                      SelectedValuePath="Value"
+                                      SelectedValue="{x:Bind ViewModel.Currency, Mode=TwoWay}"
+                                      FontSize="{StaticResource ValueFontSize}"
+                                      Padding="10,6"
+                                      BorderBrush="{StaticResource LightGrayBrush}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Spacing="8">
+                            <TextBlock Text="{x:Bind ViewModel.TimeZoneLabelDisplay, Mode=OneWay}"
+                                       FontWeight="SemiBold"
+                                       FontSize="{StaticResource LabelFontSize}"
+                                       Foreground="{StaticResource BlackBrush}" />
+                            <ComboBox ItemsSource="{x:Bind ViewModel.TimeZoneOptions, Mode=OneWay}"
+                                      DisplayMemberPath="DisplayName"
+                                      SelectedValuePath="Value"
+                                      SelectedValue="{x:Bind ViewModel.TimeZone, Mode=TwoWay}"
+                                      FontSize="{StaticResource ValueFontSize}"
+                                      Padding="10,6"
+                                      BorderBrush="{StaticResource LightGrayBrush}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button Command="{x:Bind ViewModel.ApplyCommand, Mode=OneWay}"
+                                CornerRadius="7"
+                                Padding="24,10"
+                                FontSize="{StaticResource FontSizeMedium}"
+                                FontWeight="SemiBold"
+                                Foreground="{StaticResource WhiteBrush}"
+                                Background="{StaticResource OrangeFocusBrush}">
+                            <Button.Resources>
+                                <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
+                                <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush"/>
+                                <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
+                                <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
+                            </Button.Resources>
+                            <TextBlock Text="{x:Bind ViewModel.ApplyButtonDisplay, Mode=OneWay}" />
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
 </Page>

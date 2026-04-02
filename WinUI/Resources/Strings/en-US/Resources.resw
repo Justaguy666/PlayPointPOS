@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -120,6 +120,33 @@
   <data name="WelcomeText" xml:space="preserve">
     <value>Get started with managing your board game shop today</value>
   </data>
+  <data name="AppDisplayNameText" xml:space="preserve">
+    <value>PlayPoint POS</value>
+  </data>
+  <data name="BrandNameText" xml:space="preserve">
+    <value>PlayPoint</value>
+  </data>
+  <data name="BrandSubtitleText" xml:space="preserve">
+    <value>BOARDGAME POS</value>
+  </data>
+  <data name="CloseTooltipText" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="DialogErrorTitleText" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="DialogOkButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="ValueSeparatorText" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="NotificationPlaceholderTitleText" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="NotificationPlaceholderMessageText" xml:space="preserve">
+    <value>Message description goes here...</value>
+  </data>
   <data name="AppVersionText" xml:space="preserve">
     <value>Version {0}</value>
   </data>
@@ -138,130 +165,412 @@
   <data name="RegisterMenuItemText" xml:space="preserve">
     <value>Register</value>
   </data>
-    <data name="ConfigDialogTitleText" xml:space="preserve">
+  <data name="ConfigDialogTitleText" xml:space="preserve">
         <value>Configuration</value>
     </data>
-    <data name="ConfigDialogServerAddressLabelText" xml:space="preserve">
+  <data name="ConfigDialogServerAddressLabelText" xml:space="preserve">
         <value>Server address</value>
     </data>
-    <data name="ConfigDialogServerAddressPlaceholderText" xml:space="preserve">
+  <data name="ConfigDialogServerAddressPlaceholderText" xml:space="preserve">
         <value>Server...</value>
     </data>
-    <data name="ConfigDialogApiKeyLabelText" xml:space="preserve">
+  <data name="ConfigDialogApiKeyLabelText" xml:space="preserve">
         <value>API key</value>
     </data>
-    <data name="ConfigDialogApiKeyPlaceholderText" xml:space="preserve">
+  <data name="ConfigDialogApiKeyPlaceholderText" xml:space="preserve">
         <value>Key...</value>
     </data>
-    <data name="ConfigDialogRememberMeLabelText" xml:space="preserve">
+  <data name="ConfigDialogRememberMeLabelText" xml:space="preserve">
         <value>Remember me</value>
     </data>
-    <data name="ConfigDialogSaveButtonText" xml:space="preserve">
+  <data name="ConfigDialogSaveButtonText" xml:space="preserve">
         <value>Save</value>
     </data>
-    <data name="LoginDialogTitleText" xml:space="preserve">
+  <data name="LoginDialogTitleText" xml:space="preserve">
         <value>Login</value>
     </data>
-    <data name="LoginDialogEmailLabelText" xml:space="preserve">
+  <data name="LoginDialogEmailLabelText" xml:space="preserve">
         <value>Email</value>
     </data>
-    <data name="LoginDialogEmailPlaceholderText" xml:space="preserve">
+  <data name="LoginDialogEmailPlaceholderText" xml:space="preserve">
         <value>Email...</value>
     </data>
-    <data name="LoginDialogPasswordLabelText" xml:space="preserve">
+  <data name="LoginDialogPasswordLabelText" xml:space="preserve">
         <value>Password</value>
     </data>
-    <data name="LoginDialogPasswordPlaceholderText" xml:space="preserve">
+  <data name="LoginDialogPasswordPlaceholderText" xml:space="preserve">
         <value>Password...</value>
     </data>
-    <data name="LoginDialogRememberMeLabelText" xml:space="preserve">
+  <data name="LoginDialogRememberMeLabelText" xml:space="preserve">
         <value>Remember me</value>
     </data>
-    <data name="LoginDialogLoginButtonText" xml:space="preserve">
+  <data name="LoginDialogLoginButtonText" xml:space="preserve">
         <value>Login</value>
     </data>
-    <data name="LoginDialogErrorText" xml:space="preserve">
+  <data name="LoginDialogErrorText" xml:space="preserve">
         <value>Invalid Email or password</value>
     </data>
-    <data name="LoginSuccessTitle" xml:space="preserve">
+  <data name="LoginSuccessTitle" xml:space="preserve">
         <value>Login successful</value>
     </data>
-	<data name="LoginSuccessMessage" xml:space="preserve">
+  <data name="LoginSuccessMessage" xml:space="preserve">
         <value>Welcome {0}!</value>
     </data>
-	<data name="RegisterDialogTitleText" xml:space="preserve">
+  <data name="RegisterDialogTitleText" xml:space="preserve">
         <value>Register</value>
     </data>
-	<data name="RegisterDialogEmailLabelText" xml:space="preserve">
+  <data name="RegisterDialogEmailLabelText" xml:space="preserve">
 		<value>Email</value>
 	</data>
-	<data name="RegisterDialogEmailPlaceholderText" xml:space="preserve">
+  <data name="RegisterDialogEmailPlaceholderText" xml:space="preserve">
 		<value>example@gmail.com...</value>
 	</data>
-	<data name="RegisterDialogPasswordLabelText" xml:space="preserve">
+  <data name="RegisterDialogPasswordLabelText" xml:space="preserve">
 		<value>Password</value>
 	</data>
-	<data name="RegisterDialogPasswordPlaceHolderText" xml:space="preserve">
+  <data name="RegisterDialogPasswordPlaceHolderText" xml:space="preserve">
 		<value>Password...</value>
 	</data>
-	<data name="RegisterDialogConfirmPasswordLabelText" xml:space="preserve">
+  <data name="RegisterDialogConfirmPasswordLabelText" xml:space="preserve">
 		<value>Confirm Password</value>
 	</data>
-	<data name="RegisterDialogConfirmPasswordPlaceholderText" xml:space="preserve">
+  <data name="RegisterDialogConfirmPasswordPlaceholderText" xml:space="preserve">
 		<value>Confirm Password...</value>
 	</data>
-	<data name="RegisterDialogOTPLabelText" xml:space="preserve">
+  <data name="RegisterDialogOTPLabelText" xml:space="preserve">
 		<value>OTP</value>
 	</data>
-	<data name="RegisterDialogOTPPlaceHolderText" xml:space="preserve">
+  <data name="RegisterDialogOTPPlaceHolderText" xml:space="preserve">
 		<value>OTP Code...</value>
 	</data>
-	<data name="RegisterDialogResetButtonText" xml:space="preserve">
+  <data name="RegisterDialogResetButtonText" xml:space="preserve">
         <value>Reset</value>
     </data>
-	<data name="RegisterDialogCreateButtonText" xml:space="preserve">
+  <data name="RegisterDialogCreateButtonText" xml:space="preserve">
         <value>Create</value>
     </data>
-	<data name="RegisterDialogErrorText">
-		<value>Registration failed. Please check your inputs and try again!</value>
-	</data>
-	<data name="RegisterDialogPasswordMismatchText" xml:space="preserve">
+  <data name="RegisterDialogErrorText">
+    <value>Registration failed. Please check your inputs and try again!</value>
+  </data>
+  <data name="RegisterDialogPasswordMismatchText" xml:space="preserve">
 		<value>Confirm password doesn't match!</value>
 	</data>
-	<data name="RegisterSuccessTitle" xml:space="preserve">
+  <data name="RegisterSuccessTitle" xml:space="preserve">
         <value>Register successful</value>
     </data>
-	<data name="RegisterSuccessMessage" xml:space="preserve">
+  <data name="RegisterSuccessMessage" xml:space="preserve">
         <value>Welcome {0}!</value>
     </data>
-    <data name="HeaderTodayRevenueLabel" xml:space="preserve">
+  <data name="HeaderTodayRevenueLabel" xml:space="preserve">
         <value>Today's Revenue</value>
     </data>
-    <data name="HeaderActiveTablesLabel" xml:space="preserve">
+  <data name="HeaderActiveTablesLabel" xml:space="preserve">
         <value>Active Tables</value>
     </data>
-    <data name="HeaderReservedTablesLabel" xml:space="preserve">
+  <data name="HeaderReservedTablesLabel" xml:space="preserve">
         <value>Reserved Tables</value>
     </data>
-    <data name="NavDashboardText" xml:space="preserve">
+  <data name="NavDashboardText" xml:space="preserve">
         <value>Dashboard</value>
     </data>
-    <data name="NavTableText" xml:space="preserve">
+  <data name="NavTableText" xml:space="preserve">
         <value>Tables</value>
     </data>
-    <data name="NavGameText" xml:space="preserve">
+  <data name="NavGameText" xml:space="preserve">
         <value>Games</value>
     </data>
-    <data name="NavFoodText" xml:space="preserve">
+  <data name="NavFoodText" xml:space="preserve">
         <value>Food &amp; Drinks</value>
     </data>
-    <data name="NavMemberText" xml:space="preserve">
+  <data name="NavMemberText" xml:space="preserve">
         <value>Members</value>
     </data>
-    <data name="NavHistoryText" xml:space="preserve">
+  <data name="NavHistoryText" xml:space="preserve">
         <value>Transaction History</value>
     </data>
-    <data name="NavSettingsText" xml:space="preserve">
+  <data name="NavSettingsText" xml:space="preserve">
         <value>Settings</value>
     </data>
+  <data name="TodayRevenueStatCardTitle" xml:space="preserve">
+    <value>Today's revenue</value>
+  </data>
+  <data name="TodayRevenueStatCardValueText" xml:space="preserve">
+    <value>12,450,000 đ</value>
+  </data>
+  <data name="TodayRevenueStatCardTrendText" xml:space="preserve">
+    <value>↑ 15.5%</value>
+  </data>
+  <data name="TodayRevenueStatCardComparisonText" xml:space="preserve">
+    <value>vs yesterday</value>
+  </data>
+  <data name="TodayGameSessionStatCardTitle" xml:space="preserve">
+    <value>Game sessions</value>
+  </data>
+  <data name="TodayGameSessionStatCardValueText" xml:space="preserve">
+    <value>234</value>
+  </data>
+  <data name="TodayGameSessionStatCardTrendText" xml:space="preserve">
+    <value>↑ 12.3%</value>
+  </data>
+  <data name="TodayGameSessionStatCardComparisonText" xml:space="preserve">
+    <value>vs yesterday</value>
+  </data>
+  <data name="TodayCustomerStatCardTitle" xml:space="preserve">
+    <value>Customers</value>
+  </data>
+  <data name="TodayCustomerStatCardValueText" xml:space="preserve">
+    <value>156</value>
+  </data>
+  <data name="TodayCustomerStatCardTrendText" xml:space="preserve">
+    <value>↓ 0.36%</value>
+  </data>
+  <data name="TodayCustomerStatCardComparisonText" xml:space="preserve">
+    <value>vs yesterday</value>
+  </data>
+  <data name="TodayProductStatCardTitle" xml:space="preserve">
+    <value>Food &amp; drinks</value>
+  </data>
+  <data name="TodayProductStatCardValueText" xml:space="preserve">
+    <value>5,680,000 đ</value>
+  </data>
+  <data name="TodayProductStatCardTrendText" xml:space="preserve">
+    <value>↑ 18.7%</value>
+  </data>
+  <data name="TodayProductStatCardComparisonText" xml:space="preserve">
+    <value>vs yesterday</value>
+  </data>
+  <data name="TrendingListControlTitle" xml:space="preserve">
+    <value>Trendings</value>
+  </data>
+  <data name="TrendingListControlGameLabel" xml:space="preserve">
+    <value>Game</value>
+  </data>
+  <data name="TrendingListControlGameName" xml:space="preserve">
+    <value>Ma s&#xF3;i</value>
+  </data>
+  <data name="TrendingListControlFoodLabel" xml:space="preserve">
+    <value>Food</value>
+  </data>
+  <data name="TrendingListControlFoodName" xml:space="preserve">
+    <value>M&#x1EF3; cay</value>
+  </data>
+  <data name="TrendingListControlDrinkLabel" xml:space="preserve">
+    <value>Drink</value>
+  </data>
+  <data name="TrendingListControlDrinkName" xml:space="preserve">
+    <value>B&#x1EA1;c x&#x1EC9;u</value>
+  </data>
+  <data name="QuickStatsControlTitle" xml:space="preserve">
+    <value>Quick Stats</value>
+  </data>
+  <data name="QuickStatsControlAverageHourPerTable" xml:space="preserve">
+    <value>Avg hour per table</value>
+  </data>
+  <data name="QuickStatsControlAverageRevenuePerInvoice" xml:space="preserve">
+    <value>Avg revenue per bill</value>
+  </data>
+  <data name="QuickStatsControlComebackPercent" xml:space="preserve">
+    <value>Return rate</value>
+  </data>
+  <data name="QuickStatsControlTableCoveragePerHourPercent" xml:space="preserve">
+    <value>Table usage rate</value>
+  </data>
+  <data name="QuickStatsControlNewMemberPerMonth" xml:space="preserve">
+    <value>New members/month</value>
+  </data>
+  <data name="GoalProgressCardTitle" xml:space="preserve">
+    <value>This month's targets</value>
+  </data>
+  <data name="PopularGamesCardTitle" xml:space="preserve">
+    <value>Top 5 popular games</value>
+  </data>
+  <data name="PopularFoodsCardTitle" xml:space="preserve">
+    <value>Top 5 popular foods</value>
+  </data>
+  <data name="PopularDrinksCardTitle" xml:space="preserve">
+    <value>Top 5 popular drinks</value>
+  </data>
+  <data name="PopularCardGameMetricFormat" xml:space="preserve">
+    <value>{0:N0} plays</value>
+  </data>
+  <data name="PopularCardFoodMetricFormat" xml:space="preserve">
+    <value>{0:N0} orders</value>
+  </data>
+  <data name="PopularCardDrinkMetricFormat" xml:space="preserve">
+    <value>{0:N0} orders</value>
+  </data>
+  <data name="GoalProgressCardRevenueTargetLabel" xml:space="preserve">
+    <value>Revenue</value>
+  </data>
+  <data name="GoalProgressCardCustomerTargetLabel" xml:space="preserve">
+    <value>New customers</value>
+  </data>
+  <data name="GoalProgressCardMemberTargetLabel" xml:space="preserve">
+    <value>New members</value>
+  </data>
+  <data name="RevenueChartCardTitle" xml:space="preserve">
+    <value>Revenue trends</value>
+  </data>
+  <data name="RevenueChartCardRevenueLabel" xml:space="preserve">
+    <value>Revenue</value>
+  </data>
+  <data name="RevenueChartCardCustomerLabel" xml:space="preserve">
+    <value>Customers</value>
+  </data>
+  <data name="RevenueChartCardSubtitleLastWeek" xml:space="preserve">
+    <value>Last 7 days</value>
+  </data>
+  <data name="RevenueChartCardSubtitleLast24Hours" xml:space="preserve">
+    <value>Last 24 hours</value>
+  </data>
+  <data name="RevenueChartCardSubtitleLast30Days" xml:space="preserve">
+    <value>Last 30 days</value>
+  </data>
+  <data name="RevenueChartCardSubtitleLast3Months" xml:space="preserve">
+    <value>Last 3 months</value>
+  </data>
+  <data name="RevenueChartCardSubtitleLast12Months" xml:space="preserve">
+    <value>Last 12 months</value>
+  </data>
+  <data name="RevenueChartCardTodayLabel" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="RevenueChartCardWeekLabel" xml:space="preserve">
+    <value>This week</value>
+  </data>
+  <data name="RevenueChartCardMonthLabel" xml:space="preserve">
+    <value>This month</value>
+  </data>
+  <data name="RevenueChartCardQuarterLabel" xml:space="preserve">
+    <value>This quarter</value>
+  </data>
+  <data name="RevenueChartCardYearLabel" xml:space="preserve">
+    <value>This year</value>
+  </data>
+  <data name="RevenueChartCardCustomerValueFormat" xml:space="preserve">
+    <value>{0:0} customers</value>
+  </data>
+  <data name="RevenueChartCardRevenueValueFormatWhole" xml:space="preserve">
+    <value>{0:0}M đ</value>
+  </data>
+  <data name="RevenueChartCardRevenueValueFormatFractional" xml:space="preserve">
+    <value>{0:0.#}M đ</value>
+  </data>
+  <data name="RevenueChartCardHourValueFormat" xml:space="preserve">
+    <value>{0:00}h</value>
+  </data>
+  <data name="RevenueChartCardDayMonShort" xml:space="preserve">
+    <value>Mon</value>
+  </data>
+  <data name="RevenueChartCardDayTueShort" xml:space="preserve">
+    <value>Tue</value>
+  </data>
+  <data name="RevenueChartCardDayWedShort" xml:space="preserve">
+    <value>Wed</value>
+  </data>
+  <data name="RevenueChartCardDayThuShort" xml:space="preserve">
+    <value>Thu</value>
+  </data>
+  <data name="RevenueChartCardDayFriShort" xml:space="preserve">
+    <value>Fri</value>
+  </data>
+  <data name="RevenueChartCardDaySatShort" xml:space="preserve">
+    <value>Sat</value>
+  </data>
+  <data name="RevenueChartCardDaySunShort" xml:space="preserve">
+    <value>Sun</value>
+  </data>
+  <data name="RevenueChartCardMonthWeek1" xml:space="preserve">
+    <value>Week 1</value>
+  </data>
+  <data name="RevenueChartCardMonthWeek2" xml:space="preserve">
+    <value>Week 2</value>
+  </data>
+  <data name="RevenueChartCardMonthWeek3" xml:space="preserve">
+    <value>Week 3</value>
+  </data>
+  <data name="RevenueChartCardMonthWeek4" xml:space="preserve">
+    <value>Week 4</value>
+  </data>
+  <data name="RevenueChartCardQuarterMonth1" xml:space="preserve">
+    <value>M1</value>
+  </data>
+  <data name="RevenueChartCardQuarterMonth2" xml:space="preserve">
+    <value>M2</value>
+  </data>
+  <data name="RevenueChartCardQuarterMonth3" xml:space="preserve">
+    <value>M3</value>
+  </data>
+  <data name="RevenueChartCardYearJanShort" xml:space="preserve">
+    <value>Jan</value>
+  </data>
+  <data name="RevenueChartCardYearMarShort" xml:space="preserve">
+    <value>Mar</value>
+  </data>
+  <data name="RevenueChartCardYearMayShort" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="RevenueChartCardYearJulShort" xml:space="preserve">
+    <value>Jul</value>
+  </data>
+  <data name="RevenueChartCardYearSepShort" xml:space="preserve">
+    <value>Sep</value>
+  </data>
+  <data name="RevenueChartCardYearNovShort" xml:space="preserve">
+    <value>Nov</value>
+  </data>
+  <data name="DashboardHourValueFormat" xml:space="preserve">
+    <value>{0:0.#} h</value>
+  </data>
+  <data name="DashboardPercentValueFormat" xml:space="preserve">
+    <value>{0:0.#}%</value>
+  </data>
+  <data name="DashboardSignedNumberValueFormat" xml:space="preserve">
+    <value>{0:+#;-#;0}</value>
+  </data>
+  <data name="DashboardCompletionValueFormat" xml:space="preserve">
+    <value>{0:0}% completed</value>
+  </data>
+  <data name="SettingsPageLocalizationTitle" xml:space="preserve">
+    <value>Localization settings</value>
+  </data>
+  <data name="SettingsPageLocalizationDescription" xml:space="preserve">
+    <value>Adjust language, currency, and timezone independently. Dashboard values update immediately.</value>
+  </data>
+  <data name="SettingsPageLanguageLabel" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="SettingsPageCurrencyLabel" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="SettingsPageTimeZoneLabel" xml:space="preserve">
+    <value>Timezone</value>
+  </data>
+  <data name="SettingsPageApplyButton" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="LocalizationLanguageEnglishOptionText" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="LocalizationLanguageVietnameseOptionText" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="LocalizationCurrencyVndOptionText" xml:space="preserve">
+    <value>Vietnamese đồng (đ)</value>
+  </data>
+  <data name="LocalizationCurrencyUsdOptionText" xml:space="preserve">
+    <value>US dollar ($)</value>
+  </data>
+  <data name="LocalizationTimezoneMinus5OptionText" xml:space="preserve">
+    <value>UTC-05:00</value>
+  </data>
+  <data name="LocalizationTimezoneUtcOptionText" xml:space="preserve">
+    <value>UTC+00:00</value>
+  </data>
+  <data name="LocalizationTimezonePlus7OptionText" xml:space="preserve">
+    <value>UTC+07:00</value>
+  </data>
+  <data name="LocalizationTimezonePlus9OptionText" xml:space="preserve">
+    <value>UTC+09:00</value>
+  </data>
 </root>

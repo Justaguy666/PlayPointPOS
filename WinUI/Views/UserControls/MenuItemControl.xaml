@@ -12,44 +12,43 @@
             Width="230" Height="60"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
-            Background="#FFF8F0"
-            Foreground="#FF6B35"
-            BorderBrush="#FF8C61"
+            Background="{StaticResource OrangePeachLightBrush}"
+            Foreground="{StaticResource PrimaryOrangeBrush}"
+            BorderBrush="{StaticResource OrangeLightVariantBrush}"
             BorderThickness="1"
             CornerRadius="12"
             Margin="0,8"
             IsEnabled="{x:Bind IsEnabled, Mode=OneWay}"
             Command="{x:Bind Command, Mode=OneWay}"
             CommandParameter="{x:Bind CommandParameter, Mode=OneWay}"
-            >
+            PointerEntered="RootButton_PointerEntered"
+            PointerExited="RootButton_PointerExited">
 
         <Button.Resources>
-            <!-- Override Hover -->
-            <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#FF6B35" />
-            <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#FFF8F0" />
-            <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#FF8C61" />
-
-            <!-- Override Pressed -->
-            <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#E55A2B" />
-            <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#FFF8F0" />
+            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeBrush" />
+            <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="OrangePeachLightBrush" />
+            <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="OrangeLightVariantBrush" />
+            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkBrush" />
+            <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="OrangePeachLightBrush" />
         </Button.Resources>
 
         <StackPanel Orientation="Horizontal"
                     Spacing="16"
                     >
 
-            <FontIcon Glyph="{x:Bind IconGlyph, Mode=OneWay}" 
-                      FontSize="22"
-                      FontWeight="SemiBold"
-                      />
+            <PathIcon x:Name="IconElement"
+                      Width="24" Height="24"
+                      Foreground="{StaticResource PrimaryOrangeBrush}"
+                      VerticalAlignment="Center"
+                      Data="{x:Bind IconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
 
-            <TextBlock Text="{x:Bind Text, Mode=OneWay}" 
+            <TextBlock x:Name="TextElement"
+                       Text="{x:Bind Text, Mode=OneWay}" 
                        VerticalAlignment="Center"
-                       FontSize="20"
+                       FontSize="{StaticResource FontSizeExtraLarge}"
                        FontWeight="SemiBold"
-                       />
-            
+                       Foreground="{StaticResource PrimaryOrangeBrush}" />
+
         </StackPanel>
-        
     </Button>
 </UserControl>

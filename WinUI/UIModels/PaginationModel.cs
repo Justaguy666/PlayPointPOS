@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WinUI.UIModels
+namespace WinUI.UIModels;
+
+internal class PaginationModel
 {
-    internal class PaginationModel
-    {
-    }
 }

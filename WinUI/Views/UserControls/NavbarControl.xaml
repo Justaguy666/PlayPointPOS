@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <UserControl
     x:Class="WinUI.Views.UserControls.NavbarControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -16,7 +16,7 @@
         <converters:DivideByCountConverter x:Key="DivideByCountConverter" />
     </UserControl.Resources>
 
-    <Grid x:Name="NavbarGrid" Background="#FFFFFF" Height="64" SizeChanged="NavbarGrid_SizeChanged">
+    <Grid x:Name="NavbarGrid" Background="{StaticResource WhiteBrush}" Height="64" SizeChanged="NavbarGrid_SizeChanged">
 
         <ItemsRepeater x:Name="NavRepeater"
                        ItemsSource="{Binding NavigationItems}"
@@ -33,7 +33,7 @@
             <ItemsRepeater.ItemTemplate>
                 <DataTemplate>
                     <Button Click="OnNavigateClicked"
-                            Background="Transparent"
+                            Background="{StaticResource TransparentBrush}"
                             BorderThickness="0"
                             Padding="0"
                             Height="64"
@@ -43,10 +43,10 @@
                             CornerRadius="0">
 
                         <Button.Resources>
-                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#F2F2F2" />
-                            <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#E6E6E6" />
-                            <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#A0AEC0" />
-                            <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#A0AEC0" />
+                            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="VeryLightGrayBrush" />
+                            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="LighterGrayBrush" />
+                            <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="DarkGrayBrush" />
+                            <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="DarkGrayBrush" />
                         </Button.Resources>
 
                         <Grid HorizontalAlignment="Stretch"
@@ -62,13 +62,13 @@
                                         Spacing="8"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center">
-                                <FontIcon Glyph="{Binding IconGlyph}"
-                                          FontSize="16"
-                                          FontWeight="SemiBold"
+                                <PathIcon Width="20"
+                                          Height="20"
+                                          Data="{Binding IconState, Converter={StaticResource IconConverter}}"
                                           Foreground="{Binding IsSelected, Converter={StaticResource BoolToOrangeBrushConverter}}" />
 
                                 <TextBlock Text="{Binding Label}"
-                                           FontSize="16"
+                                           FontSize="{StaticResource FontSizeMedium}"
                                            FontWeight="SemiBold"
                                            Foreground="{Binding IsSelected, Converter={StaticResource BoolToOrangeBrushConverter}}"
                                            Visibility="{Binding IsWideEnough, ElementName=RootNavbar, Converter={StaticResource BoolToVisible}}"/>
@@ -76,7 +76,7 @@
 
                             <Border Grid.Row="1"
                                     Height="3"
-                                    Background="#FF6B35"
+                                    Background="{StaticResource PrimaryOrangeBrush}"
                                     VerticalAlignment="Bottom"
                                     Visibility="{Binding IsSelected, Converter={StaticResource BoolToVisible}}" />
                         </Grid>
@@ -85,7 +85,7 @@
             </ItemsRepeater.ItemTemplate>
         </ItemsRepeater>
 
-        <Border BorderBrush="#EAEAEA" BorderThickness="0,0,0,1" VerticalAlignment="Bottom" />
+        <Border BorderBrush="{StaticResource LighterGrayBrush}" BorderThickness="0,0,0,1" VerticalAlignment="Bottom" />
 
     </Grid>
 </UserControl>

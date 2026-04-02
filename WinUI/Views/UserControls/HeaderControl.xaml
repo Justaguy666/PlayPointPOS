@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <UserControl
     x:Class="WinUI.Views.UserControls.HeaderControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -11,10 +11,7 @@
 
     <Grid Height="80" Padding="0">
         <Grid.Background>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0.5,1">
-                <GradientStop Color="#FFFF6B35" Offset="0.0"/>
-                <GradientStop Color="#FFFF8C61" Offset="1.0"/>
-            </LinearGradientBrush>
+            <StaticResource ResourceKey="HeaderGradientBrush" />
         </Grid.Background>
         
         <Grid.ColumnDefinitions>
@@ -25,26 +22,29 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <!-- Doanh thu hôm nay (Today's Revenue) -->
+        <!-- Today's Revenue -->
         <StackPanel Grid.Column="0" Margin="32,0,48,0" Padding="0,16" VerticalAlignment="Center">
-            <TextBlock Text="{Binding TodayRevenueLabelDisplay}" Foreground="White" FontSize="14" />
-            <TextBlock Text="{Binding TodayRevenue}" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,2,0,0" />
+            <TextBlock Text="{Binding TodayRevenueLabelDisplay}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeMedium}" />
+            <TextBlock Text="{Binding TodayRevenue}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeExtraExtraExtraLarge}" FontWeight="Bold" Margin="0,2,0,0" />
         </StackPanel>
 
-        <!-- Đang hoạt động (Active Tables) -->
+        <!-- Active Tables -->
         <StackPanel Grid.Column="1" Margin="0,0,48,0" Padding="0,16" VerticalAlignment="Center">
-            <TextBlock Text="{Binding ActiveTablesLabelDisplay}" Foreground="White" FontSize="14" />
-            <TextBlock Text="{Binding ActiveTables}" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,2,0,0" />
+            <TextBlock Text="{Binding ActiveTablesLabelDisplay}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeMedium}" />
+            <TextBlock Text="{Binding ActiveTables}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeExtraExtraExtraLarge}" FontWeight="Bold" Margin="0,2,0,0" />
         </StackPanel>
 
-        <!-- Đã đặt chỗ (Reserved Tables) -->
+        <!-- Reserved Tables -->
         <StackPanel Grid.Column="2" Padding="0,16" VerticalAlignment="Center">
-            <TextBlock Text="{Binding ReservedTablesLabelDisplay}" Foreground="White" FontSize="14" />
-            <TextBlock Text="{Binding ReservedTables}" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,2,0,0" />
+            <TextBlock Text="{Binding ReservedTablesLabelDisplay}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeMedium}" />
+            <TextBlock Text="{Binding ReservedTables}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeExtraExtraExtraLarge}" FontWeight="Bold" Margin="0,2,0,0" />
         </StackPanel>
 
-        <!-- Logo (smaller size as per requirements) -->
-        <controls:LogoControl Grid.Column="4" Width="170" Height="60" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center" />
-
+        <!-- Logo -->
+        <controls:LogoControl Grid.Column="4" 
+                              Width="170" Height="60" 
+                              Margin="0,0,20,0" 
+                              HorizontalAlignment="Right" 
+                              VerticalAlignment="Center" />
     </Grid>
 </UserControl>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:color="using:Windows.UI">
+
+    <!-- Primary Brand Colors -->
+    <color:Color x:Key="PrimaryOrange">#FF6B35</color:Color>
+    <color:Color x:Key="PrimaryOrangeDark">#E55A1F</color:Color>
+    <color:Color x:Key="PrimaryOrangeDarker">#CC4D1A</color:Color>
+    <color:Color x:Key="PrimaryOrangeLight">#FFB499</color:Color>
+    <color:Color x:Key="PrimaryOrangeLighter">#FFB499</color:Color>
+    <color:Color x:Key="OrangeFocus">#FF7A30</color:Color>
+    <color:Color x:Key="OrangeLightVariant">#FF8C61</color:Color>
+    <color:Color x:Key="OrangePeachLight">#FFF8F0</color:Color>
+
+    <!-- Neutral Colors -->
+    <color:Color x:Key="TransparentColor">#00FFFFFF</color:Color>
+    <color:Color x:Key="White">#FFFFFF</color:Color>
+    <color:Color x:Key="Black">#1F1F1F</color:Color>
+    <color:Color x:Key="LightGray">#D8D8D8</color:Color>
+    <color:Color x:Key="VeryLightGray">#FAFAFA</color:Color>
+    <color:Color x:Key="AlmostWhiteGray">#F3F4F6</color:Color>
+    <color:Color x:Key="LighterGray">#E5E7EB</color:Color>
+    <color:Color x:Key="MediumDarkGray">#9CA3AF</color:Color>
+    <color:Color x:Key="MediumGray">#B3B3B3</color:Color>
+    <color:Color x:Key="PlaceholderGray">#888888</color:Color>
+    <color:Color x:Key="DarkGray">#555555</color:Color>
+    <color:Color x:Key="SecondaryGray">#A0AEC0</color:Color>
+    <color:Color x:Key="TitleBarColor">#2D3748</color:Color>
+    <color:Color x:Key="TitleBarButtonColor">#2D3748</color:Color>
+    <color:Color x:Key="TitleBarButtonHover">#222D3748</color:Color>
+    <color:Color x:Key="TitleBarButtonPressed">#442D3748</color:Color>
+
+    <!-- Status Colors -->
+    <color:Color x:Key="ErrorRed">#DC2626</color:Color>
+    <color:Color x:Key="ErrorRedLight">#FEE2E2</color:Color>
+    <color:Color x:Key="SuccessGreen">#10B981</color:Color>
+    <color:Color x:Key="SuccessGreenLight">#D1FAE5</color:Color>
+    <color:Color x:Key="WarningAmber">#F59E0B</color:Color>
+    <color:Color x:Key="WarningAmberLight">#FEF3C7</color:Color>
+    <color:Color x:Key="InfoBlue">#3B82F6</color:Color>
+    <color:Color x:Key="InfoBlueLight">#DBEAFE</color:Color>
+    <color:Color x:Key="DashboardMutedText">#718096</color:Color>
+    <color:Color x:Key="DashboardTrendPositive">#48BB78</color:Color>
+    <color:Color x:Key="DashboardTrendNegative">#F56565</color:Color>
+    <color:Color x:Key="DashboardStatCardIconBadge">#21FF6B35</color:Color>
+    <color:Color x:Key="DashboardStatCardRevenueBorder">#FFE5D9</color:Color>
+    <color:Color x:Key="DashboardStatCardCustomerBorder">#C6F6D5</color:Color>
+    <color:Color x:Key="DashboardStatCardGameBorder">#BEE3F8</color:Color>
+    <color:Color x:Key="DashboardStatCardProductBorder">#FEEBC8</color:Color>
+    <color:Color x:Key="DashboardStatCardPositiveTrendBackground">#2148BB78</color:Color>
+    <color:Color x:Key="DashboardStatCardNegativeTrendBackground">#21F56565</color:Color>
+    <color:Color x:Key="DashboardChartRangeBorder">#FFDCCE</color:Color>
+    <color:Color x:Key="DashboardChartInactiveBar">#FFA282</color:Color>
+    <color:Color x:Key="DashboardChartCalloutBackground">#F9E8E0</color:Color>
+
+    <!-- Gradient Stop Colors -->
+    <color:Color x:Key="GradientStop1">#FF6B35</color:Color>
+    <color:Color x:Key="GradientStop2">#FFE5D9</color:Color>
+    
+    <!-- Checkbox States -->
+    <color:Color x:Key="CheckboxBoarderUnchecked">#D8D8D8</color:Color>
+    <color:Color x:Key="CheckboxBackgroundUncheckedHover">#FFF8F5F2</color:Color>
+    <color:Color x:Key="CheckboxBackgroundUncheckedPressed">#FFF0EBE6</color:Color>
+    <color:Color x:Key="CheckboxBackgroundChecked">#FF6B35</color:Color>
+    <color:Color x:Key="CheckboxBackgroundCheckedDark">#E55A1F</color:Color>
+    <color:Color x:Key="CheckboxBackgroundCheckedDarker">#CC4D1A</color:Color>
+    <color:Color x:Key="CheckboxBackgroundDisabled">#FFB499</color:Color>
+
+    <!-- Solid Color Brushes - Backgrounds -->
+    <SolidColorBrush x:Key="TransparentBrush" Color="{StaticResource TransparentColor}" />
+    <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}" />
+    <SolidColorBrush x:Key="AntiqueWhiteBrush" Color="{StaticResource AlmostWhiteGray}" />
+    <SolidColorBrush x:Key="VeryLightGrayBrush" Color="{StaticResource VeryLightGray}" />
+    
+    <!-- Solid Color Brushes - Text -->
+    <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}" />
+    <SolidColorBrush x:Key="PlaceholderGrayBrush" Color="{StaticResource PlaceholderGray}" />
+    
+    <!-- Solid Color Brushes - Primary Colors -->
+    <SolidColorBrush x:Key="PrimaryOrangeBrush" Color="{StaticResource PrimaryOrange}" />
+    <SolidColorBrush x:Key="PrimaryOrangeDarkBrush" Color="{StaticResource PrimaryOrangeDark}" />
+    <SolidColorBrush x:Key="PrimaryOrangeDarkerBrush" Color="{StaticResource PrimaryOrangeDarker}" />
+    <SolidColorBrush x:Key="OrangeFocusBrush" Color="{StaticResource OrangeFocus}" />
+    <SolidColorBrush x:Key="OrangeLightVariantBrush" Color="{StaticResource OrangeLightVariant}" />
+    <SolidColorBrush x:Key="OrangePeachLightBrush" Color="{StaticResource OrangePeachLight}" />
+    
+    <!-- Solid Color Brushes - Borders & Outlines -->
+    <SolidColorBrush x:Key="LightGrayBrush" Color="{StaticResource LightGray}" />
+    <SolidColorBrush x:Key="MediumGrayBrush" Color="{StaticResource MediumGray}" />
+    <SolidColorBrush x:Key="MediumDarkGrayBrush" Color="{StaticResource MediumDarkGray}" />
+    <SolidColorBrush x:Key="LighterGrayBrush" Color="{StaticResource LighterGray}" />
+    <SolidColorBrush x:Key="DarkGrayBrush" Color="{StaticResource SecondaryGray}" />
+    <SolidColorBrush x:Key="TextBoxBorderBrush" Color="{StaticResource LightGray}" />
+    <SolidColorBrush x:Key="TextBoxBackgroundBrush" Color="{StaticResource VeryLightGray}" />
+    
+    <!-- Status Colors Brushes -->
+    <SolidColorBrush x:Key="ErrorRedBrush" Color="{StaticResource ErrorRed}" />
+    <SolidColorBrush x:Key="ErrorRedLightBrush" Color="{StaticResource ErrorRedLight}" />
+    <SolidColorBrush x:Key="SuccessGreenBrush" Color="{StaticResource SuccessGreen}" />
+    <SolidColorBrush x:Key="SuccessGreenLightBrush" Color="{StaticResource SuccessGreenLight}" />
+    <SolidColorBrush x:Key="WarningAmberBrush" Color="{StaticResource WarningAmber}" />
+    <SolidColorBrush x:Key="WarningAmberLightBrush" Color="{StaticResource WarningAmberLight}" />
+    <SolidColorBrush x:Key="InfoBlueBrush" Color="{StaticResource InfoBlue}" />
+    <SolidColorBrush x:Key="InfoBlueLightBrush" Color="{StaticResource InfoBlueLight}" />
+    <SolidColorBrush x:Key="DashboardMutedTextBrush" Color="{StaticResource DashboardMutedText}" />
+    <SolidColorBrush x:Key="DashboardTrendPositiveBrush" Color="{StaticResource DashboardTrendPositive}" />
+    <SolidColorBrush x:Key="DashboardTrendNegativeBrush" Color="{StaticResource DashboardTrendNegative}" />
+    <SolidColorBrush x:Key="DashboardStatCardIconBadgeBrush" Color="{StaticResource DashboardStatCardIconBadge}" />
+    <SolidColorBrush x:Key="DashboardStatCardDefaultBorderBrush" Color="{StaticResource DashboardStatCardRevenueBorder}" />
+    <SolidColorBrush x:Key="DashboardStatCardDefaultDividerBrush" Color="{StaticResource DashboardStatCardRevenueBorder}" />
+    <SolidColorBrush x:Key="DashboardStatCardRevenueBorderBrush" Color="{StaticResource DashboardStatCardRevenueBorder}" />
+    <SolidColorBrush x:Key="DashboardStatCardCustomerBorderBrush" Color="{StaticResource DashboardStatCardCustomerBorder}" />
+    <SolidColorBrush x:Key="DashboardStatCardGameBorderBrush" Color="{StaticResource DashboardStatCardGameBorder}" />
+    <SolidColorBrush x:Key="DashboardStatCardProductBorderBrush" Color="{StaticResource DashboardStatCardProductBorder}" />
+    <SolidColorBrush x:Key="DashboardStatCardPositiveTrendBackgroundBrush" Color="{StaticResource DashboardStatCardPositiveTrendBackground}" />
+    <SolidColorBrush x:Key="DashboardStatCardNegativeTrendBackgroundBrush" Color="{StaticResource DashboardStatCardNegativeTrendBackground}" />
+    <SolidColorBrush x:Key="DashboardChartRangeBorderBrush" Color="{StaticResource DashboardChartRangeBorder}" />
+    <SolidColorBrush x:Key="DashboardChartInactiveBarBrush" Color="{StaticResource DashboardChartInactiveBar}" />
+    <SolidColorBrush x:Key="DashboardChartCalloutBackgroundBrush" Color="{StaticResource DashboardChartCalloutBackground}" />
+
+    <!-- Gradient Brushes -->
+    <LinearGradientBrush x:Key="PrimaryGradientBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FF6B35" Offset="0.0" />
+        <GradientStop Color="#FFE5D9" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="HeaderGradientBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FF6B35" Offset="0.0" />
+        <GradientStop Color="#FF8C61" Offset="1.0" />
+    </LinearGradientBrush>
+
+</ResourceDictionary>

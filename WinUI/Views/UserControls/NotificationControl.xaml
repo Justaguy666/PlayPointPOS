@@ -2,7 +2,6 @@
     x:Class="WinUI.Views.UserControls.NotificationControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:WinUI.Views.UserControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -56,13 +55,12 @@
     </UserControl.Resources>
 
     <Grid>
-        <Border x:Name="ContainerBorder"
-                Background="#FFFFFF"
-                CornerRadius="14"
-                BorderThickness="1"
-                BorderBrush="#E5E7EB"
-                Padding="16,14">
-            <!-- Custom Shadow using a blurred border behind if needed, but a simple border is sleek -->
+        <Border
+            Background="{StaticResource WhiteBrush}"
+            BorderBrush="{StaticResource LighterGrayBrush}"
+            BorderThickness="1"
+            CornerRadius="14"
+            Padding="16,14">
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -71,48 +69,58 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Grid x:Name="IconContainer"
-                      Width="32" Height="32"
-                      CornerRadius="16"
-                      VerticalAlignment="Center"
-                      Margin="0,0,12,0"
-                      Background="#D1FAE5">
-                    <FontIcon x:Name="IconGlyph"
-                              Glyph="&#xE73E;"
-                              FontSize="14"
-                              FontWeight="Bold"
-                              Foreground="#10B981" />
+                <Grid
+                    Width="32"
+                    Height="32"
+                    Margin="0,0,12,0"
+                    Background="{Binding IconBackground}"
+                    CornerRadius="16"
+                    VerticalAlignment="Center">
+                    <PathIcon 
+                        Width="24"
+                        Height="24"
+                        Data="{Binding IconState, Converter={StaticResource IconConverter}}"
+                        Foreground="{StaticResource BlackBrush}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
                 </Grid>
 
                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                    <TextBlock x:Name="TitleBlock"
-                               Text="Title"
-                               FontWeight="Bold"
-                               FontSize="14"
-                               Foreground="#111827" 
-                               TextWrapping="NoWrap"
-                               TextTrimming="CharacterEllipsis" />
-                    <TextBlock x:Name="MessageBlock"
-                               Text="Message description goes here..."
-                               FontSize="13"
-                               Foreground="#6B7280"
-                               Margin="0,2,0,0"
-                               TextWrapping="Wrap" />
+                    <TextBlock
+                        FontSize="{StaticResource FontSizeMedium}"
+                        FontWeight="Bold"
+                        Foreground="{StaticResource BlackBrush}"
+                        Text="{Binding Title}"
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="NoWrap" />
+                    <TextBlock
+                        Margin="0,2,0,0"
+                        FontSize="{StaticResource FontSizeSmall}"
+                        Foreground="{StaticResource DarkGrayBrush}"
+                        Text="{Binding Message}"
+                        TextWrapping="Wrap" />
                 </StackPanel>
 
-                <Button Grid.Column="2"
-                        Width="28" Height="28"
-                        Margin="12,0,0,0"
-                        Padding="0"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Click="OnCloseButtonClick"
-                        VerticalAlignment="Center">
+                <Button
+                    Grid.Column="2"
+                    Width="28"
+                    Height="28"
+                    Margin="12,0,0,0"
+                    Padding="0"
+                    Background="{StaticResource TransparentBrush}"
+                    BorderThickness="0"
+                    Command="{Binding CloseCommand}"
+                    ToolTipService.ToolTip="{Binding CloseTooltipDisplay}"
+                    VerticalAlignment="Center">
                     <Button.Resources>
-                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#F3F4F6"/>
-                        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#E5E7EB"/>
+                        <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="AntiqueWhiteBrush" />
+                        <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="LighterGrayBrush" />
                     </Button.Resources>
-                    <FontIcon Glyph="&#xE8BB;" FontSize="11" Foreground="#9CA3AF" />
+                    <FontIcon
+                        FontFamily="Segoe MDL2 Assets"
+                        FontSize="{StaticResource FontSizeSmall}"
+                        Foreground="{StaticResource PlaceholderGrayBrush}"
+                        Glyph="&#xE8BB;" />
                 </Button>
             </Grid>
         </Border>

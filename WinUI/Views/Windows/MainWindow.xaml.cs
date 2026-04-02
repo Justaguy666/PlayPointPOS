@@ -1,34 +1,56 @@
 using System;
+using System.Diagnostics;
 using Application.Navigation;
 using Application.Navigation.Requests;
 using Microsoft.UI.Composition;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Hosting;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.Graphics.Canvas.Effects;
 using System.Numerics;
+using WinUI.Resources;
+using WinUI.Services;
 using WinUI.ViewModels;
+using WinUI.ViewModels.UserControls;
 using WinUI.Views.Pages;
+using Application.Services;
 
 namespace WinUI;
 
 public sealed partial class MainWindow : Window
 {
+    private readonly ILocalizationService _localizationService;
     public MainViewModel ViewModel { get; }
+    public NavbarControlViewModel NavbarViewModel { get; }
+    public NotificationControlViewModel NotificationViewModel { get; }
     private SpriteVisual? _patternVisual;
 
-    public MainWindow(INavigationService nav, MainViewModel viewModel)
+    public MainWindow(
+        INavigationService nav,
+        MainViewModel viewModel,
+        NavbarControlViewModel navbarViewModel,
+        NotificationControlViewModel notificationViewModel,
+        ILocalizationService localizationService)
     {
         InitializeComponent();
         ViewModel = viewModel;
+        NavbarViewModel = navbarViewModel;
+        NotificationViewModel = notificationViewModel;
+        _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
+
+        UpdateLocalizedText();
+        _localizationService.LanguageChanged += HandleLanguageChanged;
 
         ConfigureTitleBar();
 
         nav.SetFrame(MainFrame);
-        MainFrame.Navigated += MainFrame_Navigated;
+
+        if (nav is Services.WinUINavigationService winuiNav)
+        {
+            winuiNav.SetShellViewModels(viewModel, navbarViewModel);
+        }
 
         SetupTilePattern();
 
@@ -36,8 +58,19 @@ public sealed partial class MainWindow : Window
 
         this.Closed += (s, e) =>
         {
+            _localizationService.LanguageChanged -= HandleLanguageChanged;
             Environment.Exit(0);
         };
+    }
+
+    private void HandleLanguageChanged()
+    {
+        UpdateLocalizedText();
+    }
+
+    private void UpdateLocalizedText()
+    {
+        Title = _localizationService.GetString("AppDisplayNameText");
     }
 
     private void ConfigureTitleBar()
@@ -51,61 +84,59 @@ public sealed partial class MainWindow : Window
 
         if (AppWindow.TitleBar is { } titleBar)
         {
-            var buttonColor = ColorHelper.FromArgb(0xFF, 0x2D, 0x37, 0x48);
-            var hoverBackground = ColorHelper.FromArgb(0x22, 0x2D, 0x37, 0x48);
-            var pressedBackground = ColorHelper.FromArgb(0x44, 0x2D, 0x37, 0x48);
-
-            titleBar.ButtonBackgroundColor = Colors.Transparent;
-            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-            titleBar.ButtonHoverBackgroundColor = hoverBackground;
-            titleBar.ButtonPressedBackgroundColor = pressedBackground;
-            titleBar.ButtonForegroundColor = buttonColor;
-            titleBar.ButtonInactiveForegroundColor = buttonColor;
-            titleBar.ButtonHoverForegroundColor = buttonColor;
-            titleBar.ButtonPressedForegroundColor = buttonColor;
+            titleBar.ButtonBackgroundColor = AppColors.Transparent;
+            titleBar.ButtonInactiveBackgroundColor = AppColors.Transparent;
+            titleBar.ButtonHoverBackgroundColor = AppColors.TitleBarButtonHover;
+            titleBar.ButtonPressedBackgroundColor = AppColors.TitleBarButtonPressed;
+            titleBar.ButtonForegroundColor = AppColors.TitleBarButton;
+            titleBar.ButtonInactiveForegroundColor = AppColors.TitleBarButton;
+            titleBar.ButtonHoverForegroundColor = AppColors.TitleBarButton;
+            titleBar.ButtonPressedForegroundColor = AppColors.TitleBarButton;
         }
     }
 
     private void SetupTilePattern()
     {
-        var compositor = ElementCompositionPreview.GetElementVisual(PatternHost).Compositor;
-
-        var surface = LoadedImageSurface.StartLoadFromUri(new Uri("ms-appx:///Assets/pattern.png"));
-        var surfaceBrush = compositor.CreateSurfaceBrush(surface);
-
-        surfaceBrush.Stretch = CompositionStretch.None;
-        surfaceBrush.HorizontalAlignmentRatio = 0;
-        surfaceBrush.VerticalAlignmentRatio = 0;
-        surfaceBrush.TransformMatrix = Matrix3x2.CreateScale(1.0f);
-
-        var borderEffect = new BorderEffect
+        try
         {
-            Source = new CompositionEffectSourceParameter("source"),
-            ExtendX = Microsoft.Graphics.Canvas.CanvasEdgeBehavior.Wrap,
-            ExtendY = Microsoft.Graphics.Canvas.CanvasEdgeBehavior.Wrap
-        };
+            var compositor = ElementCompositionPreview.GetElementVisual(PatternHost).Compositor;
 
-        var effectFactory = compositor.CreateEffectFactory(borderEffect);
-        var effectBrush = effectFactory.CreateBrush();
+            var surface = LoadedImageSurface.StartLoadFromUri(new Uri("ms-appx:///Assets/Pattern.png"));
+            var surfaceBrush = compositor.CreateSurfaceBrush(surface);
 
-        effectBrush.SetSourceParameter("source", surfaceBrush);
+            surfaceBrush.Stretch = CompositionStretch.None;
+            surfaceBrush.HorizontalAlignmentRatio = 0;
+            surfaceBrush.VerticalAlignmentRatio = 0;
+            surfaceBrush.TransformMatrix = Matrix3x2.CreateScale(1.0f);
 
-        _patternVisual = compositor.CreateSpriteVisual();
-        _patternVisual.Brush = effectBrush;
-        ElementCompositionPreview.SetElementChildVisual(PatternHost, _patternVisual);
-
-        PatternHost.SizeChanged += (s, e) =>
-        {
-            if (_patternVisual != null)
+            var borderEffect = new BorderEffect
             {
-                _patternVisual.Size = new Vector2((float)e.NewSize.Width, (float)e.NewSize.Height);
-            }
-        };
-    }
+                Source = new CompositionEffectSourceParameter("source"),
+                ExtendX = Microsoft.Graphics.Canvas.CanvasEdgeBehavior.Wrap,
+                ExtendY = Microsoft.Graphics.Canvas.CanvasEdgeBehavior.Wrap
+            };
 
-    private void MainFrame_Navigated(object sender, NavigationEventArgs e)
-    {
-        ViewModel.IsNavigationVisible = e.Content is not StartingPage;
+            var effectFactory = compositor.CreateEffectFactory(borderEffect);
+            var effectBrush = effectFactory.CreateBrush();
+
+            effectBrush.SetSourceParameter("source", surfaceBrush);
+
+            _patternVisual = compositor.CreateSpriteVisual();
+            _patternVisual.Brush = effectBrush;
+            ElementCompositionPreview.SetElementChildVisual(PatternHost, _patternVisual);
+
+            PatternHost.SizeChanged += (s, e) =>
+            {
+                if (_patternVisual != null)
+                {
+                    _patternVisual.Size = new Vector2((float)e.NewSize.Width, (float)e.NewSize.Height);
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"SetupTilePattern failed: {ex}");
+        }
     }
 
     public Visibility GetVisibility(bool isVisible)
@@ -113,6 +144,6 @@ public sealed partial class MainWindow : Window
 
     public void ShowNotification(string title, string message, Application.Services.NotificationType type)
     {
-        NotificationToast.Show(title, message, type);
+        NotificationViewModel.Show(title, message, type);
     }
 }

@@ -9,34 +9,40 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
-                <!-- Other merged dictionaries here -->
+                <ResourceDictionary Source="ms-appx:///Resources/FontSize.xaml" />
+                <ResourceDictionary Source="ms-appx:///Resources/Colors.xaml" />
+                <ResourceDictionary Source="ms-appx:///Resources/Images.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
             <!-- Converters -->
             <converters:BoolToVisibleConverter x:Key="BoolToVisible" />
             <converters:BoolToInvisibleConverter x:Key="BoolToInvisible" />
             <converters:BoolInverterConverter x:Key="BoolInverter" />
             <converters:BoolToOpacityConverter x:Key="BoolToOpacity" />
             <converters:BoolToOrangeBrushConverter x:Key="BoolToOrangeBrushConverter" />
-            
+            <converters:BoolToGradientBrushConverter x:Key="BoolToGradientBrushConverter" />
+            <converters:IconConverter x:Key="IconConverter" />
+            <converters:ChartValueToHeightConverter x:Key="ChartValueToHeightConverter" />
+
             <!-- Custom TextBox Style - Keep white background on focus, larger border radius -->
             <Style TargetType="TextBox">
-                <Setter Property="BorderBrush" Value="#D8D8D8"/>
-                <Setter Property="Background" Value="#FAFAFA"/>
+                <Setter Property="BorderBrush" Value="{StaticResource TextBoxBorderBrush}"/>
+                <Setter Property="Background" Value="{StaticResource TextBoxBackgroundBrush}"/>
                 <Setter Property="CornerRadius" Value="10"/>
                 <Setter Property="Padding" Value="12,10"/>
             </Style>
 
             <!-- Custom PasswordBox Style - Keep white background on focus, larger border radius -->
             <Style TargetType="PasswordBox">
-                <Setter Property="BorderBrush" Value="#D8D8D8"/>
-                <Setter Property="Background" Value="#FAFAFA"/>
+                <Setter Property="BorderBrush" Value="{StaticResource TextBoxBorderBrush}"/>
+                <Setter Property="Background" Value="{StaticResource TextBoxBackgroundBrush}"/>
                 <Setter Property="CornerRadius" Value="10"/>
                 <Setter Property="Padding" Value="12,10"/>
             </Style>
             
             <!-- Custom CheckBox Style - Perfectly circular, Orange when checked -->
             <Style TargetType="CheckBox" x:Key="OrangeCheckBoxStyle">
-                <Setter Property="Foreground" Value="#555555"/>
+                <Setter Property="Foreground" Value="{StaticResource DarkGrayBrush}"/>
                 <Setter Property="CornerRadius" Value="9999"/>
                 <Setter Property="Width" Value="20"/>
                 <Setter Property="Height" Value="20"/>
@@ -53,39 +59,39 @@
                                         <VisualState x:Name="UncheckedNormal"/>
                                         <VisualState x:Name="UncheckedPointerOver">
                                             <Storyboard>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="#FF6B35" Duration="0"/>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="#FFF8F5F2" Duration="0"/>
+                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrange}" Duration="0"/>
+                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundUncheckedHover}" Duration="0"/>
                                             </Storyboard>
                                         </VisualState>
                                         <VisualState x:Name="UncheckedPressed">
                                             <Storyboard>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="#E55A1F" Duration="0"/>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="#FFF0EBE6" Duration="0"/>
+                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDark}" Duration="0"/>
+                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundUncheckedPressed}" Duration="0"/>
                                             </Storyboard>
                                         </VisualState>
                                         <VisualState x:Name="UncheckedDisabled"/>
                                         <VisualState x:Name="CheckedNormal">
                                             <Storyboard>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="#FF6B35" Duration="0"/>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="#FF6B35" Duration="0"/>
+                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrange}" Duration="0"/>
+                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundChecked}" Duration="0"/>
                                             </Storyboard>
                                         </VisualState>
                                         <VisualState x:Name="CheckedPointerOver">
                                             <Storyboard>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="#E55A1F" Duration="0"/>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="#E55A1F" Duration="0"/>
+                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDark}" Duration="0"/>
+                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundCheckedDark}" Duration="0"/>
                                             </Storyboard>
                                         </VisualState>
                                         <VisualState x:Name="CheckedPressed">
                                             <Storyboard>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="#CC4D1A" Duration="0"/>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="#CC4D1A" Duration="0"/>
+                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDarker}" Duration="0"/>
+                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundCheckedDarker}" Duration="0"/>
                                             </Storyboard>
                                         </VisualState>
                                         <VisualState x:Name="CheckedDisabled">
                                             <Storyboard>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="#FFB499" Duration="0"/>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="#FFB499" Duration="0"/>
+                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeLight}" Duration="0"/>
+                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundDisabled}" Duration="0"/>
                                             </Storyboard>
                                         </VisualState>
                                         <VisualState x:Name="IndeterminateNormal"/>
@@ -101,7 +107,7 @@
                                         Width="20"
                                         Height="20">
                                     <Border.BorderBrush>
-                                        <SolidColorBrush x:Name="CheckboxBorderBrush" Color="#D8D8D8"/>
+                                        <SolidColorBrush x:Name="CheckboxBorderBrush" Color="{StaticResource CheckboxBoarderUnchecked}"/>
                                     </Border.BorderBrush>
                                     <Border.Background>
                                         <SolidColorBrush x:Name="CheckboxBackgroundBrush" Color="Transparent"/>
@@ -119,12 +125,12 @@
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Padding" Value="8,8"/>
-                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontSize" Value="{StaticResource LabelFontSize}"/>
                 <Setter Property="FontWeight" Value="Bold"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="CornerRadius" Value="4"/>
             </Style>
-            
+
             <!-- Other app resources here -->
         </ResourceDictionary>
     </Application.Resources>

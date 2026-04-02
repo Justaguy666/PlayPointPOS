@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Application.Services;
+using WinUI.ViewModels;
 
 namespace WinUI.ViewModels.Dialogs;
 
-public partial class ConfigViewModel : ObservableObject
+public partial class ConfigViewModel : LocalizedViewModelBase
 {
-    private readonly ILocalizationService _loc;
     private readonly IDialogService _dialogService;
     private readonly IConfigurationService _configService;
 
@@ -47,6 +47,9 @@ public partial class ConfigViewModel : ObservableObject
     public partial string SaveButtonDisplay { get; set; } = string.Empty;
 
     [ObservableProperty]
+    public partial string CloseTooltipDisplay { get; set; } = string.Empty;
+
+    [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
     [NotifyCanExecuteChangedFor(nameof(CloseCommand))]
     [NotifyPropertyChangedFor(nameof(CanSaveExecute))]
@@ -68,30 +71,29 @@ public partial class ConfigViewModel : ObservableObject
         remove => CloseRequestedInternal -= value;
     }
 
-    public ConfigViewModel(ILocalizationService loc, IDialogService dialogService, IConfigurationService configService)
+    public ConfigViewModel(ILocalizationService localizationService, IDialogService dialogService, IConfigurationService configService)
+        : base(localizationService)
     {
-        _loc = loc;
         _dialogService = dialogService;
         _configService = configService;
 
-        // Load saved config values
         ServerAddress = _configService.ServerAddress;
         ApiKey = _configService.ApiKey;
         RememberMe = _configService.RememberMe;
 
-        _loc.LanguageChanged += UpdateTexts;
-        UpdateTexts();
+        RefreshLocalizedText();
     }
 
-    private void UpdateTexts()
+    protected override void RefreshLocalizedText()
     {
-        TitleDisplay = _loc.GetString("ConfigDialogTitleText");
-        ServerAddressLabelDisplay = _loc.GetString("ConfigDialogServerAddressLabelText");
-        ServerAddressPlaceholderDisplay = _loc.GetString("ConfigDialogServerAddressPlaceholderText");
-        ApiKeyLabelDisplay = _loc.GetString("ConfigDialogApiKeyLabelText");
-        ApiKeyPlaceholderDisplay = _loc.GetString("ConfigDialogApiKeyPlaceholderText");
-        RememberMeLabelDisplay = _loc.GetString("ConfigDialogRememberMeLabelText");
-        SaveButtonDisplay = _loc.GetString("ConfigDialogSaveButtonText");
+        TitleDisplay = LocalizationService.GetString("ConfigDialogTitleText");
+        ServerAddressLabelDisplay = LocalizationService.GetString("ConfigDialogServerAddressLabelText");
+        ServerAddressPlaceholderDisplay = LocalizationService.GetString("ConfigDialogServerAddressPlaceholderText");
+        ApiKeyLabelDisplay = LocalizationService.GetString("ConfigDialogApiKeyLabelText");
+        ApiKeyPlaceholderDisplay = LocalizationService.GetString("ConfigDialogApiKeyPlaceholderText");
+        RememberMeLabelDisplay = LocalizationService.GetString("ConfigDialogRememberMeLabelText");
+        SaveButtonDisplay = LocalizationService.GetString("ConfigDialogSaveButtonText");
+        CloseTooltipDisplay = LocalizationService.GetString("CloseTooltipText");
     }
 
     [RelayCommand(CanExecute = nameof(CanSave))]

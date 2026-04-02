@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <UserControl
     x:Class="WinUI.Views.UserControls.MenuControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -9,27 +9,22 @@
     xmlns:models="using:WinUI.UIModels"
     xmlns:vm="using:WinUI.ViewModels"
     mc:Ignorable="d"
-    x:Name="RootMenu"
-    >
+    x:Name="RootMenu">
 
     <StackPanel Orientation="Vertical"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Spacing="12"
-                >
+                Spacing="12">
 
         <ItemsControl ItemsSource="{Binding MenuItems}" x:Name="ItemsControlMenu">
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="models:MenuItemModel">
-                    
                     <controls:MenuItemControl
                         Text="{x:Bind DisplayText, Mode=OneWay}"
-                        IconGlyph="{x:Bind Icon, Mode=OneWay}"
-                        Visibility="{x:Bind IsVisible, Mode=OneWay}"
+                        IconKind="{x:Bind Icon, Mode=OneWay}"
+                        Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisible}}"
                         Command="{x:Bind OnMenuItemSelectedCommand, Mode=OneWay}"
-                        CommandParameter="{x:Bind}"
-                        />
-                    
+                        CommandParameter="{x:Bind}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

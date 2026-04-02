@@ -1,24 +1,19 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Application.Interfaces;
-using Application.Navigation;
-using Application.Navigation.Requests;
 using Application.Services;
+using Application.UseCases.Auth;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
+using WinUI.ViewModels;
 
 namespace WinUI.ViewModels.Dialogs;
 
-public partial class RegisterViewModel : ObservableObject
+public partial class RegisterViewModel : LocalizedViewModelBase
 {
-    private readonly ILocalizationService _loc;
     private readonly IDialogService _dialogService;
-    private readonly IRepository<Account> _accountRepo;
-    private readonly INavigationService _navigationService;
+    private readonly RegisterUserUseCase _registerUseCase;
     private readonly INotificationService _notificationService;
-    private readonly MainViewModel _mainViewModel;
 
     [ObservableProperty]
     public partial string TitleDisplay { get; set; } = string.Empty;
@@ -57,21 +52,13 @@ public partial class RegisterViewModel : ObservableObject
     public partial string ConfirmPassword { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string OTPLabelDisplay { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    public partial string OTPPlaceholderDisplay { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
-    [NotifyPropertyChangedFor(nameof(CanRegisterExecute))]
-    public partial string OTP { get; set; } = string.Empty;
-
-    [ObservableProperty]
     public partial string RegisterButtonDisplay { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string ResetButtonDisplay { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string CloseTooltipDisplay { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
@@ -114,37 +101,31 @@ public partial class RegisterViewModel : ObservableObject
     }
 
     public RegisterViewModel(
-        ILocalizationService loc,
+        ILocalizationService localizationService,
         IDialogService dialogService,
-        IRepository<Account> accountRepo,
-        INavigationService navigationService,
-        INotificationService notificationService,
-        MainViewModel mainViewModel)
+        RegisterUserUseCase registerUseCase,
+        INotificationService notificationService)
+        : base(localizationService)
     {
-        _loc = loc;
         _dialogService = dialogService;
-        _accountRepo = accountRepo;
-        _navigationService = navigationService;
+        _registerUseCase = registerUseCase;
         _notificationService = notificationService;
-        _mainViewModel = mainViewModel;
 
-        _loc.LanguageChanged += UpdateTexts;
-        UpdateTexts();
+        RefreshLocalizedText();
     }
 
-    private void UpdateTexts()
+    protected override void RefreshLocalizedText()
     {
-        TitleDisplay = _loc.GetString("RegisterDialogTitleText");
-        EmailLabelDisplay = _loc.GetString("RegisterDialogEmailLabelText");
-        EmailPlaceholderDisplay = _loc.GetString("RegisterDialogEmailPlaceholderText");
-        PasswordLabelDisplay = _loc.GetString("RegisterDialogPasswordLabelText");
-        PasswordPlaceholderDisplay = _loc.GetString("RegisterDialogPasswordPlaceHolderText");
-        ConfirmPasswordLabelDisplay = _loc.GetString("RegisterDialogConfirmPasswordLabelText");
-        ConfirmPasswordPlaceholderDisplay = _loc.GetString("RegisterDialogConfirmPasswordPlaceholderText");
-        OTPLabelDisplay = _loc.GetString("RegisterDialogOTPLabelText");
-        OTPPlaceholderDisplay = _loc.GetString("RegisterDialogOTPPlaceHolderText");
-        RegisterButtonDisplay = _loc.GetString("RegisterDialogCreateButtonText");
-        ResetButtonDisplay = _loc.GetString("RegisterDialogResetButtonText");
+        TitleDisplay = LocalizationService.GetString("RegisterDialogTitleText");
+        EmailLabelDisplay = LocalizationService.GetString("RegisterDialogEmailLabelText");
+        EmailPlaceholderDisplay = LocalizationService.GetString("RegisterDialogEmailPlaceholderText");
+        PasswordLabelDisplay = LocalizationService.GetString("RegisterDialogPasswordLabelText");
+        PasswordPlaceholderDisplay = LocalizationService.GetString("RegisterDialogPasswordPlaceHolderText");
+        ConfirmPasswordLabelDisplay = LocalizationService.GetString("RegisterDialogConfirmPasswordLabelText");
+        ConfirmPasswordPlaceholderDisplay = LocalizationService.GetString("RegisterDialogConfirmPasswordPlaceholderText");
+        RegisterButtonDisplay = LocalizationService.GetString("RegisterDialogCreateButtonText");
+        ResetButtonDisplay = LocalizationService.GetString("RegisterDialogResetButtonText");
+        CloseTooltipDisplay = LocalizationService.GetString("CloseTooltipText");
     }
 
     [RelayCommand(CanExecute = nameof(CanRegister))]
@@ -159,36 +140,29 @@ public partial class RegisterViewModel : ObservableObject
             if (Password != ConfirmPassword)
             {
                 HasError = true;
-                ErrorMessage = _loc.GetString("RegisterDialogPasswordMismatchText");
+                ErrorMessage = LocalizationService.GetString("RegisterDialogPasswordMismatchText");
                 return;
             }
 
-            var accounts = await _accountRepo.GetAllAsync();
-            if (accounts.Any(a => a.Email.Equals(Email, StringComparison.OrdinalIgnoreCase)))
+            var result = await _registerUseCase.ExecuteAsync(Email, Password, LocalizationService.Language);
+
+            if (result.Success)
+            {
+                RegisteredAccount = result.Account;
+                RegisterSucceededInternal?.Invoke(result.Account!);
+                CloseRequestedInternal?.Invoke();
+
+                // Toast notification
+                await _notificationService.SendAsync(
+                    LocalizationService.GetString("RegisterSuccessTitle"),
+                    string.Format(LocalizationService.GetString("RegisterSuccessMessage"), result.Account!.Email),
+                    NotificationType.Success);
+            }
+            else
             {
                 HasError = true;
-                ErrorMessage = _loc.GetString("RegisterDialogErrorText");
-                return;
+                ErrorMessage = result.Message ?? LocalizationService.GetString("RegisterDialogErrorText");
             }
-
-            var newAccount = new Account
-            {
-                Email = Email,
-                PasswordHash = Password,
-                Language = "en-US"
-            };
-
-            await _accountRepo.AddAsync(newAccount);
-
-            RegisteredAccount = newAccount;
-            RegisterSucceededInternal?.Invoke(newAccount);
-            CloseRequestedInternal?.Invoke();
-
-            // Toast notification
-            await _notificationService.SendAsync(
-                _loc.GetString("RegisterSuccessTitle"),
-                string.Format(_loc.GetString("RegisterSuccessMessage"), newAccount.Email),
-                NotificationType.Success);
         }
         catch (Exception ex)
         {
@@ -206,7 +180,6 @@ public partial class RegisterViewModel : ObservableObject
         Email = string.Empty;
         Password = string.Empty;
         ConfirmPassword = string.Empty;
-        OTP = string.Empty;
         HasError = false;
         ErrorMessage = string.Empty;
     }
@@ -215,6 +188,11 @@ public partial class RegisterViewModel : ObservableObject
         !IsRegistering &&
         !string.IsNullOrWhiteSpace(Email) &&
         !string.IsNullOrWhiteSpace(Password) &&
-        !string.IsNullOrWhiteSpace(ConfirmPassword) &&
-        !string.IsNullOrWhiteSpace(OTP);
+        !string.IsNullOrWhiteSpace(ConfirmPassword);
+
+    [RelayCommand]
+    private void Close()
+    {
+        CloseRequestedInternal?.Invoke();
+    }
 }

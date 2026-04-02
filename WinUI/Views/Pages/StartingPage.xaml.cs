@@ -1,17 +1,24 @@
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.Extensions.DependencyInjection;
-using WinUI.ViewModels;
+using Microsoft.UI.Xaml;
+using WinUI.ViewModels.Pages;
 
 namespace WinUI.Views.Pages;
 
 public sealed partial class StartingPage : Page
 {
-    public StartingViewModel ViewModel { get; }
+    public StartingPageViewModel ViewModel { get; }
 
-    public StartingPage()
+    public StartingPage(StartingPageViewModel viewModel)
     {
         InitializeComponent();
-        ViewModel = App.Host!.Services.GetRequiredService<StartingViewModel>();
+        ViewModel = viewModel;
         DataContext = ViewModel;
+        Unloaded += HandleUnloaded;
+    }
+
+    private void HandleUnloaded(object sender, RoutedEventArgs e)
+    {
+        Unloaded -= HandleUnloaded;
+        ViewModel.Dispose();
     }
 }

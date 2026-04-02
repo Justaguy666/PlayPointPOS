@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
@@ -55,6 +55,7 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.5" />
@@ -65,7 +66,9 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260317003" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Assets\Icons\" />
     <Folder Include="Extensions\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
   <!--
@@ -92,6 +95,36 @@
     <None Update="Configurations\config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Resources\FontSize.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\DividerControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Dashboard\PopularCardControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Dashboard\GoalProgressCardControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Dashboard\QuickStatsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Dashboard\TrendingListControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Dashboard\StatCardControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Dashboard\ChartCardControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Resources\Images.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Resources\Colors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\UserControls\PaginationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -107,7 +140,7 @@
     <Page Update="Views\Pages\MemberManagementPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Views\Pages\FoodManagementPage.xaml">
+    <Page Update="Views\Pages\ProductManagementPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Views\Pages\GameManagementPage.xaml">
@@ -155,9 +188,6 @@
     <Page Update="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <ApplicationDefinition Update="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </ApplicationDefinition>
   </ItemGroup>
   
   <Target Name="_RemoveEmptyInfrastructurePri" BeforeTargets="_GenerateProjectPriConfigurationFiles;_GetPriFilesFromPayload;_ComputeInputPriFiles">
@@ -171,7 +201,15 @@
     <PRIResource Remove="Resources\Styles\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Resources\Colors.xaml" />
+    <None Remove="Resources\FontSize.xaml" />
+    <None Remove="Resources\Images.xaml" />
     <None Remove="Views\Dialogs\ConfirmationDialog.xaml" />
+    <None Remove="Views\UserControls\Dashboard\GoalProgressCardControl.xaml" />
+    <None Remove="Views\UserControls\Dashboard\ChartCardControl.xaml" />
     <None Remove="Views\UserControls\PaginationControl.xaml" />
+    <None Remove="Views\UserControls\Dashboard\QuickStatsControl.xaml" />
+    <None Remove="Views\UserControls\Dashboard\StatCardControl.xaml" />
+    <None Remove="Views\UserControls\Dashboard\TrendingListControl.xaml" />
   </ItemGroup>
 </Project>

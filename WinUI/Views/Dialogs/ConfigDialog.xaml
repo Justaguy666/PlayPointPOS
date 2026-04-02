@@ -3,14 +3,15 @@
     x:Name="RootDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    CornerRadius="14"
-    Background="#FFFFFF"
+    xmlns:controls="using:WinUI.Views.UserControls"
+    CornerRadius="12"
+    Background="{StaticResource WhiteBrush}"
     Width="1200"
     Height="Auto"
     HorizontalAlignment="Center"
-    Padding="36">
-
-    <Grid>
+    Padding="20">
+    
+    <Grid x:Name="RootGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -25,40 +26,41 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <FontIcon Grid.Column="0"
-                      Glyph="&#xE713;"
-                      FontSize="22"
-                      FontWeight="Bold"
+            <PathIcon Grid.Column="0"
+                      Width="22"
+                      Height="22"
+                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
+                      Foreground="{StaticResource BlackBrush}"
                       Margin="0,0,12,0"
-                      Foreground="#1F1F1F"
                       VerticalAlignment="Center"/>
             <TextBlock Grid.Column="1"
                        Text="{x:Bind ViewModel.TitleDisplay, Mode=OneWay}"
-                       FontSize="19"
+                       FontSize="{StaticResource DialogHeaderFontSize}"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
-                       Foreground="#1F1F1F"/>
+                       Foreground="{StaticResource BlackBrush}"/>
             <Button Grid.Column="2"
                     Width="32" Height="32"
-                    Click="OnCloseButtonClick"
+                    Command="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Padding="0"
-                    ToolTipService.ToolTip="Đóng">
+                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipDisplay, Mode=OneWay}">
                 <Button.Resources>
-                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#F3F4F6"/>
-                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#E5E7EB"/>
+                    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="AntiqueWhiteBrush"/>
+                    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="LighterGrayBrush"/>
                 </Button.Resources>
-                <FontIcon Glyph="&#xE8BB;" FontSize="14" Foreground="#1F1F1F"/>
+                <PathIcon Width="14"
+                          Height="14"
+                          Data="{x:Bind CloseIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
+                          Foreground="{StaticResource BlackBrush}"/>
             </Button>
         </Grid>
 
         <!-- Divider -->
-        <Rectangle Grid.Row="1" 
-                   Height="1" 
-                   Fill="#E5E7EB" 
-                   Margin="-36,0,-36,0"
-                   VerticalAlignment="Center"/>
+        <controls:DividerControl Grid.Row="1"
+                                 DividerBrush="{StaticResource LighterGrayBrush}"
+                                 Margin="-36,0,-36,0"/>
 
         <!-- Content -->
         <StackPanel Grid.Row="2" Spacing="22" Margin="0,20,0,0">
@@ -66,29 +68,29 @@
             <StackPanel Spacing="8">
                 <TextBlock Text="{x:Bind ViewModel.ServerAddressLabelDisplay, Mode=OneWay}" 
                            FontWeight="SemiBold" 
-                           FontSize="15"
-                           Foreground="#1F1F1F"/>
+                           FontSize="{StaticResource LabelFontSize}"
+                           Foreground="{StaticResource BlackBrush}"/>
                 <TextBox x:Name="ServerAddressBox"
                          PlaceholderText="{x:Bind ViewModel.ServerAddressPlaceholderDisplay, Mode=OneWay}"
                          Text="{x:Bind ViewModel.ServerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         PlaceholderForeground="Gray"
+                         PlaceholderForeground="{StaticResource PlaceholderGrayBrush}"
                          CornerRadius="8" 
-                         FontSize="15"
+                         FontSize="{StaticResource ValueFontSize}"
                          Padding="16,12"
                          BorderThickness="1"
-                         BorderBrush="#D8D8D8">
+                         BorderBrush="{StaticResource LightGrayBrush}">
                     <TextBox.Resources>
-                        <SolidColorBrush x:Key="TextControlBackground" Color="White"/>
-                        <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="White"/>
-                        <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="White"/>
-                        <SolidColorBrush x:Key="TextControlForeground" Color="Black"/>
-                        <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="Black"/>
-                        <SolidColorBrush x:Key="TextControlForegroundFocused" Color="Black"/>
-                        <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#FF7A30"/>
-                        <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="#B3B3B3"/>
-                        <SolidColorBrush x:Key="TextControlPlaceholderForeground" Color="Gray"/>
-                        <SolidColorBrush x:Key="TextControlPlaceholderForegroundPointerOver" Color="Gray"/>
-                        <SolidColorBrush x:Key="TextControlPlaceholderForegroundFocused" Color="Gray"/>
+                        <StaticResource x:Key="TextControlBackground" ResourceKey="WhiteBrush"/>
+                        <StaticResource x:Key="TextControlBackgroundPointerOver" ResourceKey="WhiteBrush"/>
+                        <StaticResource x:Key="TextControlBackgroundFocused" ResourceKey="WhiteBrush"/>
+                        <StaticResource x:Key="TextControlForeground" ResourceKey="BlackBrush"/>
+                        <StaticResource x:Key="TextControlForegroundPointerOver" ResourceKey="BlackBrush"/>
+                        <StaticResource x:Key="TextControlForegroundFocused" ResourceKey="BlackBrush"/>
+                        <StaticResource x:Key="TextControlBorderBrushFocused" ResourceKey="OrangeFocusBrush"/>
+                        <StaticResource x:Key="TextControlBorderBrushPointerOver" ResourceKey="MediumGrayBrush"/>
+                        <StaticResource x:Key="TextControlPlaceholderForeground" ResourceKey="PlaceholderGrayBrush"/>
+                        <StaticResource x:Key="TextControlPlaceholderForegroundPointerOver" ResourceKey="PlaceholderGrayBrush"/>
+                        <StaticResource x:Key="TextControlPlaceholderForegroundFocused" ResourceKey="PlaceholderGrayBrush"/>
                     </TextBox.Resources>
                 </TextBox>
             </StackPanel>
@@ -97,39 +99,37 @@
             <StackPanel Spacing="8">
                 <TextBlock Text="{x:Bind ViewModel.ApiKeyLabelDisplay, Mode=OneWay}" 
                            FontWeight="SemiBold" 
-                           FontSize="15"
-                           Foreground="#1F1F1F"/>
+                           FontSize="{StaticResource LabelFontSize}"
+                           Foreground="{StaticResource BlackBrush}"/>
                 <PasswordBox x:Name="ApiKeyBox"
                              PlaceholderText="{x:Bind ViewModel.ApiKeyPlaceholderDisplay, Mode=OneWay}"
                              PasswordChanged="ApiKeyBox_PasswordChanged"
                              CornerRadius="8" 
-                             FontSize="15"
+                             FontSize="{StaticResource ValueFontSize}"
                              Padding="16,12"
                              BorderThickness="1"
                              PasswordRevealMode="Hidden"
-                             BorderBrush="#D8D8D8">
+                             BorderBrush="{StaticResource LightGrayBrush}">
                     <PasswordBox.Resources>
                         <Visibility x:Key="PasswordRevealButtonVisibility">Collapsed</Visibility>
                         <Visibility x:Key="PasswordRevealButtonCollapsedVisibility">Collapsed</Visibility>
-                        <SolidColorBrush x:Key="TextControlBackground" Color="White"/>
-                        <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="White"/>
-                        <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="White"/>
-                        <SolidColorBrush x:Key="TextControlForeground" Color="Black"/>
-                        <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="Black"/>
-                        <SolidColorBrush x:Key="TextControlForegroundFocused" Color="Black"/>
-                        <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#FF7A30"/>
-                        <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="#B3B3B3"/>
-                        <SolidColorBrush x:Key="TextControlPlaceholderForeground" Color="#888888"/>
-                        <SolidColorBrush x:Key="TextControlPlaceholderForegroundPointerOver" Color="#888888"/>
-                        <SolidColorBrush x:Key="TextControlPlaceholderForegroundFocused" Color="#888888"/>
+                        <StaticResource x:Key="TextControlBackground" ResourceKey="WhiteBrush"/>
+                        <StaticResource x:Key="TextControlBackgroundPointerOver" ResourceKey="WhiteBrush"/>
+                        <StaticResource x:Key="TextControlBackgroundFocused" ResourceKey="WhiteBrush"/>
+                        <StaticResource x:Key="TextControlForeground" ResourceKey="BlackBrush"/>
+                        <StaticResource x:Key="TextControlForegroundPointerOver" ResourceKey="BlackBrush"/>
+                        <StaticResource x:Key="TextControlForegroundFocused" ResourceKey="BlackBrush"/>
+                        <StaticResource x:Key="TextControlBorderBrushFocused" ResourceKey="OrangeFocusBrush"/>
+                        <StaticResource x:Key="TextControlBorderBrushPointerOver" ResourceKey="MediumGrayBrush"/>
+                        <StaticResource x:Key="TextControlPlaceholderForeground" ResourceKey="PlaceholderGrayBrush"/>
+                        <StaticResource x:Key="TextControlPlaceholderForegroundPointerOver" ResourceKey="PlaceholderGrayBrush"/>
+                        <StaticResource x:Key="TextControlPlaceholderForegroundFocused" ResourceKey="PlaceholderGrayBrush"/>
                     </PasswordBox.Resources>
                 </PasswordBox>
             </StackPanel>
 
             <!-- Divider -->
-            <Rectangle Height="1" 
-                       Fill="#E5E7EB" 
-                       Margin="0,8,0,8"/>
+            <controls:DividerControl DividerBrush="{StaticResource LighterGrayBrush}"/>
 
             <!-- Footer -->
             <Grid Margin="0,8,0,0">
@@ -141,14 +141,12 @@
                           IsChecked="{x:Bind ViewModel.RememberMe, Mode=TwoWay}"
                           VerticalAlignment="Center"
                           Style="{StaticResource OrangeCheckBoxStyle}">
-
                     <TextBlock Text="{x:Bind ViewModel.RememberMeLabelDisplay, Mode=OneWay}"
-                               FontSize="14"
+                               FontSize="{StaticResource FontSizeSmall}"
                                FontWeight="Thin"
-                               Foreground="#555555"
+                               Foreground="{StaticResource DarkGrayBrush}"
                                TextWrapping="NoWrap"
-                               VerticalAlignment="Center"
-                               />
+                               VerticalAlignment="Center"/>
                 </CheckBox>
                 <StackPanel Grid.Column="1"
                             Orientation="Horizontal"
@@ -159,31 +157,28 @@
                             Visibility="{x:Bind ViewModel.IsNotSaving, Mode=OneWay}"
                             CornerRadius="7"
                             Padding="24,10"
-                            FontSize="15"
+                            FontSize="{StaticResource FontSizeMedium}"
                             FontWeight="SemiBold"
-                            Foreground="White"
-                            Background="#FF7A30"
+                            Foreground="{StaticResource WhiteBrush}"
+                            Background="{StaticResource OrangeFocusBrush}"
                             Width="100"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center">
-
                         <Button.Resources>
-                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#E55A1F"/>
-                            <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#CC481A"/>
-                            <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
-                            <SolidColorBrush x:Key="ButtonForegroundPressed" Color="White"/>
-
-                            <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="#E5E7EB"/>
-                            <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="#9CA3AF"/>
+                            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
+                            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush"/>
+                            <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
+                            <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
+                            <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="LighterGrayBrush"/>
+                            <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="PlaceholderGrayBrush"/>
                         </Button.Resources>
-
                         <TextBlock Text="{x:Bind ViewModel.SaveButtonDisplay, Mode=OneWay}"/>
                     </Button>
                     <ProgressRing Width="20"
                                   Height="20"
                                   IsActive="{x:Bind ViewModel.IsSaving, Mode=OneWay}"
                                   Visibility="{x:Bind ViewModel.IsSaving, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
-                                  Foreground="#FF7A30"
+                                  Foreground="{StaticResource OrangeFocusBrush}"
                                   VerticalAlignment="Center"/>
                 </StackPanel>
             </Grid>
