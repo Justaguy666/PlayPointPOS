@@ -139,11 +139,12 @@
             <controls:DividerControl DividerBrush="{StaticResource LighterGrayBrush}" />
 
             <!-- Footer -->
-            <Grid Margin="0,8,0,0">
+            <Grid Margin="0,8,0,0" ColumnSpacing="16">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
+                
                 <CheckBox Grid.Column="0"
                           IsChecked="{x:Bind ViewModel.RememberMe, Mode=TwoWay}"
                           VerticalAlignment="Center"
@@ -157,13 +158,39 @@
                                VerticalAlignment="Center"
                                />
                 </CheckBox>
+
                 <StackPanel Grid.Column="1"
                             Orientation="Horizontal"
                             Spacing="10"
                             VerticalAlignment="Center">
+
+                    <Button x:Name="ForgotPasswordButton"
+                            Command="{x:Bind ViewModel.ForgotPasswordCommand, Mode=OneWay}"
+                            Visibility="{x:Bind ViewModel.IsNotLoggingIn, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
+                            CornerRadius="7"
+                            Padding="12,10"
+                            FontSize="{StaticResource FontSizeSmall}"
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource BlackBrush}"
+                            Background="{StaticResource TransparentBrush}"
+                            BorderThickness="1"
+                            BorderBrush="{StaticResource LightGrayBrush}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center">
+
+                        <Button.Resources>
+                            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
+                            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush"/>
+                            <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
+                            <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
+                        </Button.Resources>
+
+                        <TextBlock Text="{x:Bind ViewModel.ForgotPasswordButtonDisplay, Mode=OneWay}"/>
+                    </Button>
+
                     <Button x:Name="LoginButton"
                             Command="{x:Bind ViewModel.LoginCommand, Mode=OneWay}"
-                            Visibility="{x:Bind ViewModel.IsNotLoggingIn, Mode=OneWay}"
+                            Visibility="{x:Bind ViewModel.IsNotLoggingIn, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
                             CornerRadius="7"
                             Padding="24,10"
                             FontSize="{StaticResource FontSizeMedium}"
@@ -171,7 +198,7 @@
                             Foreground="{StaticResource WhiteBrush}"
                             Background="{StaticResource OrangeFocusBrush}"
                             Width="120"
-                            HorizontalAlignment="Right"
+                            HorizontalAlignment="Stretch"
                             VerticalAlignment="Center">
 
                         <Button.Resources>
@@ -186,10 +213,11 @@
 
                         <TextBlock Text="{x:Bind ViewModel.LoginButtonDisplay, Mode=OneWay}"/>
                     </Button>
+
                     <ProgressRing Width="20"
                                   Height="20"
                                   IsActive="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay}"
-                                  Visibility="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay}"
+                                  Visibility="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
                                   Foreground="{StaticResource OrangeFocusBrush}"
                                   VerticalAlignment="Center"/>
                 </StackPanel>

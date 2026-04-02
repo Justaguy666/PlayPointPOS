@@ -95,6 +95,18 @@
     <None Update="Configurations\config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\Dialogs\ForgotPasswordDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\Dialogs\OtpDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Settings\GeneralSettingsCardControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Settings\ShopInformationCardControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Resources\FontSize.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -131,7 +143,7 @@
     <Page Update="Views\Dialogs\ConfirmationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Views\Pages\SettingsPagePage.xaml">
+    <Page Update="Views\Pages\SettingsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Views\Pages\TransactionHistoryPage.xaml">
@@ -205,11 +217,15 @@
     <None Remove="Resources\FontSize.xaml" />
     <None Remove="Resources\Images.xaml" />
     <None Remove="Views\Dialogs\ConfirmationDialog.xaml" />
+    <None Remove="Views\Dialogs\ForgotPasswordDialog.xaml" />
+    <None Remove="Views\Dialogs\OtpDialog.xaml" />
     <None Remove="Views\UserControls\Dashboard\GoalProgressCardControl.xaml" />
     <None Remove="Views\UserControls\Dashboard\ChartCardControl.xaml" />
     <None Remove="Views\UserControls\PaginationControl.xaml" />
     <None Remove="Views\UserControls\Dashboard\QuickStatsControl.xaml" />
     <None Remove="Views\UserControls\Dashboard\StatCardControl.xaml" />
     <None Remove="Views\UserControls\Dashboard\TrendingListControl.xaml" />
+    <None Remove="Views\UserControls\Settings\GeneralSettingsCardControl.xaml" />
+    <None Remove="Views\UserControls\Settings\ShopInformationCardControl.xaml" />
   </ItemGroup>
 </Project>

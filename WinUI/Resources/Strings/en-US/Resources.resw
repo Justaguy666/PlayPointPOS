@@ -207,6 +207,57 @@
   <data name="LoginDialogLoginButtonText" xml:space="preserve">
         <value>Login</value>
     </data>
+	<data name="LoginDialogForgotPasswordButtonText" xml:space="preserve">
+        <value>Forgot password?</value>
+    </data>
+  <data name="ForgotPasswordDialogTitleText" xml:space="preserve">
+        <value>Forgot password</value>
+    </data>
+  <data name="ForgotPasswordDialogEmailLabelText" xml:space="preserve">
+        <value>Recovery email</value>
+    </data>
+  <data name="ForgotPasswordDialogEmailPlaceholderText" xml:space="preserve">
+        <value>name@example.com...</value>
+    </data>
+  <data name="ForgotPasswordDialogSendOtpButtonText" xml:space="preserve">
+        <value>Send OTP</value>
+    </data>
+  <data name="ForgotPasswordDialogBackButtonText" xml:space="preserve">
+        <value>Back to login</value>
+    </data>
+  <data name="ForgotPasswordDialogInvalidEmailText" xml:space="preserve">
+        <value>Please enter a valid email address.</value>
+    </data>
+  <data name="OtpDialogTitleText" xml:space="preserve">
+        <value>OTP verification</value>
+    </data>
+  <data name="OtpDialogOtpLabelText" xml:space="preserve">
+        <value>OTP code</value>
+    </data>
+  <data name="OtpDialogOtpPlaceholderText" xml:space="preserve">
+        <value>6-digit code...</value>
+    </data>
+  <data name="OtpDialogNewPasswordLabelText" xml:space="preserve">
+        <value>New password</value>
+    </data>
+  <data name="OtpDialogNewPasswordPlaceholderText" xml:space="preserve">
+        <value>New password...</value>
+    </data>
+  <data name="OtpDialogConfirmPasswordLabelText" xml:space="preserve">
+        <value>Confirm new password</value>
+    </data>
+  <data name="OtpDialogConfirmPasswordPlaceholderText" xml:space="preserve">
+        <value>Confirm new password...</value>
+    </data>
+  <data name="OtpDialogChangeEmailButtonText" xml:space="preserve">
+        <value>Change email</value>
+    </data>
+  <data name="OtpDialogVerifyButtonText" xml:space="preserve">
+        <value>Reset</value>
+    </data>
+  <data name="OtpDialogPasswordMismatchText" xml:space="preserve">
+        <value>Confirm password does not match.</value>
+    </data>
   <data name="LoginDialogErrorText" xml:space="preserve">
         <value>Invalid Email or password</value>
     </data>

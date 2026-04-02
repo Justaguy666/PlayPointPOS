@@ -73,6 +73,8 @@ public partial class App : Microsoft.UI.Xaml.Application
                             "Config" => new ConfigDialog(provider.GetRequiredService<ViewModels.Dialogs.ConfigViewModel>()),
                             "Register" => new RegisterDialog(provider.GetRequiredService<ViewModels.Dialogs.RegisterViewModel>()),
                             "Login" => new LoginDialog(provider.GetRequiredService<ViewModels.Dialogs.LoginViewModel>()),
+                            "ForgotPassword" => new ForgotPasswordDialog(provider.GetRequiredService<ViewModels.Dialogs.ForgotPasswordViewModel>()),
+                            "Otp" => new OtpDialog(provider.GetRequiredService<ViewModels.Dialogs.OtpViewModel>()),
                             _ => null
                         };
                     });
@@ -98,6 +100,8 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddTransient<ViewModels.Dialogs.ConfigViewModel>();
                     services.AddTransient<ViewModels.Dialogs.LoginViewModel>();
                     services.AddTransient<ViewModels.Dialogs.RegisterViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.ForgotPasswordViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.OtpViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.ChartCardControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.QuickStatsControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.GoalProgressControlViewModel>();
@@ -114,7 +118,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddTransient<Views.Pages.ProductManagementPage>();
                     services.AddTransient<Views.Pages.MemberManagementPage>();
                     services.AddTransient<Views.Pages.TransactionHistoryPage>();
-                    services.AddTransient<Views.Pages.SettingsPagePage>();
+                    services.AddTransient<Views.Pages.SettingsPage>();
                 })
                 .Build();
 
@@ -125,7 +129,7 @@ public partial class App : Microsoft.UI.Xaml.Application
             NavigationMap.Register<Application.Navigation.Requests.NavigateToProductManagement, Views.Pages.ProductManagementPage>();
             NavigationMap.Register<Application.Navigation.Requests.NavigateToMemberManagement, Views.Pages.MemberManagementPage>();
             NavigationMap.Register<Application.Navigation.Requests.NavigateToTransactionHistory, Views.Pages.TransactionHistoryPage>();
-            NavigationMap.Register<Application.Navigation.Requests.NavigateToSettings, Views.Pages.SettingsPagePage>();
+            NavigationMap.Register<Application.Navigation.Requests.NavigateToSettings, Views.Pages.SettingsPage>();
 
             var configuration = Host.Services.GetRequiredService<IConfiguration>();
             var language = configuration["AppSettings:Language"] ?? "en-US";

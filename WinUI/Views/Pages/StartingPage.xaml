@@ -11,48 +11,48 @@
 
     <ScrollViewer>
         <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <StackPanel
-            Grid.Row="0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Spacing="20">
-
-            <controls:LogoControl Width="450" Height="250" />
-
-            <TextBlock
-                Text="{x:Bind ViewModel.WelcomeTextDisplay}"
-                FontSize="{StaticResource FontSizeExtraExtraExtraLarge}"
-                FontWeight="Light"
+            <StackPanel
+                Grid.Row="0"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
+                VerticalAlignment="Center"
+                Spacing="20">
 
-            <controls:MenuControl Margin="0,20" DataContext="{x:Bind ViewModel}" />
-        </StackPanel>
+                <controls:LogoControl Width="450" Height="250" />
 
-        <StackPanel
-            Grid.Row="1"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Bottom"
-            Margin="0,0,0,16">
-            <TextBlock
-                Text="{x:Bind ViewModel.AppVersionDisplay}"
-                FontSize="{StaticResource FontSizeSmall}"
-                FontWeight="Normal"
+                <TextBlock
+                    Text="{x:Bind ViewModel.WelcomeTextDisplay}"
+                    FontSize="{StaticResource FontSizeExtraExtraExtraLarge}"
+                    FontWeight="Light"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+
+                <controls:MenuControl Margin="0,20" DataContext="{x:Bind ViewModel}" />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Row="1"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
+                VerticalAlignment="Bottom"
+                Margin="0,0,0,16">
+                <TextBlock
+                    Text="{x:Bind ViewModel.AppVersionDisplay}"
+                    FontSize="{StaticResource FontSizeSmall}"
+                    FontWeight="Normal"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
 
-            <TextBlock
-                Text="{x:Bind ViewModel.CopyrightDisplay}"
-                FontSize="{StaticResource FontSizeMedium}"
-                FontWeight="Medium"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
-        </StackPanel>
-    </Grid>
+                <TextBlock
+                    Text="{x:Bind ViewModel.CopyrightDisplay}"
+                    FontSize="{StaticResource FontSizeMedium}"
+                    FontWeight="Medium"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+            </StackPanel>
+        </Grid>
     </ScrollViewer>
 </Page>

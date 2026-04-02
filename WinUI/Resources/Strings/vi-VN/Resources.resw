@@ -207,6 +207,57 @@
   <data name="LoginDialogLoginButtonText" xml:space="preserve">
     <value>Đăng nhập</value>
   </data>
+  <data name ="LoginDialogForgotPasswordButtonText" xml:space="preserve">
+    <value>Quên mật khẩu?</value>
+  </data>
+  <data name="ForgotPasswordDialogTitleText" xml:space="preserve">
+    <value>Quên mật khẩu</value>
+  </data>
+  <data name="ForgotPasswordDialogEmailLabelText" xml:space="preserve">
+    <value>Email khôi phục</value>
+  </data>
+  <data name="ForgotPasswordDialogEmailPlaceholderText" xml:space="preserve">
+    <value>name@example.com...</value>
+  </data>
+  <data name="ForgotPasswordDialogSendOtpButtonText" xml:space="preserve">
+    <value>Gửi OTP</value>
+  </data>
+  <data name="ForgotPasswordDialogBackButtonText" xml:space="preserve">
+    <value>Quay lại đăng nhập</value>
+  </data>
+  <data name="ForgotPasswordDialogInvalidEmailText" xml:space="preserve">
+    <value>Vui lòng nhập email hợp lệ.</value>
+  </data>
+  <data name="OtpDialogTitleText" xml:space="preserve">
+    <value>Xác thực OTP</value>
+  </data>
+  <data name="OtpDialogOtpLabelText" xml:space="preserve">
+    <value>Mã OTP</value>
+  </data>
+  <data name="OtpDialogOtpPlaceholderText" xml:space="preserve">
+    <value>Mã 6 chữ số...</value>
+  </data>
+  <data name="OtpDialogNewPasswordLabelText" xml:space="preserve">
+    <value>Mật khẩu mới</value>
+  </data>
+  <data name="OtpDialogNewPasswordPlaceholderText" xml:space="preserve">
+    <value>Mật khẩu mới...</value>
+  </data>
+  <data name="OtpDialogConfirmPasswordLabelText" xml:space="preserve">
+    <value>Xác nhận mật khẩu mới</value>
+  </data>
+  <data name="OtpDialogConfirmPasswordPlaceholderText" xml:space="preserve">
+    <value>Xác nhận mật khẩu mới...</value>
+  </data>
+  <data name="OtpDialogChangeEmailButtonText" xml:space="preserve">
+    <value>Đổi email</value>
+  </data>
+  <data name="OtpDialogVerifyButtonText" xml:space="preserve">
+    <value>Đặt lại</value>
+  </data>
+  <data name="OtpDialogPasswordMismatchText" xml:space="preserve">
+    <value>Mật khẩu xác nhận không khớp.</value>
+  </data>
   <data name="LoginDialogErrorText" xml:space="preserve">
     <value>Tên đăng nhập hoặc mật khẩu không đúng</value>
   </data>

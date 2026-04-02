@@ -54,10 +54,14 @@ public partial class LoginViewModel : LocalizedViewModelBase
     public partial string LoginButtonDisplay { get; set; } = string.Empty;
 
     [ObservableProperty]
+    public partial string ForgotPasswordButtonDisplay { get; set; } = string.Empty;
+
+    [ObservableProperty]
     public partial string CloseTooltipDisplay { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ForgotPasswordCommand))]
     [NotifyPropertyChangedFor(nameof(CanLoginExecute))]
     [NotifyPropertyChangedFor(nameof(IsNotLoggingIn))]
     public partial bool IsLoggingIn { get; set; }
@@ -115,6 +119,7 @@ public partial class LoginViewModel : LocalizedViewModelBase
         PasswordPlaceholderDisplay = LocalizationService.GetString("LoginDialogPasswordPlaceholderText");
         RememberMeLabelDisplay = LocalizationService.GetString("LoginDialogRememberMeLabelText");
         LoginButtonDisplay = LocalizationService.GetString("LoginDialogLoginButtonText");
+        ForgotPasswordButtonDisplay = LocalizationService.GetString("LoginDialogForgotPasswordButtonText");
         CloseTooltipDisplay = LocalizationService.GetString("CloseTooltipText");
     }
 
@@ -165,6 +170,16 @@ public partial class LoginViewModel : LocalizedViewModelBase
         !IsLoggingIn &&
         !string.IsNullOrWhiteSpace(Email) &&
         !string.IsNullOrWhiteSpace(Password);
+
+    [RelayCommand(CanExecute = nameof(CanOpenForgotPassword))]
+    private async Task ForgotPasswordAsync()
+    {
+        CloseRequestedInternal?.Invoke();
+        await Task.Yield();
+        await _dialogService.ShowDialogAsync("ForgotPassword");
+    }
+
+    private bool CanOpenForgotPassword() => !IsLoggingIn;
 
     [RelayCommand]
     private void Close()

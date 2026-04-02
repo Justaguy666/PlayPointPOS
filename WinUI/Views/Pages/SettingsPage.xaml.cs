@@ -5,11 +5,11 @@ using WinUI.ViewModels.Pages;
 
 namespace WinUI.Views.Pages
 {
-    public sealed partial class SettingsPagePage : Page
+    public sealed partial class SettingsPage : Page
     {
         public SettingsPageViewModel ViewModel { get; }
 
-        public SettingsPagePage(SettingsPageViewModel viewModel)
+        public SettingsPage(SettingsPageViewModel viewModel)
         {
             ViewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
             DataContext = ViewModel;
