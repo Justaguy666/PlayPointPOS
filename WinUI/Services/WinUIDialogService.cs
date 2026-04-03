@@ -13,10 +13,10 @@ namespace WinUI.Services;
 public class WinUIDialogService : IDialogService
 {
     private FrameworkElement? _rootElement;
-    private readonly Func<string, ContentDialog?> _dialogFactory;
+    private readonly Func<string, object?, ContentDialog?> _dialogFactory;
     private readonly ILocalizationService _localizationService;
 
-    public WinUIDialogService(Func<string, ContentDialog?> dialogFactory, ILocalizationService localizationService)
+    public WinUIDialogService(Func<string, object?, ContentDialog?> dialogFactory, ILocalizationService localizationService)
     {
         _dialogFactory = dialogFactory ?? throw new ArgumentNullException(nameof(dialogFactory));
         _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
@@ -31,13 +31,16 @@ public class WinUIDialogService : IDialogService
     }
 
     public async Task ShowDialogAsync(string dialogKey)
+        => await ShowDialogAsync(dialogKey, null);
+
+    public async Task ShowDialogAsync(string dialogKey, object? parameter)
     {
         if (_rootElement?.XamlRoot == null)
         {
             throw new InvalidOperationException("DialogService is not initialized with a valid root element.");
         }
 
-        var dialog = _dialogFactory(dialogKey);
+        var dialog = _dialogFactory(dialogKey, parameter);
 
         if (dialog != null)
         {

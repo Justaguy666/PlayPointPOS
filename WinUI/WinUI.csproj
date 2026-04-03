@@ -23,13 +23,9 @@
 
   <ItemGroup>
     <Compile Remove="Models\**" />
-    <Compile Remove="Resources\Styles\**" />
     <EmbeddedResource Remove="Models\**" />
-    <EmbeddedResource Remove="Resources\Styles\**" />
     <None Remove="Models\**" />
-    <None Remove="Resources\Styles\**" />
     <Page Remove="Models\**" />
-    <Page Remove="Resources\Styles\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,6 +65,8 @@
     <Folder Include="Assets\Icons\" />
     <Folder Include="Extensions\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Resources\Animations\" />
+    <Folder Include="Resources\Styles\" />
   </ItemGroup>
 
   <!--
@@ -105,6 +103,15 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Views\UserControls\Settings\ShopInformationCardControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Resources\Styles\CheckBoxStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Resources\Styles\SettingsComboBoxStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Resources\Animations\NotificationAnimations.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Resources\FontSize.xaml">
@@ -210,9 +217,9 @@
     </ItemGroup>
   </Target>
   <ItemGroup>
-    <PRIResource Remove="Resources\Styles\**" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Resources\Styles\CheckBoxStyles.xaml" />
+    <None Remove="Resources\Styles\SettingsComboBoxStyles.xaml" />
+    <None Remove="Resources\Animations\NotificationAnimations.xaml" />
     <None Remove="Resources\Colors.xaml" />
     <None Remove="Resources\FontSize.xaml" />
     <None Remove="Resources\Images.xaml" />

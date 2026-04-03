@@ -3,10 +3,20 @@
     x:Class="WinUI.Views.UserControls.Settings.GeneralSettingsCardControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:WinUI.Views.UserControls.Settings"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:vm="using:WinUI.ViewModels.UserControls.Settings"
+    d:DataContext="{d:DesignInstance Type=vm:GeneralSettingsCardControlViewModel, IsDesignTimeCreatable=False}"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Resources/Styles/SettingsComboBoxStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
 
     <Border
         Padding="24"
@@ -17,5 +27,93 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
 
+        <StackPanel Orientation="Vertical" Spacing="12">
+            <TextBlock Text="{Binding Title}"
+                       FontSize="{StaticResource SubtitleTextBlockFontSize}"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource BlackBrush}" />
+
+            <controls:DividerControl DividerBrush="{StaticResource LighterGrayBrush}" />
+
+            <Grid RowSpacing="12" ColumnSpacing="12">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Vertical"
+                            Spacing="4"
+                            HorizontalAlignment="Stretch">
+                    <TextBlock Text="{Binding CurrencyLabel}"
+                               FontSize="{StaticResource FontSizeMedium}"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource BlackBrush}" />
+
+                    <ComboBox Style="{StaticResource SettingsComboBoxStyle}"
+                              ItemsSource="{Binding AvailableCurrencies}"
+                              SelectedValuePath="Value"
+                              SelectedValue="{Binding SelectedCurrencyValue, Mode=TwoWay}"
+                              DisplayMemberPath="DisplayName"
+                              FontSize="{StaticResource ValueFontSize}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            Orientation="Vertical"
+                            Spacing="4"
+                            HorizontalAlignment="Stretch">
+                    <TextBlock Text="{Binding TimeZoneLabel}"
+                               FontSize="{StaticResource FontSizeMedium}"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource BlackBrush}" />
+
+                    <ComboBox Style="{StaticResource SettingsComboBoxStyle}"
+                              ItemsSource="{Binding AvailableTimeZones}"
+                              SelectedValuePath="Value"
+                              SelectedValue="{Binding SelectedTimeZoneValue, Mode=TwoWay}"
+                              DisplayMemberPath="DisplayName"
+                              FontSize="{StaticResource ValueFontSize}" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="1"
+                            Orientation="Vertical"
+                            Spacing="4"
+                            HorizontalAlignment="Stretch">
+                    <TextBlock Text="{Binding LanguageLabel}"
+                               FontSize="{StaticResource FontSizeMedium}"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource BlackBrush}" />
+
+                    <ComboBox Style="{StaticResource SettingsComboBoxStyle}"
+                              ItemsSource="{Binding AvailableLanguages}"
+                              SelectedValuePath="Value"
+                              SelectedValue="{Binding SelectedLanguageValue, Mode=TwoWay}"
+                              DisplayMemberPath="DisplayName"
+                              FontSize="{StaticResource ValueFontSize}" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="1"
+                            Grid.Column="1"
+                            Orientation="Vertical"
+                            Spacing="4"
+                            HorizontalAlignment="Stretch">
+                    <TextBlock Text="{Binding DateFormatLabel}"
+                               FontSize="{StaticResource FontSizeMedium}"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource BlackBrush}" />
+
+                    <ComboBox Style="{StaticResource SettingsComboBoxStyle}"
+                              ItemsSource="{Binding AvailableDateFormats}"
+                              SelectedValuePath="Value"
+                              SelectedValue="{Binding SelectedDateFormatValue, Mode=TwoWay}"
+                              DisplayMemberPath="DisplayName"
+                              FontSize="{StaticResource ValueFontSize}" />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
     </Border>
 </UserControl>

@@ -258,6 +258,24 @@
   <data name="OtpDialogPasswordMismatchText" xml:space="preserve">
         <value>Confirm password does not match.</value>
     </data>
+  <data name="OtpDialogEmailChangeTitleText" xml:space="preserve">
+        <value>Verify new email</value>
+    </data>
+  <data name="OtpDialogEmailChangeDescriptionText" xml:space="preserve">
+        <value>Enter the OTP sent to {0} to confirm this email change.</value>
+    </data>
+  <data name="OtpDialogEmailChangeVerifyButtonText" xml:space="preserve">
+        <value>Confirm</value>
+    </data>
+  <data name="OtpDialogRegistrationTitleText" xml:space="preserve">
+        <value>Verify registration</value>
+    </data>
+  <data name="OtpDialogRegistrationDescriptionText" xml:space="preserve">
+        <value>Enter the OTP sent to {0} to complete account registration.</value>
+    </data>
+  <data name="OtpDialogRegistrationVerifyButtonText" xml:space="preserve">
+        <value>Create account</value>
+    </data>
   <data name="LoginDialogErrorText" xml:space="preserve">
         <value>Invalid Email or password</value>
     </data>
@@ -299,6 +317,9 @@
     </data>
   <data name="RegisterDialogCreateButtonText" xml:space="preserve">
         <value>Create</value>
+    </data>
+  <data name="RegisterDialogInvalidEmailText" xml:space="preserve">
+        <value>Please enter a valid email address.</value>
     </data>
   <data name="RegisterDialogErrorText">
     <value>Registration failed. Please check your inputs and try again!</value>
@@ -582,11 +603,8 @@
   <data name="DashboardCompletionValueFormat" xml:space="preserve">
     <value>{0:0}% completed</value>
   </data>
-  <data name="SettingsPageLocalizationTitle" xml:space="preserve">
-    <value>Localization settings</value>
-  </data>
-  <data name="SettingsPageLocalizationDescription" xml:space="preserve">
-    <value>Adjust language, currency, and timezone independently. Dashboard values update immediately.</value>
+  <data name="SettingsPageGeneralTitle" xml:space="preserve">
+    <value>General settings</value>
   </data>
   <data name="SettingsPageLanguageLabel" xml:space="preserve">
     <value>Language</value>
@@ -623,5 +641,59 @@
   </data>
   <data name="LocalizationTimezonePlus9OptionText" xml:space="preserve">
     <value>UTC+09:00</value>
+  </data>
+  <data name="SettingsPageDateFormatLabel" xml:space="preserve">
+    <value>Date format</value>
+  </data>
+  <data name="SettingsPageLogoutButton" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="SettingsPageChangePasswordButton" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="SettingsShopInformationTitle" xml:space="preserve">
+    <value>Shop information</value>
+  </data>
+  <data name="SettingsShopInformationShopNameLabel" xml:space="preserve">
+    <value>Shop name</value>
+  </data>
+  <data name="SettingsShopInformationShopNamePlaceholder" xml:space="preserve">
+    <value>Enter shop name</value>
+  </data>
+  <data name="SettingsShopInformationAddressLabel" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="SettingsShopInformationAddressPlaceholder" xml:space="preserve">
+    <value>Enter shop address</value>
+  </data>
+  <data name="SettingsShopInformationEmailLabel" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="SettingsShopInformationEmailPlaceholder" xml:space="preserve">
+    <value>Enter contact email</value>
+  </data>
+  <data name="SettingsShopInformationPhoneLabel" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+  <data name="SettingsShopInformationPhonePlaceholder" xml:space="preserve">
+    <value>Enter phone number</value>
+  </data>
+  <data name="SettingsShopInformationInvalidEmailText" xml:space="preserve">
+    <value>Please enter a valid email address.</value>
+  </data>
+  <data name="SettingsShopInformationInvalidPhoneText" xml:space="preserve">
+    <value>Please enter a valid phone number.</value>
+  </data>
+  <data name="SettingsShopInformationSavedTitle" xml:space="preserve">
+    <value>Shop information updated</value>
+  </data>
+  <data name="SettingsShopInformationSavedMessage" xml:space="preserve">
+    <value>{0} details were updated successfully.</value>
+  </data>
+  <data name="SettingsLocalizationSavedTitle" xml:space="preserve">
+    <value>Settings applied</value>
+  </data>
+  <data name="SettingsLocalizationSavedMessage" xml:space="preserve">
+    <value>Localization preferences were updated. Date format: {0}.</value>
   </data>
 </root>

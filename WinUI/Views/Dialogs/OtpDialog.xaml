@@ -93,7 +93,8 @@
                 </TextBox>
             </StackPanel>
 
-            <StackPanel Spacing="8">
+            <StackPanel Spacing="8"
+                        Visibility="{x:Bind ViewModel.ShowPasswordFields, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
                 <TextBlock Text="{x:Bind ViewModel.NewPasswordLabelDisplay, Mode=OneWay}"
                            FontWeight="SemiBold"
                            FontSize="{StaticResource LabelFontSize}"
@@ -125,7 +126,8 @@
                 </PasswordBox>
             </StackPanel>
 
-            <StackPanel Spacing="8">
+            <StackPanel Spacing="8"
+                        Visibility="{x:Bind ViewModel.ShowPasswordFields, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
                 <TextBlock Text="{x:Bind ViewModel.ConfirmPasswordLabelDisplay, Mode=OneWay}"
                            FontWeight="SemiBold"
                            FontSize="{StaticResource LabelFontSize}"
@@ -177,7 +179,7 @@
                             VerticalAlignment="Center">
                     <Button x:Name="ChangeEmailButton"
                             Command="{x:Bind ViewModel.ChangeEmailCommand, Mode=OneWay}"
-                            Visibility="{x:Bind ViewModel.IsNotWorking, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
+                            Visibility="{x:Bind ViewModel.ShowChangeEmailButton, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
                             CornerRadius="7"
                             Padding="16,10"
                             FontSize="{StaticResource FontSizeSmall}"

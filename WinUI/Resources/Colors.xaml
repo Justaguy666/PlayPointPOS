@@ -54,6 +54,8 @@
     <color:Color x:Key="DashboardChartRangeBorder">#FFDCCE</color:Color>
     <color:Color x:Key="DashboardChartInactiveBar">#FFA282</color:Color>
     <color:Color x:Key="DashboardChartCalloutBackground">#F9E8E0</color:Color>
+    <color:Color x:Key="SettingsLogoutButtonBackground">#F87171</color:Color>
+    <color:Color x:Key="SettingsLogoutButtonBackgroundHover">#DC2626</color:Color>
 
     <!-- Gradient Stop Colors -->
     <color:Color x:Key="GradientStop1">#FF6B35</color:Color>
@@ -119,6 +121,8 @@
     <SolidColorBrush x:Key="DashboardChartRangeBorderBrush" Color="{StaticResource DashboardChartRangeBorder}" />
     <SolidColorBrush x:Key="DashboardChartInactiveBarBrush" Color="{StaticResource DashboardChartInactiveBar}" />
     <SolidColorBrush x:Key="DashboardChartCalloutBackgroundBrush" Color="{StaticResource DashboardChartCalloutBackground}" />
+    <SolidColorBrush x:Key="SettingsLogoutButtonBackgroundBrush" Color="{StaticResource SettingsLogoutButtonBackground}" />
+    <SolidColorBrush x:Key="SettingsLogoutButtonBackgroundHoverBrush" Color="{StaticResource SettingsLogoutButtonBackgroundHover}" />
 
     <!-- Gradient Brushes -->
     <LinearGradientBrush x:Key="PrimaryGradientBrush" StartPoint="0,0.5" EndPoint="1,0.5">

@@ -258,6 +258,24 @@
   <data name="OtpDialogPasswordMismatchText" xml:space="preserve">
     <value>Mật khẩu xác nhận không khớp.</value>
   </data>
+  <data name="OtpDialogEmailChangeTitleText" xml:space="preserve">
+    <value>Xác thực email mới</value>
+  </data>
+  <data name="OtpDialogEmailChangeDescriptionText" xml:space="preserve">
+    <value>Nhập mã OTP đã gửi tới {0} để xác nhận thay đổi email.</value>
+  </data>
+  <data name="OtpDialogEmailChangeVerifyButtonText" xml:space="preserve">
+    <value>Xác nhận</value>
+  </data>
+  <data name="OtpDialogRegistrationTitleText" xml:space="preserve">
+    <value>Xác thực đăng ký</value>
+  </data>
+  <data name="OtpDialogRegistrationDescriptionText" xml:space="preserve">
+    <value>Nhập mã OTP đã gửi tới {0} để hoàn tất đăng ký tài khoản.</value>
+  </data>
+  <data name="OtpDialogRegistrationVerifyButtonText" xml:space="preserve">
+    <value>Tạo tài khoản</value>
+  </data>
   <data name="LoginDialogErrorText" xml:space="preserve">
     <value>Tên đăng nhập hoặc mật khẩu không đúng</value>
   </data>
@@ -299,6 +317,9 @@
   </data>
   <data name="RegisterDialogCreateButtonText" xml:space="preserve">
     <value>Tạo</value>
+  </data>
+  <data name="RegisterDialogInvalidEmailText" xml:space="preserve">
+    <value>Vui lòng nhập email hợp lệ.</value>
   </data>
   <data name="RegisterDialogErrorText">
     <value>Đăng ký thất bại. Vui lòng kiểm tra lại thông tin và thử lại!</value>
@@ -591,11 +612,8 @@
   <data name="DashboardCompletionValueFormat" xml:space="preserve">
     <value>{0:0}% hoàn thành</value>
   </data>
-  <data name="SettingsPageLocalizationTitle" xml:space="preserve">
-    <value>Cài đặt bản địa hóa</value>
-  </data>
-  <data name="SettingsPageLocalizationDescription" xml:space="preserve">
-    <value>Điều chỉnh riêng ngôn ngữ, tiền tệ và múi giờ. Giá trị trên dashboard sẽ cập nhật ngay.</value>
+  <data name="SettingsPageGeneralTitle" xml:space="preserve">
+    <value>Cài đặt hệ thống</value>
   </data>
   <data name="SettingsPageLanguageLabel" xml:space="preserve">
     <value>Ngôn ngữ</value>
@@ -632,5 +650,59 @@
   </data>
   <data name="LocalizationTimezonePlus9OptionText" xml:space="preserve">
     <value>UTC+09:00</value>
+  </data>
+  <data name="SettingsPageDateFormatLabel" xml:space="preserve">
+    <value>Định dạng ngày</value>
+  </data>
+  <data name="SettingsPageLogoutButton" xml:space="preserve">
+    <value>Đăng xuất</value>
+  </data>
+  <data name="SettingsPageChangePasswordButton" xml:space="preserve">
+    <value>Đổi mật khẩu</value>
+  </data>
+  <data name="SettingsShopInformationTitle" xml:space="preserve">
+    <value>Thông tin cửa hàng</value>
+  </data>
+  <data name="SettingsShopInformationShopNameLabel" xml:space="preserve">
+    <value>Tên cửa hàng</value>
+  </data>
+  <data name="SettingsShopInformationShopNamePlaceholder" xml:space="preserve">
+    <value>Nhập tên cửa hàng</value>
+  </data>
+  <data name="SettingsShopInformationAddressLabel" xml:space="preserve">
+    <value>Địa chỉ</value>
+  </data>
+  <data name="SettingsShopInformationAddressPlaceholder" xml:space="preserve">
+    <value>Nhập địa chỉ cửa hàng</value>
+  </data>
+  <data name="SettingsShopInformationEmailLabel" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="SettingsShopInformationEmailPlaceholder" xml:space="preserve">
+    <value>Nhập email liên hệ</value>
+  </data>
+  <data name="SettingsShopInformationPhoneLabel" xml:space="preserve">
+    <value>Số điện thoại</value>
+  </data>
+  <data name="SettingsShopInformationPhonePlaceholder" xml:space="preserve">
+    <value>Nhập số điện thoại</value>
+  </data>
+  <data name="SettingsShopInformationInvalidEmailText" xml:space="preserve">
+    <value>Vui lòng nhập email hợp lệ.</value>
+  </data>
+  <data name="SettingsShopInformationInvalidPhoneText" xml:space="preserve">
+    <value>Vui lòng nhập số điện thoại hợp lệ.</value>
+  </data>
+  <data name="SettingsShopInformationSavedTitle" xml:space="preserve">
+    <value>Đã cập nhật thông tin cửa hàng</value>
+  </data>
+  <data name="SettingsShopInformationSavedMessage" xml:space="preserve">
+    <value>Thông tin của {0} đã được cập nhật thành công.</value>
+  </data>
+  <data name="SettingsLocalizationSavedTitle" xml:space="preserve">
+    <value>Đã áp dụng cài đặt</value>
+  </data>
+  <data name="SettingsLocalizationSavedMessage" xml:space="preserve">
+    <value>Tùy chọn bản địa hóa đã được cập nhật. Định dạng ngày: {0}.</value>
   </data>
 </root>

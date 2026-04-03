@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WinUI.Helpers.Validations;
 using WinUI.ViewModels;
 
 namespace WinUI.ViewModels.Dialogs;
@@ -86,7 +87,7 @@ public partial class ForgotPasswordViewModel : LocalizedViewModelBase
 
         try
         {
-            if (!LooksLikeEmail(Email))
+            if (!EmailValidation.IsValid(Email))
             {
                 HasError = true;
                 ErrorMessage = LocalizationService.GetString("ForgotPasswordDialogInvalidEmailText");
@@ -118,11 +119,4 @@ public partial class ForgotPasswordViewModel : LocalizedViewModelBase
     }
 
     private bool CanSendOtp() => !IsSubmitting && !string.IsNullOrWhiteSpace(Email);
-
-    private static bool LooksLikeEmail(string? email)
-    {
-        return !string.IsNullOrWhiteSpace(email) &&
-               email.Contains("@", StringComparison.Ordinal) &&
-               email.Contains(".", StringComparison.Ordinal);
-    }
 }

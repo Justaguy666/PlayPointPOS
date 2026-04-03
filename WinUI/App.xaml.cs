@@ -14,6 +14,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.ApplicationModel;
 using WinUI.Services;
+using WinUI.ViewModels.Dialogs;
 using WinUI.Views.Dialogs;
 
 namespace WinUI;
@@ -66,7 +67,7 @@ public partial class App : Microsoft.UI.Xaml.Application
 
                     services.AddSingleton<IPasswordHasher, Infrastructure.Services.PasswordHasher>();
 
-                    services.AddSingleton<Func<string, ContentDialog?>>(provider => dialogKey =>
+                    services.AddSingleton<Func<string, object?, ContentDialog?>>(provider => (dialogKey, parameter) =>
                     {
                         return dialogKey switch
                         {
@@ -74,7 +75,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                             "Register" => new RegisterDialog(provider.GetRequiredService<ViewModels.Dialogs.RegisterViewModel>()),
                             "Login" => new LoginDialog(provider.GetRequiredService<ViewModels.Dialogs.LoginViewModel>()),
                             "ForgotPassword" => new ForgotPasswordDialog(provider.GetRequiredService<ViewModels.Dialogs.ForgotPasswordViewModel>()),
-                            "Otp" => new OtpDialog(provider.GetRequiredService<ViewModels.Dialogs.OtpViewModel>()),
+                            "Otp" => CreateOtpDialog(provider, parameter),
                             _ => null
                         };
                     });
@@ -106,6 +107,8 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddTransient<ViewModels.UserControls.Dashboard.QuickStatsControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.GoalProgressControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.TrendingListControlViewModel>();
+                    services.AddTransient<ViewModels.UserControls.Settings.ShopInformationCardControlViewModel>();
+                    services.AddTransient<ViewModels.UserControls.Settings.GeneralSettingsCardControlViewModel>();
                     services.AddTransient<ViewModels.Pages.DashboardPageViewModel>();
                     services.AddTransient<ViewModels.Pages.StartingPageViewModel>();
                     services.AddTransient<ViewModels.Pages.SettingsPageViewModel>();
@@ -246,5 +249,12 @@ public partial class App : Microsoft.UI.Xaml.Application
         {
             // Avoid masking the original exception when logging fails.
         }
+    }
+
+    private static ContentDialog CreateOtpDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.OtpViewModel>();
+        viewModel.Configure(parameter as OtpDialogRequest);
+        return new OtpDialog(viewModel);
     }
 }

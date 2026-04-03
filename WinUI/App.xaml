@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="ms-appx:///Resources/FontSize.xaml" />
                 <ResourceDictionary Source="ms-appx:///Resources/Colors.xaml" />
                 <ResourceDictionary Source="ms-appx:///Resources/Images.xaml" />
+                <ResourceDictionary Source="ms-appx:///Resources/Styles/CheckBoxStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <!-- Converters -->
@@ -40,97 +41,6 @@
                 <Setter Property="Padding" Value="12,10"/>
             </Style>
             
-            <!-- Custom CheckBox Style - Perfectly circular, Orange when checked -->
-            <Style TargetType="CheckBox" x:Key="OrangeCheckBoxStyle">
-                <Setter Property="Foreground" Value="{StaticResource DarkGrayBrush}"/>
-                <Setter Property="CornerRadius" Value="9999"/>
-                <Setter Property="Width" Value="20"/>
-                <Setter Property="Height" Value="20"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="CheckBox">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup x:Name="CombinedStates">
-                                        <VisualState x:Name="UncheckedNormal"/>
-                                        <VisualState x:Name="UncheckedPointerOver">
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrange}" Duration="0"/>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundUncheckedHover}" Duration="0"/>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="UncheckedPressed">
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDark}" Duration="0"/>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundUncheckedPressed}" Duration="0"/>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="UncheckedDisabled"/>
-                                        <VisualState x:Name="CheckedNormal">
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrange}" Duration="0"/>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundChecked}" Duration="0"/>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="CheckedPointerOver">
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDark}" Duration="0"/>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundCheckedDark}" Duration="0"/>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="CheckedPressed">
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDarker}" Duration="0"/>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundCheckedDarker}" Duration="0"/>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="CheckedDisabled">
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeLight}" Duration="0"/>
-                                                <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundDisabled}" Duration="0"/>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="IndeterminateNormal"/>
-                                        <VisualState x:Name="IndeterminatePointerOver"/>
-                                        <VisualState x:Name="IndeterminatePressed"/>
-                                        <VisualState x:Name="IndeterminateDisabled"/>
-                                    </VisualStateGroup>
-                                </VisualStateManager.VisualStateGroups>
-                                <Border x:Name="CheckboxBorder"
-                                        Grid.Column="0"
-                                        BorderThickness="2"
-                                        CornerRadius="9999"
-                                        Width="20"
-                                        Height="20">
-                                    <Border.BorderBrush>
-                                        <SolidColorBrush x:Name="CheckboxBorderBrush" Color="{StaticResource CheckboxBoarderUnchecked}"/>
-                                    </Border.BorderBrush>
-                                    <Border.Background>
-                                        <SolidColorBrush x:Name="CheckboxBackgroundBrush" Color="Transparent"/>
-                                    </Border.Background>
-                                </Border>
-                                <ContentPresenter x:Name="ContentPresenter"
-                                                 Grid.Column="1"
-                                                 Content="{TemplateBinding Content}"
-                                                 ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                 Margin="8,0,0,0"
-                                                 VerticalAlignment="Center"
-                                                 TextWrapping="Wrap"/>
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Padding" Value="8,8"/>
-                <Setter Property="FontSize" Value="{StaticResource LabelFontSize}"/>
-                <Setter Property="FontWeight" Value="Bold"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="CornerRadius" Value="4"/>
-            </Style>
-
             <!-- Other app resources here -->
         </ResourceDictionary>
     </Application.Resources>

@@ -5,6 +5,7 @@ using Application.UseCases.Auth;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
+using WinUI.Helpers.Validations;
 using WinUI.ViewModels;
 
 namespace WinUI.ViewModels.Dialogs;
@@ -137,6 +138,13 @@ public partial class RegisterViewModel : LocalizedViewModelBase
 
         try
         {
+            if (!EmailValidation.IsValid(Email))
+            {
+                HasError = true;
+                ErrorMessage = LocalizationService.GetString("RegisterDialogInvalidEmailText");
+                return;
+            }
+
             if (Password != ConfirmPassword)
             {
                 HasError = true;
@@ -144,25 +152,20 @@ public partial class RegisterViewModel : LocalizedViewModelBase
                 return;
             }
 
-            var result = await _registerUseCase.ExecuteAsync(Email, Password, LocalizationService.Language);
+            string email = Email.Trim();
+            string password = Password;
+            string language = LocalizationService.Language;
 
-            if (result.Success)
-            {
-                RegisteredAccount = result.Account;
-                RegisterSucceededInternal?.Invoke(result.Account!);
-                CloseRequestedInternal?.Invoke();
-
-                // Toast notification
-                await _notificationService.SendAsync(
-                    LocalizationService.GetString("RegisterSuccessTitle"),
-                    string.Format(LocalizationService.GetString("RegisterSuccessMessage"), result.Account!.Email),
-                    NotificationType.Success);
-            }
-            else
-            {
-                HasError = true;
-                ErrorMessage = result.Message ?? LocalizationService.GetString("RegisterDialogErrorText");
-            }
+            CloseRequestedInternal?.Invoke();
+            await Task.Yield();
+            await _dialogService.ShowDialogAsync(
+                "Otp",
+                new OtpDialogRequest
+                {
+                    Mode = OtpDialogMode.VerifyRegistration,
+                    PendingEmail = email,
+                    OnVerifiedAsync = () => CompleteRegistrationAsync(email, password, language)
+                });
         }
         catch (Exception ex)
         {
@@ -172,6 +175,25 @@ public partial class RegisterViewModel : LocalizedViewModelBase
         {
             IsRegistering = false;
         }
+    }
+
+    private async Task CompleteRegistrationAsync(string email, string password, string language)
+    {
+        var result = await _registerUseCase.ExecuteAsync(email, password, language);
+
+        if (result.Success)
+        {
+            RegisteredAccount = result.Account;
+            RegisterSucceededInternal?.Invoke(result.Account!);
+
+            await _notificationService.SendAsync(
+                LocalizationService.GetString("RegisterSuccessTitle"),
+                string.Format(LocalizationService.GetString("RegisterSuccessMessage"), result.Account!.Email),
+                NotificationType.Success);
+            return;
+        }
+
+        await _dialogService.ShowErrorAsync(result.Message ?? LocalizationService.GetString("RegisterDialogErrorText"));
     }
 
     [RelayCommand(CanExecute = nameof(CanResetExecute))]

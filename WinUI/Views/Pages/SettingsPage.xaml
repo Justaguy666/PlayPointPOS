@@ -3,7 +3,6 @@
     x:Class="WinUI.Views.Pages.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:WinUI.Views.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:WinUI.Views.UserControls.Settings"
@@ -12,70 +11,63 @@
     mc:Ignorable="d">
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                  VerticalScrollBarVisibility="Hidden">
-        <StackPanel 
-            Orientation="Vertical"
-            Spacing="12" Padding="24,36"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Stretch">
+                  VerticalScrollBarVisibility="Auto">
+        <Grid Padding="24,36"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+            <StackPanel MaxWidth="960"
+                        Orientation="Vertical"
+                        Spacing="12"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top">
 
-            <!-- Shop Informations --><!--
-            <controls:ShopInformationCardControl />
+                <controls:ShopInformationCardControl DataContext="{x:Bind ViewModel.ShopInformationCardViewModel, Mode=OneWay}" />
 
-            --><!-- General Settings --><!--
-            <controls:GeneralSettingsCardControl />
+                <controls:GeneralSettingsCardControl DataContext="{x:Bind ViewModel.GeneralSettingsCardViewModel, Mode=OneWay}" />
 
-            --><!-- Buttons --><!--
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right"
-                        Spacing="12">
-                <Button Command="{x:Bind ViewModel.LogoutCommand, Mode=OneWay}"
-                                CornerRadius="7"
-                                Padding="24,10"
-                                FontSize="{StaticResource FontSizeMedium}"
-                                FontWeight="SemiBold"
-                                Foreground="{StaticResource WhiteBrush}"
-                                Background="{StaticResource ErrorRedBrush}">
-                    <Button.Resources>
-                        <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="BlackBrush"/>
-                        <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="BlackBrush"/>
-                    </Button.Resources>
-                    <TextBlock Text="{x:Bind ViewModel.LogoutButtonDisplay, Mode=OneWay}" />
-                </Button>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Spacing="12">
+                    <Button Command="{x:Bind ViewModel.LogoutCommand, Mode=OneWay}"
+                            CornerRadius="7"
+                            Padding="24,10"
+                            FontSize="{StaticResource FontSizeMedium}"
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource WhiteBrush}"
+                            Background="{StaticResource SettingsLogoutButtonBackgroundBrush}">
+                        <Button.Resources>
+                            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="SettingsLogoutButtonBackgroundHover"/>
+                            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="SettingsLogoutButtonBackgroundHover"/>
+                        </Button.Resources>
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <PathIcon 
+                                Width="20"
+                                Height="20"
+                                Data="{x:Bind ViewModel.LogoutIconState, Converter={StaticResource IconConverter}, Mode=OneWay}"
+                                Foreground="{StaticResource WhiteBrush}" 
+                                VerticalAlignment="Center" />
 
-                <Button Command="{x:Bind ViewModel.ChangePasswordCommand, Mode=OneWay}"
-                                CornerRadius="7"
-                                Padding="24,10"
-                                FontSize="{StaticResource FontSizeMedium}"
-                                FontWeight="SemiBold"
-                                Foreground="{StaticResource WhiteBrush}"
-                                Background="{StaticResource OrangeFocusBrush}">
-                    <Button.Resources>
-                        <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
-                        <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkBrush"/>
-                        <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
-                        <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
-                    </Button.Resources>
-                    <TextBlock Text="{x:Bind ViewModel.ChangePasswordButtonDisplay, Mode=OneWay}" />
-                </Button>
+                            <TextBlock Text="{x:Bind ViewModel.LogoutButtonDisplay, Mode=OneWay}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
 
-                <Button Command="{x:Bind ViewModel.ApplyCommand, Mode=OneWay}"
-                                CornerRadius="7"
-                                Padding="24,10"
-                                FontSize="{StaticResource FontSizeMedium}"
-                                FontWeight="SemiBold"
-                                Foreground="{StaticResource WhiteBrush}"
-                                Background="{StaticResource OrangeFocusBrush}">
-                    <Button.Resources>
-                        <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeBrush"/>
-                        <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeBrush"/>
-                        <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
-                        <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
-                    </Button.Resources>
-                    <TextBlock Text="{x:Bind ViewModel.ApplyButtonDisplay, Mode=OneWay}" />
-                </Button>
-
-            </StackPanel>-->
-        </StackPanel>
+                    <Button Command="{x:Bind ViewModel.ChangePasswordCommand, Mode=OneWay}"
+                            CornerRadius="7"
+                            Padding="24,10"
+                            FontSize="{StaticResource FontSizeMedium}"
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource BlackBrush}"
+                            Background="{StaticResource WhiteBrush}">
+                        <Button.Resources>
+                            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
+                            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkBrush"/>
+                            <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
+                            <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
+                        </Button.Resources>
+                        <TextBlock Text="{x:Bind ViewModel.ChangePasswordButtonDisplay, Mode=OneWay}" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
     </ScrollViewer>
 </Page>
