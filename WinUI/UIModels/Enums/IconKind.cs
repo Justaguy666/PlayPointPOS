@@ -15,7 +15,7 @@ public enum IconKind
     Exit,
     Close,
     Dashboard,
-    Table,
+    Area,
     Game,
     Product,
     Food,

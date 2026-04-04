@@ -336,23 +336,23 @@
   <data name="HeaderTodayRevenueLabel" xml:space="preserve">
         <value>Today's Revenue</value>
     </data>
-  <data name="HeaderActiveTablesLabel" xml:space="preserve">
-        <value>Active Tables</value>
+  <data name="HeaderActiveAreasLabel" xml:space="preserve">
+        <value>Active Areas</value>
     </data>
-  <data name="HeaderReservedTablesLabel" xml:space="preserve">
-        <value>Reserved Tables</value>
+  <data name="HeaderReservedAreasLabel" xml:space="preserve">
+        <value>Reserved Areas</value>
     </data>
   <data name="NavDashboardText" xml:space="preserve">
         <value>Dashboard</value>
     </data>
-  <data name="NavTableText" xml:space="preserve">
-        <value>Tables</value>
+  <data name="NavAreaText" xml:space="preserve">
+        <value>Areas</value>
     </data>
   <data name="NavGameText" xml:space="preserve">
         <value>Games</value>
     </data>
   <data name="NavFoodText" xml:space="preserve">
-        <value>Food &amp; Drinks</value>
+        <value>Products</value>
     </data>
   <data name="NavMemberText" xml:space="preserve">
         <value>Members</value>
@@ -435,8 +435,8 @@
   <data name="QuickStatsControlTitle" xml:space="preserve">
     <value>Quick Stats</value>
   </data>
-  <data name="QuickStatsControlAverageHourPerTable" xml:space="preserve">
-    <value>Avg hour per table</value>
+  <data name="QuickStatsControlAverageHourPerArea" xml:space="preserve">
+    <value>Avg hour per area</value>
   </data>
   <data name="QuickStatsControlAverageRevenuePerInvoice" xml:space="preserve">
     <value>Avg revenue per bill</value>
@@ -444,8 +444,8 @@
   <data name="QuickStatsControlComebackPercent" xml:space="preserve">
     <value>Return rate</value>
   </data>
-  <data name="QuickStatsControlTableCoveragePerHourPercent" xml:space="preserve">
-    <value>Table usage rate</value>
+  <data name="QuickStatsControlAreaCoveragePerHourPercent" xml:space="preserve">
+    <value>Area usage rate</value>
   </data>
   <data name="QuickStatsControlNewMemberPerMonth" xml:space="preserve">
     <value>New members/month</value>

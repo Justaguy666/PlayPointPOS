@@ -93,7 +93,7 @@ public partial class IconConverter : IValueConverter
         IconKind.Exit => "ic_fluent_arrow_exit",
         IconKind.Close => "ic_fluent_dismiss",
         IconKind.Dashboard => "ic_fluent_clover",
-        IconKind.Table => "ic_fluent_table_multiple",
+        IconKind.Area => "ic_fluent_table_multiple",
         IconKind.Game => "ic_fluent_games",
         IconKind.Product => "ic_fluent_food_apple",
         IconKind.Food => "ic_fluent_food_egg",

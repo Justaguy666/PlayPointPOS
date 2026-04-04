@@ -1,4 +1,5 @@
 using Infrastructure.Services;
+using Application.Services;
 
 namespace IntegrationTests;
 
@@ -36,6 +37,29 @@ public class ConfigurationServiceTests : IDisposable
         Assert.Equal(string.Empty, notRemembered.ApiKey);
         Assert.False(notRemembered.RememberMe);
         Assert.False(notRemembered.IsConfigured);
+    }
+
+    [Fact]
+    public async Task SaveAndLoadAsync_RetainsLocalizationPreferences()
+    {
+        string configPath = Path.Combine(_tempDirectory, "config.json");
+
+        var service = new ConfigurationService(configPath);
+        await service.SaveAsync(new LocalizationPreferences
+        {
+            Language = "vi-VN",
+            Currency = "USD",
+            TimeZone = "+9",
+            DateFormat = "yyyy-MM-dd",
+        });
+
+        var reloaded = new ConfigurationService(configPath);
+        await reloaded.LoadAsync();
+
+        Assert.Equal("vi-VN", reloaded.Preferences.Language);
+        Assert.Equal("USD", reloaded.Preferences.Currency);
+        Assert.Equal("+9", reloaded.Preferences.TimeZone);
+        Assert.Equal("yyyy-MM-dd", reloaded.Preferences.DateFormat);
     }
 
     public void Dispose()

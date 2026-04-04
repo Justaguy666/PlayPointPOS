@@ -53,14 +53,14 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0"
-                           Text="{Binding AverageHourPerTable}"
+                           Text="{Binding AverageHourPerArea}"
                            FontSize="{StaticResource FontSizeMedium}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Left"
                            Foreground="{StaticResource DashboardMutedTextBrush}" />
 
                 <TextBlock Grid.Column="1"
-                           Text="{Binding AverageHourPerTableValue}"
+                           Text="{Binding AverageHourPerAreaValue}"
                            FontSize="{StaticResource FontSizeMedium}"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
@@ -125,14 +125,14 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0"
-                           Text="{Binding TableCoveragePerHourPercent}"
+                           Text="{Binding AreaCoveragePerHourPercent}"
                            FontSize="{StaticResource FontSizeMedium}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Left"
                            Foreground="{StaticResource DashboardMutedTextBrush}" />
 
                 <TextBlock Grid.Column="1"
-                           Text="{Binding TableCoveragePerHourPercentValue}"
+                           Text="{Binding AreaCoveragePerHourPercentValue}"
                            FontSize="{StaticResource FontSizeMedium}"
                            FontWeight="Bold"
                            VerticalAlignment="Center"

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.Enums
+namespace Domain.Enums;
+
+public enum PlayAreaType
 {
-    internal class TableStatus
-    {
-    }
+    Area,
+    Room,
 }

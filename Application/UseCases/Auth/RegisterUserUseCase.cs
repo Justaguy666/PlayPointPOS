@@ -30,9 +30,8 @@ public class RegisterUserUseCase
     /// </summary>
     /// <param name="email">User's email (must be unique)</param>
     /// <param name="password">User's plain-text password (will be hashed for storage)</param>
-    /// <param name="language">User's preferred language (e.g., "en-US", "vi-VN")</param>
     /// <returns>RegisterResult containing success status and message</returns>
-    public async Task<RegisterResult> ExecuteAsync(string email, string password, string language = "en-US")
+    public async Task<RegisterResult> ExecuteAsync(string email, string password)
     {
         // Validate inputs
         if (string.IsNullOrWhiteSpace(email))
@@ -84,7 +83,6 @@ public class RegisterUserUseCase
         {
             Email = email,
             PasswordHash = hashedPassword,
-            Language = string.IsNullOrWhiteSpace(language) ? "en-US" : language
         };
 
         // Save to repository

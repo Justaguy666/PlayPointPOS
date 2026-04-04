@@ -28,16 +28,16 @@
             <TextBlock Text="{Binding TodayRevenue}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeExtraExtraExtraLarge}" FontWeight="Bold" Margin="0,2,0,0" />
         </StackPanel>
 
-        <!-- Active Tables -->
+        <!-- Active Areas -->
         <StackPanel Grid.Column="1" Margin="0,0,48,0" Padding="0,16" VerticalAlignment="Center">
-            <TextBlock Text="{Binding ActiveTablesLabelDisplay}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeMedium}" />
-            <TextBlock Text="{Binding ActiveTables}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeExtraExtraExtraLarge}" FontWeight="Bold" Margin="0,2,0,0" />
+            <TextBlock Text="{Binding ActiveAreasLabelDisplay}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeMedium}" />
+            <TextBlock Text="{Binding ActiveAreas}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeExtraExtraExtraLarge}" FontWeight="Bold" Margin="0,2,0,0" />
         </StackPanel>
 
-        <!-- Reserved Tables -->
+        <!-- Reserved Areas -->
         <StackPanel Grid.Column="2" Padding="0,16" VerticalAlignment="Center">
-            <TextBlock Text="{Binding ReservedTablesLabelDisplay}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeMedium}" />
-            <TextBlock Text="{Binding ReservedTables}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeExtraExtraExtraLarge}" FontWeight="Bold" Margin="0,2,0,0" />
+            <TextBlock Text="{Binding ReservedAreasLabelDisplay}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeMedium}" />
+            <TextBlock Text="{Binding ReservedAreas}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeExtraExtraExtraLarge}" FontWeight="Bold" Margin="0,2,0,0" />
         </StackPanel>
 
         <!-- Logo -->

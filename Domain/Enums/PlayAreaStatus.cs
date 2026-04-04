@@ -4,8 +4,9 @@ using System.Text;
 
 namespace Domain.Enums;
 
-public enum ProductType
+public enum PlayAreaStatus
 {
-    Food,
-    Drink,
+    Available,
+    Occupied,
+    Reserved,
 }

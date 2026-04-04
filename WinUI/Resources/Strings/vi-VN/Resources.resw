@@ -336,26 +336,26 @@
   <data name="HeaderTodayRevenueLabel" xml:space="preserve">
     <value>Doanh thu hôm nay</value>
   </data>
-  <data name="HeaderActiveTablesLabel" xml:space="preserve">
-    <value>Đang hoạt động</value>
+  <data name="HeaderActiveAreasLabel" xml:space="preserve">
+    <value>Khu vực đang hoạt động</value>
   </data>
-  <data name="HeaderReservedTablesLabel" xml:space="preserve">
-    <value>Đã đặt chỗ</value>
+  <data name="HeaderReservedAreasLabel" xml:space="preserve">
+    <value>Khu vực đã đặt</value>
   </data>
   <data name="NavDashboardText" xml:space="preserve">
     <value>Tổng quan</value>
   </data>
-  <data name="NavTableText" xml:space="preserve">
-    <value>Quản lý bàn</value>
+  <data name="NavAreaText" xml:space="preserve">
+    <value>Khu vực</value>
   </data>
   <data name="NavGameText" xml:space="preserve">
-    <value>Quản lý game</value>
+    <value>Game</value>
   </data>
   <data name="NavFoodText" xml:space="preserve">
-    <value>Quản lý đồ ăn</value>
+    <value>Sản phẩm</value>
   </data>
   <data name="NavMemberText" xml:space="preserve">
-    <value>Quản lý thành viên</value>
+    <value>Thành viên</value>
   </data>
   <data name="NavHistoryText" xml:space="preserve">
     <value>Lịch sử giao dịch</value>
@@ -435,8 +435,8 @@
   <data name="QuickStatsControlTitle" xml:space="preserve">
     <value>Thống kê nhanh</value>
   </data>
-  <data name="QuickStatsControlAverageHourPerTable" xml:space="preserve">
-    <value>Trung bình giờ mỗi bàn</value>
+  <data name="QuickStatsControlAverageHourPerArea" xml:space="preserve">
+    <value>Trung bình giờ mỗi khu vực</value>
   </data>
   <data name="QuickStatsControlAverageRevenuePerInvoice" xml:space="preserve">
     <value>Trung bình doanh thu/hóa đơn</value>
@@ -444,8 +444,8 @@
   <data name="QuickStatsControlComebackPercent" xml:space="preserve">
     <value>Tỷ lệ quay lại</value>
   </data>
-  <data name="QuickStatsControlTableCoveragePerHourPercent" xml:space="preserve">
-    <value>Tỷ lệ sử dụng bàn</value>
+  <data name="QuickStatsControlAreaCoveragePerHourPercent" xml:space="preserve">
+    <value>Tỷ lệ sử dụng khu vực</value>
   </data>
   <data name="QuickStatsControlNewMemberPerMonth" xml:space="preserve">
     <value>Thành viên mới/tháng</value>

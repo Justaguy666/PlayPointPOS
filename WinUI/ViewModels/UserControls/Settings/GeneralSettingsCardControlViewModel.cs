@@ -12,8 +12,9 @@ namespace WinUI.ViewModels.UserControls.Settings;
 
 public partial class GeneralSettingsCardControlViewModel : LocalizedViewModelBase
 {
-    private const string DefaultDateFormat = "dd/MM/yyyy";
+    private const string DefaultDateFormat = LocalizationPreferences.DefaultDateFormat;
 
+    private readonly ILocalizationPreferencesService _preferencesService;
     private readonly INotificationService _notificationService;
     private string _appliedDateFormat = DefaultDateFormat;
     private bool _isRefreshingOptions;
@@ -64,10 +65,13 @@ public partial class GeneralSettingsCardControlViewModel : LocalizedViewModelBas
 
     public GeneralSettingsCardControlViewModel(
         ILocalizationService localizationService,
+        ILocalizationPreferencesService preferencesService,
         INotificationService notificationService)
         : base(localizationService)
     {
+        _preferencesService = preferencesService ?? throw new ArgumentNullException(nameof(preferencesService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        _appliedDateFormat = _preferencesService.Preferences.DateFormat;
         RefreshLocalizedText();
     }
 
@@ -117,6 +121,13 @@ public partial class GeneralSettingsCardControlViewModel : LocalizedViewModelBas
         try
         {
             LocalizationService.ApplyPreferences(language, currency, timeZone);
+            await _preferencesService.SaveAsync(new LocalizationPreferences
+            {
+                Language = language,
+                Currency = currency,
+                TimeZone = timeZone,
+                DateFormat = dateFormat,
+            });
             _appliedDateFormat = dateFormat;
 
             if (showNotification)
@@ -151,7 +162,7 @@ public partial class GeneralSettingsCardControlViewModel : LocalizedViewModelBas
         string selectedCurrencyValue = SelectedCurrencyValue ?? LocalizationService.Currency;
         string selectedTimeZoneValue = SelectedTimeZoneValue ?? LocalizationService.TimeZone;
         string selectedLanguageValue = SelectedLanguageValue ?? LocalizationService.Language;
-        string selectedDateFormatValue = SelectedDateFormatValue ?? _appliedDateFormat;
+        string selectedDateFormatValue = SelectedDateFormatValue ?? _preferencesService.Preferences.DateFormat;
 
         try
         {

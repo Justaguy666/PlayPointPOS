@@ -8,17 +8,17 @@ namespace WinUI.ViewModels.UserControls.Dashboard;
 
 public partial class QuickStatsControlViewModel : LocalizedViewModelBase
 {
-    private const double AverageHourPerTableMetric = 2.5;
+    private const double AverageHourPerAreaMetric = 2.5;
     private const decimal AverageRevenuePerInvoiceMetric = 385_000m;
     private const double ReturnRateMetric = 68;
-    private const double TableUsageRateMetric = 68;
+    private const double AreaUsageRateMetric = 68;
     private const int NewMembersPerMonthMetric = 23;
 
     [ObservableProperty]
     public partial string Title { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string AverageHourPerTable { get; set; } = string.Empty;
+    public partial string AverageHourPerArea { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string AverageRevenuePerInvoice { get; set; } = string.Empty;
@@ -27,13 +27,13 @@ public partial class QuickStatsControlViewModel : LocalizedViewModelBase
     public partial string ComebackPercent { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string TableCoveragePerHourPercent { get; set; } = string.Empty;
+    public partial string AreaCoveragePerHourPercent { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string NewMemberPerMonth { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string AverageHourPerTableValue { get; set; } = string.Empty;
+    public partial string AverageHourPerAreaValue { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string AverageRevenuePerInvoiceValue { get; set; } = string.Empty;
@@ -42,7 +42,7 @@ public partial class QuickStatsControlViewModel : LocalizedViewModelBase
     public partial string ComebackPercentValue { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string TableCoveragePerHourPercentValue { get; set; } = string.Empty;
+    public partial string AreaCoveragePerHourPercentValue { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string NewMemberPerMonthValue { get; set; } = string.Empty;
@@ -64,16 +64,16 @@ public partial class QuickStatsControlViewModel : LocalizedViewModelBase
     protected override void RefreshLocalizedText()
     {
         Title = LocalizationService.GetString("QuickStatsControlTitle");
-        AverageHourPerTable = LocalizationService.GetString("QuickStatsControlAverageHourPerTable");
+        AverageHourPerArea = LocalizationService.GetString("QuickStatsControlAverageHourPerArea");
         AverageRevenuePerInvoice = LocalizationService.GetString("QuickStatsControlAverageRevenuePerInvoice");
         ComebackPercent = LocalizationService.GetString("QuickStatsControlComebackPercent");
-        TableCoveragePerHourPercent = LocalizationService.GetString("QuickStatsControlTableCoveragePerHourPercent");
+        AreaCoveragePerHourPercent = LocalizationService.GetString("QuickStatsControlAreaCoveragePerHourPercent");
         NewMemberPerMonth = LocalizationService.GetString("QuickStatsControlNewMemberPerMonth");
 
-        AverageHourPerTableValue = string.Format(
+        AverageHourPerAreaValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardHourValueFormat"),
-            AverageHourPerTableMetric);
+            AverageHourPerAreaMetric);
 
         AverageRevenuePerInvoiceValue = LocalizationService.FormatCurrency(AverageRevenuePerInvoiceMetric);
 
@@ -82,10 +82,10 @@ public partial class QuickStatsControlViewModel : LocalizedViewModelBase
             LocalizationService.GetString("DashboardPercentValueFormat"),
             ReturnRateMetric);
 
-        TableCoveragePerHourPercentValue = string.Format(
+        AreaCoveragePerHourPercentValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardPercentValueFormat"),
-            TableUsageRateMetric);
+            AreaUsageRateMetric);
 
         NewMemberPerMonthValue = string.Format(
             LocalizationService.Culture,

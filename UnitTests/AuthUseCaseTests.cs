@@ -17,7 +17,6 @@ public class AuthUseCaseTests
                 Id = "acc-1",
                 Email = "owner@playpoint.test",
                 PasswordHash = passwordHasher.HashPassword("secret-123"),
-                Language = "en-US",
             });
 
         var useCase = new LoginUserUseCase(repository, passwordHasher);
@@ -39,7 +38,6 @@ public class AuthUseCaseTests
                 Id = "acc-1",
                 Email = "owner@playpoint.test",
                 PasswordHash = passwordHasher.HashPassword("secret-123"),
-                Language = "en-US",
             });
 
         var useCase = new RegisterUserUseCase(repository, passwordHasher);
@@ -57,13 +55,12 @@ public class AuthUseCaseTests
         var repository = new InMemoryAccountRepository();
         var useCase = new RegisterUserUseCase(repository, passwordHasher);
 
-        var result = await useCase.ExecuteAsync("new@playpoint.test", "secret-123", "vi-VN");
+        var result = await useCase.ExecuteAsync("new@playpoint.test", "secret-123");
 
         Assert.True(result.Success);
         Assert.NotNull(result.Account);
         Assert.NotEqual("secret-123", result.Account!.PasswordHash);
         Assert.True(passwordHasher.VerifyPassword("secret-123", result.Account.PasswordHash));
-        Assert.Equal("vi-VN", result.Account.Language);
         Assert.Contains(await repository.GetAllAsync(), account => account.Email == "new@playpoint.test");
     }
 

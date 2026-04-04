@@ -154,8 +154,6 @@ public partial class RegisterViewModel : LocalizedViewModelBase
 
             string email = Email.Trim();
             string password = Password;
-            string language = LocalizationService.Language;
-
             CloseRequestedInternal?.Invoke();
             await Task.Yield();
             await _dialogService.ShowDialogAsync(
@@ -164,7 +162,7 @@ public partial class RegisterViewModel : LocalizedViewModelBase
                 {
                     Mode = OtpDialogMode.VerifyRegistration,
                     PendingEmail = email,
-                    OnVerifiedAsync = () => CompleteRegistrationAsync(email, password, language)
+                    OnVerifiedAsync = () => CompleteRegistrationAsync(email, password)
                 });
         }
         catch (Exception ex)
@@ -177,9 +175,9 @@ public partial class RegisterViewModel : LocalizedViewModelBase
         }
     }
 
-    private async Task CompleteRegistrationAsync(string email, string password, string language)
+    private async Task CompleteRegistrationAsync(string email, string password)
     {
-        var result = await _registerUseCase.ExecuteAsync(email, password, language);
+        var result = await _registerUseCase.ExecuteAsync(email, password);
 
         if (result.Success)
         {

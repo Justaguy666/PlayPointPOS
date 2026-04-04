@@ -46,7 +46,7 @@ public partial class NavbarControlViewModel : LocalizedViewModelBase
     private void InitializeNavigationItems()
     {
         NavigationItems.Add(CreateItem(IconKind.Dashboard, typeof(NavigateToDashboard), "NavDashboardText"));
-        NavigationItems.Add(CreateItem(IconKind.Table, typeof(NavigateToTableManagement), "NavTableText"));
+        NavigationItems.Add(CreateItem(IconKind.Area, typeof(NavigateToAreaManagement), "NavAreaText"));
         NavigationItems.Add(CreateItem(IconKind.Game, typeof(NavigateToGameManagement), "NavGameText"));
         NavigationItems.Add(CreateItem(IconKind.Product, typeof(NavigateToProductManagement), "NavFoodText"));
         NavigationItems.Add(CreateItem(IconKind.Member, typeof(NavigateToMemberManagement), "NavMemberText"));

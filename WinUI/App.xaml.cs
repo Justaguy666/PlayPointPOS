@@ -44,23 +44,30 @@ public partial class App : Microsoft.UI.Xaml.Application
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    string defaultLanguage = context.Configuration["AppSettings:Language"] ?? "en-US";
-                    string defaultCurrency = context.Configuration["AppSettings:Currency"] ?? "VND";
-                    string defaultTimeZone = context.Configuration["AppSettings:Timezone"] ?? "+7";
+                    var defaultPreferences = new LocalizationPreferences
+                    {
+                        Language = context.Configuration["AppSettings:Language"] ?? LocalizationPreferences.DefaultLanguage,
+                        Currency = context.Configuration["AppSettings:Currency"] ?? LocalizationPreferences.DefaultCurrency,
+                        TimeZone = context.Configuration["AppSettings:Timezone"] ?? LocalizationPreferences.DefaultTimeZone,
+                        DateFormat = context.Configuration["AppSettings:DateFormat"] ?? LocalizationPreferences.DefaultDateFormat,
+                    };
 
                     services.AddSingleton<Converters.CurrencyConverter>();
                     services.AddSingleton<ILocalizationService>(sp =>
                         new WinUILocalizationService(
                             sp.GetRequiredService<Converters.CurrencyConverter>(),
-                            defaultLanguage,
-                            defaultCurrency,
-                            defaultTimeZone));
+                            defaultPreferences.Language,
+                            defaultPreferences.Currency,
+                            defaultPreferences.TimeZone));
                     services.AddSingleton<IAppInfoService, WinUIAppInfoService>();
                     services.AddSingleton<IDateTimeService, Infrastructure.Services.DateTimeService>();
                     services.AddSingleton<INavigationService, WinUINavigationService>();
                     //services.AddSingleton<IAnalyticsService, Infrastructure.Services.Analytics.AnalyticsService>();
 
-                    services.AddSingleton<IConfigurationService>(new Infrastructure.Services.ConfigurationService(configPath));
+                    var configurationService = new Infrastructure.Services.ConfigurationService(configPath, defaultPreferences);
+                    services.AddSingleton<Infrastructure.Services.ConfigurationService>(configurationService);
+                    services.AddSingleton<IConfigurationService>(configurationService);
+                    services.AddSingleton<ILocalizationPreferencesService>(configurationService);
 
                     services.AddSingleton<Infrastructure.Services.Notification.ToastNotificationService>();
                     services.AddSingleton<INotificationService>(sp => sp.GetRequiredService<Infrastructure.Services.Notification.ToastNotificationService>());
@@ -116,7 +123,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddTransient<MainWindow>();
                     services.AddTransient<Views.Pages.StartingPage>();
                     services.AddTransient<Views.Pages.DashboardPage>();
-                    services.AddTransient<Views.Pages.TableManagementPage>();
+                    services.AddTransient<Views.Pages.AreaManagementPage>();
                     services.AddTransient<Views.Pages.GameManagementPage>();
                     services.AddTransient<Views.Pages.ProductManagementPage>();
                     services.AddTransient<Views.Pages.MemberManagementPage>();
@@ -127,7 +134,7 @@ public partial class App : Microsoft.UI.Xaml.Application
 
             NavigationMap.Register<Application.Navigation.Requests.NavigateToStarting, Views.Pages.StartingPage>();
             NavigationMap.Register<Application.Navigation.Requests.NavigateToDashboard, Views.Pages.DashboardPage>();
-            NavigationMap.Register<Application.Navigation.Requests.NavigateToTableManagement, Views.Pages.TableManagementPage>();
+            NavigationMap.Register<Application.Navigation.Requests.NavigateToAreaManagement, Views.Pages.AreaManagementPage>();
             NavigationMap.Register<Application.Navigation.Requests.NavigateToGameManagement, Views.Pages.GameManagementPage>();
             NavigationMap.Register<Application.Navigation.Requests.NavigateToProductManagement, Views.Pages.ProductManagementPage>();
             NavigationMap.Register<Application.Navigation.Requests.NavigateToMemberManagement, Views.Pages.MemberManagementPage>();
@@ -149,7 +156,13 @@ public partial class App : Microsoft.UI.Xaml.Application
     {
         try
         {
-            await Host!.Services.GetRequiredService<IConfigurationService>().LoadAsync();
+            var configurationService = Host!.Services.GetRequiredService<IConfigurationService>();
+            await configurationService.LoadAsync();
+
+            var preferencesService = Host.Services.GetRequiredService<ILocalizationPreferencesService>();
+            var localizationService = Host.Services.GetRequiredService<ILocalizationService>();
+            LocalizationPreferences preferences = preferencesService.Preferences;
+            localizationService.ApplyPreferences(preferences.Language, preferences.Currency, preferences.TimeZone);
 
             _window = Host?.Services.GetRequiredService<MainWindow>();
             _window?.Activate();

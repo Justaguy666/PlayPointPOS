@@ -90,9 +90,6 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Configurations\config.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Page Update="Views\Dialogs\ForgotPasswordDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -165,7 +162,7 @@
     <Page Update="Views\Pages\GameManagementPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Views\Pages\TableManagementPage.xaml">
+    <Page Update="Views\Pages\AreaManagementPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Views\Dialogs\ConfigDialog.xaml">
