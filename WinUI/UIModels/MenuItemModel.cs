@@ -6,7 +6,7 @@ namespace WinUI.UIModels;
 
 public partial class MenuItemModel : ObservableObject
 {
-    public string ResourceKey { get; set; } = string.Empty;
+    public string LabelResourceKey { get; set; } = string.Empty;
 
     public IconKind Icon { get; set; }
 
@@ -21,7 +21,7 @@ public partial class MenuItemModel : ObservableObject
     public bool HideWhenConfigured { get; set; }
 
     [ObservableProperty]
-    public partial string DisplayText { get; set; } = string.Empty;
+    public partial string Label { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial bool IsVisible { get; set; } = true;

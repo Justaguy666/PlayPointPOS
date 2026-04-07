@@ -16,13 +16,13 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
     private readonly IConfigurationService _configService;
 
     [ObservableProperty]
-    public partial string WelcomeTextDisplay { get; set; } = string.Empty;
+    public partial string WelcomeText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string AppVersionDisplay { get; set; } = string.Empty;
+    public partial string AppVersionText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string CopyrightDisplay { get; set; } = string.Empty;
+    public partial string CopyrightText { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial ObservableCollection<MenuItemModel> MenuItems { get; set; } = new();
@@ -30,11 +30,11 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
     public IAsyncRelayCommand<MenuItemModel?> OnMenuItemSelectedCommand { get; }
 
     public StartingPageViewModel(
-        ILocalizationService loc,
+        ILocalizationService localizationService,
         IAppInfoService appInfo,
         IDialogService dialogService,
         IConfigurationService configService)
-        : base(loc)
+        : base(localizationService)
     {
         _appInfo = appInfo;
         _dialogService = dialogService;
@@ -48,14 +48,14 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
 
     protected override void RefreshLocalizedText()
     {
-        WelcomeTextDisplay = LocalizationService.GetString("WelcomeText");
+        WelcomeText = LocalizationService.GetString("WelcomeText");
 
-        AppVersionDisplay = string.Format(
+        AppVersionText = string.Format(
             LocalizationService.GetString("AppVersionText"),
             _appInfo.GetAppVersion()
         );
 
-        CopyrightDisplay = LocalizationService.GetString("CopyrightText");
+        CopyrightText = LocalizationService.GetString("CopyrightText");
         UpdateMenu();
     }
 
@@ -63,7 +63,7 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
     {
         var config = new MenuItemModel
         {
-            ResourceKey = "ConfigMenuItemText",
+            LabelResourceKey = "ConfigMenuItemText",
             Icon = IconKind.Config,
             DialogKey = "Config",
             HideWhenConfigured = true,
@@ -71,7 +71,7 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
         };
         var register = new MenuItemModel
         {
-            ResourceKey = "RegisterMenuItemText",
+            LabelResourceKey = "RegisterMenuItemText",
             Icon = IconKind.Register,
             DialogKey = "Register",
             RequiresConfig = true,
@@ -79,7 +79,7 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
         };
         var login = new MenuItemModel
         {
-            ResourceKey = "LoginMenuItemText",
+            LabelResourceKey = "LoginMenuItemText",
             Icon = IconKind.Login,
             DialogKey = "Login",
             RequiresConfig = true,
@@ -87,7 +87,7 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
         };
         var exit = new MenuItemModel
         {
-            ResourceKey = "ExitMenuItemText",
+            LabelResourceKey = "ExitMenuItemText",
             Icon = IconKind.Exit,
             IsExit = true,
             OnMenuItemSelectedCommand = OnMenuItemSelectedCommand,
@@ -105,7 +105,7 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
     {
         foreach (var item in MenuItems)
         {
-            item.DisplayText = LocalizationService.GetString(item.ResourceKey);
+            item.Label = LocalizationService.GetString(item.LabelResourceKey);
         }
     }
 

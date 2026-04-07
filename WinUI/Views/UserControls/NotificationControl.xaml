@@ -78,7 +78,7 @@
                     Background="{StaticResource TransparentBrush}"
                     BorderThickness="0"
                     Command="{Binding CloseCommand}"
-                    ToolTipService.ToolTip="{Binding CloseTooltipDisplay}"
+                    ToolTipService.ToolTip="{Binding CloseTooltipText}"
                     VerticalAlignment="Center">
                     <Button.Resources>
                         <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="AntiqueWhiteBrush" />

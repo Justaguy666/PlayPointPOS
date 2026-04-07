@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using Application.Navigation;
 using Application.Navigation.Requests;
 using Microsoft.UI.Composition;
@@ -92,6 +93,12 @@ public sealed partial class MainWindow : Window
             titleBar.ButtonInactiveForegroundColor = AppColors.TitleBarButton;
             titleBar.ButtonHoverForegroundColor = AppColors.TitleBarButton;
             titleBar.ButtonPressedForegroundColor = AppColors.TitleBarButton;
+        }
+
+        string iconPath = Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico");
+        if (File.Exists(iconPath))
+        {
+            AppWindow.SetIcon(iconPath);
         }
     }
 

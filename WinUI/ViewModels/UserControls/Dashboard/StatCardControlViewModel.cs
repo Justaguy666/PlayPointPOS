@@ -21,10 +21,10 @@ public sealed partial class StatCardControlViewModel : LocalizedViewModelBase
     public partial string ValueText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string TrendText { get; set; } = string.Empty;
+    public partial string TrendLabel { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ComparisonText { get; set; } = string.Empty;
+    public partial string ComparisonLabel { get; set; } = string.Empty;
 
     public Brush TrendBackground { get; }
 
@@ -70,8 +70,8 @@ public sealed partial class StatCardControlViewModel : LocalizedViewModelBase
     protected override void RefreshLocalizedText()
     {
         Title = LocalizationService.GetString($"{_resourcePrefix}Title");
-        TrendText = LocalizationService.GetString($"{_resourcePrefix}TrendText");
-        ComparisonText = LocalizationService.GetString($"{_resourcePrefix}ComparisonText");
+        TrendLabel = LocalizationService.GetString($"{_resourcePrefix}TrendLabel");
+        ComparisonLabel = LocalizationService.GetString($"{_resourcePrefix}ComparisonLabel");
         ValueText = _valueTextFactory(LocalizationService);
     }
 }

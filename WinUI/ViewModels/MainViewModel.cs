@@ -21,13 +21,13 @@ public partial class MainViewModel : ObservableObject
     public partial string ReservedAreas { get; set; } = "2";
 
     [ObservableProperty]
-    public partial string TodayRevenueLabelDisplay { get; set; } = string.Empty;
+    public partial string TodayRevenueLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ActiveAreasLabelDisplay { get; set; } = string.Empty;
+    public partial string ActiveAreasLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ReservedAreasLabelDisplay { get; set; } = string.Empty;
+    public partial string ReservedAreasLabelText { get; set; } = string.Empty;
 
     public MainViewModel(ILocalizationService localizationService)
     {
@@ -40,9 +40,9 @@ public partial class MainViewModel : ObservableObject
 
     private void UpdateHeaderTexts()
     {
-        TodayRevenueLabelDisplay = _localizationService.GetString("HeaderTodayRevenueLabel");
-        ActiveAreasLabelDisplay = _localizationService.GetString("HeaderActiveAreasLabel");
-        ReservedAreasLabelDisplay = _localizationService.GetString("HeaderReservedAreasLabel");
+        TodayRevenueLabelText = _localizationService.GetString("HeaderTodayRevenueLabel");
+        ActiveAreasLabelText = _localizationService.GetString("HeaderActiveAreasLabel");
+        ReservedAreasLabelText = _localizationService.GetString("HeaderReservedAreasLabel");
         UpdateHeaderMetrics();
     }
 

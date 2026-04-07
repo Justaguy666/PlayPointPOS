@@ -8,6 +8,8 @@ public class Transaction : BaseEntity
     public string AccountId { get; set; } = string.Empty;
     public string? MemberId { get; set; }
     public string? PlayAreaUnitId { get; set; }
+    public string? PlayAreaSessionId { get; set; }
+    public string? PlayAreaReservationId { get; set; }
     public List<TransactionLine> Lines { get; set; } = [];
     public PaymentMethod PaymentMethod { get; set; }
     public decimal SubtotalAmount { get; set; }

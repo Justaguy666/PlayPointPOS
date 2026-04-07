@@ -1,0 +1,87 @@
+<UserControl
+    x:Class="WinUI.Views.UserControls.AreaManagement.SummarizedAreaCards.SummarizedReservedCard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="using:WinUI.Helpers"
+    xmlns:vm="using:WinUI.ViewModels.AreaManagement.SummarizedAreaCards"
+    d:DataContext="{d:DesignInstance Type=vm:SummarizedReservedCardViewModel, IsDesignTimeCreatable=False}"
+    mc:Ignorable="d">
+
+    <Border
+        x:Name="CardBorder"
+        MinWidth="180"
+        Height="160"
+        Padding="16"
+        CornerRadius="12"
+        HorizontalAlignment="Stretch"
+        Background="{StaticResource SummarizedReservedAreaBackgroundBrush}"
+        BorderBrush="{StaticResource SummarizedAreaBorderBrush}"
+        BorderThickness="1"
+        helpers:CursorBehavior.UseHandCursor="True"
+        PointerEntered="HandleCardPointerEntered"
+        PointerExited="HandleCardPointerExited"
+        PointerPressed="HandleCardPointerPressed"
+        PointerReleased="HandleCardPointerReleased"
+        PointerCanceled="HandleCardPointerCanceled"
+        PointerCaptureLost="HandleCardPointerCaptureLost">
+
+        <Grid RowSpacing="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{Binding AreaName}"
+                           Foreground="{StaticResource BlackBrush}"
+                           FontSize="{StaticResource FontSizeLarge}"
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center" />
+
+                <Border Grid.Column="1"
+                        Width="12"
+                        Height="12"
+                        CornerRadius="9999"
+                        Background="{StaticResource SummarizedReservedAreaStatusBrush}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top" />
+            </Grid>
+
+            <TextBlock Grid.Row="1"
+                       Text="{Binding CustomerName}"
+                       TextTrimming="CharacterEllipsis"
+                       Foreground="{StaticResource BlackBrush}"
+                       FontSize="{StaticResource FontSizeMedium}"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center" />
+
+            <TextBlock Grid.Row="2"
+                       Text="{Binding CheckInTime}"
+                       Foreground="{StaticResource DarkGrayBrush}"
+                       FontSize="{StaticResource FontSizeMedium}"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center" />
+
+            <TextBlock Grid.Row="3"
+                       Text="{Binding Capacity}"
+                       TextTrimming="CharacterEllipsis"
+                       Foreground="{StaticResource DarkGrayBrush}"
+                       FontSize="{StaticResource FontSizeMedium}"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center" />
+        </Grid>
+    </Border>
+</UserControl>

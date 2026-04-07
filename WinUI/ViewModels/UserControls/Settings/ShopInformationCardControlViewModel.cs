@@ -68,7 +68,7 @@ public partial class ShopInformationCardControlViewModel : LocalizedViewModelBas
     public partial string Phone { get; set; } = DefaultPhone;
 
     [ObservableProperty]
-    public partial string ApplyButtonDisplay { get; set; } = string.Empty;
+    public partial string ApplyButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string EmailErrorMessage { get; set; } = string.Empty;
@@ -105,7 +105,7 @@ public partial class ShopInformationCardControlViewModel : LocalizedViewModelBas
         EmailPlaceholder = LocalizationService.GetString("SettingsShopInformationEmailPlaceholder");
         PhoneLabel = LocalizationService.GetString("SettingsShopInformationPhoneLabel");
         PhonePlaceholder = LocalizationService.GetString("SettingsShopInformationPhonePlaceholder");
-        ApplyButtonDisplay = LocalizationService.GetString("SettingsPageApplyButton");
+        ApplyButtonText = LocalizationService.GetString("SettingsPageApplyButton");
         ValidateEmail();
         ValidatePhone();
         ApplyCommand.NotifyCanExecuteChanged();

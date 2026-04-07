@@ -17,7 +17,7 @@ public partial class NavbarItemModel : ObservableObject
 
     public required Type RequestType { get; init; }
 
-    public required string ResourceKey { get; init; }
+    public required string LabelResourceKey { get; init; }
 
     [ObservableProperty]
     public partial bool IsSelected { get; set; }

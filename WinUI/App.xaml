@@ -12,7 +12,7 @@
                 <ResourceDictionary Source="ms-appx:///Resources/FontSize.xaml" />
                 <ResourceDictionary Source="ms-appx:///Resources/Colors.xaml" />
                 <ResourceDictionary Source="ms-appx:///Resources/Images.xaml" />
-                <ResourceDictionary Source="ms-appx:///Resources/Styles/CheckBoxStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Resources/Styles/CommonStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <!-- Converters -->
@@ -25,23 +25,6 @@
             <converters:IconConverter x:Key="IconConverter" />
             <converters:ChartValueToHeightConverter x:Key="ChartValueToHeightConverter" />
 
-            <!-- Custom TextBox Style - Keep white background on focus, larger border radius -->
-            <Style TargetType="TextBox">
-                <Setter Property="BorderBrush" Value="{StaticResource TextBoxBorderBrush}"/>
-                <Setter Property="Background" Value="{StaticResource TextBoxBackgroundBrush}"/>
-                <Setter Property="CornerRadius" Value="10"/>
-                <Setter Property="Padding" Value="12,10"/>
-            </Style>
-
-            <!-- Custom PasswordBox Style - Keep white background on focus, larger border radius -->
-            <Style TargetType="PasswordBox">
-                <Setter Property="BorderBrush" Value="{StaticResource TextBoxBorderBrush}"/>
-                <Setter Property="Background" Value="{StaticResource TextBoxBackgroundBrush}"/>
-                <Setter Property="CornerRadius" Value="10"/>
-                <Setter Property="Padding" Value="12,10"/>
-            </Style>
-            
-            <!-- Other app resources here -->
         </ResourceDictionary>
     </Application.Resources>
 </Application>

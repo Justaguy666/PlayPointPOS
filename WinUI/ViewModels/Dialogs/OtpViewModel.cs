@@ -15,13 +15,13 @@ public partial class OtpViewModel : LocalizedViewModelBase
     private Func<Task>? _verifiedCallback;
 
     [ObservableProperty]
-    public partial string TitleDisplay { get; set; } = string.Empty;
+    public partial string TitleText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string OtpLabelDisplay { get; set; } = string.Empty;
+    public partial string OtpLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string OtpPlaceholderDisplay { get; set; } = string.Empty;
+    public partial string OtpPlaceholderText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(VerifyCommand))]
@@ -29,10 +29,10 @@ public partial class OtpViewModel : LocalizedViewModelBase
     public partial string OtpCode { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string NewPasswordLabelDisplay { get; set; } = string.Empty;
+    public partial string NewPasswordLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string NewPasswordPlaceholderDisplay { get; set; } = string.Empty;
+    public partial string NewPasswordPlaceholderText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(VerifyCommand))]
@@ -40,10 +40,10 @@ public partial class OtpViewModel : LocalizedViewModelBase
     public partial string NewPassword { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ConfirmPasswordLabelDisplay { get; set; } = string.Empty;
+    public partial string ConfirmPasswordLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ConfirmPasswordPlaceholderDisplay { get; set; } = string.Empty;
+    public partial string ConfirmPasswordPlaceholderText { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial bool ShowPasswordFields { get; set; } = true;
@@ -57,13 +57,13 @@ public partial class OtpViewModel : LocalizedViewModelBase
     public partial bool ShowChangeEmailButton { get; set; } = true;
 
     [ObservableProperty]
-    public partial string ChangeEmailButtonDisplay { get; set; } = string.Empty;
+    public partial string ChangeEmailButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string VerifyButtonDisplay { get; set; } = string.Empty;
+    public partial string VerifyButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string CloseTooltipDisplay { get; set; } = string.Empty;
+    public partial string CloseTooltipText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(VerifyCommand))]
@@ -103,48 +103,48 @@ public partial class OtpViewModel : LocalizedViewModelBase
     {
         if (_mode == OtpDialogMode.VerifyEmailChange)
         {
-            TitleDisplay = LocalizationService.GetString("OtpDialogEmailChangeTitleText");
+            TitleText = LocalizationService.GetString("OtpDialogEmailChangeTitleText");
             ShowPasswordFields = false;
             ShowChangeEmailButton = false;
-            OtpLabelDisplay = LocalizationService.GetString("OtpDialogOtpLabelText");
-            OtpPlaceholderDisplay = LocalizationService.GetString("OtpDialogOtpPlaceholderText");
-            NewPasswordLabelDisplay = LocalizationService.GetString("OtpDialogNewPasswordLabelText");
-            NewPasswordPlaceholderDisplay = LocalizationService.GetString("OtpDialogNewPasswordPlaceholderText");
-            ConfirmPasswordLabelDisplay = LocalizationService.GetString("OtpDialogConfirmPasswordLabelText");
-            ConfirmPasswordPlaceholderDisplay = LocalizationService.GetString("OtpDialogConfirmPasswordPlaceholderText");
-            ChangeEmailButtonDisplay = LocalizationService.GetString("OtpDialogChangeEmailButtonText");
-            VerifyButtonDisplay = LocalizationService.GetString("OtpDialogEmailChangeVerifyButtonText");
+            OtpLabelText = LocalizationService.GetString("OtpDialogOtpLabelText");
+            OtpPlaceholderText = LocalizationService.GetString("OtpDialogOtpPlaceholderText");
+            NewPasswordLabelText = LocalizationService.GetString("OtpDialogNewPasswordLabelText");
+            NewPasswordPlaceholderText = LocalizationService.GetString("OtpDialogNewPasswordPlaceholderText");
+            ConfirmPasswordLabelText = LocalizationService.GetString("OtpDialogConfirmPasswordLabelText");
+            ConfirmPasswordPlaceholderText = LocalizationService.GetString("OtpDialogConfirmPasswordPlaceholderText");
+            ChangeEmailButtonText = LocalizationService.GetString("OtpDialogChangeEmailButtonText");
+            VerifyButtonText = LocalizationService.GetString("OtpDialogEmailChangeVerifyButtonText");
         }
         else if (_mode == OtpDialogMode.VerifyRegistration)
         {
-            TitleDisplay = LocalizationService.GetString("OtpDialogRegistrationTitleText");
+            TitleText = LocalizationService.GetString("OtpDialogRegistrationTitleText");
             ShowPasswordFields = false;
             ShowChangeEmailButton = false;
-            OtpLabelDisplay = LocalizationService.GetString("OtpDialogOtpLabelText");
-            OtpPlaceholderDisplay = LocalizationService.GetString("OtpDialogOtpPlaceholderText");
-            NewPasswordLabelDisplay = LocalizationService.GetString("OtpDialogNewPasswordLabelText");
-            NewPasswordPlaceholderDisplay = LocalizationService.GetString("OtpDialogNewPasswordPlaceholderText");
-            ConfirmPasswordLabelDisplay = LocalizationService.GetString("OtpDialogConfirmPasswordLabelText");
-            ConfirmPasswordPlaceholderDisplay = LocalizationService.GetString("OtpDialogConfirmPasswordPlaceholderText");
-            ChangeEmailButtonDisplay = LocalizationService.GetString("OtpDialogChangeEmailButtonText");
-            VerifyButtonDisplay = LocalizationService.GetString("OtpDialogRegistrationVerifyButtonText");
+            OtpLabelText = LocalizationService.GetString("OtpDialogOtpLabelText");
+            OtpPlaceholderText = LocalizationService.GetString("OtpDialogOtpPlaceholderText");
+            NewPasswordLabelText = LocalizationService.GetString("OtpDialogNewPasswordLabelText");
+            NewPasswordPlaceholderText = LocalizationService.GetString("OtpDialogNewPasswordPlaceholderText");
+            ConfirmPasswordLabelText = LocalizationService.GetString("OtpDialogConfirmPasswordLabelText");
+            ConfirmPasswordPlaceholderText = LocalizationService.GetString("OtpDialogConfirmPasswordPlaceholderText");
+            ChangeEmailButtonText = LocalizationService.GetString("OtpDialogChangeEmailButtonText");
+            VerifyButtonText = LocalizationService.GetString("OtpDialogRegistrationVerifyButtonText");
         }
         else
         {
-            TitleDisplay = LocalizationService.GetString("OtpDialogTitleText");
+            TitleText = LocalizationService.GetString("OtpDialogTitleText");
             ShowPasswordFields = true;
             ShowChangeEmailButton = true;
-            OtpLabelDisplay = LocalizationService.GetString("OtpDialogOtpLabelText");
-            OtpPlaceholderDisplay = LocalizationService.GetString("OtpDialogOtpPlaceholderText");
-            NewPasswordLabelDisplay = LocalizationService.GetString("OtpDialogNewPasswordLabelText");
-            NewPasswordPlaceholderDisplay = LocalizationService.GetString("OtpDialogNewPasswordPlaceholderText");
-            ConfirmPasswordLabelDisplay = LocalizationService.GetString("OtpDialogConfirmPasswordLabelText");
-            ConfirmPasswordPlaceholderDisplay = LocalizationService.GetString("OtpDialogConfirmPasswordPlaceholderText");
-            ChangeEmailButtonDisplay = LocalizationService.GetString("OtpDialogChangeEmailButtonText");
-            VerifyButtonDisplay = LocalizationService.GetString("OtpDialogVerifyButtonText");
+            OtpLabelText = LocalizationService.GetString("OtpDialogOtpLabelText");
+            OtpPlaceholderText = LocalizationService.GetString("OtpDialogOtpPlaceholderText");
+            NewPasswordLabelText = LocalizationService.GetString("OtpDialogNewPasswordLabelText");
+            NewPasswordPlaceholderText = LocalizationService.GetString("OtpDialogNewPasswordPlaceholderText");
+            ConfirmPasswordLabelText = LocalizationService.GetString("OtpDialogConfirmPasswordLabelText");
+            ConfirmPasswordPlaceholderText = LocalizationService.GetString("OtpDialogConfirmPasswordPlaceholderText");
+            ChangeEmailButtonText = LocalizationService.GetString("OtpDialogChangeEmailButtonText");
+            VerifyButtonText = LocalizationService.GetString("OtpDialogVerifyButtonText");
         }
 
-        CloseTooltipDisplay = LocalizationService.GetString("CloseTooltipText");
+        CloseTooltipText = LocalizationService.GetString("CloseTooltipText");
     }
 
     public void Configure(OtpDialogRequest? request)

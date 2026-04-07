@@ -188,7 +188,7 @@
                     <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="LighterGrayBrush"/>
                     <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="MediumDarkGrayBrush"/>
                 </Button.Resources>
-                <TextBlock Text="{Binding ApplyButtonDisplay}" />
+                <TextBlock Text="{Binding ApplyButtonText}" />
             </Button>
         </StackPanel>
     </Border>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,6 +9,6 @@ public enum ChartRangeType
     Today, // last 24 hours
     ThisWeek,
     ThisMonth,
-    ThisQuater,
+    ThisQuarter,
     ThisYear
 }

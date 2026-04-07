@@ -32,6 +32,8 @@ public enum IconKind
     Stat,
     Chart,
     Target,
+    Table,
+    Room,
     Up,
     Down,
     Add,

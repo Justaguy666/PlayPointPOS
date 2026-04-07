@@ -94,7 +94,7 @@ public partial class IconConverter : IValueConverter
         IconKind.Close => "ic_fluent_dismiss",
         IconKind.Dashboard => "ic_fluent_clover",
         IconKind.Area => "ic_fluent_table_multiple",
-        IconKind.Game => "ic_fluent_games",
+        IconKind.Game => "ic_fluent_chess",
         IconKind.Product => "ic_fluent_food_apple",
         IconKind.Food => "ic_fluent_food_egg",
         IconKind.Drink => "ic_fluent_drink_to_go",
@@ -110,6 +110,8 @@ public partial class IconConverter : IValueConverter
         IconKind.Chart => "ic_fluent_chart_multiple",
         IconKind.Stat => "ic_fluent_book_number",
         IconKind.Target => "ic_fluent_target_arrow",
+        IconKind.Table => "ic_fluent_desk_multiple",
+        IconKind.Room => "ic_fluent_conference_room",
         IconKind.Up => "ic_fluent_arrow_up",
         IconKind.Down => "ic_fluent_arrow_down",
         IconKind.Add => "ic_fluent_add_square_multiple",
@@ -177,6 +179,10 @@ public partial class IconConverter : IValueConverter
         string fullPath = Path.Combine(iconsDirectory, candidate);
         if (File.Exists(fullPath))
             return fullPath;
+
+        string plainPath = Path.Combine(iconsDirectory, $"{fileName}.svg");
+        if (File.Exists(plainPath))
+            return plainPath;
 
         return null;
     }

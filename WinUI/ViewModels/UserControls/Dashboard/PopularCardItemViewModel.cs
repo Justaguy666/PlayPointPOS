@@ -5,20 +5,20 @@ public sealed class PopularCardItemViewModel
     public PopularCardItemViewModel(
         int rank,
         string name,
-        string activityText,
-        string amountText)
+        string activityLabel,
+        string amountLabel)
     {
         Rank = rank;
         Name = name;
-        ActivityText = activityText;
-        AmountText = amountText;
+        ActivityLabel = activityLabel;
+        AmountLabel = amountLabel;
     }
 
     public int Rank { get; }
 
     public string Name { get; }
 
-    public string ActivityText { get; }
+    public string ActivityLabel { get; }
 
-    public string AmountText { get; }
+    public string AmountLabel { get; }
 }

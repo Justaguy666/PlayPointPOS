@@ -7,6 +7,6 @@ namespace Domain.Enums;
 public enum PlayAreaStatus
 {
     Available,
-    Occupied,
     Reserved,
+    Rented,
 }

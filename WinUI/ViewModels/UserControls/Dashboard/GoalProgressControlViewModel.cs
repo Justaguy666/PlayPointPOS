@@ -21,31 +21,31 @@ public partial class GoalProgressControlViewModel : LocalizedViewModelBase
     public partial string MemberTargetLabel { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial int RevenueTargetProgress { get; set; } = 285;
+    public partial int RevenueTargetCurrentValue { get; set; } = 285;
 
     [ObservableProperty]
-    public partial int RevenueTargetValue { get; set; } = 350;
+    public partial int RevenueTargetGoalValue { get; set; } = 350;
 
     [ObservableProperty]
-    public partial string RevenueTargetPercent { get; set; } = string.Empty;
+    public partial string RevenueTargetCompletionText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial int CustomerTargetProgress { get; set; } = 156;
+    public partial int CustomerTargetCurrentValue { get; set; } = 156;
 
     [ObservableProperty]
-    public partial int CustomerTargetValue { get; set; } = 200;
+    public partial int CustomerTargetGoalValue { get; set; } = 200;
 
     [ObservableProperty]
-    public partial string CustomerTargetPercent { get; set; } = string.Empty;
+    public partial string CustomerTargetCompletionText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial int MemberTargetProgress { get; set; } = 23;
+    public partial int MemberTargetCurrentValue { get; set; } = 23;
 
     [ObservableProperty]
-    public partial int MemberTargetValue { get; set; } = 30;
+    public partial int MemberTargetGoalValue { get; set; } = 30;
 
     [ObservableProperty]
-    public partial string MemberTargetPercent { get; set; } = string.Empty;
+    public partial string MemberTargetCompletionText { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial IconState IconState { get; set; } = new()
@@ -63,14 +63,14 @@ public partial class GoalProgressControlViewModel : LocalizedViewModelBase
 
     protected override void RefreshLocalizedText()
     {
-        Title = LocalizationService.GetString("GoalProgressCardTitle");
-        RevenueTargetLabel = LocalizationService.GetString("GoalProgressCardRevenueTargetLabel");
-        CustomerTargetLabel = LocalizationService.GetString("GoalProgressCardCustomerTargetLabel");
-        MemberTargetLabel = LocalizationService.GetString("GoalProgressCardMemberTargetLabel");
+        Title = LocalizationService.GetString("GoalProgressTitle");
+        RevenueTargetLabel = LocalizationService.GetString("GoalProgressRevenueTargetLabel");
+        CustomerTargetLabel = LocalizationService.GetString("GoalProgressCustomerTargetLabel");
+        MemberTargetLabel = LocalizationService.GetString("GoalProgressMemberTargetLabel");
 
-        RevenueTargetPercent = FormatCompletion(RevenueTargetProgress, RevenueTargetValue);
-        CustomerTargetPercent = FormatCompletion(CustomerTargetProgress, CustomerTargetValue);
-        MemberTargetPercent = FormatCompletion(MemberTargetProgress, MemberTargetValue);
+        RevenueTargetCompletionText = FormatCompletion(RevenueTargetCurrentValue, RevenueTargetGoalValue);
+        CustomerTargetCompletionText = FormatCompletion(CustomerTargetCurrentValue, CustomerTargetGoalValue);
+        MemberTargetCompletionText = FormatCompletion(MemberTargetCurrentValue, MemberTargetGoalValue);
     }
 
     private string FormatCompletion(int progress, int total)

@@ -34,7 +34,7 @@
                       Margin="0,0,12,0"
                       VerticalAlignment="Center"/>
             <TextBlock Grid.Column="1"
-                       Text="{x:Bind ViewModel.TitleDisplay, Mode=OneWay}"
+                       Text="{x:Bind ViewModel.TitleText, Mode=OneWay}"
                        FontSize="{StaticResource DialogHeaderFontSize}"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
@@ -45,7 +45,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Padding="0"
-                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipDisplay, Mode=OneWay}">
+                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
                 <Button.Resources>
                     <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="AntiqueWhiteBrush"/>
                     <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="LighterGrayBrush"/>
@@ -66,12 +66,12 @@
         <StackPanel Grid.Row="2" Spacing="22" Margin="0,20,0,0">
             <!-- Server Address -->
             <StackPanel Spacing="8">
-                <TextBlock Text="{x:Bind ViewModel.ServerAddressLabelDisplay, Mode=OneWay}" 
+                <TextBlock Text="{x:Bind ViewModel.ServerAddressLabelText, Mode=OneWay}" 
                            FontWeight="SemiBold" 
                            FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource BlackBrush}"/>
                 <TextBox x:Name="ServerAddressBox"
-                         PlaceholderText="{x:Bind ViewModel.ServerAddressPlaceholderDisplay, Mode=OneWay}"
+                         PlaceholderText="{x:Bind ViewModel.ServerAddressPlaceholderText, Mode=OneWay}"
                          Text="{x:Bind ViewModel.ServerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          PlaceholderForeground="{StaticResource PlaceholderGrayBrush}"
                          CornerRadius="8" 
@@ -97,12 +97,12 @@
 
             <!-- API Key -->
             <StackPanel Spacing="8">
-                <TextBlock Text="{x:Bind ViewModel.ApiKeyLabelDisplay, Mode=OneWay}" 
+                <TextBlock Text="{x:Bind ViewModel.ApiKeyLabelText, Mode=OneWay}" 
                            FontWeight="SemiBold" 
                            FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource BlackBrush}"/>
                 <PasswordBox x:Name="ApiKeyBox"
-                             PlaceholderText="{x:Bind ViewModel.ApiKeyPlaceholderDisplay, Mode=OneWay}"
+                             PlaceholderText="{x:Bind ViewModel.ApiKeyPlaceholderText, Mode=OneWay}"
                              PasswordChanged="ApiKeyBox_PasswordChanged"
                              CornerRadius="8" 
                              FontSize="{StaticResource ValueFontSize}"
@@ -141,7 +141,7 @@
                           IsChecked="{x:Bind ViewModel.RememberMe, Mode=TwoWay}"
                           VerticalAlignment="Center"
                           Style="{StaticResource OrangeCheckBoxStyle}">
-                    <TextBlock Text="{x:Bind ViewModel.RememberMeLabelDisplay, Mode=OneWay}"
+                    <TextBlock Text="{x:Bind ViewModel.RememberMeLabelText, Mode=OneWay}"
                                FontSize="{StaticResource FontSizeSmall}"
                                FontWeight="Thin"
                                Foreground="{StaticResource DarkGrayBrush}"
@@ -172,7 +172,7 @@
                             <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="LighterGrayBrush"/>
                             <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="PlaceholderGrayBrush"/>
                         </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.SaveButtonDisplay, Mode=OneWay}"/>
+                        <TextBlock Text="{x:Bind ViewModel.SaveButtonText, Mode=OneWay}"/>
                     </Button>
                     <ProgressRing Width="20"
                                   Height="20"

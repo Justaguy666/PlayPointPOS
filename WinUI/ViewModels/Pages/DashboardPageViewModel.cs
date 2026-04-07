@@ -1,5 +1,5 @@
 using System;
-using WinUI.Services;
+using WinUI.Services.Factories;
 using WinUI.UIModels.Enums;
 using WinUI.ViewModels.UserControls.Dashboard;
 
@@ -18,7 +18,7 @@ public sealed class DashboardPageViewModel : IDisposable
     public DashboardPageViewModel(
         StatCardControlViewModelFactory statCardViewModelFactory,
         PopularCardControlViewModelFactory popularCardViewModelFactory,
-        ChartCardControlViewModel revenueChartCardViewModel,
+        RevenueChartControlViewModel revenueChartViewModel,
         TrendingListControlViewModel trendingListViewModel,
         QuickStatsControlViewModel quickStatsViewModel,
         GoalProgressControlViewModel goalProgressViewModel)
@@ -53,7 +53,7 @@ public sealed class DashboardPageViewModel : IDisposable
         TopGamesCardViewModel = popularCardViewModelFactory.Create(
             "PopularGamesCard",
             IconKind.Game,
-            "PopularCardGameMetricFormat",
+            "PopularGamesActivityFormat",
             [
                 new PopularCardItemData(1, "Catan", 45, 2_250_000m),
                 new PopularCardItemData(2, "Uno", 38, 1_900_000m),
@@ -65,7 +65,7 @@ public sealed class DashboardPageViewModel : IDisposable
         TopFoodsCardViewModel = popularCardViewModelFactory.Create(
             "PopularFoodsCard",
             IconKind.Food,
-            "PopularCardFoodMetricFormat",
+            "PopularFoodsActivityFormat",
             [
                 new PopularCardItemData(1, "Spicy noodles", 58, 1_740_000m),
                 new PopularCardItemData(2, "Fried chicken", 47, 1_410_000m),
@@ -77,7 +77,7 @@ public sealed class DashboardPageViewModel : IDisposable
         TopDrinksCardViewModel = popularCardViewModelFactory.Create(
             "PopularDrinksCard",
             IconKind.Drink,
-            "PopularCardDrinkMetricFormat",
+            "PopularDrinksActivityFormat",
             [
                 new PopularCardItemData(1, "B\u1EA1c x\u1EC9u", 62, 1_550_000m),
                 new PopularCardItemData(2, "Peach tea", 54, 1_350_000m),
@@ -86,7 +86,7 @@ public sealed class DashboardPageViewModel : IDisposable
                 new PopularCardItemData(5, "Mojito", 28, 980_000m),
             ]);
 
-        RevenueChartCardViewModel = revenueChartCardViewModel ?? throw new ArgumentNullException(nameof(revenueChartCardViewModel));
+        RevenueChartViewModel = revenueChartViewModel ?? throw new ArgumentNullException(nameof(revenueChartViewModel));
         TrendingListViewModel = trendingListViewModel ?? throw new ArgumentNullException(nameof(trendingListViewModel));
         QuickStatsViewModel = quickStatsViewModel ?? throw new ArgumentNullException(nameof(quickStatsViewModel));
         GoalProgressViewModel = goalProgressViewModel ?? throw new ArgumentNullException(nameof(goalProgressViewModel));
@@ -100,7 +100,7 @@ public sealed class DashboardPageViewModel : IDisposable
             TopGamesCardViewModel,
             TopFoodsCardViewModel,
             TopDrinksCardViewModel,
-            RevenueChartCardViewModel,
+            RevenueChartViewModel,
             TrendingListViewModel,
             QuickStatsViewModel,
             GoalProgressViewModel,
@@ -115,7 +115,7 @@ public sealed class DashboardPageViewModel : IDisposable
 
     public StatCardControlViewModel TodayProductStatCardViewModel { get; }
 
-    public ChartCardControlViewModel RevenueChartCardViewModel { get; }
+    public RevenueChartControlViewModel RevenueChartViewModel { get; }
 
     public TrendingListControlViewModel TrendingListViewModel { get; }
 

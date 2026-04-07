@@ -47,7 +47,7 @@
                                 Foreground="{StaticResource WhiteBrush}" 
                                 VerticalAlignment="Center" />
 
-                            <TextBlock Text="{x:Bind ViewModel.LogoutButtonDisplay, Mode=OneWay}" VerticalAlignment="Center" />
+                            <TextBlock Text="{x:Bind ViewModel.LogoutButtonText, Mode=OneWay}" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -64,7 +64,7 @@
                             <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
                             <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
                         </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.ChangePasswordButtonDisplay, Mode=OneWay}" />
+                        <TextBlock Text="{x:Bind ViewModel.ChangePasswordButtonText, Mode=OneWay}" />
                     </Button>
                 </StackPanel>
             </StackPanel>

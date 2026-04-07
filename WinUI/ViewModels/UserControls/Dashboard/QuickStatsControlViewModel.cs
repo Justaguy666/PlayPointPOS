@@ -8,7 +8,7 @@ namespace WinUI.ViewModels.UserControls.Dashboard;
 
 public partial class QuickStatsControlViewModel : LocalizedViewModelBase
 {
-    private const double AverageHourPerAreaMetric = 2.5;
+    private const double AverageHoursPerAreaMetric = 2.5;
     private const decimal AverageRevenuePerInvoiceMetric = 385_000m;
     private const double ReturnRateMetric = 68;
     private const double AreaUsageRateMetric = 68;
@@ -18,34 +18,34 @@ public partial class QuickStatsControlViewModel : LocalizedViewModelBase
     public partial string Title { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string AverageHourPerArea { get; set; } = string.Empty;
+    public partial string AverageHoursPerAreaLabel { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string AverageRevenuePerInvoice { get; set; } = string.Empty;
+    public partial string AverageRevenuePerInvoiceLabel { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ComebackPercent { get; set; } = string.Empty;
+    public partial string ReturnRateLabel { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string AreaCoveragePerHourPercent { get; set; } = string.Empty;
+    public partial string AreaUsageRateLabel { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string NewMemberPerMonth { get; set; } = string.Empty;
+    public partial string NewMembersPerMonthLabel { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string AverageHourPerAreaValue { get; set; } = string.Empty;
+    public partial string AverageHoursPerAreaValue { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string AverageRevenuePerInvoiceValue { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ComebackPercentValue { get; set; } = string.Empty;
+    public partial string ReturnRateValue { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string AreaCoveragePerHourPercentValue { get; set; } = string.Empty;
+    public partial string AreaUsageRateValue { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string NewMemberPerMonthValue { get; set; } = string.Empty;
+    public partial string NewMembersPerMonthValue { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial IconState IconState { get; set; } = new()
@@ -63,31 +63,31 @@ public partial class QuickStatsControlViewModel : LocalizedViewModelBase
 
     protected override void RefreshLocalizedText()
     {
-        Title = LocalizationService.GetString("QuickStatsControlTitle");
-        AverageHourPerArea = LocalizationService.GetString("QuickStatsControlAverageHourPerArea");
-        AverageRevenuePerInvoice = LocalizationService.GetString("QuickStatsControlAverageRevenuePerInvoice");
-        ComebackPercent = LocalizationService.GetString("QuickStatsControlComebackPercent");
-        AreaCoveragePerHourPercent = LocalizationService.GetString("QuickStatsControlAreaCoveragePerHourPercent");
-        NewMemberPerMonth = LocalizationService.GetString("QuickStatsControlNewMemberPerMonth");
+        Title = LocalizationService.GetString("QuickStatsTitle");
+        AverageHoursPerAreaLabel = LocalizationService.GetString("QuickStatsAverageHoursPerAreaLabel");
+        AverageRevenuePerInvoiceLabel = LocalizationService.GetString("QuickStatsAverageRevenuePerInvoiceLabel");
+        ReturnRateLabel = LocalizationService.GetString("QuickStatsReturnRateLabel");
+        AreaUsageRateLabel = LocalizationService.GetString("QuickStatsAreaUsageRateLabel");
+        NewMembersPerMonthLabel = LocalizationService.GetString("QuickStatsNewMembersPerMonthLabel");
 
-        AverageHourPerAreaValue = string.Format(
+        AverageHoursPerAreaValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardHourValueFormat"),
-            AverageHourPerAreaMetric);
+            AverageHoursPerAreaMetric);
 
         AverageRevenuePerInvoiceValue = LocalizationService.FormatCurrency(AverageRevenuePerInvoiceMetric);
 
-        ComebackPercentValue = string.Format(
+        ReturnRateValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardPercentValueFormat"),
             ReturnRateMetric);
 
-        AreaCoveragePerHourPercentValue = string.Format(
+        AreaUsageRateValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardPercentValueFormat"),
             AreaUsageRateMetric);
 
-        NewMemberPerMonthValue = string.Format(
+        NewMembersPerMonthValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardSignedNumberValueFormat"),
             NewMembersPerMonthMetric);

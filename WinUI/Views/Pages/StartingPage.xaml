@@ -25,7 +25,7 @@
                 <controls:LogoControl Width="450" Height="250" />
 
                 <TextBlock
-                    Text="{x:Bind ViewModel.WelcomeTextDisplay}"
+                    Text="{x:Bind ViewModel.WelcomeText}"
                     FontSize="{StaticResource FontSizeExtraExtraExtraLarge}"
                     FontWeight="Light"
                     HorizontalAlignment="Center"
@@ -40,14 +40,14 @@
                 VerticalAlignment="Bottom"
                 Margin="0,0,0,16">
                 <TextBlock
-                    Text="{x:Bind ViewModel.AppVersionDisplay}"
+                    Text="{x:Bind ViewModel.AppVersionText}"
                     FontSize="{StaticResource FontSizeSmall}"
                     FontWeight="Normal"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" />
 
                 <TextBlock
-                    Text="{x:Bind ViewModel.CopyrightDisplay}"
+                    Text="{x:Bind ViewModel.CopyrightText}"
                     FontSize="{StaticResource FontSizeMedium}"
                     FontWeight="Medium"
                     HorizontalAlignment="Center"

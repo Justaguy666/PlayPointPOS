@@ -14,6 +14,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.ApplicationModel;
 using WinUI.Services;
+using WinUI.Services.Factories;
 using WinUI.ViewModels.Dialogs;
 using WinUI.Views.Dialogs;
 
@@ -104,19 +105,23 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddSingleton<ViewModels.UserControls.NotificationControlViewModel>();
                     services.AddSingleton<StatCardControlViewModelFactory>();
                     services.AddSingleton<PopularCardControlViewModelFactory>();
+                    services.AddSingleton<SummarizedAvailableCardViewModelFactory>();
+                    services.AddSingleton<SummarizedReservedCardViewModelFactory>();
+                    services.AddSingleton<SummarizedRentedCardViewModelFactory>();
                     
                     services.AddTransient<ViewModels.Dialogs.ConfigViewModel>();
                     services.AddTransient<ViewModels.Dialogs.LoginViewModel>();
                     services.AddTransient<ViewModels.Dialogs.RegisterViewModel>();
                     services.AddTransient<ViewModels.Dialogs.ForgotPasswordViewModel>();
                     services.AddTransient<ViewModels.Dialogs.OtpViewModel>();
-                    services.AddTransient<ViewModels.UserControls.Dashboard.ChartCardControlViewModel>();
+                    services.AddTransient<ViewModels.UserControls.Dashboard.RevenueChartControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.QuickStatsControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.GoalProgressControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.TrendingListControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Settings.ShopInformationCardControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Settings.GeneralSettingsCardControlViewModel>();
                     services.AddTransient<ViewModels.Pages.DashboardPageViewModel>();
+                    services.AddTransient<ViewModels.Pages.AreaManagementPageViewModel>();
                     services.AddTransient<ViewModels.Pages.StartingPageViewModel>();
                     services.AddTransient<ViewModels.Pages.SettingsPageViewModel>();
 
@@ -127,7 +132,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddTransient<Views.Pages.GameManagementPage>();
                     services.AddTransient<Views.Pages.ProductManagementPage>();
                     services.AddTransient<Views.Pages.MemberManagementPage>();
-                    services.AddTransient<Views.Pages.TransactionHistoryPage>();
+                    services.AddTransient<Views.Pages.TransactionManagementPage>();
                     services.AddTransient<Views.Pages.SettingsPage>();
                 })
                 .Build();
@@ -138,7 +143,7 @@ public partial class App : Microsoft.UI.Xaml.Application
             NavigationMap.Register<Application.Navigation.Requests.NavigateToGameManagement, Views.Pages.GameManagementPage>();
             NavigationMap.Register<Application.Navigation.Requests.NavigateToProductManagement, Views.Pages.ProductManagementPage>();
             NavigationMap.Register<Application.Navigation.Requests.NavigateToMemberManagement, Views.Pages.MemberManagementPage>();
-            NavigationMap.Register<Application.Navigation.Requests.NavigateToTransactionHistory, Views.Pages.TransactionHistoryPage>();
+            NavigationMap.Register<Application.Navigation.Requests.NavigateToTransactionHistory, Views.Pages.TransactionManagementPage>();
             NavigationMap.Register<Application.Navigation.Requests.NavigateToSettings, Views.Pages.SettingsPage>();
 
             var configuration = Host.Services.GetRequiredService<IConfiguration>();

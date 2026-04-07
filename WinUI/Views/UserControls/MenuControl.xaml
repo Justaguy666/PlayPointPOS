@@ -20,7 +20,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="models:MenuItemModel">
                     <controls:MenuItemControl
-                        Text="{x:Bind DisplayText, Mode=OneWay}"
+                        Text="{x:Bind Label, Mode=OneWay}"
                         IconKind="{x:Bind Icon, Mode=OneWay}"
                         Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisible}}"
                         Command="{x:Bind OnMenuItemSelectedCommand, Mode=OneWay}"

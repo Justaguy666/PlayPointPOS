@@ -20,13 +20,13 @@ public partial class LoginViewModel : LocalizedViewModelBase
     private readonly MainViewModel _mainViewModel;
 
     [ObservableProperty]
-    public partial string TitleDisplay { get; set; } = string.Empty;
+    public partial string TitleText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string EmailLabelDisplay { get; set; } = string.Empty;
+    public partial string EmailLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string EmailPlaceholderDisplay { get; set; } = string.Empty;
+    public partial string EmailPlaceholderText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
@@ -34,10 +34,10 @@ public partial class LoginViewModel : LocalizedViewModelBase
     public partial string Email { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string PasswordLabelDisplay { get; set; } = string.Empty;
+    public partial string PasswordLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string PasswordPlaceholderDisplay { get; set; } = string.Empty;
+    public partial string PasswordPlaceholderText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
@@ -48,16 +48,16 @@ public partial class LoginViewModel : LocalizedViewModelBase
     public partial bool RememberMe { get; set; }
 
     [ObservableProperty]
-    public partial string RememberMeLabelDisplay { get; set; } = string.Empty;
+    public partial string RememberMeLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string LoginButtonDisplay { get; set; } = string.Empty;
+    public partial string LoginButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ForgotPasswordButtonDisplay { get; set; } = string.Empty;
+    public partial string ForgotPasswordButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string CloseTooltipDisplay { get; set; } = string.Empty;
+    public partial string CloseTooltipText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
@@ -112,15 +112,15 @@ public partial class LoginViewModel : LocalizedViewModelBase
 
     protected override void RefreshLocalizedText()
     {
-        TitleDisplay = LocalizationService.GetString("LoginDialogTitleText");
-        EmailLabelDisplay = LocalizationService.GetString("LoginDialogEmailLabelText");
-        EmailPlaceholderDisplay = LocalizationService.GetString("LoginDialogEmailPlaceholderText");
-        PasswordLabelDisplay = LocalizationService.GetString("LoginDialogPasswordLabelText");
-        PasswordPlaceholderDisplay = LocalizationService.GetString("LoginDialogPasswordPlaceholderText");
-        RememberMeLabelDisplay = LocalizationService.GetString("LoginDialogRememberMeLabelText");
-        LoginButtonDisplay = LocalizationService.GetString("LoginDialogLoginButtonText");
-        ForgotPasswordButtonDisplay = LocalizationService.GetString("LoginDialogForgotPasswordButtonText");
-        CloseTooltipDisplay = LocalizationService.GetString("CloseTooltipText");
+        TitleText = LocalizationService.GetString("LoginDialogTitleText");
+        EmailLabelText = LocalizationService.GetString("LoginDialogEmailLabelText");
+        EmailPlaceholderText = LocalizationService.GetString("LoginDialogEmailPlaceholderText");
+        PasswordLabelText = LocalizationService.GetString("LoginDialogPasswordLabelText");
+        PasswordPlaceholderText = LocalizationService.GetString("LoginDialogPasswordPlaceholderText");
+        RememberMeLabelText = LocalizationService.GetString("LoginDialogRememberMeLabelText");
+        LoginButtonText = LocalizationService.GetString("LoginDialogLoginButtonText");
+        ForgotPasswordButtonText = LocalizationService.GetString("LoginDialogForgotPasswordButtonText");
+        CloseTooltipText = LocalizationService.GetString("CloseTooltipText");
     }
 
     [RelayCommand(CanExecute = nameof(CanLogin))]

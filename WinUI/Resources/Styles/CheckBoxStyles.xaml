@@ -1,8 +1,10 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:helpers="using:WinUI.Helpers">
 
     <Style TargetType="CheckBox" x:Key="OrangeCheckBoxStyle">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True"/>
         <Setter Property="Foreground" Value="{StaticResource DarkGrayBrush}"/>
         <Setter Property="MinHeight" Value="20"/>
         <Setter Property="Template">
@@ -17,7 +19,7 @@
                             <VisualStateGroup x:Name="CombinedStates">
                                 <VisualState x:Name="UncheckedNormal">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBoarderUnchecked}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBorderUnchecked}" Duration="0"/>
                                         <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource TransparentColor}" Duration="0"/>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CheckGlyph" Storyboard.TargetProperty="Visibility">
                                             <DiscreteObjectKeyFrame KeyTime="0">
@@ -121,7 +123,7 @@
                                 </VisualState>
                                 <VisualState x:Name="IndeterminateNormal">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBoarderUnchecked}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBorderUnchecked}" Duration="0"/>
                                         <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource TransparentColor}" Duration="0"/>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CheckGlyph" Storyboard.TargetProperty="Visibility">
                                             <DiscreteObjectKeyFrame KeyTime="0">
@@ -180,7 +182,7 @@
                                 Width="20"
                                 Height="20">
                             <Border.BorderBrush>
-                                <SolidColorBrush x:Name="CheckboxBorderBrush" Color="{StaticResource CheckboxBoarderUnchecked}"/>
+                                <SolidColorBrush x:Name="CheckboxBorderBrush" Color="{StaticResource CheckboxBorderUnchecked}"/>
                             </Border.BorderBrush>
                             <Border.Background>
                                 <SolidColorBrush x:Name="CheckboxBackgroundBrush" Color="{StaticResource TransparentColor}"/>

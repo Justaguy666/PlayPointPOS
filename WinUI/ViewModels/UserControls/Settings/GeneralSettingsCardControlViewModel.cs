@@ -37,7 +37,7 @@ public partial class GeneralSettingsCardControlViewModel : LocalizedViewModelBas
     public partial string DateFormatLabel { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ApplyButtonDisplay { get; set; } = string.Empty;
+    public partial string ApplyButtonText { get; set; } = string.Empty;
 
     public ObservableCollection<LocalizationOptionModel> AvailableCurrencies { get; } = [];
 
@@ -82,7 +82,7 @@ public partial class GeneralSettingsCardControlViewModel : LocalizedViewModelBas
         TimeZoneLabel = LocalizationService.GetString("SettingsPageTimeZoneLabel");
         LanguageLabel = LocalizationService.GetString("SettingsPageLanguageLabel");
         DateFormatLabel = LocalizationService.GetString("SettingsPageDateFormatLabel");
-        ApplyButtonDisplay = LocalizationService.GetString("SettingsPageApplyButton");
+        ApplyButtonText = LocalizationService.GetString("SettingsPageApplyButton");
 
         RefreshOptions();
         ApplyCommand.NotifyCanExecuteChanged();

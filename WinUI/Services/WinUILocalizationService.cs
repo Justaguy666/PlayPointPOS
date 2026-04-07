@@ -114,7 +114,7 @@ public class WinUILocalizationService : ILocalizationService
     public string FormatHourLabel(int hour)
     {
         int localizedHour = NormalizeHour(hour + ResolveHourOffset(TimeZone) - ResolveHourOffset(_defaultTimeZone));
-        return string.Format(Culture, GetString("RevenueChartCardHourValueFormat"), localizedHour);
+        return string.Format(Culture, GetString("RevenueChartHourValueFormat"), localizedHour);
     }
 
     private static void ApplyThreadCulture(string language)

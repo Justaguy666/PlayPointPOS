@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -141,10 +141,10 @@
   <data name="ValueSeparatorText" xml:space="preserve">
     <value>/</value>
   </data>
-  <data name="NotificationPlaceholderTitleText" xml:space="preserve">
+  <data name="NotificationDefaultTitle" xml:space="preserve">
     <value>Title</value>
   </data>
-  <data name="NotificationPlaceholderMessageText" xml:space="preserve">
+  <data name="NotificationDefaultMessage" xml:space="preserve">
     <value>Message description goes here...</value>
   </data>
   <data name="AppVersionText" xml:space="preserve">
@@ -297,7 +297,7 @@
   <data name="RegisterDialogPasswordLabelText" xml:space="preserve">
 		<value>Password</value>
 	</data>
-  <data name="RegisterDialogPasswordPlaceHolderText" xml:space="preserve">
+  <data name="RegisterDialogPasswordPlaceholderText" xml:space="preserve">
 		<value>Password...</value>
 	</data>
   <data name="RegisterDialogConfirmPasswordLabelText" xml:space="preserve">
@@ -309,7 +309,7 @@
   <data name="RegisterDialogOTPLabelText" xml:space="preserve">
 		<value>OTP</value>
 	</data>
-  <data name="RegisterDialogOTPPlaceHolderText" xml:space="preserve">
+  <data name="RegisterDialogOTPPlaceholderText" xml:space="preserve">
 		<value>OTP Code...</value>
 	</data>
   <data name="RegisterDialogResetButtonText" xml:space="preserve">
@@ -342,253 +342,262 @@
   <data name="HeaderReservedAreasLabel" xml:space="preserve">
         <value>Reserved Areas</value>
     </data>
-  <data name="NavDashboardText" xml:space="preserve">
+  <data name="NavDashboardLabel" xml:space="preserve">
         <value>Dashboard</value>
     </data>
-  <data name="NavAreaText" xml:space="preserve">
+  <data name="NavAreaLabel" xml:space="preserve">
         <value>Areas</value>
     </data>
-  <data name="NavGameText" xml:space="preserve">
+  <data name="NavGameLabel" xml:space="preserve">
         <value>Games</value>
     </data>
-  <data name="NavFoodText" xml:space="preserve">
+  <data name="NavProductLabel" xml:space="preserve">
         <value>Products</value>
     </data>
-  <data name="NavMemberText" xml:space="preserve">
+  <data name="NavMemberLabel" xml:space="preserve">
         <value>Members</value>
     </data>
-  <data name="NavHistoryText" xml:space="preserve">
-        <value>Transaction History</value>
-    </data>
-  <data name="NavSettingsText" xml:space="preserve">
+  <data name="NavHistoryLabel" xml:space="preserve">
+        <value>Transaction</value>
+  </data>
+  <data name="NavSettingsLabel" xml:space="preserve">
         <value>Settings</value>
     </data>
   <data name="TodayRevenueStatCardTitle" xml:space="preserve">
     <value>Today's revenue</value>
   </data>
-  <data name="TodayRevenueStatCardValueText" xml:space="preserve">
+  <data name="TodayRevenueStatCardValueLabel" xml:space="preserve">
     <value>12,450,000 đ</value>
   </data>
-  <data name="TodayRevenueStatCardTrendText" xml:space="preserve">
+  <data name="TodayRevenueStatCardTrendLabel" xml:space="preserve">
     <value>↑ 15.5%</value>
   </data>
-  <data name="TodayRevenueStatCardComparisonText" xml:space="preserve">
+  <data name="TodayRevenueStatCardComparisonLabel" xml:space="preserve">
     <value>vs yesterday</value>
   </data>
   <data name="TodayGameSessionStatCardTitle" xml:space="preserve">
     <value>Game sessions</value>
   </data>
-  <data name="TodayGameSessionStatCardValueText" xml:space="preserve">
+  <data name="TodayGameSessionStatCardValueLabel" xml:space="preserve">
     <value>234</value>
   </data>
-  <data name="TodayGameSessionStatCardTrendText" xml:space="preserve">
+  <data name="TodayGameSessionStatCardTrendLabel" xml:space="preserve">
     <value>↑ 12.3%</value>
   </data>
-  <data name="TodayGameSessionStatCardComparisonText" xml:space="preserve">
+  <data name="TodayGameSessionStatCardComparisonLabel" xml:space="preserve">
     <value>vs yesterday</value>
   </data>
   <data name="TodayCustomerStatCardTitle" xml:space="preserve">
     <value>Customers</value>
   </data>
-  <data name="TodayCustomerStatCardValueText" xml:space="preserve">
+  <data name="TodayCustomerStatCardValueLabel" xml:space="preserve">
     <value>156</value>
   </data>
-  <data name="TodayCustomerStatCardTrendText" xml:space="preserve">
+  <data name="TodayCustomerStatCardTrendLabel" xml:space="preserve">
     <value>↓ 0.36%</value>
   </data>
-  <data name="TodayCustomerStatCardComparisonText" xml:space="preserve">
+  <data name="TodayCustomerStatCardComparisonLabel" xml:space="preserve">
     <value>vs yesterday</value>
   </data>
   <data name="TodayProductStatCardTitle" xml:space="preserve">
     <value>Food &amp; drinks</value>
   </data>
-  <data name="TodayProductStatCardValueText" xml:space="preserve">
+  <data name="TodayProductStatCardValueLabel" xml:space="preserve">
     <value>5,680,000 đ</value>
   </data>
-  <data name="TodayProductStatCardTrendText" xml:space="preserve">
+  <data name="TodayProductStatCardTrendLabel" xml:space="preserve">
     <value>↑ 18.7%</value>
   </data>
-  <data name="TodayProductStatCardComparisonText" xml:space="preserve">
+  <data name="TodayProductStatCardComparisonLabel" xml:space="preserve">
     <value>vs yesterday</value>
   </data>
-  <data name="TrendingListControlTitle" xml:space="preserve">
+  <data name="TrendingListTitle" xml:space="preserve">
     <value>Trendings</value>
   </data>
-  <data name="TrendingListControlGameLabel" xml:space="preserve">
+  <data name="TrendingListGameLabel" xml:space="preserve">
     <value>Game</value>
   </data>
-  <data name="TrendingListControlGameName" xml:space="preserve">
+  <data name="TrendingListGameName" xml:space="preserve">
     <value>Ma s&#xF3;i</value>
   </data>
-  <data name="TrendingListControlFoodLabel" xml:space="preserve">
+  <data name="TrendingListFoodLabel" xml:space="preserve">
     <value>Food</value>
   </data>
-  <data name="TrendingListControlFoodName" xml:space="preserve">
+  <data name="TrendingListFoodName" xml:space="preserve">
     <value>M&#x1EF3; cay</value>
   </data>
-  <data name="TrendingListControlDrinkLabel" xml:space="preserve">
+  <data name="TrendingListDrinkLabel" xml:space="preserve">
     <value>Drink</value>
   </data>
-  <data name="TrendingListControlDrinkName" xml:space="preserve">
+  <data name="TrendingListDrinkName" xml:space="preserve">
     <value>B&#x1EA1;c x&#x1EC9;u</value>
   </data>
-  <data name="QuickStatsControlTitle" xml:space="preserve">
+  <data name="QuickStatsTitle" xml:space="preserve">
     <value>Quick Stats</value>
   </data>
-  <data name="QuickStatsControlAverageHourPerArea" xml:space="preserve">
+  <data name="QuickStatsAverageHoursPerAreaLabel" xml:space="preserve">
     <value>Avg hour per area</value>
   </data>
-  <data name="QuickStatsControlAverageRevenuePerInvoice" xml:space="preserve">
+  <data name="QuickStatsAverageRevenuePerInvoiceLabel" xml:space="preserve">
     <value>Avg revenue per bill</value>
   </data>
-  <data name="QuickStatsControlComebackPercent" xml:space="preserve">
+  <data name="QuickStatsReturnRateLabel" xml:space="preserve">
     <value>Return rate</value>
   </data>
-  <data name="QuickStatsControlAreaCoveragePerHourPercent" xml:space="preserve">
+  <data name="QuickStatsAreaUsageRateLabel" xml:space="preserve">
     <value>Area usage rate</value>
   </data>
-  <data name="QuickStatsControlNewMemberPerMonth" xml:space="preserve">
+  <data name="QuickStatsNewMembersPerMonthLabel" xml:space="preserve">
     <value>New members/month</value>
   </data>
-  <data name="GoalProgressCardTitle" xml:space="preserve">
+  <data name="GoalProgressTitle" xml:space="preserve">
     <value>This month's targets</value>
   </data>
   <data name="PopularGamesCardTitle" xml:space="preserve">
     <value>Top 5 popular games</value>
   </data>
+  <data name="PopularGamesCardShowMoreMessage" xml:space="preserve">
+    <value>Popular game details are not available yet.</value>
+  </data>
   <data name="PopularFoodsCardTitle" xml:space="preserve">
     <value>Top 5 popular foods</value>
+  </data>
+  <data name="PopularFoodsCardShowMoreMessage" xml:space="preserve">
+    <value>Popular food details are not available yet.</value>
   </data>
   <data name="PopularDrinksCardTitle" xml:space="preserve">
     <value>Top 5 popular drinks</value>
   </data>
-  <data name="PopularCardGameMetricFormat" xml:space="preserve">
+  <data name="PopularDrinksCardShowMoreMessage" xml:space="preserve">
+    <value>Popular drink details are not available yet.</value>
+  </data>
+  <data name="PopularGamesActivityFormat" xml:space="preserve">
     <value>{0:N0} plays</value>
   </data>
-  <data name="PopularCardFoodMetricFormat" xml:space="preserve">
+  <data name="PopularFoodsActivityFormat" xml:space="preserve">
     <value>{0:N0} orders</value>
   </data>
-  <data name="PopularCardDrinkMetricFormat" xml:space="preserve">
+  <data name="PopularDrinksActivityFormat" xml:space="preserve">
     <value>{0:N0} orders</value>
   </data>
-  <data name="GoalProgressCardRevenueTargetLabel" xml:space="preserve">
+  <data name="GoalProgressRevenueTargetLabel" xml:space="preserve">
     <value>Revenue</value>
   </data>
-  <data name="GoalProgressCardCustomerTargetLabel" xml:space="preserve">
+  <data name="GoalProgressCustomerTargetLabel" xml:space="preserve">
     <value>New customers</value>
   </data>
-  <data name="GoalProgressCardMemberTargetLabel" xml:space="preserve">
+  <data name="GoalProgressMemberTargetLabel" xml:space="preserve">
     <value>New members</value>
   </data>
-  <data name="RevenueChartCardTitle" xml:space="preserve">
+  <data name="RevenueChartTitle" xml:space="preserve">
     <value>Revenue trends</value>
   </data>
-  <data name="RevenueChartCardRevenueLabel" xml:space="preserve">
+  <data name="RevenueChartRevenueLabel" xml:space="preserve">
     <value>Revenue</value>
   </data>
-  <data name="RevenueChartCardCustomerLabel" xml:space="preserve">
+  <data name="RevenueChartCustomerLabel" xml:space="preserve">
     <value>Customers</value>
   </data>
-  <data name="RevenueChartCardSubtitleLastWeek" xml:space="preserve">
+  <data name="RevenueChartLastWeekSubtitle" xml:space="preserve">
     <value>Last 7 days</value>
   </data>
-  <data name="RevenueChartCardSubtitleLast24Hours" xml:space="preserve">
+  <data name="RevenueChartLast24HoursSubtitle" xml:space="preserve">
     <value>Last 24 hours</value>
   </data>
-  <data name="RevenueChartCardSubtitleLast30Days" xml:space="preserve">
+  <data name="RevenueChartLast30DaysSubtitle" xml:space="preserve">
     <value>Last 30 days</value>
   </data>
-  <data name="RevenueChartCardSubtitleLast3Months" xml:space="preserve">
+  <data name="RevenueChartLast3MonthsSubtitle" xml:space="preserve">
     <value>Last 3 months</value>
   </data>
-  <data name="RevenueChartCardSubtitleLast12Months" xml:space="preserve">
+  <data name="RevenueChartLast12MonthsSubtitle" xml:space="preserve">
     <value>Last 12 months</value>
   </data>
-  <data name="RevenueChartCardTodayLabel" xml:space="preserve">
+  <data name="RevenueChartTodayLabel" xml:space="preserve">
     <value>Today</value>
   </data>
-  <data name="RevenueChartCardWeekLabel" xml:space="preserve">
+  <data name="RevenueChartWeekLabel" xml:space="preserve">
     <value>This week</value>
   </data>
-  <data name="RevenueChartCardMonthLabel" xml:space="preserve">
+  <data name="RevenueChartMonthLabel" xml:space="preserve">
     <value>This month</value>
   </data>
-  <data name="RevenueChartCardQuarterLabel" xml:space="preserve">
+  <data name="RevenueChartQuarterLabel" xml:space="preserve">
     <value>This quarter</value>
   </data>
-  <data name="RevenueChartCardYearLabel" xml:space="preserve">
+  <data name="RevenueChartYearLabel" xml:space="preserve">
     <value>This year</value>
   </data>
-  <data name="RevenueChartCardCustomerValueFormat" xml:space="preserve">
+  <data name="RevenueChartCustomerValueFormat" xml:space="preserve">
     <value>{0:0} customers</value>
   </data>
-  <data name="RevenueChartCardRevenueValueFormatWhole" xml:space="preserve">
+  <data name="RevenueChartRevenueValueFormatWhole" xml:space="preserve">
     <value>{0:0}M đ</value>
   </data>
-  <data name="RevenueChartCardRevenueValueFormatFractional" xml:space="preserve">
+  <data name="RevenueChartRevenueValueFormatFractional" xml:space="preserve">
     <value>{0:0.#}M đ</value>
   </data>
-  <data name="RevenueChartCardHourValueFormat" xml:space="preserve">
+  <data name="RevenueChartHourValueFormat" xml:space="preserve">
     <value>{0:00}h</value>
   </data>
-  <data name="RevenueChartCardDayMonShort" xml:space="preserve">
+  <data name="RevenueChartDayMonShort" xml:space="preserve">
     <value>Mon</value>
   </data>
-  <data name="RevenueChartCardDayTueShort" xml:space="preserve">
+  <data name="RevenueChartDayTueShort" xml:space="preserve">
     <value>Tue</value>
   </data>
-  <data name="RevenueChartCardDayWedShort" xml:space="preserve">
+  <data name="RevenueChartDayWedShort" xml:space="preserve">
     <value>Wed</value>
   </data>
-  <data name="RevenueChartCardDayThuShort" xml:space="preserve">
+  <data name="RevenueChartDayThuShort" xml:space="preserve">
     <value>Thu</value>
   </data>
-  <data name="RevenueChartCardDayFriShort" xml:space="preserve">
+  <data name="RevenueChartDayFriShort" xml:space="preserve">
     <value>Fri</value>
   </data>
-  <data name="RevenueChartCardDaySatShort" xml:space="preserve">
+  <data name="RevenueChartDaySatShort" xml:space="preserve">
     <value>Sat</value>
   </data>
-  <data name="RevenueChartCardDaySunShort" xml:space="preserve">
+  <data name="RevenueChartDaySunShort" xml:space="preserve">
     <value>Sun</value>
   </data>
-  <data name="RevenueChartCardMonthWeek1" xml:space="preserve">
+  <data name="RevenueChartMonthWeek1" xml:space="preserve">
     <value>Week 1</value>
   </data>
-  <data name="RevenueChartCardMonthWeek2" xml:space="preserve">
+  <data name="RevenueChartMonthWeek2" xml:space="preserve">
     <value>Week 2</value>
   </data>
-  <data name="RevenueChartCardMonthWeek3" xml:space="preserve">
+  <data name="RevenueChartMonthWeek3" xml:space="preserve">
     <value>Week 3</value>
   </data>
-  <data name="RevenueChartCardMonthWeek4" xml:space="preserve">
+  <data name="RevenueChartMonthWeek4" xml:space="preserve">
     <value>Week 4</value>
   </data>
-  <data name="RevenueChartCardQuarterMonth1" xml:space="preserve">
+  <data name="RevenueChartQuarterMonth1" xml:space="preserve">
     <value>M1</value>
   </data>
-  <data name="RevenueChartCardQuarterMonth2" xml:space="preserve">
+  <data name="RevenueChartQuarterMonth2" xml:space="preserve">
     <value>M2</value>
   </data>
-  <data name="RevenueChartCardQuarterMonth3" xml:space="preserve">
+  <data name="RevenueChartQuarterMonth3" xml:space="preserve">
     <value>M3</value>
   </data>
-  <data name="RevenueChartCardYearJanShort" xml:space="preserve">
+  <data name="RevenueChartYearJanShort" xml:space="preserve">
     <value>Jan</value>
   </data>
-  <data name="RevenueChartCardYearMarShort" xml:space="preserve">
+  <data name="RevenueChartYearMarShort" xml:space="preserve">
     <value>Mar</value>
   </data>
-  <data name="RevenueChartCardYearMayShort" xml:space="preserve">
+  <data name="RevenueChartYearMayShort" xml:space="preserve">
     <value>May</value>
   </data>
-  <data name="RevenueChartCardYearJulShort" xml:space="preserve">
+  <data name="RevenueChartYearJulShort" xml:space="preserve">
     <value>Jul</value>
   </data>
-  <data name="RevenueChartCardYearSepShort" xml:space="preserve">
+  <data name="RevenueChartYearSepShort" xml:space="preserve">
     <value>Sep</value>
   </data>
-  <data name="RevenueChartCardYearNovShort" xml:space="preserve">
+  <data name="RevenueChartYearNovShort" xml:space="preserve">
     <value>Nov</value>
   </data>
   <data name="DashboardHourValueFormat" xml:space="preserve">
@@ -695,5 +704,35 @@
   </data>
   <data name="SettingsLocalizationSavedMessage" xml:space="preserve">
     <value>Localization preferences were updated. Date format: {0}.</value>
+  </data>
+  <data name="AreaManagementPageListHeader" xml:space="preserve">
+    <value>Area Management</value>
+  </data>
+  <data name="AreaManagementPageAddAreaButton" xml:space="preserve">
+    <value>Add new</value>
+  </data>
+  <data name="AreaManagementPageAllAreasFilter" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="AreaManagementPageTableFilter" xml:space="preserve">
+    <value>Tables</value>
+  </data>
+  <data name="AreaManagementPageRoomFilter" xml:space="preserve">
+    <value>Rooms</value>
+  </data>
+  <data name="AreaManagementPageNoAreasText" xml:space="preserve">
+    <value>Select an area to view details.</value>
+  </data>
+  <data name="AreaManagementPageFilterAreaButton" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="AreaManagementAvailableStatusText" xml:space="preserve">
+    <value>Available</value>
+  </data>
+	<data name="AreaManagementRentedTotalAmountFormat" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="AreaManagementCapacityFormat" xml:space="preserve">
+    <value>{0} guests</value>
   </data>
 </root>

@@ -20,10 +20,10 @@ public partial class SettingsPageViewModel : LocalizedViewModelBase
     private bool _isDisposed;
 
     [ObservableProperty]
-    public partial string LogoutButtonDisplay { get; set; } = string.Empty;
+    public partial string LogoutButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ChangePasswordButtonDisplay { get; set; } = string.Empty;
+    public partial string ChangePasswordButtonText { get; set; } = string.Empty;
 
     public IconState LogoutIconState { get; } = new() { Kind = IconKind.Logout, Size = 24 };
 
@@ -62,8 +62,8 @@ public partial class SettingsPageViewModel : LocalizedViewModelBase
 
     protected override void RefreshLocalizedText()
     {
-        LogoutButtonDisplay = LocalizationService.GetString("SettingsPageLogoutButton");
-        ChangePasswordButtonDisplay = LocalizationService.GetString("SettingsPageChangePasswordButton");
+        LogoutButtonText = LocalizationService.GetString("SettingsPageLogoutButton");
+        ChangePasswordButtonText = LocalizationService.GetString("SettingsPageChangePasswordButton");
     }
 
     public new void Dispose()

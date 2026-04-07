@@ -5,6 +5,7 @@
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>WinUI</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
     <Platforms>x86;x64;ARM64</Platforms>
     <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
     <PublishProfile>win-$(Platform).pubxml</PublishProfile>
@@ -29,6 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Assets\AppIcon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Icons\AppIcon.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
@@ -63,10 +68,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Icons\" />
-    <Folder Include="Extensions\" />
     <Folder Include="Helpers\" />
     <Folder Include="Resources\Animations\" />
-    <Folder Include="Resources\Styles\" />
+    <Folder Include="ViewModels\Dialogs\Add\" />
+    <Folder Include="ViewModels\Dialogs\Edit\" />
+    <Folder Include="ViewModels\Dialogs\Filter\" />
+    <Folder Include="ViewModels\UserControls\AreaManagement\DetailedAreaCards\" />
+    <Folder Include="ViewModels\UserControls\AreaManagement\SummarizedAreaCards\" />
+    <Folder Include="Views\Dialogs\Add\" />
+    <Folder Include="Views\Dialogs\Edit\" />
+    <Folder Include="Views\Dialogs\Filter\" />
+    <Folder Include="Views\UserControls\AreaManagement\" />
   </ItemGroup>
 
   <!--
@@ -105,7 +117,7 @@
     <Page Update="Resources\Styles\CheckBoxStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Resources\Styles\SettingsComboBoxStyles.xaml">
+    <Page Update="Resources\Styles\ComboBoxStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Resources\Animations\NotificationAnimations.xaml">
@@ -120,7 +132,7 @@
     <Page Update="Views\UserControls\Dashboard\PopularCardControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Views\UserControls\Dashboard\GoalProgressCardControl.xaml">
+    <Page Update="Views\UserControls\Dashboard\GoalProgressControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Views\UserControls\Dashboard\QuickStatsControl.xaml">
@@ -132,7 +144,7 @@
     <Page Update="Views\UserControls\Dashboard\StatCardControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Views\UserControls\Dashboard\ChartCardControl.xaml">
+    <Page Update="Views\UserControls\Dashboard\RevenueChartControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Resources\Images.xaml">
@@ -150,7 +162,7 @@
     <Page Update="Views\Pages\SettingsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Views\Pages\TransactionHistoryPage.xaml">
+    <Page Update="Views\Pages\TransactionManagementPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Views\Pages\MemberManagementPage.xaml">
@@ -215,7 +227,8 @@
   </Target>
   <ItemGroup>
     <None Remove="Resources\Styles\CheckBoxStyles.xaml" />
-    <None Remove="Resources\Styles\SettingsComboBoxStyles.xaml" />
+    <None Remove="Resources\Styles\ScrollBarStyles.xaml" />
+    <None Remove="Resources\Styles\ComboBoxStyles.xaml" />
     <None Remove="Resources\Animations\NotificationAnimations.xaml" />
     <None Remove="Resources\Colors.xaml" />
     <None Remove="Resources\FontSize.xaml" />
@@ -223,13 +236,18 @@
     <None Remove="Views\Dialogs\ConfirmationDialog.xaml" />
     <None Remove="Views\Dialogs\ForgotPasswordDialog.xaml" />
     <None Remove="Views\Dialogs\OtpDialog.xaml" />
-    <None Remove="Views\UserControls\Dashboard\GoalProgressCardControl.xaml" />
-    <None Remove="Views\UserControls\Dashboard\ChartCardControl.xaml" />
+    <None Remove="Views\UserControls\Dashboard\GoalProgressControl.xaml" />
+    <None Remove="Views\UserControls\Dashboard\RevenueChartControl.xaml" />
     <None Remove="Views\UserControls\PaginationControl.xaml" />
     <None Remove="Views\UserControls\Dashboard\QuickStatsControl.xaml" />
     <None Remove="Views\UserControls\Dashboard\StatCardControl.xaml" />
     <None Remove="Views\UserControls\Dashboard\TrendingListControl.xaml" />
     <None Remove="Views\UserControls\Settings\GeneralSettingsCardControl.xaml" />
     <None Remove="Views\UserControls\Settings\ShopInformationCardControl.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Resources\Styles\ScrollBarStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

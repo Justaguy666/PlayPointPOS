@@ -8,19 +8,19 @@ public partial class HeaderControlViewModel : ObservableObject
     private readonly ILocalizationService _localizationService;
 
     [ObservableProperty]
-    public partial string TodayRevenueLabelDisplay { get; set; } = string.Empty;
+    public partial string TodayRevenueLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string TodayRevenue { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ActiveAreasLabelDisplay { get; set; } = string.Empty;
+    public partial string ActiveAreasLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string ActiveAreas { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ReservedAreasLabelDisplay { get; set; } = string.Empty;
+    public partial string ReservedAreasLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string ReservedAreas { get; set; } = string.Empty;
@@ -34,8 +34,8 @@ public partial class HeaderControlViewModel : ObservableObject
 
     private void UpdateTexts()
     {
-        TodayRevenueLabelDisplay = _localizationService.GetString("HeaderTodayRevenueLabel");
-        ActiveAreasLabelDisplay = _localizationService.GetString("HeaderActiveAreasLabel");
-        ReservedAreasLabelDisplay = _localizationService.GetString("HeaderReservedAreasLabel");
+        TodayRevenueLabelText = _localizationService.GetString("HeaderTodayRevenueLabel");
+        ActiveAreasLabelText = _localizationService.GetString("HeaderActiveAreasLabel");
+        ReservedAreasLabelText = _localizationService.GetString("HeaderReservedAreasLabel");
     }
 }

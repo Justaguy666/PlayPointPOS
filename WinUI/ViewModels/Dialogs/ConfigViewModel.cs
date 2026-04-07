@@ -13,13 +13,13 @@ public partial class ConfigViewModel : LocalizedViewModelBase
     private readonly IConfigurationService _configService;
 
     [ObservableProperty]
-    public partial string TitleDisplay { get; set; } = string.Empty;
+    public partial string TitleText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ServerAddressLabelDisplay { get; set; } = string.Empty;
+    public partial string ServerAddressLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ServerAddressPlaceholderDisplay { get; set; } = string.Empty;
+    public partial string ServerAddressPlaceholderText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
@@ -27,10 +27,10 @@ public partial class ConfigViewModel : LocalizedViewModelBase
     public partial string ServerAddress { get; set; }
 
     [ObservableProperty]
-    public partial string ApiKeyLabelDisplay { get; set; } = string.Empty;
+    public partial string ApiKeyLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ApiKeyPlaceholderDisplay { get; set; } = string.Empty;
+    public partial string ApiKeyPlaceholderText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
@@ -41,13 +41,13 @@ public partial class ConfigViewModel : LocalizedViewModelBase
     public partial bool RememberMe { get; set; }
 
     [ObservableProperty]
-    public partial string RememberMeLabelDisplay { get; set; } = string.Empty;
+    public partial string RememberMeLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string SaveButtonDisplay { get; set; } = string.Empty;
+    public partial string SaveButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string CloseTooltipDisplay { get; set; } = string.Empty;
+    public partial string CloseTooltipText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
@@ -86,14 +86,14 @@ public partial class ConfigViewModel : LocalizedViewModelBase
 
     protected override void RefreshLocalizedText()
     {
-        TitleDisplay = LocalizationService.GetString("ConfigDialogTitleText");
-        ServerAddressLabelDisplay = LocalizationService.GetString("ConfigDialogServerAddressLabelText");
-        ServerAddressPlaceholderDisplay = LocalizationService.GetString("ConfigDialogServerAddressPlaceholderText");
-        ApiKeyLabelDisplay = LocalizationService.GetString("ConfigDialogApiKeyLabelText");
-        ApiKeyPlaceholderDisplay = LocalizationService.GetString("ConfigDialogApiKeyPlaceholderText");
-        RememberMeLabelDisplay = LocalizationService.GetString("ConfigDialogRememberMeLabelText");
-        SaveButtonDisplay = LocalizationService.GetString("ConfigDialogSaveButtonText");
-        CloseTooltipDisplay = LocalizationService.GetString("CloseTooltipText");
+        TitleText = LocalizationService.GetString("ConfigDialogTitleText");
+        ServerAddressLabelText = LocalizationService.GetString("ConfigDialogServerAddressLabelText");
+        ServerAddressPlaceholderText = LocalizationService.GetString("ConfigDialogServerAddressPlaceholderText");
+        ApiKeyLabelText = LocalizationService.GetString("ConfigDialogApiKeyLabelText");
+        ApiKeyPlaceholderText = LocalizationService.GetString("ConfigDialogApiKeyPlaceholderText");
+        RememberMeLabelText = LocalizationService.GetString("ConfigDialogRememberMeLabelText");
+        SaveButtonText = LocalizationService.GetString("ConfigDialogSaveButtonText");
+        CloseTooltipText = LocalizationService.GetString("CloseTooltipText");
     }
 
     [RelayCommand(CanExecute = nameof(CanSave))]

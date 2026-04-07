@@ -18,7 +18,7 @@ public sealed partial class NotificationControlViewModel : LocalizedViewModelBas
     public partial string Message { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string CloseTooltipDisplay { get; set; } = string.Empty;
+    public partial string CloseTooltipText { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial IconState IconState { get; set; } = new IconState { Kind = IconKind.Info, Size = 24, AlwaysFilled = true };
@@ -58,12 +58,12 @@ public sealed partial class NotificationControlViewModel : LocalizedViewModelBas
 
     protected override void RefreshLocalizedText()
     {
-        CloseTooltipDisplay = LocalizationService.GetString("CloseTooltipText");
+        CloseTooltipText = LocalizationService.GetString("CloseTooltipText");
 
         if (DisplayVersion == 0)
         {
-            Title = LocalizationService.GetString("NotificationPlaceholderTitleText");
-            Message = LocalizationService.GetString("NotificationPlaceholderMessageText");
+            Title = LocalizationService.GetString("NotificationDefaultTitle");
+            Message = LocalizationService.GetString("NotificationDefaultMessage");
         }
     }
 

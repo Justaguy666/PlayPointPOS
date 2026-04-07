@@ -34,7 +34,7 @@
                       Margin="0,0,12,0"
                       VerticalAlignment="Center"/>
             <TextBlock Grid.Column="1"
-                       Text="{x:Bind ViewModel.TitleDisplay, Mode=OneWay}"
+                       Text="{x:Bind ViewModel.TitleText, Mode=OneWay}"
                        FontSize="{StaticResource DialogHeaderFontSize}"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
@@ -45,7 +45,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Padding="0"
-                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipDisplay, Mode=OneWay}">
+                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
                 <Button.Resources>
                     <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="AntiqueWhiteBrush"/>
                     <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="LighterGrayBrush"/>
@@ -66,12 +66,12 @@
         <StackPanel Grid.Row="2" Spacing="22" Margin="0,20,0,0">
             <!-- Email -->
             <StackPanel Spacing="8">
-                <TextBlock Text="{x:Bind ViewModel.EmailLabelDisplay, Mode=OneWay}" 
+                <TextBlock Text="{x:Bind ViewModel.EmailLabelText, Mode=OneWay}" 
                            FontWeight="SemiBold" 
                            FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource BlackBrush}"/>
                 <TextBox x:Name="EmailBox"
-                         PlaceholderText="{x:Bind ViewModel.EmailPlaceholderDisplay, Mode=OneWay}"
+                         PlaceholderText="{x:Bind ViewModel.EmailPlaceholderText, Mode=OneWay}"
                          Text="{x:Bind ViewModel.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          PlaceholderForeground="{StaticResource PlaceholderGrayBrush}"
                          CornerRadius="8" 
@@ -97,12 +97,12 @@
 
             <!-- Password -->
             <StackPanel Spacing="8">
-                <TextBlock Text="{x:Bind ViewModel.PasswordLabelDisplay, Mode=OneWay}" 
+                <TextBlock Text="{x:Bind ViewModel.PasswordLabelText, Mode=OneWay}" 
                            FontWeight="SemiBold" 
                            FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource BlackBrush}"/>
                 <PasswordBox x:Name="LoginPasswordBox"
-                             PlaceholderText="{x:Bind ViewModel.PasswordPlaceholderDisplay, Mode=OneWay}"
+                             PlaceholderText="{x:Bind ViewModel.PasswordPlaceholderText, Mode=OneWay}"
                              PasswordChanged="PasswordBox_PasswordChanged"
                              CornerRadius="8" 
                              FontSize="{StaticResource ValueFontSize}"
@@ -150,7 +150,7 @@
                           VerticalAlignment="Center"
                           Style="{StaticResource OrangeCheckBoxStyle}">
 
-                    <TextBlock Text="{x:Bind ViewModel.RememberMeLabelDisplay, Mode=OneWay}"
+                    <TextBlock Text="{x:Bind ViewModel.RememberMeLabelText, Mode=OneWay}"
                                FontSize="{StaticResource FontSizeSmall}"
                                FontWeight="Thin"
                                Foreground="{StaticResource DarkGrayBrush}"
@@ -185,14 +185,14 @@
                             <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
                         </Button.Resources>
 
-                        <TextBlock Text="{x:Bind ViewModel.ForgotPasswordButtonDisplay, Mode=OneWay}"/>
+                        <TextBlock Text="{x:Bind ViewModel.ForgotPasswordButtonText, Mode=OneWay}"/>
                     </Button>
 
                     <Button x:Name="LoginButton"
                             Command="{x:Bind ViewModel.LoginCommand, Mode=OneWay}"
                             Visibility="{x:Bind ViewModel.IsNotLoggingIn, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
                             CornerRadius="7"
-                            Padding="24,10"
+                            Padding="18,10"
                             FontSize="{StaticResource FontSizeMedium}"
                             FontWeight="SemiBold"
                             Foreground="{StaticResource WhiteBrush}"
@@ -211,7 +211,7 @@
                             <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="MediumDarkGrayBrush"/>
                         </Button.Resources>
 
-                        <TextBlock Text="{x:Bind ViewModel.LoginButtonDisplay, Mode=OneWay}"/>
+                        <TextBlock Text="{x:Bind ViewModel.LoginButtonText, Mode=OneWay}" />
                     </Button>
 
                     <ProgressRing Width="20"

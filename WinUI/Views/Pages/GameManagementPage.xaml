@@ -9,8 +9,6 @@
     mc:Ignorable="d">
 
     <ScrollViewer>
-        <Grid>
 
-        </Grid>
     </ScrollViewer>
 </Page>

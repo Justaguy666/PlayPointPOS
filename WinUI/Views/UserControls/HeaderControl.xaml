@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <UserControl
     x:Class="WinUI.Views.UserControls.HeaderControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -24,19 +24,19 @@
 
         <!-- Today's Revenue -->
         <StackPanel Grid.Column="0" Margin="32,0,48,0" Padding="0,16" VerticalAlignment="Center">
-            <TextBlock Text="{Binding TodayRevenueLabelDisplay}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeMedium}" />
+            <TextBlock Text="{Binding TodayRevenueLabelText}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeMedium}" />
             <TextBlock Text="{Binding TodayRevenue}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeExtraExtraExtraLarge}" FontWeight="Bold" Margin="0,2,0,0" />
         </StackPanel>
 
         <!-- Active Areas -->
         <StackPanel Grid.Column="1" Margin="0,0,48,0" Padding="0,16" VerticalAlignment="Center">
-            <TextBlock Text="{Binding ActiveAreasLabelDisplay}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeMedium}" />
+            <TextBlock Text="{Binding ActiveAreasLabelText}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeMedium}" />
             <TextBlock Text="{Binding ActiveAreas}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeExtraExtraExtraLarge}" FontWeight="Bold" Margin="0,2,0,0" />
         </StackPanel>
 
         <!-- Reserved Areas -->
         <StackPanel Grid.Column="2" Padding="0,16" VerticalAlignment="Center">
-            <TextBlock Text="{Binding ReservedAreasLabelDisplay}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeMedium}" />
+            <TextBlock Text="{Binding ReservedAreasLabelText}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeMedium}" />
             <TextBlock Text="{Binding ReservedAreas}" Foreground="{StaticResource WhiteBrush}" FontSize="{StaticResource FontSizeExtraExtraExtraLarge}" FontWeight="Bold" Margin="0,2,0,0" />
         </StackPanel>
 

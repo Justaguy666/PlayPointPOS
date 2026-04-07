@@ -31,7 +31,7 @@ public partial class NavbarControlViewModel : LocalizedViewModelBase
     {
         foreach (var navItem in NavigationItems)
         {
-            navItem.Label = LocalizationService.GetString(navItem.ResourceKey);
+            navItem.Label = LocalizationService.GetString(navItem.LabelResourceKey);
         }
     }
 
@@ -45,22 +45,22 @@ public partial class NavbarControlViewModel : LocalizedViewModelBase
 
     private void InitializeNavigationItems()
     {
-        NavigationItems.Add(CreateItem(IconKind.Dashboard, typeof(NavigateToDashboard), "NavDashboardText"));
-        NavigationItems.Add(CreateItem(IconKind.Area, typeof(NavigateToAreaManagement), "NavAreaText"));
-        NavigationItems.Add(CreateItem(IconKind.Game, typeof(NavigateToGameManagement), "NavGameText"));
-        NavigationItems.Add(CreateItem(IconKind.Product, typeof(NavigateToProductManagement), "NavFoodText"));
-        NavigationItems.Add(CreateItem(IconKind.Member, typeof(NavigateToMemberManagement), "NavMemberText"));
-        NavigationItems.Add(CreateItem(IconKind.History, typeof(NavigateToTransactionHistory), "NavHistoryText"));
-        NavigationItems.Add(CreateItem(IconKind.Settings, typeof(NavigateToSettings), "NavSettingsText"));
+        NavigationItems.Add(CreateItem(IconKind.Dashboard, typeof(NavigateToDashboard), "NavDashboardLabel"));
+        NavigationItems.Add(CreateItem(IconKind.Area, typeof(NavigateToAreaManagement), "NavAreaLabel"));
+        NavigationItems.Add(CreateItem(IconKind.Game, typeof(NavigateToGameManagement), "NavGameLabel"));
+        NavigationItems.Add(CreateItem(IconKind.Product, typeof(NavigateToProductManagement), "NavProductLabel"));
+        NavigationItems.Add(CreateItem(IconKind.Member, typeof(NavigateToMemberManagement), "NavMemberLabel"));
+        NavigationItems.Add(CreateItem(IconKind.History, typeof(NavigateToTransactionHistory), "NavHistoryLabel"));
+        NavigationItems.Add(CreateItem(IconKind.Settings, typeof(NavigateToSettings), "NavSettingsLabel"));
     }
 
-    private NavbarItemModel CreateItem(IconKind icon, Type requestType, string resourceKey)
+    private NavbarItemModel CreateItem(IconKind icon, Type requestType, string labelResourceKey)
     {
         return new NavbarItemModel
         {
             Icon = icon,
             RequestType = requestType,
-            ResourceKey = resourceKey,
+            LabelResourceKey = labelResourceKey,
             Label = string.Empty,
         };
     }

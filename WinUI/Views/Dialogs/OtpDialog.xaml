@@ -33,7 +33,7 @@
                       Margin="0,0,12,0"
                       VerticalAlignment="Center"/>
             <TextBlock Grid.Column="1"
-                       Text="{x:Bind ViewModel.TitleDisplay, Mode=OneWay}"
+                       Text="{x:Bind ViewModel.TitleText, Mode=OneWay}"
                        FontSize="{StaticResource DialogHeaderFontSize}"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
@@ -45,7 +45,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Padding="0"
-                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipDisplay, Mode=OneWay}">
+                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
                 <Button.Resources>
                     <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="AntiqueWhiteBrush"/>
                     <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="LighterGrayBrush"/>
@@ -63,12 +63,12 @@
 
         <StackPanel Grid.Row="2" Spacing="22" Margin="0,20,0,0">
             <StackPanel Spacing="8">
-                <TextBlock Text="{x:Bind ViewModel.OtpLabelDisplay, Mode=OneWay}"
+                <TextBlock Text="{x:Bind ViewModel.OtpLabelText, Mode=OneWay}"
                            FontWeight="SemiBold"
                            FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource BlackBrush}"/>
                 <TextBox x:Name="OtpCodeBox"
-                         PlaceholderText="{x:Bind ViewModel.OtpPlaceholderDisplay, Mode=OneWay}"
+                         PlaceholderText="{x:Bind ViewModel.OtpPlaceholderText, Mode=OneWay}"
                          Text="{x:Bind ViewModel.OtpCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          PlaceholderForeground="{StaticResource PlaceholderGrayBrush}"
                          CornerRadius="8"
@@ -95,12 +95,12 @@
 
             <StackPanel Spacing="8"
                         Visibility="{x:Bind ViewModel.ShowPasswordFields, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
-                <TextBlock Text="{x:Bind ViewModel.NewPasswordLabelDisplay, Mode=OneWay}"
+                <TextBlock Text="{x:Bind ViewModel.NewPasswordLabelText, Mode=OneWay}"
                            FontWeight="SemiBold"
                            FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource BlackBrush}"/>
                 <PasswordBox x:Name="NewPasswordBox"
-                             PlaceholderText="{x:Bind ViewModel.NewPasswordPlaceholderDisplay, Mode=OneWay}"
+                             PlaceholderText="{x:Bind ViewModel.NewPasswordPlaceholderText, Mode=OneWay}"
                              PasswordChanged="NewPasswordBox_PasswordChanged"
                              CornerRadius="8"
                              FontSize="{StaticResource ValueFontSize}"
@@ -128,12 +128,12 @@
 
             <StackPanel Spacing="8"
                         Visibility="{x:Bind ViewModel.ShowPasswordFields, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
-                <TextBlock Text="{x:Bind ViewModel.ConfirmPasswordLabelDisplay, Mode=OneWay}"
+                <TextBlock Text="{x:Bind ViewModel.ConfirmPasswordLabelText, Mode=OneWay}"
                            FontWeight="SemiBold"
                            FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource BlackBrush}"/>
                 <PasswordBox x:Name="ConfirmPasswordBox"
-                             PlaceholderText="{x:Bind ViewModel.ConfirmPasswordPlaceholderDisplay, Mode=OneWay}"
+                             PlaceholderText="{x:Bind ViewModel.ConfirmPasswordPlaceholderText, Mode=OneWay}"
                              PasswordChanged="ConfirmPasswordBox_PasswordChanged"
                              CornerRadius="8"
                              FontSize="{StaticResource ValueFontSize}"
@@ -195,7 +195,7 @@
                             <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
                             <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
                         </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.ChangeEmailButtonDisplay, Mode=OneWay}"/>
+                        <TextBlock Text="{x:Bind ViewModel.ChangeEmailButtonText, Mode=OneWay}"/>
                     </Button>
                 </StackPanel>
 
@@ -223,7 +223,7 @@
                             <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="LighterGrayBrush"/>
                             <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="MediumDarkGrayBrush"/>
                         </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.VerifyButtonDisplay, Mode=OneWay}"/>
+                        <TextBlock Text="{x:Bind ViewModel.VerifyButtonText, Mode=OneWay}"/>
                     </Button>
 
                     <ProgressRing Width="20"

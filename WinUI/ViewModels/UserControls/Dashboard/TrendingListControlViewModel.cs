@@ -45,12 +45,12 @@ public partial class TrendingListControlViewModel : LocalizedViewModelBase
 
     protected override void RefreshLocalizedText()
     {
-        Title = LocalizationService.GetString("TrendingListControlTitle");
-        GameLabel = LocalizationService.GetString("TrendingListControlGameLabel");
-        GameName = LocalizationService.GetString("TrendingListControlGameName");
-        FoodLabel = LocalizationService.GetString("TrendingListControlFoodLabel");
-        FoodName = LocalizationService.GetString("TrendingListControlFoodName");
-        DrinkLabel = LocalizationService.GetString("TrendingListControlDrinkLabel");
-        DrinkName = LocalizationService.GetString("TrendingListControlDrinkName");
+        Title = LocalizationService.GetString("TrendingListTitle");
+        GameLabel = LocalizationService.GetString("TrendingListGameLabel");
+        GameName = LocalizationService.GetString("TrendingListGameName");
+        FoodLabel = LocalizationService.GetString("TrendingListFoodLabel");
+        FoodName = LocalizationService.GetString("TrendingListFoodName");
+        DrinkLabel = LocalizationService.GetString("TrendingListDrinkLabel");
+        DrinkName = LocalizationService.GetString("TrendingListDrinkName");
     }
 }

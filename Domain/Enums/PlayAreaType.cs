@@ -6,6 +6,6 @@ namespace Domain.Enums;
 
 public enum PlayAreaType
 {
-    Area,
+    Table,
     Room,
 }

@@ -1,0 +1,17 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:helpers="using:WinUI.Helpers">
+
+    <Style TargetType="Button">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
+    </Style>
+
+    <Style TargetType="RadioButton">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
+    </Style>
+
+    <Style TargetType="ComboBoxItem">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
+    </Style>
+</ResourceDictionary>

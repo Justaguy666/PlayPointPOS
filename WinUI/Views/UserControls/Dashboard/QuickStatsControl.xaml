@@ -48,19 +48,19 @@
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0"
-                           Text="{Binding AverageHourPerArea}"
+                           Text="{Binding AverageHoursPerAreaLabel}"
                            FontSize="{StaticResource FontSizeMedium}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Left"
                            Foreground="{StaticResource DashboardMutedTextBrush}" />
 
                 <TextBlock Grid.Column="1"
-                           Text="{Binding AverageHourPerAreaValue}"
+                           Text="{Binding AverageHoursPerAreaValue}"
                            FontSize="{StaticResource FontSizeMedium}"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
@@ -72,12 +72,12 @@
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0"
-                           Text="{Binding AverageRevenuePerInvoice}"
+                           Text="{Binding AverageRevenuePerInvoiceLabel}"
                            FontSize="{StaticResource FontSizeMedium}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Left"
@@ -96,19 +96,19 @@
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0"
-                           Text="{Binding ComebackPercent}"
+                           Text="{Binding ReturnRateLabel}"
                            FontSize="{StaticResource FontSizeMedium}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Left"
                            Foreground="{StaticResource DashboardMutedTextBrush}" />
 
                 <TextBlock Grid.Column="1"
-                           Text="{Binding ComebackPercentValue}"
+                           Text="{Binding ReturnRateValue}"
                            FontSize="{StaticResource FontSizeMedium}"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
@@ -120,19 +120,19 @@
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0"
-                           Text="{Binding AreaCoveragePerHourPercent}"
+                           Text="{Binding AreaUsageRateLabel}"
                            FontSize="{StaticResource FontSizeMedium}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Left"
                            Foreground="{StaticResource DashboardMutedTextBrush}" />
 
                 <TextBlock Grid.Column="1"
-                           Text="{Binding AreaCoveragePerHourPercentValue}"
+                           Text="{Binding AreaUsageRateValue}"
                            FontSize="{StaticResource FontSizeMedium}"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
@@ -144,19 +144,19 @@
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0"
-                           Text="{Binding NewMemberPerMonth}"
+                           Text="{Binding NewMembersPerMonthLabel}"
                            FontSize="{StaticResource FontSizeMedium}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Left"
                            Foreground="{StaticResource DashboardMutedTextBrush}" />
 
                 <TextBlock Grid.Column="1"
-                           Text="{Binding NewMemberPerMonthValue}"
+                           Text="{Binding NewMembersPerMonthValue}"
                            FontSize="{StaticResource FontSizeMedium}"
                            FontWeight="Bold"
                            VerticalAlignment="Center"

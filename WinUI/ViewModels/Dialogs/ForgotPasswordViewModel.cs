@@ -13,13 +13,13 @@ public partial class ForgotPasswordViewModel : LocalizedViewModelBase
     private readonly IDialogService _dialogService;
 
     [ObservableProperty]
-    public partial string TitleDisplay { get; set; } = string.Empty;
+    public partial string TitleText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string EmailLabelDisplay { get; set; } = string.Empty;
+    public partial string EmailLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string EmailPlaceholderDisplay { get; set; } = string.Empty;
+    public partial string EmailPlaceholderText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SendOtpCommand))]
@@ -27,13 +27,13 @@ public partial class ForgotPasswordViewModel : LocalizedViewModelBase
     public partial string Email { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string SendOtpButtonDisplay { get; set; } = string.Empty;
+    public partial string SendOtpButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string BackButtonDisplay { get; set; } = string.Empty;
+    public partial string BackButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string CloseTooltipDisplay { get; set; } = string.Empty;
+    public partial string CloseTooltipText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SendOtpCommand))]
@@ -70,12 +70,12 @@ public partial class ForgotPasswordViewModel : LocalizedViewModelBase
 
     protected override void RefreshLocalizedText()
     {
-        TitleDisplay = LocalizationService.GetString("ForgotPasswordDialogTitleText");
-        EmailLabelDisplay = LocalizationService.GetString("ForgotPasswordDialogEmailLabelText");
-        EmailPlaceholderDisplay = LocalizationService.GetString("ForgotPasswordDialogEmailPlaceholderText");
-        SendOtpButtonDisplay = LocalizationService.GetString("ForgotPasswordDialogSendOtpButtonText");
-        BackButtonDisplay = LocalizationService.GetString("ForgotPasswordDialogBackButtonText");
-        CloseTooltipDisplay = LocalizationService.GetString("CloseTooltipText");
+        TitleText = LocalizationService.GetString("ForgotPasswordDialogTitleText");
+        EmailLabelText = LocalizationService.GetString("ForgotPasswordDialogEmailLabelText");
+        EmailPlaceholderText = LocalizationService.GetString("ForgotPasswordDialogEmailPlaceholderText");
+        SendOtpButtonText = LocalizationService.GetString("ForgotPasswordDialogSendOtpButtonText");
+        BackButtonText = LocalizationService.GetString("ForgotPasswordDialogBackButtonText");
+        CloseTooltipText = LocalizationService.GetString("CloseTooltipText");
     }
 
     [RelayCommand(CanExecute = nameof(CanSendOtp))]

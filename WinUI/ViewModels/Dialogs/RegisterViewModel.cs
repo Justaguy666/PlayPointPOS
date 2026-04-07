@@ -17,13 +17,13 @@ public partial class RegisterViewModel : LocalizedViewModelBase
     private readonly INotificationService _notificationService;
 
     [ObservableProperty]
-    public partial string TitleDisplay { get; set; } = string.Empty;
+    public partial string TitleText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string EmailLabelDisplay { get; set; } = string.Empty;
+    public partial string EmailLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string EmailPlaceholderDisplay { get; set; } = string.Empty;
+    public partial string EmailPlaceholderText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
@@ -31,10 +31,10 @@ public partial class RegisterViewModel : LocalizedViewModelBase
     public partial string Email { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string PasswordLabelDisplay { get; set; } = string.Empty;
+    public partial string PasswordLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string PasswordPlaceholderDisplay { get; set; } = string.Empty;
+    public partial string PasswordPlaceholderText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
@@ -42,10 +42,10 @@ public partial class RegisterViewModel : LocalizedViewModelBase
     public partial string Password { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ConfirmPasswordLabelDisplay { get; set; } = string.Empty;
+    public partial string ConfirmPasswordLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ConfirmPasswordPlaceholderDisplay { get; set; } = string.Empty;
+    public partial string ConfirmPasswordPlaceholderText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
@@ -53,13 +53,13 @@ public partial class RegisterViewModel : LocalizedViewModelBase
     public partial string ConfirmPassword { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string RegisterButtonDisplay { get; set; } = string.Empty;
+    public partial string RegisterButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ResetButtonDisplay { get; set; } = string.Empty;
+    public partial string ResetButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string CloseTooltipDisplay { get; set; } = string.Empty;
+    public partial string CloseTooltipText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
@@ -117,16 +117,16 @@ public partial class RegisterViewModel : LocalizedViewModelBase
 
     protected override void RefreshLocalizedText()
     {
-        TitleDisplay = LocalizationService.GetString("RegisterDialogTitleText");
-        EmailLabelDisplay = LocalizationService.GetString("RegisterDialogEmailLabelText");
-        EmailPlaceholderDisplay = LocalizationService.GetString("RegisterDialogEmailPlaceholderText");
-        PasswordLabelDisplay = LocalizationService.GetString("RegisterDialogPasswordLabelText");
-        PasswordPlaceholderDisplay = LocalizationService.GetString("RegisterDialogPasswordPlaceHolderText");
-        ConfirmPasswordLabelDisplay = LocalizationService.GetString("RegisterDialogConfirmPasswordLabelText");
-        ConfirmPasswordPlaceholderDisplay = LocalizationService.GetString("RegisterDialogConfirmPasswordPlaceholderText");
-        RegisterButtonDisplay = LocalizationService.GetString("RegisterDialogCreateButtonText");
-        ResetButtonDisplay = LocalizationService.GetString("RegisterDialogResetButtonText");
-        CloseTooltipDisplay = LocalizationService.GetString("CloseTooltipText");
+        TitleText = LocalizationService.GetString("RegisterDialogTitleText");
+        EmailLabelText = LocalizationService.GetString("RegisterDialogEmailLabelText");
+        EmailPlaceholderText = LocalizationService.GetString("RegisterDialogEmailPlaceholderText");
+        PasswordLabelText = LocalizationService.GetString("RegisterDialogPasswordLabelText");
+        PasswordPlaceholderText = LocalizationService.GetString("RegisterDialogPasswordPlaceholderText");
+        ConfirmPasswordLabelText = LocalizationService.GetString("RegisterDialogConfirmPasswordLabelText");
+        ConfirmPasswordPlaceholderText = LocalizationService.GetString("RegisterDialogConfirmPasswordPlaceholderText");
+        RegisterButtonText = LocalizationService.GetString("RegisterDialogCreateButtonText");
+        ResetButtonText = LocalizationService.GetString("RegisterDialogResetButtonText");
+        CloseTooltipText = LocalizationService.GetString("CloseTooltipText");
     }
 
     [RelayCommand(CanExecute = nameof(CanRegister))]

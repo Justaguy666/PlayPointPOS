@@ -112,7 +112,7 @@
                                         <TextBlock
                                             FontSize="{StaticResource FontSizeMedium}"
                                             Foreground="{StaticResource DashboardMutedTextBrush}"
-                                            Text="{x:Bind ActivityText}" />
+                                            Text="{x:Bind ActivityLabel}" />
                                         <TextBlock
                                             FontSize="{StaticResource FontSizeMedium}"
                                             Foreground="{StaticResource DashboardMutedTextBrush}"
@@ -120,7 +120,7 @@
                                         <TextBlock
                                             FontSize="{StaticResource FontSizeMedium}"
                                             Foreground="{StaticResource DashboardMutedTextBrush}"
-                                            Text="{x:Bind AmountText}" />
+                                            Text="{x:Bind AmountLabel}" />
                                     </StackPanel>
                                 </StackPanel>
                             </Grid>

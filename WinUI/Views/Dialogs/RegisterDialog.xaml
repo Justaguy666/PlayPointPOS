@@ -34,7 +34,7 @@
                       Margin="0,0,12,0"
                       VerticalAlignment="Center"/>
             <TextBlock Grid.Column="1"
-                       Text="{x:Bind ViewModel.TitleDisplay, Mode=OneWay}"
+                       Text="{x:Bind ViewModel.TitleText, Mode=OneWay}"
                        FontSize="{StaticResource DialogHeaderFontSize}"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
@@ -45,7 +45,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Padding="0"
-                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipDisplay, Mode=OneWay}">
+                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
                 <Button.Resources>
                     <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="AntiqueWhiteBrush"/>
                     <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="LighterGrayBrush"/>
@@ -66,12 +66,12 @@
         <StackPanel Grid.Row="2" Spacing="22" Margin="0,20,0,0">
             <!-- Email -->
             <StackPanel Spacing="8">
-                <TextBlock Text="{x:Bind ViewModel.EmailLabelDisplay, Mode=OneWay}" 
+                <TextBlock Text="{x:Bind ViewModel.EmailLabelText, Mode=OneWay}" 
                            FontWeight="SemiBold" 
                            FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource BlackBrush}"/>
                 <TextBox x:Name="EmailBox"
-                         PlaceholderText="{x:Bind ViewModel.EmailPlaceholderDisplay, Mode=OneWay}"
+                         PlaceholderText="{x:Bind ViewModel.EmailPlaceholderText, Mode=OneWay}"
                          Text="{x:Bind ViewModel.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          PlaceholderForeground="{StaticResource PlaceholderGrayBrush}"
                          CornerRadius="8" 
@@ -97,12 +97,12 @@
 
             <!-- Password -->
             <StackPanel Spacing="8">
-                <TextBlock Text="{x:Bind ViewModel.PasswordLabelDisplay, Mode=OneWay}" 
+                <TextBlock Text="{x:Bind ViewModel.PasswordLabelText, Mode=OneWay}" 
                            FontWeight="SemiBold" 
                            FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource BlackBrush}"/>
                 <PasswordBox x:Name="PasswordBox"
-                             PlaceholderText="{x:Bind ViewModel.PasswordPlaceholderDisplay, Mode=OneWay}"
+                             PlaceholderText="{x:Bind ViewModel.PasswordPlaceholderText, Mode=OneWay}"
                              PasswordChanged="PasswordBox_PasswordChanged"
                              CornerRadius="8" 
                              FontSize="{StaticResource ValueFontSize}"
@@ -130,12 +130,12 @@
 
             <!-- Confirm Password -->
             <StackPanel Spacing="8">
-                <TextBlock Text="{x:Bind ViewModel.ConfirmPasswordLabelDisplay, Mode=OneWay}" 
+                <TextBlock Text="{x:Bind ViewModel.ConfirmPasswordLabelText, Mode=OneWay}" 
                            FontWeight="SemiBold" 
                            FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource BlackBrush}"/>
                 <PasswordBox x:Name="ConfirmPasswordBox"
-                             PlaceholderText="{x:Bind ViewModel.ConfirmPasswordPlaceholderDisplay, Mode=OneWay}"
+                             PlaceholderText="{x:Bind ViewModel.ConfirmPasswordPlaceholderText, Mode=OneWay}"
                              PasswordChanged="ConfirmPasswordBox_PasswordChanged"
                              CornerRadius="8" 
                              FontSize="{StaticResource ValueFontSize}"
@@ -201,7 +201,7 @@
                             <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
                         </Button.Resources>
                         
-                        <TextBlock Text="{x:Bind ViewModel.ResetButtonDisplay, Mode=OneWay}"/>
+                        <TextBlock Text="{x:Bind ViewModel.ResetButtonText, Mode=OneWay}"/>
                     </Button>
                     <ProgressRing Width="20"
                                   Height="20"
@@ -235,7 +235,7 @@
                             <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="MediumDarkGrayBrush"/>
                         </Button.Resources>
 
-                        <TextBlock Text="{x:Bind ViewModel.RegisterButtonDisplay, Mode=OneWay}"/>
+                        <TextBlock Text="{x:Bind ViewModel.RegisterButtonText, Mode=OneWay}"/>
                     </Button>
                     <ProgressRing Width="20"
                                   Height="20"

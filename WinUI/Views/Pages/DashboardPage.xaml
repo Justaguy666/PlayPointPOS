@@ -53,9 +53,9 @@
                                           DataContext="{x:Bind ViewModel.TodayProductStatCardViewModel, Mode=OneWay}" />
             </Grid>
 
-            <controls:ChartCardControl Grid.Row="1"
-                                       Grid.Column="0"
-                                       DataContext="{x:Bind ViewModel.RevenueChartCardViewModel, Mode=OneWay}" />
+            <controls:RevenueChartControl Grid.Row="1"
+                                          Grid.Column="0"
+                                          DataContext="{x:Bind ViewModel.RevenueChartViewModel, Mode=OneWay}" />
 
             <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Spacing="12">
                 <controls:TrendingListControl DataContext="{x:Bind ViewModel.TrendingListViewModel, Mode=OneWay}"

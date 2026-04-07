@@ -82,7 +82,7 @@
                     CornerRadius="6"
                     VerticalAlignment="Center">
                     <TextBlock
-                        Text="{Binding TrendText}"
+                        Text="{Binding TrendLabel}"
                         FontSize="{StaticResource FontSizeSmall}"
                         FontWeight="SemiBold"
                         Foreground="{Binding TrendForeground}"
@@ -91,7 +91,7 @@
                 </Border>
 
                 <TextBlock
-                    Text="{Binding ComparisonText}"
+                    Text="{Binding ComparisonLabel}"
                     FontSize="{StaticResource FontSizeSmall}"
                     FontWeight="SemiBold"
                     Foreground="{StaticResource DashboardMutedTextBrush}"

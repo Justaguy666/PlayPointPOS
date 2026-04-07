@@ -17,7 +17,7 @@ public sealed partial class PopularCardControlViewModel : LocalizedViewModelBase
 {
     private readonly INavigationService _navigationService;
     private readonly string _resourcePrefix;
-    private readonly string _metricFormatKey;
+    private readonly string _activityFormatResourceKey;
     private readonly IReadOnlyList<PopularCardItemData> _sourceItems;
 
     [ObservableProperty]
@@ -41,7 +41,7 @@ public sealed partial class PopularCardControlViewModel : LocalizedViewModelBase
         INavigationService navigationService,
         string resourcePrefix,
         IconKind titleIconKind,
-        string metricFormatKey,
+        string activityFormatResourceKey,
         IReadOnlyList<PopularCardItemData> sourceItems)
         : base(localizationService)
     {
@@ -49,9 +49,9 @@ public sealed partial class PopularCardControlViewModel : LocalizedViewModelBase
         _resourcePrefix = string.IsNullOrWhiteSpace(resourcePrefix)
             ? throw new ArgumentException("Resource prefix is required.", nameof(resourcePrefix))
             : resourcePrefix;
-        _metricFormatKey = string.IsNullOrWhiteSpace(metricFormatKey)
-            ? throw new ArgumentException("Metric format key is required.", nameof(metricFormatKey))
-            : metricFormatKey;
+        _activityFormatResourceKey = string.IsNullOrWhiteSpace(activityFormatResourceKey)
+            ? throw new ArgumentException("Activity format resource key is required.", nameof(activityFormatResourceKey))
+            : activityFormatResourceKey;
         _sourceItems = sourceItems ?? throw new ArgumentNullException(nameof(sourceItems));
 
         TitleIconState = new IconState
@@ -69,25 +69,25 @@ public sealed partial class PopularCardControlViewModel : LocalizedViewModelBase
     {
         Title = LocalizationService.GetString($"{_resourcePrefix}Title");
 
-        string metricFormat = LocalizationService.GetString(_metricFormatKey);
+        string activityFormat = LocalizationService.GetString(_activityFormatResourceKey);
 
         Items.Clear();
         foreach (var item in _sourceItems)
         {
-            string activityText = string.Format(LocalizationService.Culture, metricFormat, item.ActivityCount);
-            string amountText = LocalizationService.FormatCurrency(item.Amount);
+            string activityLabel = string.Format(LocalizationService.Culture, activityFormat, item.ActivityCount);
+            string amountLabel = LocalizationService.FormatCurrency(item.Amount);
 
             Items.Add(new PopularCardItemViewModel(
                 item.Rank,
                 item.Name,
-                activityText,
-                amountText));
+                activityLabel,
+                amountLabel));
         }
     }
 
     private void ShowMore()
     {
-        INavigationRequest? req = _resourcePrefix switch
+        INavigationRequest? navigationRequest = _resourcePrefix switch
         {
             "PopularGamesCard" => new NavigateToGameManagement(),
             "PopularFoodsCard" => new NavigateToProductManagement(),
@@ -95,9 +95,9 @@ public sealed partial class PopularCardControlViewModel : LocalizedViewModelBase
             _ => null
         };
 
-        if (req != null)
+        if (navigationRequest != null)
         {
-            _navigationService.Navigate(req);
+            _navigationService.Navigate(navigationRequest);
         }
     }
 }

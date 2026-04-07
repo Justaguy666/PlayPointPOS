@@ -1,16 +1,292 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="WinUI.Views.Pages.AreaManagementPage"
+    x:Name="RootPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:WinUI.Views.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:summarizedViews="using:WinUI.Views.UserControls.AreaManagement.SummarizedAreaCards"
+    xmlns:detailedViews="using:WinUI.Views.UserControls.AreaManagement.DetailedAreaCards"
+    xmlns:summarizedViewModels="using:WinUI.ViewModels.AreaManagement.SummarizedAreaCards"
+    xmlns:detailedViewModels="using:WinUI.ViewModels.AreaManagement.DetailedAreaCards"
+    xmlns:selectors="using:WinUI.Selectors"
+    xmlns:vm="using:WinUI.ViewModels.Pages"
+    d:DataContext="{d:DesignInstance Type=vm:AreaManagementPageViewModel, IsDesignTimeCreatable=False}"
     mc:Ignorable="d">
 
-    <ScrollViewer>
-        <Grid>
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Resources/Styles/ScrollBarStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-        </Grid>
-    </ScrollViewer>
+            <DataTemplate x:Key="SummarizedAvailableCardTemplate"
+                          x:DataType="summarizedViewModels:SummarizedAvailableCardViewModel">
+                <summarizedViews:SummarizedAvailableCard Margin="4" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="SummarizedReservedCardTemplate"
+                          x:DataType="summarizedViewModels:SummarizedReservedCardViewModel">
+                <summarizedViews:SummarizedReservedCard Margin="4" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="SummarizedRentedCardTemplate"
+                          x:DataType="summarizedViewModels:SummarizedRentedCardViewModel">
+                <summarizedViews:SummarizedRentedCard Margin="4" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="DetailedAvailableCardTemplate"
+                          x:DataType="detailedViewModels:DetailedAvailableCardViewModel">
+                <detailedViews:DetailedAvailableCard Margin="4" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="DetailedReservedCardTemplate"
+                          x:DataType="detailedViewModels:DetailedReservedCardViewModel">
+                <detailedViews:DetailedReservedCard Margin="4" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="DetailedRentedCardTemplate"
+                            x:DataType="detailedViewModels:DetailedRentedCardViewModel">
+                <detailedViews:DetailedRentedCard Margin="4" />
+            </DataTemplate>
+
+            <selectors:SummarizedAreaCardTemplateSelector x:Key="SummarizedAreaCardTemplateSelector"
+                                                         AvailableTemplate="{StaticResource SummarizedAvailableCardTemplate}"
+                                                         ReservedTemplate="{StaticResource SummarizedReservedCardTemplate}"
+                                                         RentedTemplate="{StaticResource SummarizedRentedCardTemplate}" />
+
+            <selectors:DetailedAreaCardTemplateSelector x:Key="DetailedAreaCardTemplateSelector"
+                                                        AvailableTemplate="{StaticResource DetailedAvailableCardTemplate}"
+                                                        ReservedTemplate="{StaticResource DetailedReservedCardTemplate}"
+                                                        RentedTemplate="{StaticResource DetailedRentedCardTemplate}" />
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid Background="{StaticResource WhiteBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4.3*" />
+            <ColumnDefinition Width="5.7*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0"
+                Background="{StaticResource WhiteBrush}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <Border Grid.Row="0"
+                        Background="{StaticResource WhiteBrush}"
+                        BorderBrush="{StaticResource LighterGrayBrush}"
+                        BorderThickness="0,0,1,1"
+                        Padding="20">
+                    <StackPanel Orientation="Vertical"
+                                Spacing="12">
+                        <Grid VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock
+                                   Grid.Column="0"
+                                   Text="{Binding ListHeaderText}"
+                                   Foreground="{StaticResource BlackBrush}"
+                                   FontSize="{StaticResource FontSizeExtraExtraExtraLarge}"
+                                   FontWeight="Bold" 
+                                   HorizontalAlignment="Left"/>
+
+                            <Button
+                                Grid.Column="1"
+                                CornerRadius="7"
+                                Padding="18,10"
+                                FontSize="{StaticResource FontSizeMedium}"
+                                FontWeight="SemiBold"
+                                Foreground="{StaticResource WhiteBrush}"
+                                Background="{StaticResource OrangeFocusBrush}"
+                                Command="{Binding AddAreaCommand}" 
+                                HorizontalAlignment="Right">
+                                <Button.Resources>
+                                    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
+                                    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush"/>
+                                    <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
+                                    <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
+                                    <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="LighterGrayBrush"/>
+                                    <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="MediumDarkGrayBrush"/>
+                                </Button.Resources>
+                                <StackPanel Orientation="Horizontal"
+                                        Spacing="8">
+                                    <PathIcon Data="{Binding AddIconState, Converter={StaticResource IconConverter}, Mode=OneWay}" />
+                                    <TextBlock Text="{Binding AddAreaButtonText}" />
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+
+                        <Grid VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0"
+                                        Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        Spacing="4">
+                                <Button CornerRadius="7"
+                                        Padding="12,10"
+                                        FontSize="{StaticResource FontSizeMedium}"
+                                        FontWeight="SemiBold"
+                                        Foreground="{StaticResource BlackBrush}"
+                                        Background="{StaticResource TransparentBrush}"
+                                        BorderThickness="1"
+                                        BorderBrush="{StaticResource LightGrayBrush}"
+                                        Command="{Binding AllAreasCommand}">
+                                    <Button.Resources>
+                                        <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
+                                        <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush"/>
+                                        <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
+                                        <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
+                                    </Button.Resources>
+                                    <TextBlock Text="{Binding AllAreasFilterText}" />
+                                </Button>
+
+                                <Button CornerRadius="7"
+                                        Padding="12,10"
+                                        FontSize="{StaticResource FontSizeMedium}"
+                                        FontWeight="SemiBold"
+                                        Foreground="{StaticResource BlackBrush}"
+                                        Background="{StaticResource TransparentBrush}"
+                                        BorderThickness="1"
+                                        BorderBrush="{StaticResource LightGrayBrush}"
+                                        Command="{Binding TableFilterCommand}">
+                                    <Button.Resources>
+                                        <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
+                                        <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush"/>
+                                        <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
+                                        <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
+                                    </Button.Resources>
+                                    <StackPanel Orientation="Horizontal"
+                                        Spacing="8">
+                                        <PathIcon Data="{Binding TableFilterIconState, Converter={StaticResource IconConverter}, Mode=OneWay}" />
+                                        <TextBlock Text="{Binding TableFilterText}" />
+                                    </StackPanel>
+                                </Button>
+
+                                <Button CornerRadius="7"
+                                        Padding="10"
+                                        FontSize="{StaticResource FontSizeMedium}"
+                                        FontWeight="SemiBold"
+                                        Foreground="{StaticResource BlackBrush}"
+                                        Background="{StaticResource TransparentBrush}"
+                                        BorderThickness="1"
+                                        BorderBrush="{StaticResource LightGrayBrush}"
+                                        Command="{Binding RoomFilterCommand}">
+                                    <Button.Resources>
+                                        <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
+                                        <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush"/>
+                                        <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
+                                        <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
+                                    </Button.Resources>
+                                    <StackPanel Orientation="Horizontal"
+                                        Spacing="8">
+                                        <PathIcon Data="{Binding RoomFilterIconState, Converter={StaticResource IconConverter}, Mode=OneWay}" />
+                                        <TextBlock Text="{Binding RoomFilterText}" />
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+
+                            <Button 
+                                Grid.Column="1"
+                                CornerRadius="7"
+                                Padding="10"
+                                FontSize="{StaticResource FontSizeMedium}"
+                                FontWeight="SemiBold"
+                                Foreground="{StaticResource WhiteBrush}"
+                                Background="{StaticResource OrangeFocusBrush}"
+                                Command="{Binding FilterAreaCommand}" 
+                                HorizontalAlignment="Right">
+                                <Button.Resources>
+                                    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
+                                    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush"/>
+                                    <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
+                                    <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
+                                    <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="LighterGrayBrush"/>
+                                    <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="MediumDarkGrayBrush"/>
+                                </Button.Resources>
+                                <StackPanel Orientation="Horizontal"
+                                        Spacing="8">
+                                    <PathIcon Data="{Binding FilterIconState, Converter={StaticResource IconConverter}, Mode=OneWay}" />
+                                    <TextBlock Text="{Binding FilterAreaButtonText}" />
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Summarized Area Cards -->
+                <GridView x:Name="AreaCardsGridView"
+                          Grid.Row="1"
+                          Padding="10,20"
+                          Background="{StaticResource TransparentBrush}"
+                          BorderThickness="0"
+                          IsItemClickEnabled="True"
+                          ItemClick="HandleAreaCardsGridViewItemClick"
+                          SelectionMode="None"
+                          HorizontalAlignment="Stretch"
+                          HorizontalContentAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          ItemsSource="{Binding SummarizedAreaCardViewModels}"
+                          ItemTemplateSelector="{StaticResource SummarizedAreaCardTemplateSelector}"
+                          ItemContainerStyle="{StaticResource AreaManagementGridViewItemStyle}"
+                          ScrollViewer.HorizontalScrollMode="Disabled"
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          Loaded="HandleAreaCardsGridViewLoaded"
+                          SizeChanged="HandleAreaCardsGridViewSizeChanged">
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </GridView>
+            </Grid>
+        </Border>
+
+        <!-- Placeholder for when no area is selected -->
+        <Border Grid.Column="1"
+                Background="{StaticResource VeryLightGrayBrush}"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Visibility="{x:Bind ViewModel.IsAnySummarizedCardSelected, Converter={StaticResource BoolToInvisible}, Mode=OneWay}">
+            <StackPanel VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                <Path Width="64"
+                      Height="64"
+                      Stretch="Uniform"
+                      Fill="{StaticResource MediumDarkGrayBrush}"
+                      Data="{x:Bind ViewModel.NoAreasIconState, Converter={StaticResource IconConverter}, Mode=OneWay}" />
+                <TextBlock Text="{x:Bind ViewModel.NoAreasText, Mode=OneWay}" 
+                           Foreground="{StaticResource DarkGrayBrush}" 
+                           FontSize="{StaticResource FontSizeExtraExtraLarge}" 
+                           FontWeight="SemiBold" />
+            </StackPanel>
+        </Border>
+
+        <!-- Detailed Area Card -->
+        <Border Grid.Column="1"
+                Background="{StaticResource VeryLightGrayBrush}"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Visibility="{x:Bind ViewModel.IsAnySummarizedCardSelected, Converter={StaticResource BoolToVisible}, Mode=OneWay}">
+
+            <ContentControl 
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Content="{x:Bind ViewModel.DetailedAreaCardViewModel, Mode=OneWay}"
+                ContentTemplateSelector="{StaticResource DetailedAreaCardTemplateSelector}" />
+        </Border>
+    </Grid>
 </Page>
