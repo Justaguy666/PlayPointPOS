@@ -13,12 +13,8 @@
     mc:Ignorable="d">
 
     <Border
+        Style="{StaticResource SurfaceCardBorderStyle}"
         Height="Auto"
-        Padding="24"
-        Background="{StaticResource WhiteBrush}"
-        BorderBrush="{StaticResource LightGrayBrush}"
-        BorderThickness="1"
-        CornerRadius="12"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Center">
 

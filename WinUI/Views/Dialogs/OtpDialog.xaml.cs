@@ -20,7 +20,19 @@ public sealed partial class OtpDialog : ContentDialog
         InitializeComponent();
 
         ViewModel.CloseRequested += HandleCloseRequested;
+        ViewModel.DialogHideRequested += HandleDialogHideRequested;
+        ViewModel.DialogShowRequested += HandleDialogShowRequested;
         Closed += HandleClosed;
+    }
+
+    private void HandleDialogHideRequested()
+    {
+        Hide();
+    }
+
+    private async void HandleDialogShowRequested()
+    {
+        await ShowAsync();
     }
 
     private void NewPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
@@ -52,6 +64,8 @@ public sealed partial class OtpDialog : ContentDialog
     {
         Closed -= HandleClosed;
         ViewModel.CloseRequested -= HandleCloseRequested;
+        ViewModel.DialogHideRequested -= HandleDialogHideRequested;
+        ViewModel.DialogShowRequested -= HandleDialogShowRequested;
         ViewModel.Dispose();
     }
 }

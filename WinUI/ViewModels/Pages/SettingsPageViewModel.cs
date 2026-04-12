@@ -81,11 +81,23 @@ public partial class SettingsPageViewModel : LocalizedViewModelBase
         base.Dispose();
     }
 
-    private Task OnLogout()
+    private async Task OnLogout()
     {
-        _navigationService.Navigate(new NavigateToStarting());
-        return Task.CompletedTask;
+        bool isConfirmed = await _dialogService.ShowConfirmationAsync(
+            titleKey: "ConfirmLogoutTitle",
+            messageKey: "ConfirmLogoutMessage",
+            confirmButtonTextKey: "ConfirmLogoutButton",
+            cancelButtonTextKey: "CancelButtonText"
+        );
+
+        if (isConfirmed)
+        {
+            _navigationService.Navigate(new NavigateToStarting());
+        }
     }
 
-    private Task OnChangePassword() => _dialogService.ShowDialogAsync("Otp");
+    private async Task OnChangePassword()
+    {
+        await _dialogService.ShowDialogAsync("Otp");
+    }
 }

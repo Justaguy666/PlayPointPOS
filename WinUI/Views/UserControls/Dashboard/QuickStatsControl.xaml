@@ -8,17 +8,39 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:uimodels="using:WinUI.UIModels"
     xmlns:vm="using:WinUI.ViewModels.UserControls.Dashboard"
     d:DataContext="{d:DesignInstance Type=vm:QuickStatsControlViewModel, IsDesignTimeCreatable=False}"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <DataTemplate x:Key="MetricRowTemplate"
+                      x:DataType="uimodels:LabelValueRowModel">
+            <StackPanel Spacing="12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*" />
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Text="{x:Bind Label}"
+                               Style="{StaticResource MetricRowLabelTextStyle}" />
+
+                    <TextBlock Grid.Column="1"
+                               Text="{x:Bind Value}"
+                               Style="{StaticResource MetricRowValueTextStyle}" />
+                </Grid>
+
+                <controls:DividerControl DividerBrush="{StaticResource LighterGrayBrush}"
+                                         Visibility="{Binding ShowDivider, Converter={StaticResource BoolToVisible}}" />
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+
     <Border
+        Style="{StaticResource SurfaceCardBorderStyle}"
         Height="Auto"
-        Padding="24"
-        Background="{StaticResource WhiteBrush}"
-        BorderBrush="{StaticResource LightGrayBrush}"
-        BorderThickness="1"
-        CornerRadius="12"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Center">
         
@@ -27,8 +49,8 @@
                     VerticalAlignment="Center">
 
             <StackPanel Orientation="Horizontal"
-                Spacing="4"
-                VerticalAlignment="Center">
+                        Spacing="4"
+                        VerticalAlignment="Center">
                 <PathIcon
                     Width="24"
                     Height="24"
@@ -46,123 +68,8 @@
 
             <controls:DividerControl DividerBrush="{StaticResource LighterGrayBrush}" />
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*" />
-                    <ColumnDefinition Width="3*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Column="0"
-                           Text="{Binding AverageHoursPerAreaLabel}"
-                           FontSize="{StaticResource FontSizeMedium}"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Foreground="{StaticResource DashboardMutedTextBrush}" />
-
-                <TextBlock Grid.Column="1"
-                           Text="{Binding AverageHoursPerAreaValue}"
-                           FontSize="{StaticResource FontSizeMedium}"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Right"
-                           Foreground="{StaticResource BlackBrush}" />
-            </Grid>
-
-            <controls:DividerControl DividerBrush="{StaticResource LighterGrayBrush}" />
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*" />
-                    <ColumnDefinition Width="3*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Column="0"
-                           Text="{Binding AverageRevenuePerInvoiceLabel}"
-                           FontSize="{StaticResource FontSizeMedium}"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Foreground="{StaticResource DashboardMutedTextBrush}" />
-
-                <TextBlock Grid.Column="1"
-                           Text="{Binding AverageRevenuePerInvoiceValue}"
-                           FontSize="{StaticResource FontSizeMedium}"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Right"
-                           Foreground="{StaticResource BlackBrush}" />
-            </Grid>
-
-            <controls:DividerControl DividerBrush="{StaticResource LighterGrayBrush}" />
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*" />
-                    <ColumnDefinition Width="3*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Column="0"
-                           Text="{Binding ReturnRateLabel}"
-                           FontSize="{StaticResource FontSizeMedium}"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Foreground="{StaticResource DashboardMutedTextBrush}" />
-
-                <TextBlock Grid.Column="1"
-                           Text="{Binding ReturnRateValue}"
-                           FontSize="{StaticResource FontSizeMedium}"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Right"
-                           Foreground="{StaticResource BlackBrush}" />
-            </Grid>
-
-            <controls:DividerControl DividerBrush="{StaticResource LighterGrayBrush}" />
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*" />
-                    <ColumnDefinition Width="3*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Column="0"
-                           Text="{Binding AreaUsageRateLabel}"
-                           FontSize="{StaticResource FontSizeMedium}"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Foreground="{StaticResource DashboardMutedTextBrush}" />
-
-                <TextBlock Grid.Column="1"
-                           Text="{Binding AreaUsageRateValue}"
-                           FontSize="{StaticResource FontSizeMedium}"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Right"
-                           Foreground="{StaticResource BlackBrush}" />
-            </Grid>
-
-            <controls:DividerControl DividerBrush="{StaticResource LighterGrayBrush}" />
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*" />
-                    <ColumnDefinition Width="3*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Column="0"
-                           Text="{Binding NewMembersPerMonthLabel}"
-                           FontSize="{StaticResource FontSizeMedium}"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Foreground="{StaticResource DashboardMutedTextBrush}" />
-
-                <TextBlock Grid.Column="1"
-                           Text="{Binding NewMembersPerMonthValue}"
-                           FontSize="{StaticResource FontSizeMedium}"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Right"
-                           Foreground="{StaticResource BlackBrush}" />
-            </Grid>
+            <ItemsControl ItemsSource="{Binding MetricRows}"
+                          ItemTemplate="{StaticResource MetricRowTemplate}" />
 
         </StackPanel>
     </Border>

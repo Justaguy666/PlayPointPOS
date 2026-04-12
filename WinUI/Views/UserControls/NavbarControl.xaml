@@ -11,9 +11,15 @@
     xmlns:converters="using:WinUI.Converters">
 
     <UserControl.Resources>
-        <converters:BoolToOrangeBrushConverter x:Key="BoolToOrangeBrushConverter" />
-        <converters:BoolToVisibleConverter x:Key="BoolToVisible" />
-        <converters:DivideByCountConverter x:Key="DivideByCountConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/NavbarItemButtonStateResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:BoolToOrangeBrushConverter x:Key="BoolToOrangeBrushConverter" />
+            <converters:BoolToVisibleConverter x:Key="BoolToVisible" />
+            <converters:DivideByCountConverter x:Key="DivideByCountConverter" />
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid x:Name="NavbarGrid" Background="{StaticResource WhiteBrush}" Height="64" SizeChanged="NavbarGrid_SizeChanged">
@@ -33,21 +39,7 @@
             <ItemsRepeater.ItemTemplate>
                 <DataTemplate>
                     <Button Click="OnNavigateClicked"
-                            Background="{StaticResource TransparentBrush}"
-                            BorderThickness="0"
-                            Padding="0"
-                            Height="64"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Stretch"
-                            VerticalContentAlignment="Stretch"
-                            CornerRadius="0">
-
-                        <Button.Resources>
-                            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="VeryLightGrayBrush" />
-                            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="LighterGrayBrush" />
-                            <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="DarkGrayBrush" />
-                            <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="DarkGrayBrush" />
-                        </Button.Resources>
+                            Style="{StaticResource NavbarItemButtonStyle}">
 
                         <Grid HorizontalAlignment="Stretch"
                               VerticalAlignment="Stretch">

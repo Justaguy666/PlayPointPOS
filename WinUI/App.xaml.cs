@@ -84,6 +84,11 @@ public partial class App : Microsoft.UI.Xaml.Application
                             "Login" => new LoginDialog(provider.GetRequiredService<ViewModels.Dialogs.LoginViewModel>()),
                             "ForgotPassword" => new ForgotPasswordDialog(provider.GetRequiredService<ViewModels.Dialogs.ForgotPasswordViewModel>()),
                             "Otp" => CreateOtpDialog(provider, parameter),
+                            "Reservation" => CreateReservationDialog(provider, parameter),
+                            "AreaFilter" => CreateAreaFilterDialog(provider, parameter),
+                            "Payment" => CreatePaymentDialog(provider, parameter),
+                            "StartSession" => CreateStartSessionDialog(provider, parameter),
+                            "Area" => CreateAreaDialog(provider, parameter),
                             _ => null
                         };
                     });
@@ -91,11 +96,13 @@ public partial class App : Microsoft.UI.Xaml.Application
 
                     services.AddTransient<Application.UseCases.Auth.LoginUserUseCase>();
                     services.AddTransient<Application.UseCases.Auth.RegisterUserUseCase>();
+                    services.AddTransient<Application.UseCases.Pagination.BuildPaginationStateUseCase>();
                     //services.AddTransient<Application.UseCases.Analytics.GetChartAnalyticsUseCase>()
 
                     services.AddSingleton<IRepository<Account>, MockAccountRepository>();
                     services.AddSingleton<IRepository<BoardGame>, MockRepository<BoardGame>>();
                     services.AddSingleton<IRepository<Product>, MockRepository<Product>>();
+                    services.AddSingleton<IRepository<Member>>(_ => CreateMockMemberRepository());
                     services.AddSingleton<IRepository<Membership>, MockRepository<Membership>>();
 
                     //services.AddSingleton<IAnalyticsProvider, Infrastructure.Services.Analytics.MockAnalyticsProvider>();
@@ -114,10 +121,15 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddTransient<ViewModels.Dialogs.RegisterViewModel>();
                     services.AddTransient<ViewModels.Dialogs.ForgotPasswordViewModel>();
                     services.AddTransient<ViewModels.Dialogs.OtpViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.Management.ReservationViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.Management.AreaFilterViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.Management.PaymentViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.StartSessionViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.RevenueChartControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.QuickStatsControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.GoalProgressControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.TrendingListControlViewModel>();
+                    services.AddTransient<ViewModels.UserControls.PaginationControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Settings.ShopInformationCardControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Settings.GeneralSettingsCardControlViewModel>();
                     services.AddTransient<ViewModels.Pages.DashboardPageViewModel>();
@@ -274,5 +286,83 @@ public partial class App : Microsoft.UI.Xaml.Application
         var viewModel = provider.GetRequiredService<ViewModels.Dialogs.OtpViewModel>();
         viewModel.Configure(parameter as OtpDialogRequest);
         return new OtpDialog(viewModel);
+    }
+
+    private static ContentDialog CreateReservationDialog(IServiceProvider provider, object? parameter)
+    {
+        var request = parameter switch
+        {
+            ViewModels.Dialogs.Management.ReservationDialogRequest reservationRequest => reservationRequest,
+            UIModels.AreaManagement.AreaModel areaModel => new ViewModels.Dialogs.Management.ReservationDialogRequest
+            {
+                Mode = UIModels.Enums.UpsertDialogMode.Add,
+                Model = areaModel,
+            },
+            _ => new ViewModels.Dialogs.Management.ReservationDialogRequest(),
+        };
+
+        var viewModel = new ViewModels.Dialogs.Management.ReservationViewModel(
+            provider.GetRequiredService<ILocalizationService>(),
+            provider.GetRequiredService<ILocalizationPreferencesService>(),
+            provider.GetRequiredService<IRepository<Member>>(),
+            provider.GetRequiredService<IDialogService>(),
+            request.Mode);
+
+        return new Views.Dialogs.Management.ReservationDialog(viewModel, request);
+    }
+
+    private static ContentDialog CreateStartSessionDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.StartSessionViewModel>();
+        return new StartSessionDialog(viewModel, parameter as UIModels.AreaManagement.AreaModel);
+    }
+
+    private static ContentDialog CreateAreaFilterDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.Management.AreaFilterViewModel>();
+        return new Views.Dialogs.Management.AreaFilterDialog(
+            viewModel,
+            parameter as ViewModels.Dialogs.Management.AreaFilterDialogRequest);
+    }
+
+    private static ContentDialog CreatePaymentDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.Management.PaymentViewModel>();
+        return new Views.Dialogs.Management.PaymentDialog(viewModel, parameter as UIModels.AreaManagement.AreaModel);
+    }
+
+    private static ContentDialog CreateAreaDialog(IServiceProvider provider, object? parameter)
+    {
+        var request = parameter as ViewModels.Dialogs.Management.AreaDialogRequest;
+        var viewModel = new ViewModels.Dialogs.Management.AreaDialogViewModel(
+            provider.GetRequiredService<ILocalizationService>(),
+            provider.GetRequiredService<IDialogService>(),
+            request?.Mode ?? UIModels.Enums.UpsertDialogMode.Add);
+        return new Views.Dialogs.Management.AreaDialog(viewModel, request);
+    }
+
+    private static IRepository<Member> CreateMockMemberRepository()
+    {
+        var repository = new MockRepository<Member>();
+
+        repository.AddAsync(new Member
+        {
+            FullName = "Nguyen Minh Anh",
+            PhoneNumber = "0901 234 567",
+        }).GetAwaiter().GetResult();
+
+        repository.AddAsync(new Member
+        {
+            FullName = "Tran Hoang Nam",
+            PhoneNumber = "0912 345 678",
+        }).GetAwaiter().GetResult();
+
+        repository.AddAsync(new Member
+        {
+            FullName = "Le Thu Ha",
+            PhoneNumber = "0987 654 321",
+        }).GetAwaiter().GetResult();
+
+        return repository;
     }
 }

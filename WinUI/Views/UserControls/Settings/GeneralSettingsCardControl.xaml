@@ -11,19 +11,13 @@
     mc:Ignorable="d">
 
     <Border
-        Padding="24"
-        Background="{StaticResource WhiteBrush}"
-        BorderBrush="{StaticResource LightGrayBrush}"
-        BorderThickness="1"
-        CornerRadius="12"
+        Style="{StaticResource SurfaceCardBorderStyle}"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
 
         <StackPanel Orientation="Vertical" Spacing="12">
             <TextBlock Text="{Binding Title}"
-                       FontSize="{StaticResource SubtitleTextBlockFontSize}"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource BlackBrush}" />
+                       Style="{StaticResource CardTitleTextStyle}" />
 
             <controls:DividerControl DividerBrush="{StaticResource LighterGrayBrush}" />
 

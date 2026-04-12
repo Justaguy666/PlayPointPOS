@@ -11,15 +11,8 @@
 
     <Border
         x:Name="CardBorder"
-        MinWidth="180"
-        Height="160"
-        Padding="16"
-        CornerRadius="12"
-        HorizontalAlignment="Stretch"
+        Style="{StaticResource SummarizedAreaCardBorderStyle}"
         Background="{StaticResource SummarizedReservedAreaBackgroundBrush}"
-        BorderBrush="{StaticResource SummarizedAreaBorderBrush}"
-        BorderThickness="1"
-        helpers:CursorBehavior.UseHandCursor="True"
         PointerEntered="HandleCardPointerEntered"
         PointerExited="HandleCardPointerExited"
         PointerPressed="HandleCardPointerPressed"

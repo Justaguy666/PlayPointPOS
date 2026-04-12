@@ -1,0 +1,255 @@
+<ContentDialog
+    x:Class="WinUI.Views.Dialogs.Management.ReservationDialog"
+    x:Name="RootDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:entities="using:Domain.Entities"
+    xmlns:vm="using:WinUI.ViewModels.Dialogs.Management"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=vm:ReservationViewModel, IsDesignTimeCreatable=False}"
+    Style="{StaticResource StandardFormDialogStyle}">
+
+    <ContentDialog.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/FormInputStateResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="MemberOptionTemplate"
+                          x:DataType="entities:Member">
+                <StackPanel Spacing="2">
+                    <TextBlock Text="{x:Bind FullName}"
+                               FontSize="{StaticResource ValueFontSize}"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource BlackBrush}" />
+                    <TextBlock Text="{x:Bind PhoneNumber}"
+                               FontSize="{StaticResource FontSizeSmall}"
+                               Foreground="{StaticResource DarkGrayBrush}" />
+                </StackPanel>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentDialog.Resources>
+
+    <Grid Style="{StaticResource DialogTwoColumnRootGridStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Style="{StaticResource DialogHeaderContainerStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <PathIcon Grid.Column="0"
+                      Style="{StaticResource DialogHeaderIconStyle}"
+                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+            <TextBlock Grid.Column="1"
+                       Style="{StaticResource DialogHeaderTitleTextStyle}"
+                       Text="{x:Bind ViewModel.Title, Mode=OneWay}" />
+            <Button Grid.Column="2"
+                    Style="{StaticResource DialogCloseButtonStyle}"
+                    Command="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
+                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
+                <Button.Resources>
+                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
+                </Button.Resources>
+                <PathIcon Width="14"
+                          Height="14"
+                          Data="{x:Bind CloseIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
+                          Foreground="{StaticResource BlackBrush}" />
+            </Button>
+        </Grid>
+
+        <controls:DividerControl Grid.Row="1"
+                                 Style="{StaticResource DialogHeaderDividerStyle}" />
+
+        <StackPanel Grid.Row="2"
+                    Style="{StaticResource DialogFormContentPanelStyle}">
+            <CheckBox Content="{x:Bind ViewModel.MemberToggleText, Mode=OneWay}"
+                      IsChecked="{x:Bind ViewModel.IsMember, Mode=TwoWay}"
+                      Style="{StaticResource OrangeCheckBoxStyle}" />
+
+            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}"
+                        Visibility="{x:Bind ViewModel.ShowMemberSelection, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
+                <TextBlock Text="{x:Bind ViewModel.MemberLabelText, Mode=OneWay}"
+                           Style="{StaticResource DialogFormLabelTextStyle}" />
+                <ComboBox ItemsSource="{x:Bind ViewModel.Members, Mode=OneWay}"
+                          SelectedItem="{x:Bind ViewModel.SelectedMember, Mode=TwoWay}"
+                          ItemTemplate="{StaticResource MemberOptionTemplate}"
+                          PlaceholderText="{x:Bind ViewModel.MemberPlaceholderText, Mode=OneWay}"
+                          HorizontalAlignment="Stretch" />
+            </StackPanel>
+
+            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}"
+                        Visibility="{x:Bind ViewModel.ShowCustomerFields, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
+                <TextBlock Text="{x:Bind ViewModel.CustomerNameLabelText, Mode=OneWay}"
+                           Style="{StaticResource DialogFormLabelTextStyle}" />
+                <TextBox PlaceholderText="{x:Bind ViewModel.CustomerNamePlaceholderText, Mode=OneWay}"
+                         Style="{StaticResource DialogFormTextBoxStyle}"
+                         Text="{x:Bind ViewModel.CustomerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Stretch" />
+            </StackPanel>
+
+            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}"
+                        Visibility="{x:Bind ViewModel.ShowCustomerFields, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
+                <TextBlock Text="{x:Bind ViewModel.PhoneNumberLabelText, Mode=OneWay}"
+                           Style="{StaticResource DialogFormLabelTextStyle}" />
+                <TextBox PlaceholderText="{x:Bind ViewModel.PhoneNumberPlaceholderText, Mode=OneWay}"
+                         Style="{StaticResource DialogFormTextBoxStyle}"
+                         Text="{x:Bind ViewModel.PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Stretch" />
+            </StackPanel>
+
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0"
+                            Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.ReservationDateLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <Button x:Name="ReservationDateFieldButton"
+                            Style="{StaticResource DialogPickerButtonStyle}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Click="ReservationDateFieldButton_Click">
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogInputButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <Grid ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="{x:Bind ViewModel.ReservationDateDisplayText, Mode=OneWay}"
+                                       Style="{StaticResource DialogFieldValueTextStyle}"
+                                       Visibility="{x:Bind ViewModel.HasReservationDate, Mode=OneWay, Converter={StaticResource BoolToVisible}}" />
+                            <TextBlock Grid.Column="0"
+                                       Text="{x:Bind ViewModel.ReservationDatePlaceholderText, Mode=OneWay}"
+                                       Style="{StaticResource DialogFieldPlaceholderTextStyle}"
+                                       Visibility="{x:Bind ViewModel.HasReservationDate, Mode=OneWay, Converter={StaticResource BoolToInvisible}}" />
+                            <PathIcon Grid.Column="1"
+                                      Style="{StaticResource DialogFieldIconStyle}"
+                                      Data="{x:Bind CalendarIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+                        </Grid>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.ReservationTimeLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <Button x:Name="ReservationTimeFieldButton"
+                            Style="{StaticResource DialogPickerButtonStyle}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Click="ReservationTimeFieldButton_Click">
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogInputButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <Grid ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="{x:Bind ViewModel.ReservationTimeDisplayText, Mode=OneWay}"
+                                       Style="{StaticResource DialogFieldValueTextStyle}"
+                                       Visibility="{x:Bind ViewModel.HasReservationTime, Mode=OneWay, Converter={StaticResource BoolToVisible}}" />
+                            <TextBlock Grid.Column="0"
+                                       Text="{x:Bind ViewModel.ReservationTimePlaceholderText, Mode=OneWay}"
+                                       Style="{StaticResource DialogFieldPlaceholderTextStyle}"
+                                       Visibility="{x:Bind ViewModel.HasReservationTime, Mode=OneWay, Converter={StaticResource BoolToInvisible}}" />
+                            <PathIcon Grid.Column="1"
+                                      Style="{StaticResource DialogFieldIconStyle}"
+                                      Data="{x:Bind ClockIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+                        </Grid>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0"
+                            Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.ReservationCapacityLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <Grid HorizontalAlignment="Center"
+                          ColumnSpacing="24"
+                          Margin="0,6,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                                Style="{StaticResource DialogCompactCapacityButtonStyle}"
+                                Command="{x:Bind ViewModel.DecrementReservationCapacityCommand, Mode=OneWay}">
+                            <Button.Resources>
+                                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
+                            </Button.Resources>
+                            <TextBlock Text="-"
+                                       FontSize="{StaticResource FontSizeExtraExtraLarge}"
+                                       FontWeight="Bold" />
+                        </Button>
+
+                        <TextBox Grid.Column="1"
+                                 Style="{StaticResource DialogCompactCapacityTextBoxStyle}"
+                                 Text="{x:Bind ViewModel.ReservationCapacity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 InputScope="Number" />
+
+                        <Button Grid.Column="2"
+                                Style="{StaticResource DialogCompactCapacityButtonStyle}"
+                                Command="{x:Bind ViewModel.IncrementReservationCapacityCommand, Mode=OneWay}">
+                            <Button.Resources>
+                                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
+                            </Button.Resources>
+                            <TextBlock Text="+"
+                                       FontSize="{StaticResource FontSizeExtraExtraLarge}"
+                                       FontWeight="Bold" />
+                        </Button>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.ReservationPriceLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <TextBox Text="{x:Bind ViewModel.ReservationPriceText, Mode=OneWay}"
+                             Style="{StaticResource DialogReadOnlyTextBoxStyle}"
+                             HorizontalAlignment="Stretch" />
+                </StackPanel>
+            </Grid>
+
+            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+            <Button Style="{StaticResource DialogPrimaryFooterButtonStyle}"
+                    Command="{x:Bind ViewModel.SubmitCommand, Mode=OneWay}"
+                    IsEnabled="{x:Bind ViewModel.CanSubmit, Mode=OneWay}"
+                    Margin="0,8,0,0">
+                <Button.Resources>
+                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
+                </Button.Resources>
+                <TextBlock Text="{x:Bind ViewModel.SubmitButtonText, Mode=OneWay}" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</ContentDialog>

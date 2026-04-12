@@ -1,0 +1,185 @@
+<ContentDialog
+    x:Class="WinUI.Views.Dialogs.Management.AreaDialog"
+    x:Name="RootDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:vm="using:WinUI.ViewModels.Dialogs.Management"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=vm:AreaDialogViewModel, IsDesignTimeCreatable=False}"
+    Style="{StaticResource StandardFormDialogStyle}"
+    mc:Ignorable="d">
+
+    <ContentDialog.Resources>
+        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/FormInputStateResources.xaml" />
+    </ContentDialog.Resources>
+
+    <Grid x:Name="RootGrid"
+          Style="{StaticResource DialogFormRootGridStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Style="{StaticResource DialogHeaderContainerStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <PathIcon x:Name="HeaderIcon"
+                      Grid.Column="0"
+                      Style="{StaticResource DialogHeaderIconStyle}"
+                      />
+            <TextBlock Grid.Column="1"
+                       Style="{StaticResource DialogHeaderTitleTextStyle}"
+                       Text="{Binding Title}" />
+            <Button Grid.Column="2"
+                    Style="{StaticResource DialogCloseButtonStyle}"
+                    Command="{Binding CloseCommand}"
+                    ToolTipService.ToolTip="{Binding CloseTooltipText}">
+                <Button.Resources>
+                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
+                </Button.Resources>
+                <PathIcon x:Name="CloseIcon"
+                          Width="14"
+                          Height="14"
+                          Foreground="{StaticResource BlackBrush}" />
+            </Button>
+        </Grid>
+
+        <controls:DividerControl Grid.Row="1"
+                                 Style="{StaticResource DialogHeaderDividerStyle}" />
+
+        <StackPanel Grid.Row="2"
+                    Style="{StaticResource DialogFormContentPanelStyle}">
+            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                <TextBlock Text="{Binding NameLabelText}"
+                           Style="{StaticResource DialogFormLabelTextStyle}" />
+                <TextBox PlaceholderText="{Binding NamePlaceholderText}"
+                         Style="{StaticResource DialogFormTextBoxStyle}"
+                         Text="{Binding AreaName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Stretch" />
+            </StackPanel>
+
+            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                <TextBlock Text="{Binding TypeLabelText}"
+                           Style="{StaticResource DialogFormLabelTextStyle}" />
+                <Grid ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <RadioButton Grid.Column="0"
+                                 GroupName="AreaTypeGroup"
+                                 IsChecked="{Binding IsTableTypeSelected, Mode=TwoWay}"
+                                 Style="{StaticResource OrangeRadioButtonStyle}"
+                                 Content="{Binding TableTypeText}"
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Center" />
+
+                    <RadioButton Grid.Column="1"
+                                 GroupName="AreaTypeGroup"
+                                 IsChecked="{Binding IsRoomTypeSelected, Mode=TwoWay}"
+                                 Style="{StaticResource OrangeRadioButtonStyle}"
+                                 Content="{Binding RoomTypeText}"
+                                 VerticalAlignment="Center" 
+                                 HorizontalAlignment="Center" />
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                <TextBlock Text="{Binding MaxCapacityLabelText}"
+                           Style="{StaticResource DialogFormLabelTextStyle}" />
+                <Grid HorizontalAlignment="Center"
+                      ColumnSpacing="24"
+                      Margin="0,6,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0"
+                            Style="{StaticResource DialogCompactCapacityButtonStyle}"
+                            Command="{Binding DecrementCapacityCommand}">
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <TextBlock Text="-"
+                                   FontSize="{StaticResource FontSizeExtraExtraLarge}"
+                                   FontWeight="Bold" />
+                    </Button>
+
+                    <TextBox Grid.Column="1"
+                             Style="{StaticResource DialogCompactCapacityTextBoxStyle}"
+                             Text="{Binding MaxCapacityText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             InputScope="Number">
+                    </TextBox>
+
+                    <Button Grid.Column="2"
+                            Style="{StaticResource DialogCompactCapacityButtonStyle}"
+                            Command="{Binding IncrementCapacityCommand}">
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <TextBlock Text="+"
+                                   FontSize="{StaticResource FontSizeExtraExtraLarge}"
+                                   FontWeight="Bold" />
+                    </Button>
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                <TextBlock Text="{Binding HourlyPriceLabelText}"
+                           Style="{StaticResource DialogFormLabelTextStyle}" />
+                <TextBox PlaceholderText="{Binding HourlyPricePlaceholderText}"
+                         Style="{StaticResource DialogFormTextBoxStyle}"
+                         Text="{Binding HourlyPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Stretch" />
+            </StackPanel>
+
+            <TextBlock Text="{Binding ErrorMessage}"
+                       Visibility="{Binding HasError, Converter={StaticResource BoolToVisible}}"
+                       Foreground="{StaticResource ErrorRedBrush}"
+                       FontSize="{StaticResource FontSizeSmall}"
+                       FontWeight="SemiBold" />
+
+            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+            <Grid Margin="0,8,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <Button Style="{StaticResource DialogSecondaryFooterButtonStyle}"
+                            Command="{Binding ResetCommand}">
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <TextBlock Text="{Binding ResetButtonText}" />
+                    </Button>
+                </Grid>
+
+                <Grid Grid.Column="2">
+                    <Button Style="{StaticResource DialogPrimaryFooterButtonStyle}"
+                            Command="{Binding SubmitCommand}"
+                            IsEnabled="{Binding CanSubmit}">
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <TextBlock Text="{Binding SubmitButtonText}" />
+                    </Button>
+                </Grid>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</ContentDialog>

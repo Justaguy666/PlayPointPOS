@@ -166,17 +166,38 @@ public partial class OtpViewModel : LocalizedViewModelBase
         OnPropertyChanged(nameof(CanVerifyExecute));
     }
 
+    public event Action? DialogHideRequested;
+    public event Action? DialogShowRequested;
+
     [RelayCommand(CanExecute = nameof(CanVerify))]
     private async Task VerifyAsync()
     {
         HasError = false;
         ErrorMessage = string.Empty;
 
-        if (_mode == OtpDialogMode.ResetPassword && NewPassword != ConfirmPassword)
+        if (_mode == OtpDialogMode.ResetPassword)
         {
-            HasError = true;
-            ErrorMessage = LocalizationService.GetString("OtpDialogPasswordMismatchText");
-            return;
+            if (NewPassword != ConfirmPassword)
+            {
+                HasError = true;
+                ErrorMessage = LocalizationService.GetString("OtpDialogPasswordMismatchText");
+                return;
+            }
+
+            DialogHideRequested?.Invoke();
+
+            bool isConfirmed = await _dialogService.ShowConfirmationAsync(
+                titleKey: "ConfirmChangePasswordTitle",
+                messageKey: "ConfirmChangePasswordMessage",
+                confirmButtonTextKey: "ConfirmChangePasswordButton",
+                cancelButtonTextKey: "CancelButtonText"
+            );
+
+            if (!isConfirmed)
+            {
+                DialogShowRequested?.Invoke();
+                return;
+            }
         }
 
         CloseRequestedInternal?.Invoke();

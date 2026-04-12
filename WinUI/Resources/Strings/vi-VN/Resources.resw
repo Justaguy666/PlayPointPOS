@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -223,7 +223,7 @@
     <value>Gửi OTP</value>
   </data>
   <data name="ForgotPasswordDialogBackButtonText" xml:space="preserve">
-    <value>Quay lại đăng nhập</value>
+    <value>Quay lại</value>
   </data>
   <data name="ForgotPasswordDialogInvalidEmailText" xml:space="preserve">
     <value>Vui lòng nhập email hợp lệ.</value>
@@ -721,15 +721,422 @@
     <value>Phòng</value>
   </data>
   <data name="AreaManagementPageNoAreasText" xml:space="preserve">
-    <value>Không tìm thấy khu vực nào.</value>
+    <value>Chọn một khu vực để xem chi tiết</value>
   </data>
   <data name="AreaManagementPageFilterAreaButton" xml:space="preserve">
     <value>Bộ lọc</value>
   </data>
+  <data name="AreaManagementPageEditMenuText" xml:space="preserve">
+    <value>Chỉnh sửa</value>
+  </data>
+  <data name="AreaManagementPageDeleteMenuText" xml:space="preserve">
+    <value>Xóa</value>
+  </data>
   <data name="AreaManagementAvailableStatusText" xml:space="preserve">
     <value>Khả dụng</value>
   </data>
-  <data name="AreaManagementCapacityFormat" xml:space="preserve">
+  <data name="AreaManagementReservedStatusText" xml:space="preserve">
+    <value>Đặt chỗ</value>
+  </data>
+  <data name="AreaManagementRentedStatusText" xml:space="preserve">
+    <value>Đang sử dụng</value>
+  </data>
+  <data name="AreaFilterDialogTitleText" xml:space="preserve">
+    <value>Lọc khu vực</value>
+  </data>
+  <data name="AreaFilterDialogStatusLabelText" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="AreaFilterDialogStartTimeRangeLabelText" xml:space="preserve">
+    <value>Giờ bắt đầu trong khoảng</value>
+  </data>
+  <data name="AreaFilterDialogCapacityRangeLabelText" xml:space="preserve">
+    <value>Sức chứa trong khoảng</value>
+  </data>
+  <data name="AreaFilterDialogHourlyPriceRangeLabelText" xml:space="preserve">
+    <value>Giá thuê trong khoảng</value>
+  </data>
+  <data name="AreaFilterDialogRangeFromText" xml:space="preserve">
+    <value>Từ</value>
+  </data>
+  <data name="AreaFilterDialogRangeToText" xml:space="preserve">
+    <value>Đến</value>
+  </data>
+  <data name="AreaFilterDialogAllStatusesText" xml:space="preserve">
+    <value>Tất cả trạng thái</value>
+  </data>
+  <data name="AreaFilterDialogStartTimeFromPlaceholderText" xml:space="preserve">
+    <value>Chọn giờ bắt đầu...</value>
+  </data>
+  <data name="AreaFilterDialogStartTimeToPlaceholderText" xml:space="preserve">
+    <value>Chọn giờ kết thúc...</value>
+  </data>
+  <data name="AreaFilterDialogCapacityFromPlaceholderText" xml:space="preserve">
+    <value>Sức chứa từ...</value>
+  </data>
+  <data name="AreaFilterDialogCapacityToPlaceholderText" xml:space="preserve">
+    <value>Sức chứa đến...</value>
+  </data>
+  <data name="AreaFilterDialogHourlyPriceFromPlaceholderText" xml:space="preserve">
+    <value>Giá từ...</value>
+  </data>
+  <data name="AreaFilterDialogHourlyPriceToPlaceholderText" xml:space="preserve">
+    <value>Giá đến...</value>
+  </data>
+  <data name="AreaFilterDialogResetButtonText" xml:space="preserve">
+    <value>Đặt lại</value>
+  </data>
+  <data name="AreaFilterDialogApplyButtonText" xml:space="preserve">
+    <value>Áp dụng</value>
+  </data>
+  <data name="AreaFilterDialogInvalidRangeText" xml:space="preserve">
+    <value>Vui lòng nhập khoảng lọc hợp lệ.</value>
+  </data>
+	<data name="AreaManagementCapacityFormat" xml:space="preserve">
     <value>{0} khách</value>
   </data>
+  <data name="PaginationGoToPageButtonText" xml:space="preserve">
+    <value>Đến trang</value>
+  </data>
+  <data name="PaginationJumpToPageTitleText" xml:space="preserve">
+    <value>Nhập số trang</value>
+  </data>
+  <data name="PaginationCancelButtonText" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="PaginationConfirmButtonText" xml:space="preserve">
+    <value>Đi</value>
+  </data>
+	<data name="DetailedCardMaxCapacityFormat" xml:space="preserve">
+		<value>Sức chứa: {0} khách</value>
+	</data>
+	<data name="StartSessionButtonText" xml:space="preserve">
+		<value>Mở</value>
+	</data>
+	<data name="ResumeSessionButtonText" xml:space="preserve">
+		<value>Mở lại</value>
+	</data>
+	<data name="ReserveButtonText" xml:space="preserve">
+		<value>Đặt chỗ</value>
+	</data>
+	<data name="CheckInButtonText" xml:space="preserve">
+		<value>Đã đến</value>
+	</data>
+	<data name="EditReservationButtonText" xml:space="preserve">
+		<value>Sửa</value>
+	</data>
+	<data name="CancelReservationButtonText" xml:space="preserve">
+		<value>Hủy</value>
+	</data>
+	<data name="ReservationInfoTitleText" xml:space="preserve">
+		<value>Thông tin đặt chỗ</value>
+	</data>
+	<data name="ReservationCustomerNameLabelText" xml:space="preserve">
+		<value>Tên khách:</value>
+	</data>
+	<data name="ReservationCustomerPhoneNumberLabelText" xml:space="preserve">
+		<value>Số điện thoại:</value>
+	</data>
+	<data name="ReservationDateLabelText" xml:space="preserve">
+		<value>Ngày đặt:</value>
+	</data>
+	<data name="ReservationTimeLabelText" xml:space="preserve">
+		<value>Giờ đặt:</value>
+	</data>
+	<data name="ReservationCustomerNumberLabelText" xml:space="preserve">
+		<value>Số khách:</value>
+	</data>
+	<data name="ReservationPriceLabelText" xml:space="preserve">
+		<value>Giá giữ chỗ:</value>
+	</data>
+	<data name="ReservationDialogTitleText" xml:space="preserve">
+		<value>Đặt chỗ</value>
+	</data>
+	<data name="ReservationDialogEditTitleText" xml:space="preserve">
+		<value>Sửa đặt chỗ</value>
+	</data>
+	<data name="ReservationDialogNameLabelText" xml:space="preserve">
+		<value>Tên khách</value>
+		</data>
+	<data name="ReservationDialogNamePlaceholderText" xml:space="preserve">
+		<value>Nhập tên khách...</value>
+		</data>
+	<data name="ReservationDialogAreaLabelText" xml:space="preserve">
+		<value>Khu vực</value>
+		</data>
+	<data name="ReservationDialogAreaPlaceholderText" xml:space="preserve">
+		<value>Chọn khu vực...</value>
+		</data>
+	<data name="ReservationDialogReservationPriceLabelText" xml:space="preserve">
+		<value>Giá giữ chỗ</value>
+		</data>
+	<data name="ReservationDialogPhoneLabelText" xml:space="preserve">
+		<value>Số điện thoại</value>
+		</data>
+	<data name="ReservationDialogPhonePlaceholderText" xml:space="preserve">
+		<value>Nhập số điện thoại...</value>
+		</data>
+	<data name="ReservationDialogDateLabelText" xml:space="preserve">
+		<value>Ngày đặt</value>
+		</data>
+	<data name="ReservationDialogDatePlaceholderText" xml:space="preserve">
+		<value>Chọn ngày...</value>
+		</data>
+	<data name="ReservationDialogTimeLabelText" xml:space="preserve">
+		<value>Giờ đặt</value>
+		</data>
+	<data name="ReservationDialogTimePlaceholderText" xml:space="preserve">
+		<value>Chọn giờ...</value>
+		</data>
+	<data name="ReservationDialogConfirmButtonText" xml:space="preserve">
+		<value>Xác nhận</value>
+		</data>
+	<data name="ReservationDialogCancelButtonText" xml:space="preserve">
+		<value>Hủy</value>
+		</data>
+	<data name="StartSessionDialogTitleText" xml:space="preserve">
+		<value>Nhập số người để bắt đầu</value>
+	</data>
+	<data name="StartSessionDialogMemberToggleText" xml:space="preserve">
+		<value>Khách là thành viên</value>
+	</data>
+	<data name="StartSessionDialogMemberLabelText" xml:space="preserve">
+		<value>Thành viên</value>
+	</data>
+	<data name="StartSessionDialogMemberPlaceholderText" xml:space="preserve">
+		<value>Chọn thành viên...</value>
+	</data>
+	<data name="StartSessionDialogCapacityLabelText" xml:space="preserve">
+		<value>Số người</value>
+	</data>
+	<data name="StartSessionDialogConfirmButtonText" xml:space="preserve">
+		<value>Xác nhận</value>
+	</data>
+	<data name="StartSessionDialogCancelButtonText" xml:space="preserve">
+		<value>Hủy</value>
+	</data>
+	<data name="StartSessionDialogMemberRequiredText" xml:space="preserve">
+		<value>Vui lòng chọn thành viên.</value>
+	</data>
+	<data name="StartSessionDialogCapacityInvalidText" xml:space="preserve">
+		<value>Vui lòng nhập số người hợp lệ.</value>
+	</data>
+	<data name="StartSessionDialogCapacityLimitText" xml:space="preserve">
+		<value>Số người không được vượt quá sức chứa {0}.</value>
+	</data>
+	<data name="GameServiceInfoFormat" xml:space="preserve">
+		<value>Mượn lúc: {0}</value>
+	</data>
+	<data name="PaidButtonText" xml:space="preserve">
+		<value>Thanh toán</value>
+	</data>
+	<data name="ReturnButtonText" xml:space="preserve">
+		<value>Trả</value>
+	</data>
+	<data name="EditButtonText" xml:space="preserve">
+		<value>Sửa</value>
+	</data>
+	<data name="RemoveButtonText" xml:space="preserve">
+		<value>Xóa</value>
+	</data>
+	<data name="ServiceActionPlaceholderText" xml:space="preserve">
+		<value>Thao tác</value>
+	</data>
+	<data name="EndSessionButtonText" xml:space="preserve">
+		<value>Đóng</value>
+	</data>
+	<data name="DetailedRentedCardCapacityFormat" xml:space="preserve">
+		<value>{0}/{1} người</value>
+	</data>
+	<data name="SessionInfoTitleText" xml:space="preserve">
+		<value>Thời gian chơi</value>
+	</data>
+	<data name="SessionStartTimeLabelText" xml:space="preserve">
+		<value>Bắt đầu:</value>
+	</data>
+	<data name="SessionDurationLabelText" xml:space="preserve">
+		<value>Thời gian:</value>
+	</data>
+	<data name="AreaHourlyPriceLabelText" xml:space="preserve">
+		<value>Giá/giờ:</value>
+	</data>
+	<data name="AreaSessionTotalPriceLabelText" xml:space="preserve">
+		<value>Tổng tiền giờ:</value>
+	</data>
+	<data name="GameServicesTitleText" xml:space="preserve">
+		<value>Game đang mượn</value>
+	</data>
+	<data name="AddGameButtonText" xml:space="preserve">
+		<value>Thêm</value>
+	</data>
+	<data name="GameServicesCurrentTotalPriceLabelText" xml:space="preserve">
+		<value>Tổng tiền game:</value>
+	</data>
+	<data name="ProductServicesTitleText" xml:space="preserve">
+		<value>Đồ ăn &amp; nước</value>
+	</data>
+	<data name="AddProductButtonText" xml:space="preserve">
+		<value>Thêm</value>
+	</data>
+	<data name="ProductServicesTotalPriceLabelText" xml:space="preserve">
+		<value>Tổng tiền đồ ăn:</value>
+	</data>
+	<data name="CurrentTotalPriceLabelText" xml:space="preserve">
+		<value>TỔNG CỘNG</value>
+	</data>
+	<data name="SaveButtonText" xml:space="preserve">
+		<value>Lưu</value>
+	</data>
+	<data name="CreateButtonText" xml:space="preserve">
+		<value>Tạo mới</value>
+	</data>
+	<data name="AreaDialogCreateTitleText" xml:space="preserve">
+		<value>Thêm khu vực mới</value>
+	</data>
+	<data name="AreaDialogEditTitleText" xml:space="preserve">
+		<value>Chỉnh sửa khu vực</value>
+	</data>
+	<data name="AreaDialogNameLabelText" xml:space="preserve">
+		<value>Tên</value>
+	</data>
+	<data name="AreaDialogNamePlaceholderText" xml:space="preserve">
+		<value>Tên...</value>
+	</data>
+	<data name="AreaDialogTypeLabelText" xml:space="preserve">
+		<value>Loại</value>
+	</data>
+	<data name="AreaDialogTableTypeText" xml:space="preserve">
+		<value>Bàn</value>
+	</data>
+	<data name="AreaDialogRoomTypeText" xml:space="preserve">
+		<value>Phòng</value>
+	</data>
+	<data name="AreaDialogMaxCapacityLabelText" xml:space="preserve">
+		<value>Số người tối đa</value>
+	</data>
+	<data name="AreaDialogHourlyPriceLabelText" xml:space="preserve">
+		<value>Giá thuê / Giờ</value>
+	</data>
+	<data name="AreaDialogHourlyPricePlaceholderText" xml:space="preserve">
+		<value>Giá thuê / giờ...</value>
+	</data>
+	<data name="AreaDialogResetButtonText" xml:space="preserve">
+		<value>Đặt lại</value>
+	</data>
+	<data name="AreaDialogApplyButtonText" xml:space="preserve">
+		<value>Áp dụng</value>
+	</data>
+	<data name="CancelButtonText" xml:space="preserve">
+		<value>Hủy</value>
+	</data>
+	<data name="ConfirmCloseTitle" xml:space="preserve">
+		<value>Đóng hộp thoại?</value>
+	</data>
+	<data name="ConfirmCloseMessage" xml:space="preserve">
+		<value>Các thay đổi chưa lưu sẽ bị mất. Bạn có chắc muốn đóng hộp thoại này?</value>
+	</data>
+	<data name="ConfirmCloseButton" xml:space="preserve">
+		<value>Đóng</value>
+	</data>
+	<data name="ConfirmEditTitle" xml:space="preserve">
+		<value>Lưu thay đổi?</value>
+	</data>
+	<data name="ConfirmEditMessage" xml:space="preserve">
+		<value>Bạn có chắc muốn lưu thay đổi cho khu vực này?</value>
+	</data>
+	<data name="ConfirmEditButton" xml:space="preserve">
+		<value>Lưu</value>
+	</data>
+	<data name="ConfirmAddTitle" xml:space="preserve">
+		<value>Thêm khu vực?</value>
+	</data>
+	<data name="ConfirmAddMessage" xml:space="preserve">
+		<value>Bạn có chắc muốn thêm khu vực này?</value>
+	</data>
+	<data name="ConfirmAddButton" xml:space="preserve">
+		<value>Thêm</value>
+	</data>
+	<data name="ConfirmExitTitle" xml:space="preserve">
+		<value>Thoát ứng dụng?</value>
+	</data>
+	<data name="ConfirmExitMessage" xml:space="preserve">
+		<value>Bạn có chắc muốn thoát PlayPoint POS?</value>
+	</data>
+	<data name="ConfirmExitButton" xml:space="preserve">
+		<value>Thoát</value>
+	</data>
+	<data name="ConfirmLogoutTitle" xml:space="preserve">
+		<value>Đăng xuất?</value>
+	</data>
+	<data name="ConfirmLogoutMessage" xml:space="preserve">
+		<value>Bạn có chắc muốn đăng xuất khỏi tài khoản hiện tại?</value>
+	</data>
+	<data name="ConfirmLogoutButton" xml:space="preserve">
+		<value>Đăng xuất</value>
+	</data>
+	<data name="ConfirmChangePasswordTitle" xml:space="preserve">
+		<value>Đổi mật khẩu?</value>
+	</data>
+	<data name="ConfirmChangePasswordMessage" xml:space="preserve">
+		<value>Bạn có muốn xác nhận đổi mật khẩu?</value>
+	</data>
+	<data name="ConfirmChangePasswordButton" xml:space="preserve">
+		<value>Tiếp tục</value>
+	</data>
+	<data name="ConfirmCheckInTitle" xml:space="preserve">
+		<value>Xác nhận check-in?</value>
+	</data>
+	<data name="ConfirmCheckInMessage" xml:space="preserve">
+		<value>Bạn có chắc muốn check-in đặt chỗ này ngay bây giờ?</value>
+	</data>
+	<data name="ConfirmCheckInButton" xml:space="preserve">
+		<value>Check-in</value>
+	</data>
+	<data name="ConfirmCancelReservationTitle" xml:space="preserve">
+		<value>Hủy đặt chỗ?</value>
+	</data>
+	<data name="ConfirmCancelReservationMessage" xml:space="preserve">
+		<value>Đặt chỗ này sẽ bị hủy và khu vực sẽ trở về trạng thái còn trống. Tiếp tục?</value>
+	</data>
+	<data name="ConfirmCancelReservationButton" xml:space="preserve">
+		<value>Hủy đặt chỗ</value>
+	</data>
+	<data name="PaymentDialogTitleText" xml:space="preserve">
+		<value>Thanh toán</value>
+	</data>
+	<data name="PaymentDialogDurationLabelText" xml:space="preserve">
+		<value>Thời gian chơi:</value>
+	</data>
+	<data name="PaymentDialogAreaFeeLabelText" xml:space="preserve">
+		<value>Tiền giờ:</value>
+	</data>
+	<data name="PaymentDialogProductFeeLabelText" xml:space="preserve">
+		<value>Tiền đồ ăn/uống:</value>
+	</data>
+	<data name="PaymentDialogGameFeeLabelText" xml:space="preserve">
+		<value>Tiền game:</value>
+	</data>
+	<data name="PaymentDialogDepositLabelText" xml:space="preserve">
+		<value>Tiền cọc:</value>
+	</data>
+	<data name="PaymentDialogDiscountLabelText" xml:space="preserve">
+		<value>Giảm giá:</value>
+	</data>
+	<data name="PaymentDialogTotalLabelText" xml:space="preserve">
+		<value>TỔNG CỘNG:</value>
+	</data>
+	<data name="PaymentDialogConfirmButtonText" xml:space="preserve">
+		<value>Xác nhận</value>
+	</data>
+	<data name="ConfirmPaymentTitle" xml:space="preserve">
+		<value>Xác nhận thanh toán?</value>
+	</data>
+	<data name="ConfirmPaymentMessage" xml:space="preserve">
+		<value>Sau khi thanh toán, khu vực sẽ trở về trạng thái khả dụng. Tiếp tục?</value>
+	</data>
+	<data name="ConfirmPaymentButton" xml:space="preserve">
+		<value>Thanh toán</value>
+	</data>
 </root>
+
+

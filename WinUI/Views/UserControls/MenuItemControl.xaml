@@ -8,29 +8,17 @@
     mc:Ignorable="d"
     >
 
+    <UserControl.Resources>
+        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/MenuItemButtonStateResources.xaml" />
+    </UserControl.Resources>
+
     <Button x:Name="RootButton"
-            Width="230" Height="60"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            Background="{StaticResource OrangePeachLightBrush}"
-            Foreground="{StaticResource PrimaryOrangeBrush}"
-            BorderBrush="{StaticResource OrangeLightVariantBrush}"
-            BorderThickness="1"
-            CornerRadius="12"
-            Margin="0,8"
+            Style="{StaticResource MenuItemButtonStyle}"
             IsEnabled="{x:Bind IsEnabled, Mode=OneWay}"
             Command="{x:Bind Command, Mode=OneWay}"
             CommandParameter="{x:Bind CommandParameter, Mode=OneWay}"
             PointerEntered="RootButton_PointerEntered"
             PointerExited="RootButton_PointerExited">
-
-        <Button.Resources>
-            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeBrush" />
-            <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="OrangePeachLightBrush" />
-            <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="OrangeLightVariantBrush" />
-            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkBrush" />
-            <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="OrangePeachLightBrush" />
-        </Button.Resources>
 
         <StackPanel Orientation="Horizontal"
                     Spacing="16"

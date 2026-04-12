@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WinUI.UIModels;
@@ -18,34 +20,7 @@ public partial class QuickStatsControlViewModel : LocalizedViewModelBase
     public partial string Title { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string AverageHoursPerAreaLabel { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    public partial string AverageRevenuePerInvoiceLabel { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    public partial string ReturnRateLabel { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    public partial string AreaUsageRateLabel { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    public partial string NewMembersPerMonthLabel { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    public partial string AverageHoursPerAreaValue { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    public partial string AverageRevenuePerInvoiceValue { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    public partial string ReturnRateValue { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    public partial string AreaUsageRateValue { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    public partial string NewMembersPerMonthValue { get; set; } = string.Empty;
+    public partial IReadOnlyList<LabelValueRowModel> MetricRows { get; set; } = Array.Empty<LabelValueRowModel>();
 
     [ObservableProperty]
     public partial IconState IconState { get; set; } = new()
@@ -64,32 +39,46 @@ public partial class QuickStatsControlViewModel : LocalizedViewModelBase
     protected override void RefreshLocalizedText()
     {
         Title = LocalizationService.GetString("QuickStatsTitle");
-        AverageHoursPerAreaLabel = LocalizationService.GetString("QuickStatsAverageHoursPerAreaLabel");
-        AverageRevenuePerInvoiceLabel = LocalizationService.GetString("QuickStatsAverageRevenuePerInvoiceLabel");
-        ReturnRateLabel = LocalizationService.GetString("QuickStatsReturnRateLabel");
-        AreaUsageRateLabel = LocalizationService.GetString("QuickStatsAreaUsageRateLabel");
-        NewMembersPerMonthLabel = LocalizationService.GetString("QuickStatsNewMembersPerMonthLabel");
-
-        AverageHoursPerAreaValue = string.Format(
+        string averageHoursPerAreaValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardHourValueFormat"),
             AverageHoursPerAreaMetric);
 
-        AverageRevenuePerInvoiceValue = LocalizationService.FormatCurrency(AverageRevenuePerInvoiceMetric);
+        string averageRevenuePerInvoiceValue = LocalizationService.FormatCurrency(AverageRevenuePerInvoiceMetric);
 
-        ReturnRateValue = string.Format(
+        string returnRateValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardPercentValueFormat"),
             ReturnRateMetric);
 
-        AreaUsageRateValue = string.Format(
+        string areaUsageRateValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardPercentValueFormat"),
             AreaUsageRateMetric);
 
-        NewMembersPerMonthValue = string.Format(
+        string newMembersPerMonthValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardSignedNumberValueFormat"),
             NewMembersPerMonthMetric);
+
+        MetricRows =
+        [
+            new LabelValueRowModel(
+                LocalizationService.GetString("QuickStatsAverageHoursPerAreaLabel"),
+                averageHoursPerAreaValue),
+            new LabelValueRowModel(
+                LocalizationService.GetString("QuickStatsAverageRevenuePerInvoiceLabel"),
+                averageRevenuePerInvoiceValue),
+            new LabelValueRowModel(
+                LocalizationService.GetString("QuickStatsReturnRateLabel"),
+                returnRateValue),
+            new LabelValueRowModel(
+                LocalizationService.GetString("QuickStatsAreaUsageRateLabel"),
+                areaUsageRateValue),
+            new LabelValueRowModel(
+                LocalizationService.GetString("QuickStatsNewMembersPerMonthLabel"),
+                newMembersPerMonthValue,
+                showDivider: false),
+        ];
     }
 }

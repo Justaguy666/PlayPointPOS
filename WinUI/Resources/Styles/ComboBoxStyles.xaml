@@ -53,7 +53,7 @@
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot"
                                                                        Storyboard.TargetProperty="Background">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource AntiqueWhiteBrush}" />
+                                                                    Value="{StaticResource VeryLightGrayBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot"
                                                                        Storyboard.TargetProperty="BorderBrush">
@@ -317,27 +317,27 @@
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Background"
                                                                        Storyboard.TargetProperty="Background">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource PrimaryOrangeDarkBrush}" />
+                                                                    Value="{StaticResource VeryLightGrayBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Background"
                                                                        Storyboard.TargetProperty="BorderBrush">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource PrimaryOrangeDarkBrush}" />
+                                                                    Value="{StaticResource LightGrayBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
                                                                        Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource WhiteBrush}" />
+                                                                    Value="{StaticResource BlackBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlaceholderTextBlock"
                                                                        Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource WhiteBrush}" />
+                                                                    Value="{StaticResource BlackBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DropDownGlyph"
                                                                        Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource WhiteBrush}" />
+                                                                    Value="{StaticResource BlackBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -628,7 +628,7 @@
                                     HorizontalAlignment="Stretch">
                                 <Border.Resources>
                                     <StaticResource x:Key="ComboBoxItemBackground" ResourceKey="WhiteBrush" />
-                                    <StaticResource x:Key="ComboBoxItemBackgroundPointerOver" ResourceKey="AntiqueWhiteBrush" />
+                                    <StaticResource x:Key="ComboBoxItemBackgroundPointerOver" ResourceKey="VeryLightGrayBrush" />
                                     <StaticResource x:Key="ComboBoxItemBackgroundSelected" ResourceKey="OrangePeachLightBrush" />
                                     <StaticResource x:Key="ComboBoxItemBackgroundSelectedUnfocused" ResourceKey="OrangePeachLightBrush" />
                                     <StaticResource x:Key="ComboBoxItemBackgroundSelectedPressed" ResourceKey="OrangePeachLightBrush" />

@@ -14,7 +14,7 @@ public partial class ShopInformationCardControlViewModel : LocalizedViewModelBas
     private const string DefaultShopName = "PlayPoint Board Game Cafe";
     private const string DefaultAddress = "123 Nguyen Hue, District 1, Ho Chi Minh City";
     private const string DefaultEmail = "hello@playpoint.vn";
-    private const string DefaultPhone = "+84 28 1234 5678";
+    private const string DefaultPhone = "0789 608 537";
 
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;

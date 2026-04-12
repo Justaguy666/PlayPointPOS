@@ -36,10 +36,14 @@
     <color:Color x:Key="ErrorRed">#DC2626</color:Color>
     <color:Color x:Key="ErrorRedLight">#FEE2E2</color:Color>
     <color:Color x:Key="SuccessGreen">#10B981</color:Color>
+    <color:Color x:Key="SuccessGreenDark">#0E9F6E</color:Color>
+    <color:Color x:Key="SuccessGreenDarker">#0B8A60</color:Color>
     <color:Color x:Key="SuccessGreenLight">#D1FAE5</color:Color>
     <color:Color x:Key="WarningAmber">#F59E0B</color:Color>
     <color:Color x:Key="WarningAmberLight">#FEF3C7</color:Color>
     <color:Color x:Key="InfoBlue">#3B82F6</color:Color>
+    <color:Color x:Key="InfoBlueDark">#2563EB</color:Color>
+    <color:Color x:Key="InfoBlueDarker">#1D4ED8</color:Color>
     <color:Color x:Key="InfoBlueLight">#DBEAFE</color:Color>
     <color:Color x:Key="DashboardMutedText">#718096</color:Color>
     <color:Color x:Key="DashboardTrendPositive">#48BB78</color:Color>
@@ -63,8 +67,8 @@
     <color:Color x:Key="SummarizedAreaPressedBackground">#FFC4A3</color:Color>
     <color:Color x:Key="SummarizedReservedAreaStatus">#4299E1</color:Color>
     <color:Color x:Key="SummarizedRentedAreaStatus">#48BB78</color:Color>
-    <color:Color x:Key="SettingsLogoutButtonBackground">#F87171</color:Color>
-    <color:Color x:Key="SettingsLogoutButtonBackgroundHover">#DC2626</color:Color>
+    <color:Color x:Key="DangerButtonBackground">#F87171</color:Color>
+    <color:Color x:Key="DangerButtonBackgroundHover">#DC2626</color:Color>
 
     <!-- Gradient Stop Colors -->
     <color:Color x:Key="GradientStop1">#FF6B35</color:Color>
@@ -116,10 +120,14 @@
     <SolidColorBrush x:Key="ErrorRedBrush" Color="{StaticResource ErrorRed}" />
     <SolidColorBrush x:Key="ErrorRedLightBrush" Color="{StaticResource ErrorRedLight}" />
     <SolidColorBrush x:Key="SuccessGreenBrush" Color="{StaticResource SuccessGreen}" />
+    <SolidColorBrush x:Key="SuccessGreenDarkBrush" Color="{StaticResource SuccessGreenDark}" />
+    <SolidColorBrush x:Key="SuccessGreenDarkerBrush" Color="{StaticResource SuccessGreenDarker}" />
     <SolidColorBrush x:Key="SuccessGreenLightBrush" Color="{StaticResource SuccessGreenLight}" />
     <SolidColorBrush x:Key="WarningAmberBrush" Color="{StaticResource WarningAmber}" />
     <SolidColorBrush x:Key="WarningAmberLightBrush" Color="{StaticResource WarningAmberLight}" />
     <SolidColorBrush x:Key="InfoBlueBrush" Color="{StaticResource InfoBlue}" />
+    <SolidColorBrush x:Key="InfoBlueDarkBrush" Color="{StaticResource InfoBlueDark}" />
+    <SolidColorBrush x:Key="InfoBlueDarkerBrush" Color="{StaticResource InfoBlueDarker}" />
     <SolidColorBrush x:Key="InfoBlueLightBrush" Color="{StaticResource InfoBlueLight}" />
     <SolidColorBrush x:Key="DashboardMutedTextBrush" Color="{StaticResource DashboardMutedText}" />
     <SolidColorBrush x:Key="DashboardTrendPositiveBrush" Color="{StaticResource DashboardTrendPositive}" />
@@ -145,8 +153,8 @@
     <SolidColorBrush x:Key="SummarizedReservedAreaStatusBrush" Color="{StaticResource SummarizedReservedAreaStatus}" />
     <SolidColorBrush x:Key="SummarizedRentedAreaStatusBrush" Color="{StaticResource SummarizedRentedAreaStatus}" />
     <SolidColorBrush x:Key="DashboardChartCalloutBackgroundBrush" Color="{StaticResource DashboardChartCalloutBackground}" />
-    <SolidColorBrush x:Key="SettingsLogoutButtonBackgroundBrush" Color="{StaticResource SettingsLogoutButtonBackground}" />
-    <SolidColorBrush x:Key="SettingsLogoutButtonBackgroundHoverBrush" Color="{StaticResource SettingsLogoutButtonBackgroundHover}" />
+    <SolidColorBrush x:Key="DangerButtonBackgroundBrush" Color="{StaticResource DangerButtonBackground}" />
+    <SolidColorBrush x:Key="DangerButtonBackgroundHoverBrush" Color="{StaticResource DangerButtonBackgroundHover}" />
 
     <!-- Gradient Brushes -->
     <LinearGradientBrush x:Key="PrimaryGradientBrush" StartPoint="0,0.5" EndPoint="1,0.5">

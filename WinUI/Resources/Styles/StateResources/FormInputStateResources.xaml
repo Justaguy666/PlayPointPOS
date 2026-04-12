@@ -1,0 +1,18 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Visibility x:Key="PasswordRevealButtonVisibility">Collapsed</Visibility>
+    <Visibility x:Key="PasswordRevealButtonCollapsedVisibility">Collapsed</Visibility>
+    <StaticResource x:Key="TextControlBackground" ResourceKey="WhiteBrush" />
+    <StaticResource x:Key="TextControlBackgroundPointerOver" ResourceKey="WhiteBrush" />
+    <StaticResource x:Key="TextControlBackgroundFocused" ResourceKey="WhiteBrush" />
+    <StaticResource x:Key="TextControlForeground" ResourceKey="BlackBrush" />
+    <StaticResource x:Key="TextControlForegroundPointerOver" ResourceKey="BlackBrush" />
+    <StaticResource x:Key="TextControlForegroundFocused" ResourceKey="BlackBrush" />
+    <StaticResource x:Key="TextControlBorderBrushFocused" ResourceKey="OrangeFocusBrush" />
+    <StaticResource x:Key="TextControlBorderBrushPointerOver" ResourceKey="MediumGrayBrush" />
+    <StaticResource x:Key="TextControlPlaceholderForeground" ResourceKey="PlaceholderGrayBrush" />
+    <StaticResource x:Key="TextControlPlaceholderForegroundPointerOver" ResourceKey="PlaceholderGrayBrush" />
+    <StaticResource x:Key="TextControlPlaceholderForegroundFocused" ResourceKey="PlaceholderGrayBrush" />
+</ResourceDictionary>

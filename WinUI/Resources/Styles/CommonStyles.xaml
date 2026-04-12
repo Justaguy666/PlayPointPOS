@@ -3,9 +3,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ms-appx:///Resources/Styles/AreaManagementStyles.xaml" />
         <ResourceDictionary Source="ms-appx:///Resources/Styles/ButtonStyles.xaml" />
+        <ResourceDictionary Source="ms-appx:///Resources/Styles/CardStyles.xaml" />
         <ResourceDictionary Source="ms-appx:///Resources/Styles/CheckBoxStyles.xaml" />
         <ResourceDictionary Source="ms-appx:///Resources/Styles/ComboBoxStyles.xaml" />
+        <ResourceDictionary Source="ms-appx:///Resources/Styles/DialogStyles.xaml" />
+        <ResourceDictionary Source="ms-appx:///Resources/Styles/DialogDateTimePickerResources.xaml" />
+        <ResourceDictionary Source="ms-appx:///Resources/Styles/FlyoutStyles.xaml" />
         <ResourceDictionary Source="ms-appx:///Resources/Styles/GridViewStyles.xaml" />
         <ResourceDictionary Source="ms-appx:///Resources/Styles/TextInputStyles.xaml" />
     </ResourceDictionary.MergedDictionaries>

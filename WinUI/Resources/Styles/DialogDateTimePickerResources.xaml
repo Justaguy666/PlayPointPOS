@@ -1,0 +1,169 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:color="using:Windows.UI">
+
+    <Thickness x:Key="DatePickerBorderThemeThickness">1</Thickness>
+    <Thickness x:Key="TimePickerBorderThemeThickness">1</Thickness>
+    <Thickness x:Key="DatePickerHostPadding">0,10,0,10</Thickness>
+    <Thickness x:Key="DatePickerHostMonthPadding">8,10,0,10</Thickness>
+    <Thickness x:Key="TimePickerHostPadding">0,10,0,10</Thickness>
+
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="SystemControlForegroundBaseMediumBrush" Color="#99000000" />
+            <SolidColorBrush x:Key="SystemControlForegroundBaseMediumHighBrush" Color="#CC000000" />
+
+            <SolidColorBrush x:Key="DatePickerButtonBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="DatePickerButtonBackgroundPointerOver" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="DatePickerButtonBackgroundPressed" Color="#FAFAFA" />
+            <SolidColorBrush x:Key="DatePickerButtonBackgroundDisabled" Color="#F3F4F6" />
+            <SolidColorBrush x:Key="DatePickerButtonBackgroundFocused" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="DatePickerButtonBorderBrush" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="DatePickerButtonBorderBrushPointerOver" Color="#B3B3B3" />
+            <SolidColorBrush x:Key="DatePickerButtonBorderBrushPressed" Color="#FF7A30" />
+            <SolidColorBrush x:Key="DatePickerButtonBorderBrushDisabled" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="DatePickerButtonForeground" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DatePickerButtonForegroundPointerOver" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DatePickerButtonForegroundPressed" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DatePickerButtonForegroundDisabled" Color="#9CA3AF" />
+            <SolidColorBrush x:Key="DatePickerButtonForegroundFocused" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DatePickerButtonForegroundDefault" Color="#888888" />
+            <SolidColorBrush x:Key="DatePickerSpacerFill" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="DatePickerSpacerFillDisabled" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="DatePickerFlyoutPresenterBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="DatePickerFlyoutPresenterBorderBrush" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="DatePickerFlyoutPresenterHighlightFill" Color="#FF7A30" />
+            <SolidColorBrush x:Key="DatePickerFlyoutPresenterSpacerFill" Color="#E5E7EB" />
+            <color:Color x:Key="DatePickerFlyoutPresenterHighlightForegroundColor">#FFFFFFFF</color:Color>
+
+            <SolidColorBrush x:Key="TimePickerButtonBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="TimePickerButtonBackgroundPointerOver" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="TimePickerButtonBackgroundPressed" Color="#FAFAFA" />
+            <SolidColorBrush x:Key="TimePickerButtonBackgroundDisabled" Color="#F3F4F6" />
+            <SolidColorBrush x:Key="TimePickerButtonBackgroundFocused" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="TimePickerButtonBorderBrush" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="TimePickerButtonBorderBrushPointerOver" Color="#B3B3B3" />
+            <SolidColorBrush x:Key="TimePickerButtonBorderBrushPressed" Color="#FF7A30" />
+            <SolidColorBrush x:Key="TimePickerButtonBorderBrushDisabled" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="TimePickerButtonForeground" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="TimePickerButtonForegroundPointerOver" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="TimePickerButtonForegroundPressed" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="TimePickerButtonForegroundDisabled" Color="#9CA3AF" />
+            <SolidColorBrush x:Key="TimePickerButtonForegroundFocused" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="TimePickerButtonForegroundDefault" Color="#888888" />
+            <SolidColorBrush x:Key="TimePickerSpacerFill" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="TimePickerSpacerFillDisabled" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="TimePickerFlyoutPresenterBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="TimePickerFlyoutPresenterBorderBrush" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="TimePickerFlyoutPresenterHighlightFill" Color="#FF7A30" />
+            <SolidColorBrush x:Key="TimePickerFlyoutPresenterSpacerFill" Color="#E5E7EB" />
+            <color:Color x:Key="TimePickerFlyoutPresenterHighlightForegroundColor">#FFFFFFFF</color:Color>
+            <SolidColorBrush x:Key="TimePickerFlyoutPresenterForeground" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DatePickerFlyoutPresenterForeground" Color="#1F1F1F" />
+
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBackgroundPointerOver" Color="#F3F4F6" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBackgroundPressed" Color="#FAFAFA" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBorderBrush" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBorderBrushPointerOver" Color="#B3B3B3" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBorderBrushPressed" Color="#FF7A30" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonForeground" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonForegroundPointerOver" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonForegroundPressed" Color="#1F1F1F" />
+
+            <SolidColorBrush x:Key="LoopingSelectorButtonBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="LoopingSelectorItemForeground" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="LoopingSelectorItemForegroundSelected" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="LoopingSelectorItemForegroundPointerOver" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="LoopingSelectorItemForegroundPressed" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="LoopingSelectorItemBackgroundPointerOver" Color="#FAFAFA" />
+            <SolidColorBrush x:Key="LoopingSelectorItemBackgroundPressed" Color="#F3F4F6" />
+            <SolidColorBrush x:Key="LoopingSelectorUpDownButtonForeground" Color="#9CA3AF" />
+            <SolidColorBrush x:Key="LoopingSelectorUpDownButtonForegroundPointerOver" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="LoopingSelectorUpDownButtonForegroundPressed" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="LoopingSelectorUpDownButtonBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="LoopingSelectorUpDownButtonBackgroundPointerOver" Color="#FAFAFA" />
+            <SolidColorBrush x:Key="LoopingSelectorUpDownButtonBackgroundPressed" Color="#F3F4F6" />
+        </ResourceDictionary>
+
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="SystemControlForegroundBaseMediumBrush" Color="#99000000" />
+            <SolidColorBrush x:Key="SystemControlForegroundBaseMediumHighBrush" Color="#CC000000" />
+
+            <SolidColorBrush x:Key="DatePickerButtonBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="DatePickerButtonBackgroundPointerOver" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="DatePickerButtonBackgroundPressed" Color="#FAFAFA" />
+            <SolidColorBrush x:Key="DatePickerButtonBackgroundDisabled" Color="#F3F4F6" />
+            <SolidColorBrush x:Key="DatePickerButtonBackgroundFocused" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="DatePickerButtonBorderBrush" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="DatePickerButtonBorderBrushPointerOver" Color="#B3B3B3" />
+            <SolidColorBrush x:Key="DatePickerButtonBorderBrushPressed" Color="#FF7A30" />
+            <SolidColorBrush x:Key="DatePickerButtonBorderBrushDisabled" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="DatePickerButtonForeground" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DatePickerButtonForegroundPointerOver" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DatePickerButtonForegroundPressed" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DatePickerButtonForegroundDisabled" Color="#9CA3AF" />
+            <SolidColorBrush x:Key="DatePickerButtonForegroundFocused" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DatePickerButtonForegroundDefault" Color="#888888" />
+            <SolidColorBrush x:Key="DatePickerSpacerFill" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="DatePickerSpacerFillDisabled" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="DatePickerFlyoutPresenterBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="DatePickerFlyoutPresenterBorderBrush" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="DatePickerFlyoutPresenterHighlightFill" Color="#FF7A30" />
+            <SolidColorBrush x:Key="DatePickerFlyoutPresenterSpacerFill" Color="#E5E7EB" />
+            <color:Color x:Key="DatePickerFlyoutPresenterHighlightForegroundColor">#FFFFFFFF</color:Color>
+
+            <SolidColorBrush x:Key="TimePickerButtonBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="TimePickerButtonBackgroundPointerOver" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="TimePickerButtonBackgroundPressed" Color="#FAFAFA" />
+            <SolidColorBrush x:Key="TimePickerButtonBackgroundDisabled" Color="#F3F4F6" />
+            <SolidColorBrush x:Key="TimePickerButtonBackgroundFocused" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="TimePickerButtonBorderBrush" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="TimePickerButtonBorderBrushPointerOver" Color="#B3B3B3" />
+            <SolidColorBrush x:Key="TimePickerButtonBorderBrushPressed" Color="#FF7A30" />
+            <SolidColorBrush x:Key="TimePickerButtonBorderBrushDisabled" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="TimePickerButtonForeground" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="TimePickerButtonForegroundPointerOver" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="TimePickerButtonForegroundPressed" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="TimePickerButtonForegroundDisabled" Color="#9CA3AF" />
+            <SolidColorBrush x:Key="TimePickerButtonForegroundFocused" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="TimePickerButtonForegroundDefault" Color="#888888" />
+            <SolidColorBrush x:Key="TimePickerSpacerFill" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="TimePickerSpacerFillDisabled" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="TimePickerFlyoutPresenterBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="TimePickerFlyoutPresenterBorderBrush" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="TimePickerFlyoutPresenterHighlightFill" Color="#FF7A30" />
+            <SolidColorBrush x:Key="TimePickerFlyoutPresenterSpacerFill" Color="#E5E7EB" />
+            <color:Color x:Key="TimePickerFlyoutPresenterHighlightForegroundColor">#FFFFFFFF</color:Color>
+            <SolidColorBrush x:Key="TimePickerFlyoutPresenterForeground" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DatePickerFlyoutPresenterForeground" Color="#1F1F1F" />
+
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBackgroundPointerOver" Color="#F3F4F6" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBackgroundPressed" Color="#FAFAFA" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBorderBrush" Color="#E5E7EB" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBorderBrushPointerOver" Color="#B3B3B3" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBorderBrushPressed" Color="#FF7A30" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonForeground" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonForegroundPointerOver" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="DateTimePickerFlyoutButtonForegroundPressed" Color="#1F1F1F" />
+
+            <SolidColorBrush x:Key="LoopingSelectorButtonBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="LoopingSelectorItemForeground" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="LoopingSelectorItemForegroundSelected" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="LoopingSelectorItemForegroundPointerOver" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="LoopingSelectorItemForegroundPressed" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="LoopingSelectorItemBackgroundPointerOver" Color="#FAFAFA" />
+            <SolidColorBrush x:Key="LoopingSelectorItemBackgroundPressed" Color="#F3F4F6" />
+            <SolidColorBrush x:Key="LoopingSelectorUpDownButtonForeground" Color="#9CA3AF" />
+            <SolidColorBrush x:Key="LoopingSelectorUpDownButtonForegroundPointerOver" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="LoopingSelectorUpDownButtonForegroundPressed" Color="#1F1F1F" />
+            <SolidColorBrush x:Key="LoopingSelectorUpDownButtonBackground" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="LoopingSelectorUpDownButtonBackgroundPointerOver" Color="#FAFAFA" />
+            <SolidColorBrush x:Key="LoopingSelectorUpDownButtonBackgroundPressed" Color="#F3F4F6" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+</ResourceDictionary>

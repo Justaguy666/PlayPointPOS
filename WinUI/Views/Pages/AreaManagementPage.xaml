@@ -12,8 +12,17 @@
     xmlns:detailedViewModels="using:WinUI.ViewModels.AreaManagement.DetailedAreaCards"
     xmlns:selectors="using:WinUI.Selectors"
     xmlns:vm="using:WinUI.ViewModels.Pages"
+    KeyboardAcceleratorPlacementMode="Hidden"
     d:DataContext="{d:DesignInstance Type=vm:AreaManagementPageViewModel, IsDesignTimeCreatable=False}"
     mc:Ignorable="d">
+
+    <Page.KeyboardAccelerators>
+        <KeyboardAccelerator Key="E"
+                             Modifiers="Control"
+                             Invoked="HandleEditAreaKeyboardAcceleratorInvoked" />
+        <KeyboardAccelerator Key="Delete"
+                             Invoked="HandleDeleteAreaKeyboardAcceleratorInvoked" />
+    </Page.KeyboardAccelerators>
 
     <Page.Resources>
         <ResourceDictionary>
@@ -23,32 +32,42 @@
 
             <DataTemplate x:Key="SummarizedAvailableCardTemplate"
                           x:DataType="summarizedViewModels:SummarizedAvailableCardViewModel">
-                <summarizedViews:SummarizedAvailableCard Margin="4" />
+                <summarizedViews:SummarizedAvailableCard
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch" />
             </DataTemplate>
 
             <DataTemplate x:Key="SummarizedReservedCardTemplate"
                           x:DataType="summarizedViewModels:SummarizedReservedCardViewModel">
-                <summarizedViews:SummarizedReservedCard Margin="4" />
+                <summarizedViews:SummarizedReservedCard
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch" />
             </DataTemplate>
 
             <DataTemplate x:Key="SummarizedRentedCardTemplate"
                           x:DataType="summarizedViewModels:SummarizedRentedCardViewModel">
-                <summarizedViews:SummarizedRentedCard Margin="4" />
+                <summarizedViews:SummarizedRentedCard
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch" />
             </DataTemplate>
 
             <DataTemplate x:Key="DetailedAvailableCardTemplate"
                           x:DataType="detailedViewModels:DetailedAvailableCardViewModel">
-                <detailedViews:DetailedAvailableCard Margin="4" />
+                <detailedViews:DetailedAvailableCard
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch" />
             </DataTemplate>
 
             <DataTemplate x:Key="DetailedReservedCardTemplate"
                           x:DataType="detailedViewModels:DetailedReservedCardViewModel">
-                <detailedViews:DetailedReservedCard Margin="4" />
+                <detailedViews:DetailedReservedCard
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch" />
             </DataTemplate>
 
             <DataTemplate x:Key="DetailedRentedCardTemplate"
                             x:DataType="detailedViewModels:DetailedRentedCardViewModel">
-                <detailedViews:DetailedRentedCard Margin="4" />
+                <detailedViews:DetailedRentedCard />
             </DataTemplate>
 
             <selectors:SummarizedAreaCardTemplateSelector x:Key="SummarizedAreaCardTemplateSelector"
@@ -64,6 +83,51 @@
     </Page.Resources>
 
     <Grid Background="{StaticResource WhiteBrush}">
+        <FlyoutBase.AttachedFlyout>
+            <Flyout x:Name="AreaCardActionsFlyout"
+                    FlyoutPresenterStyle="{StaticResource AppContextActionFlyoutPresenterStyle}">
+                <StackPanel Spacing="2">
+                    <StackPanel.Resources>
+                        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/AppContextActionButtonStateResources.xaml" />
+                    </StackPanel.Resources>
+
+                    <Button Style="{StaticResource AppContextActionButtonStyle}"
+                            Click="HandleEditAreaContextButtonClick">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="{x:Bind ViewModel.EditAreaMenuText, Mode=OneWay}"
+                                       Style="{StaticResource AppContextActionLabelTextStyle}" />
+
+                            <TextBlock Grid.Column="1"
+                                       Text="Ctrl + E"
+                                       Style="{StaticResource AppContextActionShortcutTextStyle}" />
+                        </Grid>
+                    </Button>
+
+                    <Button Style="{StaticResource AppContextActionButtonStyle}"
+                            Click="HandleDeleteAreaContextButtonClick">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="{x:Bind ViewModel.DeleteAreaMenuText, Mode=OneWay}"
+                                       Style="{StaticResource AppContextActionLabelTextStyle}" />
+
+                            <TextBlock Grid.Column="1"
+                                       Text="Del"
+                                       Style="{StaticResource AppContextActionShortcutTextStyle}" />
+                        </Grid>
+                    </Button>
+                </StackPanel>
+            </Flyout>
+        </FlyoutBase.AttachedFlyout>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4.3*" />
             <ColumnDefinition Width="5.7*" />
@@ -73,7 +137,7 @@
                 Background="{StaticResource WhiteBrush}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="150" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -85,6 +149,10 @@
                         Padding="20">
                     <StackPanel Orientation="Vertical"
                                 Spacing="12">
+                        <StackPanel.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
+                        </StackPanel.Resources>
+
                         <Grid VerticalAlignment="Center">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -101,22 +169,9 @@
 
                             <Button
                                 Grid.Column="1"
-                                CornerRadius="7"
-                                Padding="18,10"
-                                FontSize="{StaticResource FontSizeMedium}"
-                                FontWeight="SemiBold"
-                                Foreground="{StaticResource WhiteBrush}"
-                                Background="{StaticResource OrangeFocusBrush}"
-                                Command="{Binding AddAreaCommand}" 
+                                Style="{StaticResource PrimaryActionButtonStyle}"
+                                Command="{Binding AddAreaCommand}"
                                 HorizontalAlignment="Right">
-                                <Button.Resources>
-                                    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
-                                    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush"/>
-                                    <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
-                                    <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
-                                    <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="LighterGrayBrush"/>
-                                    <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="MediumDarkGrayBrush"/>
-                                </Button.Resources>
                                 <StackPanel Orientation="Horizontal"
                                         Spacing="8">
                                     <PathIcon Data="{Binding AddIconState, Converter={StaticResource IconConverter}, Mode=OneWay}" />
@@ -125,96 +180,125 @@
                             </Button>
                         </Grid>
 
+                        <!-- Filter by Area Type -->
                         <Grid VerticalAlignment="Center">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="0"
-                                        Orientation="Horizontal"
-                                        VerticalAlignment="Center"
-                                        Spacing="4">
-                                <Button CornerRadius="7"
-                                        Padding="12,10"
-                                        FontSize="{StaticResource FontSizeMedium}"
-                                        FontWeight="SemiBold"
-                                        Foreground="{StaticResource BlackBrush}"
-                                        Background="{StaticResource TransparentBrush}"
-                                        BorderThickness="1"
-                                        BorderBrush="{StaticResource LightGrayBrush}"
-                                        Command="{Binding AllAreasCommand}">
-                                    <Button.Resources>
-                                        <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
-                                        <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush"/>
-                                        <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
-                                        <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
-                                    </Button.Resources>
-                                    <TextBlock Text="{Binding AllAreasFilterText}" />
-                                </Button>
+                            <Border Grid.Column="0"
+                                    Background="{StaticResource WhiteBrush}"
+                                    BorderBrush="{StaticResource LightGrayBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="10"
+                                    Padding="4">
+                                <Grid ColumnSpacing="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
 
-                                <Button CornerRadius="7"
-                                        Padding="12,10"
-                                        FontSize="{StaticResource FontSizeMedium}"
-                                        FontWeight="SemiBold"
-                                        Foreground="{StaticResource BlackBrush}"
-                                        Background="{StaticResource TransparentBrush}"
-                                        BorderThickness="1"
-                                        BorderBrush="{StaticResource LightGrayBrush}"
-                                        Command="{Binding TableFilterCommand}">
-                                    <Button.Resources>
-                                        <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
-                                        <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush"/>
-                                        <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
-                                        <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
-                                    </Button.Resources>
-                                    <StackPanel Orientation="Horizontal"
-                                        Spacing="8">
-                                        <PathIcon Data="{Binding TableFilterIconState, Converter={StaticResource IconConverter}, Mode=OneWay}" />
-                                        <TextBlock Text="{Binding TableFilterText}" />
-                                    </StackPanel>
-                                </Button>
+                                    <Button Grid.Column="0"
+                                            Style="{StaticResource SelectionChipButtonStyle}"
+                                            Padding="0"
+                                            Background="{StaticResource TransparentBrush}"
+                                            BorderThickness="0"
+                                            Tag="{Binding IsAllAreasFilterSelected, Mode=OneWay}"
+                                            Command="{Binding AllAreasCommand}"
+                                            PointerPressed="HandleAreaFilterChipPointerPressed"
+                                            PointerEntered="HandleAreaFilterChipPointerEntered"
+                                            PointerExited="HandleAreaFilterChipPointerExited">
+                                        <Button.Resources>
+                                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/TransparentButtonStateResources.xaml" />
+                                        </Button.Resources>
+                                        <Grid>
+                                            <Border Background="{Binding AllAreasFilterBackgroundBrush, Mode=OneWay}"
+                                                    CornerRadius="7" />
+                                            <Border Background="{StaticResource VeryLightGrayBrush}"
+                                                    CornerRadius="7"
+                                                    Opacity="0"
+                                                    IsHitTestVisible="False" />
+                                            <TextBlock Text="{Binding AllAreasFilterText, Mode=OneWay}"
+                                                       Foreground="{Binding AllAreasFilterForegroundBrush, Mode=OneWay}"
+                                                       Margin="18,10" />
+                                        </Grid>
+                                    </Button>
 
-                                <Button CornerRadius="7"
-                                        Padding="10"
-                                        FontSize="{StaticResource FontSizeMedium}"
-                                        FontWeight="SemiBold"
-                                        Foreground="{StaticResource BlackBrush}"
-                                        Background="{StaticResource TransparentBrush}"
-                                        BorderThickness="1"
-                                        BorderBrush="{StaticResource LightGrayBrush}"
-                                        Command="{Binding RoomFilterCommand}">
-                                    <Button.Resources>
-                                        <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
-                                        <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush"/>
-                                        <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
-                                        <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
-                                    </Button.Resources>
-                                    <StackPanel Orientation="Horizontal"
-                                        Spacing="8">
-                                        <PathIcon Data="{Binding RoomFilterIconState, Converter={StaticResource IconConverter}, Mode=OneWay}" />
-                                        <TextBlock Text="{Binding RoomFilterText}" />
-                                    </StackPanel>
-                                </Button>
-                            </StackPanel>
+                                    <Button Grid.Column="1"
+                                            Style="{StaticResource SelectionChipButtonStyle}"
+                                            Padding="0"
+                                            Background="{StaticResource TransparentBrush}"
+                                            BorderThickness="0"
+                                            Tag="{Binding IsTableFilterSelected, Mode=OneWay}"
+                                            Command="{Binding TableFilterCommand}"
+                                            PointerPressed="HandleAreaFilterChipPointerPressed"
+                                            PointerEntered="HandleAreaFilterChipPointerEntered"
+                                            PointerExited="HandleAreaFilterChipPointerExited">
+                                        <Button.Resources>
+                                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/TransparentButtonStateResources.xaml" />
+                                        </Button.Resources>
+                                        <Grid>
+                                            <Border Background="{Binding TableFilterBackgroundBrush, Mode=OneWay}"
+                                                    CornerRadius="7" />
+                                            <Border Background="{StaticResource VeryLightGrayBrush}"
+                                                    CornerRadius="7"
+                                                    Opacity="0"
+                                                    IsHitTestVisible="False" />
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="8"
+                                                        Margin="18,10">
+                                                <PathIcon Data="{Binding TableFilterIconState, Converter={StaticResource IconConverter}, Mode=OneWay}"
+                                                          Foreground="{Binding TableFilterForegroundBrush, Mode=OneWay}" />
+                                                <TextBlock Text="{Binding TableFilterText, Mode=OneWay}"
+                                                           Foreground="{Binding TableFilterForegroundBrush, Mode=OneWay}" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Button>
+
+                                    <Button Grid.Column="2"
+                                            Style="{StaticResource SelectionChipButtonStyle}"
+                                            Padding="0"
+                                            Background="{StaticResource TransparentBrush}"
+                                            BorderThickness="0"
+                                            Tag="{Binding IsRoomFilterSelected, Mode=OneWay}"
+                                            Command="{Binding RoomFilterCommand}"
+                                            PointerPressed="HandleAreaFilterChipPointerPressed"
+                                            PointerEntered="HandleAreaFilterChipPointerEntered"
+                                            PointerExited="HandleAreaFilterChipPointerExited">
+                                        <Button.Resources>
+                                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/TransparentButtonStateResources.xaml" />
+                                        </Button.Resources>
+                                        <Grid>
+                                            <Border Background="{Binding RoomFilterBackgroundBrush, Mode=OneWay}"
+                                                    CornerRadius="7" />
+                                            <Border Background="{StaticResource VeryLightGrayBrush}"
+                                                    CornerRadius="7"
+                                                    Opacity="0"
+                                                    IsHitTestVisible="False" />
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="8"
+                                                        Margin="18,10">
+                                                <PathIcon Data="{Binding RoomFilterIconState, Converter={StaticResource IconConverter}, Mode=OneWay}"
+                                                          Foreground="{Binding RoomFilterForegroundBrush, Mode=OneWay}" />
+                                                <TextBlock Text="{Binding RoomFilterText, Mode=OneWay}"
+                                                           Foreground="{Binding RoomFilterForegroundBrush, Mode=OneWay}" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                            </Border>
 
                             <Button 
-                                Grid.Column="1"
-                                CornerRadius="7"
+                                Grid.Column="2"
+                                Style="{StaticResource SecondaryActionButtonStyle}"
                                 Padding="10"
-                                FontSize="{StaticResource FontSizeMedium}"
-                                FontWeight="SemiBold"
-                                Foreground="{StaticResource WhiteBrush}"
-                                Background="{StaticResource OrangeFocusBrush}"
                                 Command="{Binding FilterAreaCommand}" 
                                 HorizontalAlignment="Right">
                                 <Button.Resources>
-                                    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
-                                    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush"/>
-                                    <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
-                                    <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
-                                    <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="LighterGrayBrush"/>
-                                    <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="MediumDarkGrayBrush"/>
+                                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
                                 </Button.Resources>
                                 <StackPanel Orientation="Horizontal"
                                         Spacing="8">
@@ -227,31 +311,47 @@
                 </Border>
 
                 <!-- Summarized Area Cards -->
-                <GridView x:Name="AreaCardsGridView"
-                          Grid.Row="1"
-                          Padding="10,20"
-                          Background="{StaticResource TransparentBrush}"
-                          BorderThickness="0"
-                          IsItemClickEnabled="True"
-                          ItemClick="HandleAreaCardsGridViewItemClick"
-                          SelectionMode="None"
-                          HorizontalAlignment="Stretch"
-                          HorizontalContentAlignment="Stretch"
-                          VerticalAlignment="Stretch"
-                          ItemsSource="{Binding SummarizedAreaCardViewModels}"
-                          ItemTemplateSelector="{StaticResource SummarizedAreaCardTemplateSelector}"
-                          ItemContainerStyle="{StaticResource AreaManagementGridViewItemStyle}"
-                          ScrollViewer.HorizontalScrollMode="Disabled"
-                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto"
-                          Loaded="HandleAreaCardsGridViewLoaded"
-                          SizeChanged="HandleAreaCardsGridViewSizeChanged">
-                    <GridView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <ItemsWrapGrid Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </GridView.ItemsPanel>
-                </GridView>
+                <ItemsRepeaterScrollHost Grid.Row="1">
+                    <ScrollViewer x:Name="AreaCardsScrollViewer"
+                                  Padding="10,20,28,20"
+                                  Background="{StaticResource TransparentBrush}"
+                                  BorderBrush="{StaticResource LighterGrayBrush}"
+                                  BorderThickness="0,0,1,0"
+                                  UseLayoutRounding="True"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalScrollMode="Disabled"
+                                  HorizontalScrollBarVisibility="Hidden"
+                                  VerticalScrollBarVisibility="Auto"
+                                  Loaded="HandleAreaCardsScrollViewerLoaded"
+                                  SizeChanged="HandleAreaCardsScrollViewerSizeChanged">
+                        <ItemsRepeater x:Name="AreaCardsRepeater"
+                                       HorizontalAlignment="Stretch"
+                                       ItemsSource="{Binding SummarizedAreaCardViewModels}">
+                            <ItemsRepeater.Layout>
+                            <UniformGridLayout x:Name="AreaCardsGridLayout"
+                                                   Orientation="Horizontal"
+                                                   MaximumRowsOrColumns="5"
+                                                   MinColumnSpacing="8"
+                                                   MinRowSpacing="12"
+                                                   ItemsStretch="Uniform" />
+                            </ItemsRepeater.Layout>
+
+                            <ItemsRepeater.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Background="{StaticResource TransparentBrush}"
+                                          Tapped="HandleAreaCardTapped"
+                                          RightTapped="HandleAreaCardRightTapped">
+                                        <ContentControl Content="{Binding}"
+                                                        HorizontalContentAlignment="Stretch"
+                                                        VerticalContentAlignment="Stretch"
+                                                        ContentTemplateSelector="{StaticResource SummarizedAreaCardTemplateSelector}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsRepeater.ItemTemplate>
+                        </ItemsRepeater>
+                    </ScrollViewer>
+                </ItemsRepeaterScrollHost>
             </Grid>
         </Border>
 
@@ -260,15 +360,15 @@
                 Background="{StaticResource VeryLightGrayBrush}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                Visibility="{x:Bind ViewModel.IsAnySummarizedCardSelected, Converter={StaticResource BoolToInvisible}, Mode=OneWay}">
+                Visibility="{Binding IsAnySummarizedCardSelected, Converter={StaticResource BoolToInvisible}, Mode=OneWay}">
             <StackPanel VerticalAlignment="Center"
                         HorizontalAlignment="Center">
                 <Path Width="64"
                       Height="64"
                       Stretch="Uniform"
                       Fill="{StaticResource MediumDarkGrayBrush}"
-                      Data="{x:Bind ViewModel.NoAreasIconState, Converter={StaticResource IconConverter}, Mode=OneWay}" />
-                <TextBlock Text="{x:Bind ViewModel.NoAreasText, Mode=OneWay}" 
+                      Data="{Binding NoAreasIconState, Converter={StaticResource IconConverter}, Mode=OneWay}" />
+                <TextBlock Text="{Binding NoAreasText, Mode=OneWay}" 
                            Foreground="{StaticResource DarkGrayBrush}" 
                            FontSize="{StaticResource FontSizeExtraExtraLarge}" 
                            FontWeight="SemiBold" />
@@ -280,12 +380,14 @@
                 Background="{StaticResource VeryLightGrayBrush}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                Visibility="{x:Bind ViewModel.IsAnySummarizedCardSelected, Converter={StaticResource BoolToVisible}, Mode=OneWay}">
+                Visibility="{Binding IsAnySummarizedCardSelected, Converter={StaticResource BoolToVisible}, Mode=OneWay}">
 
             <ContentControl 
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                Content="{x:Bind ViewModel.DetailedAreaCardViewModel, Mode=OneWay}"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Stretch"
+                Content="{Binding DetailedAreaCardViewModel, Mode=OneWay}"
                 ContentTemplateSelector="{StaticResource DetailedAreaCardTemplateSelector}" />
         </Border>
     </Grid>

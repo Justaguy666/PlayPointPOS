@@ -7,6 +7,182 @@
         <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
     </Style>
 
+    <Style x:Key="ActionButtonBaseStyle"
+           TargetType="Button">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
+        <Setter Property="Padding" Value="18,10" />
+        <Setter Property="CornerRadius" Value="7" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMedium}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="PrimaryActionButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource ActionButtonBaseStyle}">
+        <Setter Property="Background" Value="{StaticResource OrangeFocusBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource OrangeFocusBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style x:Key="SecondaryActionButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource ActionButtonBaseStyle}">
+        <Setter Property="Background" Value="{StaticResource TransparentBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource LightGrayBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <Style x:Key="DangerActionButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource ActionButtonBaseStyle}">
+        <Setter Property="Background" Value="{StaticResource DangerButtonBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource DangerButtonBackgroundBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style x:Key="DialogCloseButtonStyle"
+           TargetType="Button">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
+        <Setter Property="Width" Value="24" />
+        <Setter Property="Height" Value="24" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="9999" />
+        <Setter Property="Background" Value="{StaticResource TransparentBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource TransparentBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="MenuItemButtonStyle"
+           TargetType="Button">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
+        <Setter Property="Width" Value="230" />
+        <Setter Property="Height" Value="60" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="{StaticResource OrangePeachLightBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource PrimaryOrangeBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource OrangeLightVariantBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Margin" Value="0,8" />
+    </Style>
+
+    <Style x:Key="NavbarItemButtonStyle"
+           TargetType="Button">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
+        <Setter Property="Background" Value="{StaticResource TransparentBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Height" Value="64" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="CornerRadius" Value="0" />
+    </Style>
+
+    <Style x:Key="CircularIconActionButtonStyle"
+           TargetType="Button">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
+        <Setter Property="Width" Value="Auto" />
+        <Setter Property="Height" Value="Auto" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="{StaticResource TransparentBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource TransparentBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="9999" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="SelectionChipButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource ActionButtonBaseStyle}">
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style x:Key="PaginationNavigationButtonStyle"
+       TargetType="Button">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
+        <Setter Property="MinWidth" Value="72" />
+        <Setter Property="Height" Value="72" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Background" Value="{StaticResource OrangeFocusBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource OrangeFocusBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="PaginationPageButtonStyle"
+       TargetType="Button">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
+        <Setter Property="MinWidth" Value="72" />
+        <Setter Property="Height" Value="72" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="PaginationJumpButtonStyle"
+       TargetType="Button">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
+        <Setter Property="Height" Value="72" />
+        <Setter Property="Padding" Value="28,0" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Background" Value="{StaticResource OrangeFocusBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource OrangeFocusBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="PaginationDialogSecondaryButtonStyle"
+       TargetType="Button">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
+        <Setter Property="Height" Value="56" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource DarkGrayBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource LightGrayBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style x:Key="PaginationDialogPrimaryButtonStyle"
+       TargetType="Button">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
+        <Setter Property="Height" Value="56" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Background" Value="{StaticResource OrangeFocusBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource OrangeFocusBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
     <Style TargetType="RadioButton">
         <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
     </Style>

@@ -1,0 +1,15 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <StaticResource x:Key="ButtonBackground" ResourceKey="OrangeFocusBrush" />
+    <StaticResource x:Key="ButtonForeground" ResourceKey="WhiteBrush" />
+    <StaticResource x:Key="ButtonBorderBrush" ResourceKey="OrangeFocusBrush" />
+    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush" />
+    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkerBrush" />
+    <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush" />
+    <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush" />
+    <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="DarkGrayBrush" />
+    <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="WhiteBrush" />
+    <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="DarkGrayBrush" />
+</ResourceDictionary>

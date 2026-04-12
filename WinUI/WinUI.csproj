@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
@@ -70,14 +70,9 @@
     <Folder Include="Assets\Icons\" />
     <Folder Include="Helpers\" />
     <Folder Include="Resources\Animations\" />
-    <Folder Include="ViewModels\Dialogs\Add\" />
-    <Folder Include="ViewModels\Dialogs\Edit\" />
     <Folder Include="ViewModels\Dialogs\Filter\" />
     <Folder Include="ViewModels\UserControls\AreaManagement\DetailedAreaCards\" />
     <Folder Include="ViewModels\UserControls\AreaManagement\SummarizedAreaCards\" />
-    <Folder Include="Views\Dialogs\Add\" />
-    <Folder Include="Views\Dialogs\Edit\" />
-    <Folder Include="Views\Dialogs\Filter\" />
     <Folder Include="Views\UserControls\AreaManagement\" />
   </ItemGroup>
 
@@ -108,6 +103,12 @@
     <Page Update="Views\Dialogs\OtpDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Update="Views\Dialogs\Management\ReservationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\Dialogs\StartSessionDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\UserControls\Settings\GeneralSettingsCardControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -118,6 +119,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Resources\Styles\ComboBoxStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Resources\Styles\FlyoutStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Resources\Animations\NotificationAnimations.xaml">
@@ -229,13 +233,22 @@
     <None Remove="Resources\Styles\CheckBoxStyles.xaml" />
     <None Remove="Resources\Styles\ScrollBarStyles.xaml" />
     <None Remove="Resources\Styles\ComboBoxStyles.xaml" />
+    <None Remove="Resources\Styles\FlyoutStyles.xaml" />
     <None Remove="Resources\Animations\NotificationAnimations.xaml" />
     <None Remove="Resources\Colors.xaml" />
     <None Remove="Resources\FontSize.xaml" />
     <None Remove="Resources\Images.xaml" />
     <None Remove="Views\Dialogs\ConfirmationDialog.xaml" />
+    <None Remove="Views\Dialogs\Filter\AreaFilterDialog.xaml" />
+    <None Remove="Views\Dialogs\Filter\GameFilterDialog.xaml" />
+    <None Remove="Views\Dialogs\Filter\ProductFilterDialog.xaml" />
     <None Remove="Views\Dialogs\ForgotPasswordDialog.xaml" />
+    <None Remove="Views\Dialogs\Management\AreaDialog.xaml" />
+    <None Remove="Views\Dialogs\Management\GameDialog.xaml" />
+    <None Remove="Views\Dialogs\Management\ProductDialog.xaml" />
     <None Remove="Views\Dialogs\OtpDialog.xaml" />
+    <None Remove="Views\Dialogs\Management\ReservationDialog.xaml" />
+    <None Remove="Views\Dialogs\StartSessionDialog.xaml" />
     <None Remove="Views\UserControls\Dashboard\GoalProgressControl.xaml" />
     <None Remove="Views\UserControls\Dashboard\RevenueChartControl.xaml" />
     <None Remove="Views\UserControls\PaginationControl.xaml" />
@@ -246,8 +259,39 @@
     <None Remove="Views\UserControls\Settings\ShopInformationCardControl.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Views\Dialogs\Filter\ProductFilterDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Dialogs\Filter\GameFilterDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Dialogs\Filter\AreaFilterDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Dialogs\Management\ProductDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Dialogs\Management\GameDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Dialogs\Management\AreaDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="Resources\Styles\ScrollBarStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
 </Project>
+

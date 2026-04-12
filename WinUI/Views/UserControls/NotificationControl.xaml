@@ -81,8 +81,7 @@
                     ToolTipService.ToolTip="{Binding CloseTooltipText}"
                     VerticalAlignment="Center">
                     <Button.Resources>
-                        <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="AntiqueWhiteBrush" />
-                        <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="LighterGrayBrush" />
+                        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
                     </Button.Resources>
                     <FontIcon
                         FontFamily="Segoe MDL2 Assets"

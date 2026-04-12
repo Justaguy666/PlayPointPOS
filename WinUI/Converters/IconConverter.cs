@@ -112,6 +112,8 @@ public partial class IconConverter : IValueConverter
         IconKind.Target => "ic_fluent_target_arrow",
         IconKind.Table => "ic_fluent_desk_multiple",
         IconKind.Room => "ic_fluent_conference_room",
+        IconKind.Calendar => "ic_fluent_calendar",
+        IconKind.Clock => "ic_fluent_clock",
         IconKind.Up => "ic_fluent_arrow_up",
         IconKind.Down => "ic_fluent_arrow_down",
         IconKind.Add => "ic_fluent_add_square_multiple",

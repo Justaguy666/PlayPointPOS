@@ -50,8 +50,8 @@ public static class AppColors
     public static Color DashboardTrendNegative => AppResourceLookup.GetColor("DashboardTrendNegative", ErrorRed);
     public static Color DashboardStatCardPositiveTrendBackground => AppResourceLookup.GetColor("DashboardStatCardPositiveTrendBackground", SuccessGreenLight);
     public static Color DashboardStatCardNegativeTrendBackground => AppResourceLookup.GetColor("DashboardStatCardNegativeTrendBackground", ErrorRedLight);
-    public static Color SettingsLogoutButtonBackground => AppResourceLookup.GetColor("SettingsLogoutButtonBackground", Color.FromArgb(0xFF, 0xF8, 0x71, 0x71));
-    public static Color SettingsLogoutButtonBackgroundHover => AppResourceLookup.GetColor("SettingsLogoutButtonBackgroundHover", Color.FromArgb(0xFF, 0xDC, 0x26, 0x26));
+    public static Color DangerButtonBackground => AppResourceLookup.GetColor("DangerButtonBackground", Color.FromArgb(0xFF, 0xF8, 0x71, 0x71));
+    public static Color DangerButtonBackgroundHover => AppResourceLookup.GetColor("DangerButtonBackgroundHover", Color.FromArgb(0xFF, 0xDC, 0x26, 0x26));
 
     // Gradient Colors
     public static Color GradientStop1 => AppResourceLookup.GetColor("GradientStop1", Color.FromArgb(0xFF, 0xFF, 0x6B, 0x35));

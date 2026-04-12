@@ -1,0 +1,265 @@
+<ContentDialog
+    x:Class="WinUI.Views.Dialogs.Management.AreaFilterDialog"
+    x:Name="RootDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:vm="using:WinUI.ViewModels.Dialogs.Management"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=vm:AreaFilterViewModel, IsDesignTimeCreatable=False}"
+    Style="{StaticResource StandardFormDialogStyle}"
+    mc:Ignorable="d">
+
+    <ContentDialog.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/FormInputStateResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentDialog.Resources>
+
+    <Grid Style="{StaticResource DialogFormRootGridStyle}"
+          MaxWidth="620">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Style="{StaticResource DialogHeaderContainerStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <PathIcon Grid.Column="0"
+                      Style="{StaticResource DialogHeaderIconStyle}"
+                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+            <TextBlock Grid.Column="1"
+                       Style="{StaticResource DialogHeaderTitleTextStyle}"
+                       Text="{x:Bind ViewModel.TitleText, Mode=OneWay}" />
+            <Button Grid.Column="2"
+                    Style="{StaticResource DialogCloseButtonStyle}"
+                    Command="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
+                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
+                <Button.Resources>
+                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
+                </Button.Resources>
+                <PathIcon Width="14"
+                          Height="14"
+                          Data="{x:Bind CloseIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
+                          Foreground="{StaticResource BlackBrush}" />
+            </Button>
+        </Grid>
+
+        <controls:DividerControl Grid.Row="1"
+                                 Style="{StaticResource DialogHeaderDividerStyle}" />
+
+        <StackPanel Grid.Row="2"
+                    Style="{StaticResource DialogFormContentPanelStyle}">
+            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                <TextBlock Text="{x:Bind ViewModel.StatusLabelText, Mode=OneWay}"
+                           Style="{StaticResource DialogFormLabelTextStyle}" />
+
+                <StackPanel Spacing="14"
+                            Margin="4,4,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <RadioButton Grid.Column="0"
+                                     GroupName="AreaStatusFilterGroup"
+                                     IsChecked="{x:Bind ViewModel.IsAllStatusesSelected, Mode=TwoWay}"
+                                     Style="{StaticResource OrangeRadioButtonStyle}"
+                                     Content="{x:Bind ViewModel.AllStatusesText, Mode=OneWay}" />
+
+                        <RadioButton Grid.Column="1"
+                                     GroupName="AreaStatusFilterGroup"
+                                     IsChecked="{x:Bind ViewModel.IsAvailableStatusSelected, Mode=TwoWay}"
+                                     Style="{StaticResource OrangeRadioButtonStyle}"
+                                     Content="{x:Bind ViewModel.AvailableStatusText, Mode=OneWay}" />
+                    </Grid>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <RadioButton Grid.Column="0"
+                                     GroupName="AreaStatusFilterGroup"
+                                     IsChecked="{x:Bind ViewModel.IsReservedStatusSelected, Mode=TwoWay}"
+                                     Style="{StaticResource OrangeRadioButtonStyle}"
+                                     Content="{x:Bind ViewModel.ReservedStatusText, Mode=OneWay}" />
+
+                        <RadioButton Grid.Column="1"
+                                     GroupName="AreaStatusFilterGroup"
+                                     IsChecked="{x:Bind ViewModel.IsRentedStatusSelected, Mode=TwoWay}"
+                                     Style="{StaticResource OrangeRadioButtonStyle}"
+                                     Content="{x:Bind ViewModel.RentedStatusText, Mode=OneWay}" />
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                <TextBlock Text="{x:Bind ViewModel.StartTimeRangeLabelText, Mode=OneWay}"
+                           Style="{StaticResource DialogFormLabelTextStyle}" />
+
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0"
+                                Style="{StaticResource DialogFormFieldPanelStyle}">
+                        <Button x:Name="StartTimeFromFieldButton"
+                                Style="{StaticResource DialogPickerButtonStyle}"
+                                HorizontalAlignment="Stretch"
+                                Click="StartTimeFromFieldButton_Click">
+                            <Button.Resources>
+                                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogInputButtonStateResources.xaml" />
+                            </Button.Resources>
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0"
+                                           Text="{x:Bind ViewModel.StartTimeFromDisplayText, Mode=OneWay}"
+                                           Style="{StaticResource DialogFieldValueTextStyle}"
+                                           Visibility="{x:Bind ViewModel.HasStartTimeFrom, Mode=OneWay, Converter={StaticResource BoolToVisible}}" />
+                                <TextBlock Grid.Column="0"
+                                           Text="{x:Bind ViewModel.StartTimeFromPlaceholderText, Mode=OneWay}"
+                                           Style="{StaticResource DialogFieldPlaceholderTextStyle}"
+                                           Visibility="{x:Bind ViewModel.HasStartTimeFrom, Mode=OneWay, Converter={StaticResource BoolToInvisible}}" />
+                                <PathIcon Grid.Column="1"
+                                          Style="{StaticResource DialogFieldIconStyle}"
+                                          Data="{x:Bind ClockIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1"
+                                Style="{StaticResource DialogFormFieldPanelStyle}">
+                        <Button x:Name="StartTimeToFieldButton"
+                                Style="{StaticResource DialogPickerButtonStyle}"
+                                HorizontalAlignment="Stretch"
+                                Click="StartTimeToFieldButton_Click">
+                            <Button.Resources>
+                                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogInputButtonStateResources.xaml" />
+                            </Button.Resources>
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0"
+                                           Text="{x:Bind ViewModel.StartTimeToDisplayText, Mode=OneWay}"
+                                           Style="{StaticResource DialogFieldValueTextStyle}"
+                                           Visibility="{x:Bind ViewModel.HasStartTimeTo, Mode=OneWay, Converter={StaticResource BoolToVisible}}" />
+                                <TextBlock Grid.Column="0"
+                                           Text="{x:Bind ViewModel.StartTimeToPlaceholderText, Mode=OneWay}"
+                                           Style="{StaticResource DialogFieldPlaceholderTextStyle}"
+                                           Visibility="{x:Bind ViewModel.HasStartTimeTo, Mode=OneWay, Converter={StaticResource BoolToInvisible}}" />
+                                <PathIcon Grid.Column="1"
+                                          Style="{StaticResource DialogFieldIconStyle}"
+                                          Data="{x:Bind ClockIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                <TextBlock Text="{x:Bind ViewModel.CapacityRangeLabelText, Mode=OneWay}"
+                           Style="{StaticResource DialogFormLabelTextStyle}" />
+
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0"
+                             PlaceholderText="{x:Bind ViewModel.CapacityFromPlaceholderText, Mode=OneWay}"
+                             Style="{StaticResource DialogFormTextBoxStyle}"
+                             Text="{x:Bind ViewModel.CapacityMinText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             InputScope="Number" />
+
+                    <TextBox Grid.Column="1"
+                             PlaceholderText="{x:Bind ViewModel.CapacityToPlaceholderText, Mode=OneWay}"
+                             Style="{StaticResource DialogFormTextBoxStyle}"
+                             Text="{x:Bind ViewModel.CapacityMaxText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             InputScope="Number" />
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                <TextBlock Text="{x:Bind ViewModel.HourlyPriceRangeLabelText, Mode=OneWay}"
+                           Style="{StaticResource DialogFormLabelTextStyle}" />
+
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0"
+                             PlaceholderText="{x:Bind ViewModel.HourlyPriceFromPlaceholderText, Mode=OneWay}"
+                             Style="{StaticResource DialogFormTextBoxStyle}"
+                             Text="{x:Bind ViewModel.HourlyPriceMinText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             InputScope="Number" />
+
+                    <TextBox Grid.Column="1"
+                             PlaceholderText="{x:Bind ViewModel.HourlyPriceToPlaceholderText, Mode=OneWay}"
+                             Style="{StaticResource DialogFormTextBoxStyle}"
+                             Text="{x:Bind ViewModel.HourlyPriceMaxText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             InputScope="Number" />
+                </Grid>
+            </StackPanel>
+
+            <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+                       Visibility="{x:Bind ViewModel.HasError, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
+                       Foreground="{StaticResource ErrorRedBrush}"
+                       FontSize="{StaticResource FontSizeSmall}"
+                       FontWeight="SemiBold"
+                       TextWrapping="Wrap" />
+
+            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+            <Grid Margin="0,8,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0"
+                        Style="{StaticResource DialogSecondaryFooterButtonStyle}"
+                        Command="{x:Bind ViewModel.ResetCommand, Mode=OneWay}">
+                    <Button.Resources>
+                        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
+                    </Button.Resources>
+                    <TextBlock Text="{x:Bind ViewModel.ResetButtonText, Mode=OneWay}" />
+                </Button>
+
+                <Button Grid.Column="2"
+                        Style="{StaticResource DialogPrimaryFooterButtonStyle}"
+                        Command="{x:Bind ViewModel.ApplyCommand, Mode=OneWay}"
+                        IsEnabled="{x:Bind ViewModel.CanApply, Mode=OneWay}">
+                    <Button.Resources>
+                        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
+                    </Button.Resources>
+                    <TextBlock Text="{x:Bind ViewModel.ApplyButtonText, Mode=OneWay}" />
+                </Button>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</ContentDialog>

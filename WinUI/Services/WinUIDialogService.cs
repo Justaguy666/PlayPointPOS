@@ -65,4 +65,21 @@ public class WinUIDialogService : IDialogService
         };
         await dialog.ShowAsync();
     }
+
+    public async Task<bool> ShowConfirmationAsync(string titleKey, string messageKey, string confirmButtonTextKey = "DialogOkButtonText", string cancelButtonTextKey = "CancelButtonText", bool showCancelButton = true)
+    {
+        if (_rootElement?.XamlRoot == null)
+        {
+            throw new InvalidOperationException("DialogService is not initialized with a valid root element.");
+        }
+
+        var title = _localizationService.GetString(titleKey);
+        var message = _localizationService.GetString(messageKey);
+        var confirmButtonText = _localizationService.GetString(confirmButtonTextKey);
+        var cancelButtonText = _localizationService.GetString(cancelButtonTextKey);
+
+        var dialog = new Views.Dialogs.ConfirmationDialog(title, message, confirmButtonText, cancelButtonText, showCancelButton);
+        dialog.XamlRoot = _rootElement.XamlRoot;
+        return await dialog.ShowAsync();
+    }
 }

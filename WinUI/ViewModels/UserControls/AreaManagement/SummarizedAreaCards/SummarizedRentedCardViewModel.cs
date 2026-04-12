@@ -1,19 +1,22 @@
 using System;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Domain.Enums;
 using Microsoft.UI.Dispatching;
-using WinUI.UIModels.AreaManagement.SummarizedAreaCards;
+using WinUI.UIModels.AreaManagement;
 
 namespace WinUI.ViewModels.AreaManagement.SummarizedAreaCards;
 
 public sealed partial class SummarizedRentedCardViewModel : LocalizedViewModelBase, ISummarizedAreaCardViewModel, IDisposable
 {
-    private readonly SummarizedRentedCardModel _model;
     private readonly DispatcherQueueTimer? _timer;
     private bool _isDisposed;
 
-    [ObservableProperty]
-    public partial string AreaName { get; set; } = string.Empty;
+    public string AreaName => Model.AreaName;
+
+    public PlayAreaType PlayAreaType => Model.PlayAreaType;
+
+    public PlayAreaStatus Status => Model.Status;
 
     [ObservableProperty]
     public partial string Capacity { get; set; } = string.Empty;
@@ -26,11 +29,11 @@ public sealed partial class SummarizedRentedCardViewModel : LocalizedViewModelBa
 
     public SummarizedRentedCardViewModel(
         ILocalizationService localizationService,
-        SummarizedRentedCardModel model)
+        AreaModel model)
         : base(localizationService)
     {
-        _model = model ?? throw new ArgumentNullException(nameof(model));
-        AreaName = _model.AreaName;
+        Model = model ?? throw new ArgumentNullException(nameof(model));
+        Model.PropertyChanged += HandleModelPropertyChanged;
 
         var dispatcherQueue = DispatcherQueue.GetForCurrentThread();
         if (dispatcherQueue is not null)
@@ -38,21 +41,23 @@ public sealed partial class SummarizedRentedCardViewModel : LocalizedViewModelBa
             _timer = dispatcherQueue.CreateTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += HandleTimerTick;
-            _timer.Start();
         }
 
+        SyncTimerState();
         RefreshLocalizedText();
     }
+
+    public AreaModel Model { get; }
 
     protected override void RefreshLocalizedText()
     {
         UpdateElapsedTimeText();
-        TotalAmountText = LocalizationService.FormatCurrency(_model.TotalAmount);
+        TotalAmountText = LocalizationService.FormatCurrency(Model.TotalAmount);
 
         Capacity = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("AreaManagementCapacityFormat"),
-            _model.Capacity);
+            Model.Capacity);
     }
 
     public new void Dispose()
@@ -65,6 +70,8 @@ public sealed partial class SummarizedRentedCardViewModel : LocalizedViewModelBa
             _timer.Stop();
             _timer.Tick -= HandleTimerTick;
         }
+
+        Model.PropertyChanged -= HandleModelPropertyChanged;
 
         _isDisposed = true;
         base.Dispose();
@@ -85,11 +92,7 @@ public sealed partial class SummarizedRentedCardViewModel : LocalizedViewModelBa
 
     private void UpdateElapsedTimeText()
     {
-        var elapsedTime = DateTime.UtcNow - _model.StartTime.ToUniversalTime();
-        if (elapsedTime < TimeSpan.Zero)
-        {
-            elapsedTime = TimeSpan.Zero;
-        }
+        TimeSpan elapsedTime = Model.GetSessionElapsedTime(DateTime.UtcNow);
 
         ElapsedTimeText = string.Format(
             LocalizationService.Culture,
@@ -97,5 +100,36 @@ public sealed partial class SummarizedRentedCardViewModel : LocalizedViewModelBa
             (int)elapsedTime.TotalHours,
             elapsedTime.Minutes,
             elapsedTime.Seconds);
+    }
+
+    private void HandleModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (_isDisposed)
+        {
+            return;
+        }
+
+        SyncTimerState();
+        OnPropertyChanged(nameof(AreaName));
+        OnPropertyChanged(nameof(PlayAreaType));
+        OnPropertyChanged(nameof(Status));
+        RefreshLocalizedText();
+    }
+
+    private void SyncTimerState()
+    {
+        if (_timer is null)
+        {
+            return;
+        }
+
+        if (Model.IsSessionPaused)
+        {
+            _timer.Stop();
+        }
+        else
+        {
+            _timer.Start();
+        }
     }
 }

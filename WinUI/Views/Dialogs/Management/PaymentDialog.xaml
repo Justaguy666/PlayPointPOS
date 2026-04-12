@@ -1,0 +1,256 @@
+<ContentDialog
+    x:Class="WinUI.Views.Dialogs.Management.PaymentDialog"
+    x:Name="RootDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:vm="using:WinUI.ViewModels.Dialogs.Management"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=vm:PaymentViewModel, IsDesignTimeCreatable=False}"
+    Style="{StaticResource StandardFormDialogStyle}"
+    mc:Ignorable="d">
+
+    <ContentDialog.Resources>
+        <Style x:Key="PaymentDialogRowLabelTextStyle"
+               TargetType="TextBlock"
+               BasedOn="{StaticResource KeyValueRowLabelTextStyle}">
+            <Setter Property="FontSize" Value="{StaticResource FontSizeMedium}" />
+        </Style>
+
+        <Style x:Key="PaymentDialogValueTextStyle"
+               TargetType="TextBlock"
+               BasedOn="{StaticResource KeyValueRowValueTextStyle}">
+            <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            <Setter Property="MaxWidth" Value="220" />
+        </Style>
+
+        <Style x:Key="PaymentDialogMoneyValueTextStyle"
+               TargetType="TextBlock"
+               BasedOn="{StaticResource PaymentDialogValueTextStyle}">
+            <Setter Property="Foreground" Value="{StaticResource PrimaryOrangeDarkBrush}" />
+        </Style>
+
+        <Style x:Key="PaymentDialogTotalLabelTextStyle"
+               TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="PaymentDialogTotalValueTextStyle"
+               TargetType="TextBlock">
+            <Setter Property="FontSize" Value="34" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{StaticResource PrimaryOrangeDarkBrush}" />
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </ContentDialog.Resources>
+
+    <Grid x:Name="RootGrid"
+          Style="{StaticResource DialogFormRootGridStyle}"
+          MinWidth="460"
+          MaxWidth="620">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Style="{StaticResource DialogHeaderContainerStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <PathIcon Grid.Column="0"
+                      Style="{StaticResource DialogHeaderIconStyle}"
+                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+            <TextBlock Grid.Column="1"
+                       Style="{StaticResource DialogHeaderTitleTextStyle}"
+                       Text="{x:Bind ViewModel.TitleText, Mode=OneWay}" />
+            <Button Grid.Column="2"
+                    Style="{StaticResource DialogCloseButtonStyle}"
+                    Command="{x:Bind ViewModel.CancelCommand, Mode=OneWay}"
+                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
+                <Button.Resources>
+                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
+                </Button.Resources>
+                <PathIcon Width="14"
+                          Height="14"
+                          Data="{x:Bind CloseIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
+                          Foreground="{StaticResource BlackBrush}" />
+            </Button>
+        </Grid>
+
+        <controls:DividerControl Grid.Row="1"
+                                 Style="{StaticResource DialogHeaderDividerStyle}" />
+
+        <StackPanel Grid.Row="2"
+                    Style="{StaticResource DialogFormContentPanelStyle}"
+                    Margin="0,12,0,16"
+                    Spacing="16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{x:Bind ViewModel.AreaLabelText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogRowLabelTextStyle}" />
+
+                <TextBlock Grid.Column="1"
+                           Text="{x:Bind ViewModel.AreaValueText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogValueTextStyle}" />
+            </Grid>
+
+            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{x:Bind ViewModel.DurationLabelText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogRowLabelTextStyle}" />
+
+                <TextBlock Grid.Column="1"
+                           Text="{x:Bind ViewModel.DurationValueText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogValueTextStyle}" />
+            </Grid>
+
+            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{x:Bind ViewModel.AreaFeeLabelText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogRowLabelTextStyle}" />
+
+                <TextBlock Grid.Column="1"
+                           Text="{x:Bind ViewModel.AreaFeeValueText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogMoneyValueTextStyle}" />
+            </Grid>
+
+            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{x:Bind ViewModel.ProductFeeLabelText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogRowLabelTextStyle}" />
+
+                <TextBlock Grid.Column="1"
+                           Text="{x:Bind ViewModel.ProductFeeValueText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogMoneyValueTextStyle}" />
+            </Grid>
+
+            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{x:Bind ViewModel.GameFeeLabelText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogRowLabelTextStyle}" />
+
+                <TextBlock Grid.Column="1"
+                           Text="{x:Bind ViewModel.GameFeeValueText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogMoneyValueTextStyle}" />
+            </Grid>
+
+            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{x:Bind ViewModel.DepositLabelText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogRowLabelTextStyle}" />
+
+                <TextBlock Grid.Column="1"
+                           Text="{x:Bind ViewModel.DepositValueText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogMoneyValueTextStyle}" />
+            </Grid>
+
+            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{x:Bind ViewModel.DiscountLabelText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogRowLabelTextStyle}" />
+
+                <TextBlock Grid.Column="1"
+                           Text="{x:Bind ViewModel.DiscountValueText, Mode=OneWay}"
+                           Style="{StaticResource PaymentDialogMoneyValueTextStyle}" />
+            </Grid>
+
+            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+            <Border Background="{StaticResource OrangePeachLightBrush}"
+                    CornerRadius="16"
+                    Padding="18"
+                    Margin="0,4,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Text="{x:Bind ViewModel.TotalLabelText, Mode=OneWay}"
+                               Style="{StaticResource PaymentDialogTotalLabelTextStyle}" />
+
+                    <TextBlock Grid.Column="1"
+                               Text="{x:Bind ViewModel.TotalValueText, Mode=OneWay}"
+                               Style="{StaticResource PaymentDialogTotalValueTextStyle}" />
+                </Grid>
+            </Border>
+        </StackPanel>
+
+        <controls:DividerControl Grid.Row="3"
+                                 Style="{StaticResource DialogSectionDividerStyle}" />
+
+        <Grid Grid.Row="4"
+              Margin="0,16,0,0">
+            <Button
+                    Style="{StaticResource DialogSuccessFooterButtonStyle}"
+                    Command="{x:Bind ViewModel.ConfirmCommand, Mode=OneWay}">
+                <Button.Resources>
+                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SuccessActionButtonStateResources.xaml" />
+                </Button.Resources>
+                <TextBlock Text="{x:Bind ViewModel.ConfirmButtonText, Mode=OneWay}" />
+            </Button>
+        </Grid>
+    </Grid>
+</ContentDialog>

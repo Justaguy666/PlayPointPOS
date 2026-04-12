@@ -213,4 +213,140 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="CornerRadius" Value="4"/>
     </Style>
+
+    <Style TargetType="RadioButton" x:Key="OrangeRadioButtonStyle">
+        <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True"/>
+        <Setter Property="Foreground" Value="{StaticResource DarkGrayBrush}"/>
+        <Setter Property="MinHeight" Value="20"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="UncheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBorderUnchecked}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="CheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrange}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="InnerDotBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundChecked}" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="HoverBackground" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="PressedBackground" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="UncheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrange}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="CheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDark}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="InnerDotBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundCheckedDark}" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="HoverBackground" Storyboard.TargetProperty="Opacity" To="1" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="PressedBackground" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="UncheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDark}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="CheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDarker}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="InnerDotBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundCheckedDarker}" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="HoverBackground" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="PressedBackground" Storyboard.TargetProperty="Opacity" To="1" Duration="0"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="UncheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource LightGray}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="CheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeLight}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="InnerDotBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundDisabled}" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="HoverBackground" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="PressedBackground" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="CheckedVisual" Storyboard.TargetProperty="Opacity" To="1" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="UncheckedVisual" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="CheckedVisual" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="UncheckedVisual" Storyboard.TargetProperty="Opacity" To="1" Duration="0"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Indeterminate">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="CheckedVisual" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="UncheckedVisual" Storyboard.TargetProperty="Opacity" To="1" Duration="0"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid Grid.Column="0" Width="20" Height="20">
+                            <Border x:Name="HoverBackground"
+                                    CornerRadius="9999"
+                                    Opacity="0">
+                                <Border.Background>
+                                    <SolidColorBrush Color="{StaticResource CheckboxBackgroundUncheckedHover}"/>
+                                </Border.Background>
+                            </Border>
+
+                            <Border x:Name="PressedBackground"
+                                    CornerRadius="9999"
+                                    Opacity="0">
+                                <Border.Background>
+                                    <SolidColorBrush Color="{StaticResource CheckboxBackgroundUncheckedPressed}"/>
+                                </Border.Background>
+                            </Border>
+
+                            <Border x:Name="UncheckedVisual"
+                                    BorderThickness="2"
+                                    CornerRadius="9999">
+                                <Border.BorderBrush>
+                                    <SolidColorBrush x:Name="UncheckedBorderBrush" Color="{StaticResource CheckboxBorderUnchecked}"/>
+                                </Border.BorderBrush>
+                            </Border>
+
+                            <Border x:Name="CheckedVisual"
+                                    BorderThickness="2"
+                                    CornerRadius="9999"
+                                    Opacity="0">
+                                <Border.BorderBrush>
+                                    <SolidColorBrush x:Name="CheckedBorderBrush" Color="{StaticResource PrimaryOrange}"/>
+                                </Border.BorderBrush>
+                                <Ellipse x:Name="InnerDot"
+                                         Width="10"
+                                         Height="10"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center">
+                                    <Ellipse.Fill>
+                                        <SolidColorBrush x:Name="InnerDotBrush" Color="{StaticResource CheckboxBackgroundChecked}"/>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                            </Border>
+                        </Grid>
+
+                        <ContentPresenter x:Name="ContentPresenter"
+                                          Grid.Column="1"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Margin="8,0,0,0"
+                                          VerticalAlignment="Center"
+                                          TextWrapping="Wrap"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Padding" Value="8,8"/>
+        <Setter Property="FontSize" Value="{StaticResource LabelFontSize}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="CornerRadius" Value="4"/>
+    </Style>
+
 </ResourceDictionary>

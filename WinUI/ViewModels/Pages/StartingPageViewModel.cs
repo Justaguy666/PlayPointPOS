@@ -131,7 +131,17 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
 
         if (selectedItem.IsExit)
         {
-            Environment.Exit(0);
+            bool isConfirmed = await _dialogService.ShowConfirmationAsync(
+                titleKey: "ConfirmExitTitle",
+                messageKey: "ConfirmExitMessage",
+                confirmButtonTextKey: "ConfirmExitButton",
+                cancelButtonTextKey: "CancelButtonText"
+            );
+
+            if (isConfirmed)
+            {
+                Environment.Exit(0);
+            }
             return;
         }
 

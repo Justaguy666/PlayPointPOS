@@ -1,6 +1,12 @@
+using Domain.Enums;
+using WinUI.UIModels.AreaManagement;
+
 namespace WinUI.ViewModels.AreaManagement.SummarizedAreaCards;
 
 public interface ISummarizedAreaCardViewModel
 {
-    string AreaName { get; }
+    public AreaModel Model { get; }
+    public string AreaName { get; }
+    public PlayAreaType PlayAreaType { get; }
+    public PlayAreaStatus Status { get; }
 }

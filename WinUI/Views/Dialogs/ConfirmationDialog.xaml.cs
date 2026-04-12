@@ -6,23 +6,44 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using System.Threading.Tasks;
+using Microsoft.UI.Xaml.Controls;
+using WinUI.ViewModels.Dialogs;
 
 namespace WinUI.Views.Dialogs
 {
-    public sealed partial class ConfirmationDialog : UserControl
+    public sealed partial class ConfirmationDialog : ContentDialog
     {
-        public ConfirmationDialog()
+        public ConfirmationViewModel ViewModel { get; }
+
+        private bool _result;
+
+        public ConfirmationDialog(
+            string title,
+            string message,
+            string confirmButtonText,
+            string cancelButtonText,
+            bool showCancelButton)
         {
+            ViewModel = new ConfirmationViewModel(
+                title, 
+                message, 
+                confirmButtonText, 
+                cancelButtonText, 
+                showCancelButton,
+                result => 
+                {
+                    _result = result;
+                    Hide();
+                });
+
             InitializeComponent();
+        }
+
+        public new async Task<bool> ShowAsync()
+        {
+            await base.ShowAsync();
+            return _result;
         }
     }
 }

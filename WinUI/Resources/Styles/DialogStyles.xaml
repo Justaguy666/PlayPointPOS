@@ -1,0 +1,296 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:WinUI.Views.UserControls">
+
+    <Style x:Key="StandardFormDialogStyle"
+           TargetType="ContentDialog">
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="Width" Value="1600" />
+        <Setter Property="Height" Value="Auto" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Padding" Value="20" />
+    </Style>
+
+    <Style x:Key="DialogHeaderIconStyle"
+           TargetType="PathIcon">
+        <Setter Property="Width" Value="22" />
+        <Setter Property="Height" Value="22" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="Margin" Value="0,0,12,0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="DialogHeaderTitleTextStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource DialogHeaderFontSize}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="DialogHeaderContainerStyle"
+           TargetType="Grid">
+        <Setter Property="Margin" Value="0,0,0,20" />
+    </Style>
+
+    <Style x:Key="DialogHeaderDividerStyle"
+           TargetType="controls:DividerControl">
+        <Setter Property="DividerBrush" Value="{StaticResource LighterGrayBrush}" />
+        <Setter Property="Margin" Value="-36,0,-36,0" />
+    </Style>
+
+    <Style x:Key="DialogSectionDividerStyle"
+           TargetType="controls:DividerControl">
+        <Setter Property="DividerBrush" Value="{StaticResource LighterGrayBrush}" />
+    </Style>
+
+    <Style x:Key="DialogFormContentPanelStyle"
+           TargetType="StackPanel">
+        <Setter Property="Spacing" Value="22" />
+        <Setter Property="Margin" Value="0,20,0,0" />
+    </Style>
+
+    <Style x:Key="DialogFormFieldPanelStyle"
+           TargetType="StackPanel">
+        <Setter Property="Spacing" Value="8" />
+    </Style>
+
+    <Style x:Key="DialogFormLabelTextStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource LabelFontSize}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+    </Style>
+
+    <Style x:Key="DialogFormTextBoxStyle"
+           TargetType="TextBox">
+        <Setter Property="MinHeight" Value="48" />
+        <Setter Property="Padding" Value="16,12" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{StaticResource LightGrayBrush}" />
+        <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="FontSize" Value="{StaticResource ValueFontSize}" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="PlaceholderForeground" Value="{StaticResource PlaceholderGrayBrush}" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="TextAlignment" Value="Left" />
+    </Style>
+
+    <Style x:Key="DialogCompactCapacityButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource PrimaryActionButtonStyle}">
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="DialogCompactCapacityTextBoxStyle"
+           TargetType="TextBox"
+           BasedOn="{StaticResource DialogFormTextBoxStyle}">
+        <Setter Property="Width" Value="88" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="Padding" Value="0,6,0,0" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource OrangeFocusBrush}" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="DialogCapacityPrimaryButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource PrimaryActionButtonStyle}">
+        <Setter Property="Width" Value="56" />
+        <Setter Property="Height" Value="56" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="DialogCapacitySecondaryButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource SecondaryActionButtonStyle}">
+        <Setter Property="Width" Value="56" />
+        <Setter Property="Height" Value="56" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="DialogCapacityTextBoxStyle"
+           TargetType="TextBox"
+           BasedOn="{StaticResource DialogFormTextBoxStyle}">
+        <Setter Property="Width" Value="96" />
+        <Setter Property="Height" Value="56" />
+        <Setter Property="MinHeight" Value="56" />
+        <Setter Property="Padding" Value="0,8,0,0" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraExtraExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource OrangeFocusBrush}" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="DialogFormPasswordBoxStyle"
+           TargetType="PasswordBox">
+        <Setter Property="MinHeight" Value="48" />
+        <Setter Property="Padding" Value="16,12" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{StaticResource LightGrayBrush}" />
+        <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="FontSize" Value="{StaticResource ValueFontSize}" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="PasswordRevealMode" Value="Hidden" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+    </Style>
+
+    <Style x:Key="DialogReadOnlyTextBoxStyle"
+           TargetType="TextBox"
+           BasedOn="{StaticResource DialogFormTextBoxStyle}">
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Background" Value="{StaticResource AntiqueWhiteBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource LighterGrayBrush}" />
+    </Style>
+
+    <Style x:Key="DialogFormRootGridStyle"
+           TargetType="Grid">
+        <Setter Property="MinWidth" Value="440" />
+    </Style>
+
+    <Style x:Key="DialogTwoColumnRootGridStyle"
+           TargetType="Grid"
+           BasedOn="{StaticResource DialogFormRootGridStyle}" />
+
+    <Style x:Key="DialogPickerButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource ActionButtonBaseStyle}">
+        <Setter Property="MinHeight" Value="48" />
+        <Setter Property="Padding" Value="16,12" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{StaticResource LightGrayBrush}" />
+        <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="FontSize" Value="{StaticResource ValueFontSize}" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="DialogFieldValueTextStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource ValueFontSize}" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+
+    <Style x:Key="DialogFieldPlaceholderTextStyle"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource DialogFieldValueTextStyle}">
+        <Setter Property="Foreground" Value="{StaticResource PlaceholderGrayBrush}" />
+        <Setter Property="FontWeight" Value="Normal" />
+    </Style>
+
+    <Style x:Key="DialogFieldIconStyle"
+           TargetType="PathIcon">
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Height" Value="20" />
+        <Setter Property="Foreground" Value="{StaticResource MediumGrayBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+
+    <Style x:Key="DialogPrimaryFooterButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource ActionButtonBaseStyle}">
+        <Setter Property="Height" Value="48" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Background" Value="{StaticResource OrangeFocusBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource OrangeFocusBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMedium}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="DialogSuccessFooterButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource DialogPrimaryFooterButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource SuccessGreenBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource SuccessGreenBrush}" />
+    </Style>
+
+    <Style x:Key="DialogSecondaryActionButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource SecondaryActionButtonStyle}">
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource LightGrayBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="DialogSecondaryFooterButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource DialogSecondaryActionButtonStyle}">
+        <Setter Property="Height" Value="48" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMedium}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="DialogCompactPrimaryButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource PrimaryActionButtonStyle}">
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="MinWidth" Value="120" />
+        <Setter Property="Padding" Value="24,10" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="DialogCompactSecondaryButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource DialogSecondaryActionButtonStyle}">
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="Padding" Value="16,10" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+</ResourceDictionary>

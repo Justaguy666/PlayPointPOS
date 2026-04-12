@@ -34,9 +34,7 @@ public sealed partial class RevenueChartControl : UserControl
 
     private void ExportButtonPointerEntered(object sender, PointerRoutedEventArgs e)
     {
-        ExportButtonChrome.Background = ResolveBrush("OrangePeachLightBrush");
-        ExportButtonChrome.BorderBrush = ResolveBrush("OrangeLightVariantBrush");
-        ExportButtonIcon.Fill = ResolveBrush("PrimaryOrangeBrush");
+        ExportButtonChrome.Background = ResolveBrush("VeryLightGrayBrush");
     }
 
     private void ExportButtonPointerExited(object sender, PointerRoutedEventArgs e)
@@ -51,7 +49,12 @@ public sealed partial class RevenueChartControl : UserControl
         if (sender is not Button { Content: Border border, DataContext: ChartTabItemModel item })
             return;
 
-        ApplyInteractiveButtonHover(border, item.IsSelected);
+        if (item.IsSelected)
+        {
+            return;
+        }
+
+        ApplyInteractiveButtonHover(border);
     }
 
     private void MetricButtonPointerExited(object sender, PointerRoutedEventArgs e)
@@ -67,7 +70,12 @@ public sealed partial class RevenueChartControl : UserControl
         if (sender is not Button { Content: Border border, DataContext: TimeRangeItemModel item })
             return;
 
-        ApplyInteractiveButtonHover(border, item.IsSelected);
+        if (item.IsSelected)
+        {
+            return;
+        }
+
+        ApplyInteractiveButtonHover(border);
     }
 
     private void TimeRangeButtonPointerExited(object sender, PointerRoutedEventArgs e)
@@ -78,22 +86,9 @@ public sealed partial class RevenueChartControl : UserControl
         RestoreInteractiveButtonState(border, item.Background, item.BorderBrush, item.Foreground);
     }
 
-    private void ApplyInteractiveButtonHover(Border border, bool isSelected)
+    private void ApplyInteractiveButtonHover(Border border)
     {
-        if (border.Child is not TextBlock textBlock)
-            return;
-
-        if (isSelected)
-        {
-            border.Background = ResolveBrush("PrimaryOrangeDarkBrush");
-            border.BorderBrush = ResolveBrush("PrimaryOrangeDarkBrush");
-            textBlock.Foreground = ResolveBrush("WhiteBrush");
-            return;
-        }
-
-        border.Background = ResolveBrush("OrangePeachLightBrush");
-        border.BorderBrush = ResolveBrush("OrangeLightVariantBrush");
-        textBlock.Foreground = ResolveBrush("PrimaryOrangeBrush");
+        border.Background = ResolveBrush("VeryLightGrayBrush");
     }
 
     private static void RestoreInteractiveButtonState(

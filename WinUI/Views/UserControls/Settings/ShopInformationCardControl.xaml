@@ -10,28 +10,24 @@
     d:DataContext="{d:DesignInstance Type=vm:ShopInformationCardControlViewModel, IsDesignTimeCreatable=False}"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/FormInputStateResources.xaml" />
+    </UserControl.Resources>
+
     <Border
-        Padding="24"
-        Background="{StaticResource WhiteBrush}"
-        BorderBrush="{StaticResource LightGrayBrush}"
-        BorderThickness="1"
-        CornerRadius="12"
+        Style="{StaticResource SurfaceCardBorderStyle}"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
 
         <StackPanel Orientation="Vertical" Spacing="12">
             <TextBlock Text="{Binding Title}"
-                       FontSize="{StaticResource SubtitleTextBlockFontSize}"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource BlackBrush}" />
+                       Style="{StaticResource CardTitleTextStyle}" />
 
             <controls:DividerControl DividerBrush="{StaticResource LighterGrayBrush}" />
 
             <StackPanel Orientation="Vertical" Spacing="4">
                 <TextBlock Text="{Binding ShopNameLabel}"
-                           FontSize="{StaticResource LabelFontSize}"
-                           FontWeight="SemiBold"
-                           Foreground="{StaticResource BlackBrush}" />
+                           Style="{StaticResource FieldLabelTextStyle}" />
 
                 <TextBox Text="{Binding ShopName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          PlaceholderText="{Binding ShopNamePlaceholder}"
@@ -41,28 +37,12 @@
                          BorderBrush="{StaticResource LightGrayBrush}"
                          BorderThickness="1"
                          CornerRadius="7"
-                         Padding="12">
-                    <TextBox.Resources>
-                        <StaticResource x:Key="TextControlBackground" ResourceKey="WhiteBrush"/>
-                        <StaticResource x:Key="TextControlBackgroundPointerOver" ResourceKey="WhiteBrush"/>
-                        <StaticResource x:Key="TextControlBackgroundFocused" ResourceKey="WhiteBrush"/>
-                        <StaticResource x:Key="TextControlForeground" ResourceKey="BlackBrush"/>
-                        <StaticResource x:Key="TextControlForegroundPointerOver" ResourceKey="BlackBrush"/>
-                        <StaticResource x:Key="TextControlForegroundFocused" ResourceKey="BlackBrush"/>
-                        <StaticResource x:Key="TextControlBorderBrushFocused" ResourceKey="OrangeFocusBrush"/>
-                        <StaticResource x:Key="TextControlBorderBrushPointerOver" ResourceKey="MediumGrayBrush"/>
-                        <StaticResource x:Key="TextControlPlaceholderForeground" ResourceKey="PlaceholderGrayBrush"/>
-                        <StaticResource x:Key="TextControlPlaceholderForegroundPointerOver" ResourceKey="PlaceholderGrayBrush"/>
-                        <StaticResource x:Key="TextControlPlaceholderForegroundFocused" ResourceKey="PlaceholderGrayBrush"/>
-                    </TextBox.Resources>
-                </TextBox>
+                         Padding="12" />
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Spacing="4">
                 <TextBlock Text="{Binding AddressLabel}"
-                           FontSize="{StaticResource LabelFontSize}"
-                           FontWeight="SemiBold"
-                           Foreground="{StaticResource BlackBrush}" />
+                           Style="{StaticResource FieldLabelTextStyle}" />
 
                 <TextBox Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          PlaceholderText="{Binding AddressPlaceholder}"
@@ -72,21 +52,7 @@
                          BorderBrush="{StaticResource LightGrayBrush}"
                          BorderThickness="1"
                          CornerRadius="7"
-                         Padding="12">
-                    <TextBox.Resources>
-                        <StaticResource x:Key="TextControlBackground" ResourceKey="WhiteBrush"/>
-                        <StaticResource x:Key="TextControlBackgroundPointerOver" ResourceKey="WhiteBrush"/>
-                        <StaticResource x:Key="TextControlBackgroundFocused" ResourceKey="WhiteBrush"/>
-                        <StaticResource x:Key="TextControlForeground" ResourceKey="BlackBrush"/>
-                        <StaticResource x:Key="TextControlForegroundPointerOver" ResourceKey="BlackBrush"/>
-                        <StaticResource x:Key="TextControlForegroundFocused" ResourceKey="BlackBrush"/>
-                        <StaticResource x:Key="TextControlBorderBrushFocused" ResourceKey="OrangeFocusBrush"/>
-                        <StaticResource x:Key="TextControlBorderBrushPointerOver" ResourceKey="MediumGrayBrush"/>
-                        <StaticResource x:Key="TextControlPlaceholderForeground" ResourceKey="PlaceholderGrayBrush"/>
-                        <StaticResource x:Key="TextControlPlaceholderForegroundPointerOver" ResourceKey="PlaceholderGrayBrush"/>
-                        <StaticResource x:Key="TextControlPlaceholderForegroundFocused" ResourceKey="PlaceholderGrayBrush"/>
-                    </TextBox.Resources>
-                </TextBox>
+                         Padding="12" />
             </StackPanel>
 
             <Grid ColumnSpacing="12">
@@ -97,9 +63,7 @@
 
                 <StackPanel Orientation="Vertical" Spacing="4">
                     <TextBlock Text="{Binding EmailLabel}"
-                               FontSize="{StaticResource LabelFontSize}"
-                               FontWeight="SemiBold"
-                               Foreground="{StaticResource BlackBrush}" />
+                               Style="{StaticResource FieldLabelTextStyle}" />
 
                     <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              PlaceholderText="{Binding EmailPlaceholder}"
@@ -109,36 +73,18 @@
                              BorderBrush="{StaticResource LightGrayBrush}"
                              BorderThickness="1"
                              CornerRadius="7"
-                             Padding="12">
-                        <TextBox.Resources>
-                            <StaticResource x:Key="TextControlBackground" ResourceKey="WhiteBrush"/>
-                            <StaticResource x:Key="TextControlBackgroundPointerOver" ResourceKey="WhiteBrush"/>
-                            <StaticResource x:Key="TextControlBackgroundFocused" ResourceKey="WhiteBrush"/>
-                            <StaticResource x:Key="TextControlForeground" ResourceKey="BlackBrush"/>
-                            <StaticResource x:Key="TextControlForegroundPointerOver" ResourceKey="BlackBrush"/>
-                            <StaticResource x:Key="TextControlForegroundFocused" ResourceKey="BlackBrush"/>
-                            <StaticResource x:Key="TextControlBorderBrushFocused" ResourceKey="OrangeFocusBrush"/>
-                            <StaticResource x:Key="TextControlBorderBrushPointerOver" ResourceKey="MediumGrayBrush"/>
-                            <StaticResource x:Key="TextControlPlaceholderForeground" ResourceKey="PlaceholderGrayBrush"/>
-                            <StaticResource x:Key="TextControlPlaceholderForegroundPointerOver" ResourceKey="PlaceholderGrayBrush"/>
-                            <StaticResource x:Key="TextControlPlaceholderForegroundFocused" ResourceKey="PlaceholderGrayBrush"/>
-                        </TextBox.Resources>
-                    </TextBox>
+                             Padding="12" />
 
                     <TextBlock Text="{Binding EmailErrorMessage}"
                                Visibility="{Binding HasEmailError, Converter={StaticResource BoolToVisible}}"
-                               Foreground="{StaticResource ErrorRedBrush}"
-                               FontSize="{StaticResource FontSizeSmall}"
-                               FontWeight="SemiBold" />
+                               Style="{StaticResource FieldErrorTextStyle}" />
                 </StackPanel>
 
                 <StackPanel Grid.Column="1"
                             Orientation="Vertical"
                             Spacing="4">
                     <TextBlock Text="{Binding PhoneLabel}"
-                               FontSize="{StaticResource LabelFontSize}"
-                               FontWeight="SemiBold"
-                               Foreground="{StaticResource BlackBrush}" />
+                               Style="{StaticResource FieldLabelTextStyle}" />
 
                     <TextBox Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              PlaceholderText="{Binding PhonePlaceholder}"
@@ -148,45 +94,21 @@
                              BorderBrush="{StaticResource LightGrayBrush}"
                              BorderThickness="1"
                              CornerRadius="7"
-                             Padding="12">
-                        <TextBox.Resources>
-                            <StaticResource x:Key="TextControlBackground" ResourceKey="WhiteBrush"/>
-                            <StaticResource x:Key="TextControlBackgroundPointerOver" ResourceKey="WhiteBrush"/>
-                            <StaticResource x:Key="TextControlBackgroundFocused" ResourceKey="WhiteBrush"/>
-                            <StaticResource x:Key="TextControlForeground" ResourceKey="BlackBrush"/>
-                            <StaticResource x:Key="TextControlForegroundPointerOver" ResourceKey="BlackBrush"/>
-                            <StaticResource x:Key="TextControlForegroundFocused" ResourceKey="BlackBrush"/>
-                            <StaticResource x:Key="TextControlBorderBrushFocused" ResourceKey="OrangeFocusBrush"/>
-                            <StaticResource x:Key="TextControlBorderBrushPointerOver" ResourceKey="MediumGrayBrush"/>
-                            <StaticResource x:Key="TextControlPlaceholderForeground" ResourceKey="PlaceholderGrayBrush"/>
-                            <StaticResource x:Key="TextControlPlaceholderForegroundPointerOver" ResourceKey="PlaceholderGrayBrush"/>
-                            <StaticResource x:Key="TextControlPlaceholderForegroundFocused" ResourceKey="PlaceholderGrayBrush"/>
-                        </TextBox.Resources>
-                    </TextBox>
+                             Padding="12" />
 
                     <TextBlock Text="{Binding PhoneErrorMessage}"
                                Visibility="{Binding HasPhoneError, Converter={StaticResource BoolToVisible}}"
-                               Foreground="{StaticResource ErrorRedBrush}"
-                               FontSize="{StaticResource FontSizeSmall}"
-                               FontWeight="SemiBold" />
+                               Style="{StaticResource FieldErrorTextStyle}" />
                 </StackPanel>
             </Grid>
 
             <Button Command="{Binding ApplyCommand}"
+                    Style="{StaticResource PrimaryActionButtonStyle}"
                     HorizontalAlignment="Right"
-                    CornerRadius="7"
                     Padding="24,10"
-                    FontSize="{StaticResource FontSizeMedium}"
-                    FontWeight="SemiBold"
-                    Foreground="{StaticResource WhiteBrush}"
-                    Background="{StaticResource OrangeFocusBrush}">
+                    >
                 <Button.Resources>
-                    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeBrush"/>
-                    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeBrush"/>
-                    <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
-                    <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
-                    <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="LighterGrayBrush"/>
-                    <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="MediumDarkGrayBrush"/>
+                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
                 </Button.Resources>
                 <TextBlock Text="{Binding ApplyButtonText}" />
             </Button>

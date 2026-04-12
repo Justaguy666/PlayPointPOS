@@ -17,7 +17,7 @@ public sealed partial class SummarizedAvailableCard : UserControl
     private void HandleCardPointerEntered(object sender, PointerRoutedEventArgs e)
     {
         _isPointerOver = true;
-        ApplyVisualState("SummarizedAreaHoverBackgroundBrush");
+        ApplyHoverVisualState();
     }
 
     private void HandleCardPointerExited(object sender, PointerRoutedEventArgs e)
@@ -28,14 +28,18 @@ public sealed partial class SummarizedAvailableCard : UserControl
 
     private void HandleCardPointerPressed(object sender, PointerRoutedEventArgs e)
     {
-        ApplyVisualState("SummarizedAreaPressedBackgroundBrush");
+        ApplyPressedVisualState();
     }
 
     private void HandleCardPointerReleased(object sender, PointerRoutedEventArgs e)
     {
-        ApplyVisualState(_isPointerOver
-            ? "SummarizedAreaHoverBackgroundBrush"
-            : "SummarizedAvailableAreaBackgroundBrush");
+        if (_isPointerOver)
+        {
+            ApplyHoverVisualState();
+            return;
+        }
+
+        ApplyDefaultVisualState();
     }
 
     private void HandleCardPointerCanceled(object sender, PointerRoutedEventArgs e)
@@ -45,20 +49,34 @@ public sealed partial class SummarizedAvailableCard : UserControl
 
     private void HandleCardPointerCaptureLost(object sender, PointerRoutedEventArgs e)
     {
-        ApplyVisualState(_isPointerOver
-            ? "SummarizedAreaHoverBackgroundBrush"
-            : "SummarizedAvailableAreaBackgroundBrush");
+        if (_isPointerOver)
+        {
+            ApplyHoverVisualState();
+            return;
+        }
+
+        ApplyDefaultVisualState();
     }
 
     private void ApplyDefaultVisualState()
     {
-        ApplyVisualState("SummarizedAvailableAreaBackgroundBrush");
+        ApplyVisualState("SummarizedAvailableAreaBackgroundBrush", "SummarizedAreaBorderBrush");
     }
 
-    private void ApplyVisualState(string backgroundBrushKey)
+    private void ApplyHoverVisualState()
+    {
+        ApplyVisualState("SummarizedAreaHoverBackgroundBrush", "SummarizedAreaHoverBackgroundBrush");
+    }
+
+    private void ApplyPressedVisualState()
+    {
+        ApplyVisualState("SummarizedAreaPressedBackgroundBrush", "SummarizedAreaPressedBackgroundBrush");
+    }
+
+    private void ApplyVisualState(string backgroundBrushKey, string borderBrushKey)
     {
         CardBorder.Background = ResolveBrush(backgroundBrushKey);
-        CardBorder.BorderBrush = ResolveBrush(backgroundBrushKey);
+        CardBorder.BorderBrush = ResolveBrush(borderBrushKey);
     }
 
     private static Brush ResolveBrush(string resourceKey)

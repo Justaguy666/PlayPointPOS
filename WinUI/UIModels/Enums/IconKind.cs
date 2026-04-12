@@ -34,6 +34,8 @@ public enum IconKind
     Target,
     Table,
     Room,
+    Calendar,
+    Clock,
     Up,
     Down,
     Add,

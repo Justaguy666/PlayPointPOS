@@ -28,16 +28,22 @@
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             Spacing="12">
-                    <Button Command="{x:Bind ViewModel.LogoutCommand, Mode=OneWay}"
-                            CornerRadius="7"
+                    <Button Command="{x:Bind ViewModel.ChangePasswordCommand, Mode=OneWay}"
+                            Style="{StaticResource SecondaryActionButtonStyle}"
                             Padding="24,10"
-                            FontSize="{StaticResource FontSizeMedium}"
-                            FontWeight="SemiBold"
-                            Foreground="{StaticResource WhiteBrush}"
-                            Background="{StaticResource SettingsLogoutButtonBackgroundBrush}">
+                            Background="{StaticResource WhiteBrush}">
                         <Button.Resources>
-                            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="SettingsLogoutButtonBackgroundHover"/>
-                            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="SettingsLogoutButtonBackgroundHover"/>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <TextBlock Text="{x:Bind ViewModel.ChangePasswordButtonText, Mode=OneWay}" />
+                    </Button>
+
+                    <Button Command="{x:Bind ViewModel.LogoutCommand, Mode=OneWay}"
+                            Style="{StaticResource DangerActionButtonStyle}"
+                            Padding="24,10"
+                            >
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DangerHoverButtonStateResources.xaml" />
                         </Button.Resources>
                         <StackPanel Orientation="Horizontal" Spacing="4">
                             <PathIcon 
@@ -49,22 +55,6 @@
 
                             <TextBlock Text="{x:Bind ViewModel.LogoutButtonText, Mode=OneWay}" VerticalAlignment="Center" />
                         </StackPanel>
-                    </Button>
-
-                    <Button Command="{x:Bind ViewModel.ChangePasswordCommand, Mode=OneWay}"
-                            CornerRadius="7"
-                            Padding="24,10"
-                            FontSize="{StaticResource FontSizeMedium}"
-                            FontWeight="SemiBold"
-                            Foreground="{StaticResource BlackBrush}"
-                            Background="{StaticResource WhiteBrush}">
-                        <Button.Resources>
-                            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeDarkBrush"/>
-                            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeDarkBrush"/>
-                            <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
-                            <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
-                        </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.ChangePasswordButtonText, Mode=OneWay}" />
                     </Button>
                 </StackPanel>
             </StackPanel>

@@ -14,13 +14,75 @@
                 <ResourceDictionary Source="ms-appx:///Resources/Images.xaml" />
                 <ResourceDictionary Source="ms-appx:///Resources/Styles/CommonStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <!-- DateTimePicker Flyout Accept/Dismiss Button overrides -->
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBackground" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBackgroundPointerOver" Color="#F3F4F6" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBackgroundPressed" Color="#E5E7EB" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBorderBrush" Color="#E5E7EB" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBorderBrushPointerOver" Color="#B3B3B3" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBorderBrushPressed" Color="#FF7A30" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonForeground" Color="#1F1F1F" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonForegroundPointerOver" Color="#1F1F1F" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonForegroundPressed" Color="#1F1F1F" />
+
+                    <!-- Alternative key names that some WinUI versions use -->
+                    <SolidColorBrush x:Key="DatePickerFlyoutPresenterAcceptDismissHostBackground" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="TimePickerFlyoutPresenterAcceptDismissHostBackground" Color="#FFFFFF" />
+
+                    <!-- SystemControl overrides for flyout glyph icons -->
+                    <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="#1F1F1F" />
+                    <SolidColorBrush x:Key="SystemControlForegroundBaseMediumBrush" Color="#99000000" />
+                    <SolidColorBrush x:Key="SystemControlForegroundBaseMediumHighBrush" Color="#CC000000" />
+                    <SolidColorBrush x:Key="SystemControlHighlightBaseHighBrush" Color="#1F1F1F" />
+                    <SolidColorBrush x:Key="SystemControlHighlightAltBaseHighBrush" Color="#1F1F1F" />
+
+                    <!-- Flyout presenter overrides -->
+                    <SolidColorBrush x:Key="DatePickerFlyoutPresenterBackground" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="TimePickerFlyoutPresenterBackground" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="DatePickerFlyoutPresenterHighlightFill" Color="#FF7A30" />
+                    <SolidColorBrush x:Key="TimePickerFlyoutPresenterHighlightFill" Color="#FF7A30" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Light">
+                    <!-- DateTimePicker Flyout Accept/Dismiss Button overrides -->
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBackground" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBackgroundPointerOver" Color="#F3F4F6" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBackgroundPressed" Color="#E5E7EB" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBorderBrush" Color="#E5E7EB" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBorderBrushPointerOver" Color="#B3B3B3" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonBorderBrushPressed" Color="#FF7A30" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonForeground" Color="#1F1F1F" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonForegroundPointerOver" Color="#1F1F1F" />
+                    <SolidColorBrush x:Key="DateTimePickerFlyoutButtonForegroundPressed" Color="#1F1F1F" />
+
+                    <!-- Alternative key names that some WinUI versions use -->
+                    <SolidColorBrush x:Key="DatePickerFlyoutPresenterAcceptDismissHostBackground" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="TimePickerFlyoutPresenterAcceptDismissHostBackground" Color="#FFFFFF" />
+
+                    <!-- SystemControl overrides for flyout glyph icons -->
+                    <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="#1F1F1F" />
+                    <SolidColorBrush x:Key="SystemControlForegroundBaseMediumBrush" Color="#99000000" />
+                    <SolidColorBrush x:Key="SystemControlForegroundBaseMediumHighBrush" Color="#CC000000" />
+                    <SolidColorBrush x:Key="SystemControlHighlightBaseHighBrush" Color="#1F1F1F" />
+                    <SolidColorBrush x:Key="SystemControlHighlightAltBaseHighBrush" Color="#1F1F1F" />
+
+                    <!-- Flyout presenter overrides -->
+                    <SolidColorBrush x:Key="DatePickerFlyoutPresenterBackground" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="TimePickerFlyoutPresenterBackground" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="DatePickerFlyoutPresenterHighlightFill" Color="#FF7A30" />
+                    <SolidColorBrush x:Key="TimePickerFlyoutPresenterHighlightFill" Color="#FF7A30" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+
             <!-- Converters -->
             <converters:BoolToVisibleConverter x:Key="BoolToVisible" />
             <converters:BoolToInvisibleConverter x:Key="BoolToInvisible" />
             <converters:BoolInverterConverter x:Key="BoolInverter" />
             <converters:BoolToOpacityConverter x:Key="BoolToOpacity" />
             <converters:BoolToOrangeBrushConverter x:Key="BoolToOrangeBrushConverter" />
+            <converters:BoolToAccentForegroundBrushConverter x:Key="BoolToAccentForegroundBrushConverter" />
             <converters:BoolToGradientBrushConverter x:Key="BoolToGradientBrushConverter" />
             <converters:IconConverter x:Key="IconConverter" />
             <converters:ChartValueToHeightConverter x:Key="ChartValueToHeightConverter" />

@@ -8,12 +8,12 @@
     xmlns:viewmodels="using:WinUI.ViewModels.UserControls.Dashboard"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/CircularIconActionButtonStateResources.xaml" />
+    </UserControl.Resources>
+
     <Border
-        Padding="24"
-        Background="{StaticResource WhiteBrush}"
-        BorderBrush="{StaticResource LightGrayBrush}"
-        BorderThickness="1"
-        CornerRadius="12"
+        Style="{StaticResource SurfaceCardBorderStyle}"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
         <StackPanel Spacing="16">
@@ -42,23 +42,9 @@
 
                 <Button
                     Grid.Column="1"
-                    Width="Auto"
-                    Height="Auto"
-                    Padding="0"
-                    Background="{StaticResource TransparentBrush}"
-                    BorderBrush="{StaticResource TransparentBrush}"
-                    BorderThickness="1"
+                    Style="{StaticResource CircularIconActionButtonStyle}"
                     Command="{Binding ShowMoreCommand}"
-                    CornerRadius="9999"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center">
-
-                    <Button.Resources>
-                        <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="PrimaryOrangeBrush"/>
-                        <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="PrimaryOrangeBrush"/>
-                        <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="WhiteBrush"/>
-                        <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="WhiteBrush"/>
-                    </Button.Resources>
+                    >
                     
                     <PathIcon
                         Width="24"

@@ -1,6 +1,6 @@
 using System;
 using Application.Services;
-using WinUI.UIModels.AreaManagement.SummarizedAreaCards;
+using WinUI.UIModels.AreaManagement;
 using WinUI.ViewModels.AreaManagement.SummarizedAreaCards;
 
 namespace WinUI.Services.Factories;
@@ -14,7 +14,7 @@ public sealed class SummarizedAvailableCardViewModelFactory
         _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
     }
 
-    public SummarizedAvailableCardViewModel Create(SummarizedAvailableCardModel model)
+    public SummarizedAvailableCardViewModel Create(AreaModel model)
     {
         return new SummarizedAvailableCardViewModel(_localizationService, model);
     }

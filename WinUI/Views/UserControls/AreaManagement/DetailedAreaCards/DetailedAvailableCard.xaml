@@ -7,7 +7,63 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
-        
+    <Grid Style="{StaticResource DetailedAreaCardHeaderGridStyle}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0"
+              ColumnSpacing="16"
+              VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Path Grid.Column="0"
+                  Width="32"
+                  Height="32"
+                  Stretch="Uniform"
+                  Fill="{StaticResource BlackBrush}"
+                  Data="{Binding IconState, Converter={StaticResource IconConverter}, Mode=OneWay}"
+                  VerticalAlignment="Center" />
+
+            <StackPanel Grid.Column="1"
+                        Spacing="6"
+                        VerticalAlignment="Center">
+                <TextBlock Text="{Binding AreaName, Mode=OneWay}"
+                           FontSize="{StaticResource FontSizeExtraExtraExtraLarge}"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource BlackBrush}" />
+
+                <TextBlock Text="{Binding MaxCapacityText, Mode=OneWay}"
+                           FontSize="{StaticResource FontSizeMedium}"
+                           FontWeight="Normal"
+                           Foreground="{StaticResource DarkGrayBrush}" />
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Grid.Column="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Spacing="8">
+            <Button Style="{StaticResource DetailedAreaCardPrimaryButtonStyle}"
+                    Content="{Binding StartSessionButtonText, Mode=OneWay}"
+                    Command="{Binding StartSessionCommand, Mode=OneWay}">
+                <Button.Resources>
+                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SuccessActionButtonStateResources.xaml" />
+                </Button.Resources>
+            </Button>
+
+            <Button Style="{StaticResource DetailedAreaCardSecondaryButtonStyle}"
+                    Content="{Binding ReserveButtonText, Mode=OneWay}"
+                    Command="{Binding ReserveCommand, Mode=OneWay}">
+                <Button.Resources>
+                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/InfoActionButtonStateResources.xaml" />
+                </Button.Resources>
+            </Button>
+        </StackPanel>
     </Grid>
 </UserControl>

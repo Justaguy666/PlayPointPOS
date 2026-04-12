@@ -11,11 +11,7 @@
     mc:Ignorable="d">
 
     <Border
-        Padding="24"
-        Background="{StaticResource WhiteBrush}"
-        BorderBrush="{StaticResource LightGrayBrush}"
-        BorderThickness="1"
-        CornerRadius="12"
+        Style="{StaticResource SurfaceCardBorderStyle}"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
 
@@ -56,10 +52,7 @@
                             PointerEntered="ExportButtonPointerEntered"
                             PointerExited="ExportButtonPointerExited">
                             <Button.Resources>
-                                <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="TransparentBrush" />
-                                <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="TransparentBrush" />
-                                <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="TransparentBrush" />
-                                <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="TransparentBrush" />
+                                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/TransparentButtonStateResources.xaml" />
                             </Button.Resources>
 
                             <Border
@@ -111,10 +104,7 @@
                                 PointerEntered="MetricButtonPointerEntered"
                                 PointerExited="MetricButtonPointerExited">
                                 <Button.Resources>
-                                    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="TransparentBrush" />
-                                    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="TransparentBrush" />
-                                    <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="TransparentBrush" />
-                                    <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="TransparentBrush" />
+                                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/TransparentButtonStateResources.xaml" />
                                 </Button.Resources>
 
                                 <Border
@@ -247,10 +237,7 @@
                                 PointerEntered="TimeRangeButtonPointerEntered"
                                 PointerExited="TimeRangeButtonPointerExited">
                                 <Button.Resources>
-                                    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="TransparentBrush" />
-                                    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="TransparentBrush" />
-                                    <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="TransparentBrush" />
-                                    <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="TransparentBrush" />
+                                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/TransparentButtonStateResources.xaml" />
                                 </Button.Resources>
 
                                 <Border
