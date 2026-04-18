@@ -70,7 +70,6 @@
     <Folder Include="Assets\Icons\" />
     <Folder Include="Helpers\" />
     <Folder Include="Resources\Animations\" />
-    <Folder Include="ViewModels\Dialogs\Filter\" />
     <Folder Include="ViewModels\UserControls\AreaManagement\DetailedAreaCards\" />
     <Folder Include="ViewModels\UserControls\AreaManagement\SummarizedAreaCards\" />
     <Folder Include="Views\UserControls\AreaManagement\" />
@@ -239,9 +238,6 @@
     <None Remove="Resources\FontSize.xaml" />
     <None Remove="Resources\Images.xaml" />
     <None Remove="Views\Dialogs\ConfirmationDialog.xaml" />
-    <None Remove="Views\Dialogs\Filter\AreaFilterDialog.xaml" />
-    <None Remove="Views\Dialogs\Filter\GameFilterDialog.xaml" />
-    <None Remove="Views\Dialogs\Filter\ProductFilterDialog.xaml" />
     <None Remove="Views\Dialogs\ForgotPasswordDialog.xaml" />
     <None Remove="Views\Dialogs\Management\AreaDialog.xaml" />
     <None Remove="Views\Dialogs\Management\GameDialog.xaml" />
@@ -251,6 +247,7 @@
     <None Remove="Views\Dialogs\StartSessionDialog.xaml" />
     <None Remove="Views\UserControls\Dashboard\GoalProgressControl.xaml" />
     <None Remove="Views\UserControls\Dashboard\RevenueChartControl.xaml" />
+    <None Remove="Views\UserControls\Games\ListGameCardControl.xaml" />
     <None Remove="Views\UserControls\PaginationControl.xaml" />
     <None Remove="Views\UserControls\Dashboard\QuickStatsControl.xaml" />
     <None Remove="Views\UserControls\Dashboard\StatCardControl.xaml" />
@@ -259,17 +256,17 @@
     <None Remove="Views\UserControls\Settings\ShopInformationCardControl.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\Dialogs\Filter\ProductFilterDialog.xaml">
+    <Page Update="Views\Dialogs\Management\GameTypeDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\Dialogs\Filter\GameFilterDialog.xaml">
+    <Page Update="Views\UserControls\Games\ListGameCardControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\Dialogs\Filter\AreaFilterDialog.xaml">
+    <Page Update="Views\UserControls\Games\GridGameCardControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

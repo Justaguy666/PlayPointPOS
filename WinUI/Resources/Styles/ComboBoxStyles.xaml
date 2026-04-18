@@ -3,6 +3,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:helpers="using:WinUI.Helpers">
 
+    <StaticResource x:Key="ComboBoxBackgroundPointerOver" ResourceKey="VeryLightGrayBrush" />
+    <StaticResource x:Key="ComboBoxBorderBrushPointerOver" ResourceKey="LightGrayBrush" />
+    <StaticResource x:Key="ComboBoxForegroundPointerOver" ResourceKey="BlackBrush" />
+    <StaticResource x:Key="ComboBoxBackgroundPressed" ResourceKey="PrimaryOrangeDarkBrush" />
+    <StaticResource x:Key="ComboBoxBorderBrushPressed" ResourceKey="PrimaryOrangeDarkBrush" />
+    <StaticResource x:Key="ComboBoxForegroundPressed" ResourceKey="WhiteBrush" />
+
     <StaticResource x:Key="ComboBoxItemPillFillBrush" ResourceKey="PrimaryOrangeBrush" />
     <StaticResource x:Key="ComboBoxItemBackgroundSelected" ResourceKey="OrangePeachLightBrush" />
     <StaticResource x:Key="ComboBoxItemBackgroundSelectedUnfocused" ResourceKey="OrangePeachLightBrush" />
@@ -317,27 +324,27 @@
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Background"
                                                                        Storyboard.TargetProperty="Background">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource VeryLightGrayBrush}" />
+                                                                    Value="{ThemeResource ComboBoxBackgroundPointerOver}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Background"
                                                                        Storyboard.TargetProperty="BorderBrush">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource LightGrayBrush}" />
+                                                                    Value="{ThemeResource ComboBoxBorderBrushPointerOver}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
                                                                        Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource BlackBrush}" />
+                                                                    Value="{ThemeResource ComboBoxForegroundPointerOver}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlaceholderTextBlock"
                                                                        Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource BlackBrush}" />
+                                                                    Value="{ThemeResource ComboBoxForegroundPointerOver}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DropDownGlyph"
                                                                        Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource BlackBrush}" />
+                                                                    Value="{ThemeResource ComboBoxForegroundPointerOver}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -347,27 +354,27 @@
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Background"
                                                                        Storyboard.TargetProperty="Background">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource PrimaryOrangeDarkBrush}" />
+                                                                    Value="{ThemeResource ComboBoxBackgroundPressed}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Background"
                                                                        Storyboard.TargetProperty="BorderBrush">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource PrimaryOrangeDarkBrush}" />
+                                                                    Value="{ThemeResource ComboBoxBorderBrushPressed}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
                                                                        Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource WhiteBrush}" />
+                                                                    Value="{ThemeResource ComboBoxForegroundPressed}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlaceholderTextBlock"
                                                                        Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource WhiteBrush}" />
+                                                                    Value="{ThemeResource ComboBoxForegroundPressed}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DropDownGlyph"
                                                                        Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{StaticResource WhiteBrush}" />
+                                                                    Value="{ThemeResource ComboBoxForegroundPressed}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>

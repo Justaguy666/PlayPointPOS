@@ -14,9 +14,6 @@ public sealed partial class AreaFilterDialog : ContentDialog
 {
     private static readonly SolidColorBrush DarkForegroundBrush = new(Windows.UI.Color.FromArgb(255, 31, 31, 31));
 
-    private readonly TimePickerFlyout _startTimeFromFlyout;
-    private readonly TimePickerFlyout _startTimeToFlyout;
-
     public AreaFilterViewModel ViewModel { get; }
 
     public IconState HeaderIconState => ViewModel.Icon;
@@ -29,8 +26,6 @@ public sealed partial class AreaFilterDialog : ContentDialog
     {
         ViewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
         ViewModel.Configure(request);
-        _startTimeFromFlyout = CreateTimePickerFlyout();
-        _startTimeToFlyout = CreateTimePickerFlyout();
         DataContext = ViewModel;
         InitializeComponent();
 
@@ -43,41 +38,11 @@ public sealed partial class AreaFilterDialog : ContentDialog
         Hide();
     }
 
-    private async void StartTimeFromFieldButton_Click(object sender, RoutedEventArgs e)
-    {
-        _startTimeFromFlyout.Time = CoerceFilterTime(ViewModel.StartTimeFrom ?? TimeSpan.Zero);
-        await _startTimeFromFlyout.ShowAtAsync(StartTimeFromFieldButton);
-    }
-
-    private async void StartTimeToFieldButton_Click(object sender, RoutedEventArgs e)
-    {
-        _startTimeToFlyout.Time = CoerceFilterTime(ViewModel.StartTimeTo ?? new TimeSpan(23, 55, 0));
-        await _startTimeToFlyout.ShowAtAsync(StartTimeToFieldButton);
-    }
-
     private void HandleClosed(ContentDialog sender, ContentDialogClosedEventArgs args)
     {
         Closed -= HandleClosed;
-        _startTimeFromFlyout.TimePicked -= HandleTimePicked;
-        _startTimeFromFlyout.Opened -= HandleFlyoutOpened;
-        _startTimeToFlyout.TimePicked -= HandleTimePicked;
-        _startTimeToFlyout.Opened -= HandleFlyoutOpened;
         ViewModel.CloseRequested -= HandleCloseRequested;
         ViewModel.Dispose();
-    }
-
-    private TimePickerFlyout CreateTimePickerFlyout()
-    {
-        var flyout = new TimePickerFlyout
-        {
-            Time = TimeSpan.Zero,
-            ClockIdentifier = "24HourClock",
-            MinuteIncrement = ReservationDateTimeHelper.MinuteIncrement,
-        };
-
-        flyout.Opened += HandleFlyoutOpened;
-        flyout.TimePicked += HandleTimePicked;
-        return flyout;
     }
 
     private void HandleFlyoutOpened(object? sender, object e)
@@ -111,32 +76,13 @@ public sealed partial class AreaFilterDialog : ContentDialog
         }
     }
 
-    private void HandleTimePicked(TimePickerFlyout sender, TimePickedEventArgs args)
-    {
-        if (ReferenceEquals(sender, _startTimeFromFlyout))
-        {
-            HandleStartTimeFromPicked(sender, args);
-            return;
-        }
-
-        HandleStartTimeToPicked(sender, args);
-    }
-
     private void HandleStartTimeFromPicked(TimePickerFlyout sender, TimePickedEventArgs args)
     {
-        ViewModel.StartTimeFrom = CoerceFilterTime(args.NewTime);
+        ViewModel.ApplyStartTimeFromSelection(args.NewTime);
     }
 
     private void HandleStartTimeToPicked(TimePickerFlyout sender, TimePickedEventArgs args)
     {
-        ViewModel.StartTimeTo = CoerceFilterTime(args.NewTime);
-    }
-
-    private static TimeSpan CoerceFilterTime(TimeSpan selectedTime)
-    {
-        int minuteIncrement = ReservationDateTimeHelper.MinuteIncrement;
-        int totalMinutes = (int)Math.Round(selectedTime.TotalMinutes / minuteIncrement, MidpointRounding.AwayFromZero) * minuteIncrement;
-        totalMinutes = Math.Clamp(totalMinutes, 0, (24 * 60) - minuteIncrement);
-        return TimeSpan.FromMinutes(totalMinutes);
+        ViewModel.ApplyStartTimeToSelection(args.NewTime);
     }
 }

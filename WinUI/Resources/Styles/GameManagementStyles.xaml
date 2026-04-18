@@ -1,0 +1,80 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="GameCardActionButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource PrimaryActionButtonStyle}">
+        <Setter Property="Width" Value="36" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="9" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="{StaticResource WarningAmberBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource WarningAmberBrush}" />
+    </Style>
+
+    <Style x:Key="GameCardDangerButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource DangerActionButtonStyle}">
+        <Setter Property="Width" Value="36" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="9" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="GameCardStockButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource PrimaryActionButtonStyle}">
+        <Setter Property="Width" Value="34" />
+        <Setter Property="Height" Value="34" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="9" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="GameListNameTextStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="TextWrapping" Value="WrapWholeWords" />
+        <Setter Property="MaxLines" Value="2" />
+    </Style>
+
+    <Style x:Key="GameListMetaLabelTextStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}" />
+        <Setter Property="Foreground" Value="{StaticResource SecondaryGrayBrush}" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+    </Style>
+
+    <Style x:Key="GameListMetaValueTextStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+    </Style>
+
+    <Style x:Key="GameListPriceTextStyle"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource GameListMetaValueTextStyle}">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryOrangeBrush}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style x:Key="GameCardBadgeTextStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+    </Style>
+</ResourceDictionary>

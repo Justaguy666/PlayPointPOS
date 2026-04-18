@@ -5,13 +5,15 @@ using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
-using WinUI.UIModels.AreaManagement;
+using WinUI.Services.Factories;
+using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
 
 namespace WinUI.ViewModels.Dialogs.Management;
 
 public partial class AreaDialogViewModel : UpsertDialogViewModelBase
 {
+    private readonly AreaModelFactory _areaModelFactory;
     private AreaModel _targetModel = new();
     private AreaModel _initialModel = new();
     private Func<AreaModel, Task>? _onSubmittedAsync;
@@ -26,10 +28,12 @@ public partial class AreaDialogViewModel : UpsertDialogViewModelBase
     public AreaDialogViewModel(
         ILocalizationService localizationService,
         IDialogService dialogService,
+        AreaModelFactory areaModelFactory,
         UpsertDialogMode mode)
         : base(localizationService, mode)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _areaModelFactory = areaModelFactory ?? throw new ArgumentNullException(nameof(areaModelFactory));
         ApplyModel(_initialModel);
     }
 
@@ -148,7 +152,7 @@ public partial class AreaDialogViewModel : UpsertDialogViewModelBase
     {
         _onSubmittedAsync = request?.OnSubmittedAsync;
         _targetModel = request?.Model ?? new AreaModel();
-        _initialModel = _targetModel.Clone();
+        _initialModel = _areaModelFactory.Clone(_targetModel);
         ErrorMessage = string.Empty;
         ApplyModel(_initialModel);
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Application.Services;
 using Application.UseCases.Analytics.Contracts.Enums;
 using CommunityToolkit.Mvvm.Input;
@@ -21,6 +22,7 @@ public partial class RevenueChartControlViewModel : LocalizedViewModelBase
     private const double MinBarHeight = 150.0;
     private const double MaxBarHeight = 240.0;
 
+    private readonly INotificationService _notificationService;
     private readonly Dictionary<(ChartMetricType Metric, ChartRangeType Range), ChartDataset> _datasets;
     private readonly Brush _whiteBrush;
     private readonly Brush _orangeBrush;
@@ -53,9 +55,12 @@ public partial class RevenueChartControlViewModel : LocalizedViewModelBase
     private ObservableCollection<ChartBarItemModel> _bars = [];
     private double _chartContentWidth;
 
-    public RevenueChartControlViewModel(ILocalizationService localizationService)
+    public RevenueChartControlViewModel(
+        ILocalizationService localizationService,
+        INotificationService notificationService)
         : base(localizationService)
     {
+        _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         _whiteBrush = AppResourceLookup.GetBrush("WhiteBrush", Colors.White);
         _orangeBrush = AppResourceLookup.GetBrush("PrimaryOrangeBrush", AppColors.PrimaryOrange);
         _mutedTextBrush = AppResourceLookup.GetBrush("DashboardMutedTextBrush", ColorHelper.FromArgb(255, 113, 128, 150));
@@ -69,7 +74,7 @@ public partial class RevenueChartControlViewModel : LocalizedViewModelBase
 
         SelectMetricCommand = new RelayCommand<ChartMetricType>(SelectMetric);
         SelectTimeRangeCommand = new RelayCommand<ChartRangeType>(SelectTimeRange);
-        ExportCommand = new RelayCommand(static () => { });
+        ExportCommand = new AsyncRelayCommand(ExportAsync);
         RefreshLocalizedText();
     }
 
@@ -77,7 +82,7 @@ public partial class RevenueChartControlViewModel : LocalizedViewModelBase
 
     public IRelayCommand<ChartRangeType> SelectTimeRangeCommand { get; }
 
-    public IRelayCommand ExportCommand { get; }
+    public IAsyncRelayCommand ExportCommand { get; }
 
     public string Title
     {
@@ -160,6 +165,18 @@ public partial class RevenueChartControlViewModel : LocalizedViewModelBase
 
         double contentWidth = Bars.Count * 104.0 + Math.Max(Bars.Count - 1, 0) * 16.0;
         ChartContentWidth = Math.Max(contentWidth, 360.0);
+    }
+
+    private Task ExportAsync()
+    {
+        string metricLabel = GetMetricLabel(_selectedMetric);
+        string message = string.Format(
+            LocalizationService.Culture,
+            GetLocalizedText("RevenueChartExportUnavailableMessage"),
+            metricLabel,
+            Subtitle);
+
+        return _notificationService.SendAsync(Title, message, NotificationType.Info);
     }
 
     private IReadOnlyList<ChartTabItemModel> CreateMetricTabs()
@@ -256,6 +273,15 @@ public partial class RevenueChartControlViewModel : LocalizedViewModelBase
             ChartRangeType.ThisQuarter => GetLocalizedText("RevenueChartLast3MonthsSubtitle"),
             ChartRangeType.ThisYear => GetLocalizedText("RevenueChartLast12MonthsSubtitle"),
             _ => string.Empty,
+        };
+    }
+
+    private string GetMetricLabel(ChartMetricType metricType)
+    {
+        return metricType switch
+        {
+            ChartMetricType.Customer => GetLocalizedText("RevenueChartCustomerLabel"),
+            _ => GetLocalizedText("RevenueChartRevenueLabel"),
         };
     }
 

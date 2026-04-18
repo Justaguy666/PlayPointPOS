@@ -1,6 +1,6 @@
 using System;
 using Application.Services;
-using WinUI.UIModels.AreaManagement;
+using WinUI.UIModels.Management;
 using WinUI.ViewModels.AreaManagement.SummarizedAreaCards;
 
 namespace WinUI.Services.Factories;

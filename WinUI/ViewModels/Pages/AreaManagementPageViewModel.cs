@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Areas;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -12,21 +13,27 @@ using Microsoft.UI.Xaml.Media;
 using WinUI.Resources;
 using WinUI.Services.Factories;
 using WinUI.UIModels;
-using WinUI.UIModels.AreaManagement;
+using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
-using WinUI.ViewModels.AreaManagement.DetailedAreaCards;
 using WinUI.ViewModels.AreaManagement.SummarizedAreaCards;
 using WinUI.ViewModels.Dialogs.Management;
+using Application.Services.Areas;
 
 namespace WinUI.ViewModels.Pages;
 
 public partial class AreaManagementPageViewModel : LocalizedViewModelBase
 {
+    private const int PreferredAreaCardsPerRow = 3;
+    private const double MinimumSingleColumnWidth = 240;
+    private const double MinimumTwoColumnWidth = 420;
+    private const double AreaCardOuterHeight = 168;
+    private const double AreaCardsColumnSpacing = 8;
+    private const double LayoutPrecisionEpsilon = 0.01;
+
     private readonly IDialogService _dialogService;
-    private readonly ILocalizationPreferencesService _localizationPreferencesService;
-    private readonly SummarizedAvailableCardViewModelFactory _availableCardViewModelFactory;
-    private readonly SummarizedReservedCardViewModelFactory _reservedCardViewModelFactory;
-    private readonly SummarizedRentedCardViewModelFactory _rentedCardViewModelFactory;
+    private readonly INotificationService _notificationService;
+    private readonly IAreaFilterService _areaFilterService;
+    private readonly AreaManagementCardViewModelFactory _areaCardViewModelFactory;
     private readonly Brush _selectedFilterBackgroundBrush;
     private readonly Brush _selectedFilterForegroundBrush;
     private readonly Brush _unselectedFilterBackgroundBrush;
@@ -128,7 +135,13 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
     public partial string EditAreaMenuText { get; set; } = string.Empty;
 
     [ObservableProperty]
+    public partial string EditAreaShortcutText { get; set; } = string.Empty;
+
+    [ObservableProperty]
     public partial string DeleteAreaMenuText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string DeleteAreaShortcutText { get; set; } = string.Empty;
 
     public bool IsAnySummarizedCardSelected => DetailedAreaCardViewModel is not null;
 
@@ -136,23 +149,31 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
     [NotifyPropertyChangedFor(nameof(IsAnySummarizedCardSelected))]
     public partial object? DetailedAreaCardViewModel { get; set; }
 
+    [ObservableProperty]
+    public partial int AreaCardsMaximumRowsOrColumns { get; set; } = PreferredAreaCardsPerRow;
+
+    [ObservableProperty]
+    public partial double AreaCardsMinItemWidth { get; set; } = MinimumSingleColumnWidth;
+
+    [ObservableProperty]
+    public partial double AreaCardsMinItemHeight { get; set; } = AreaCardOuterHeight;
+
     public AreaManagementPageViewModel(
         ILocalizationService localizationService,
-        ILocalizationPreferencesService localizationPreferencesService,
         IDialogService dialogService,
-        SummarizedAvailableCardViewModelFactory availableCardViewModelFactory,
-        SummarizedReservedCardViewModelFactory reservedCardViewModelFactory,
-        SummarizedRentedCardViewModelFactory rentedCardViewModelFactory)
+        INotificationService notificationService,
+        IAreaCatalogService areaCatalogService,
+        IAreaFilterService areaFilterService,
+        AreaModelFactory areaModelFactory,
+        AreaManagementCardViewModelFactory areaCardViewModelFactory)
         : base(localizationService)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-        _localizationPreferencesService = localizationPreferencesService ?? throw new ArgumentNullException(nameof(localizationPreferencesService));
-        ArgumentNullException.ThrowIfNull(availableCardViewModelFactory);
-        ArgumentNullException.ThrowIfNull(reservedCardViewModelFactory);
-        ArgumentNullException.ThrowIfNull(rentedCardViewModelFactory);
-        _availableCardViewModelFactory = availableCardViewModelFactory;
-        _reservedCardViewModelFactory = reservedCardViewModelFactory;
-        _rentedCardViewModelFactory = rentedCardViewModelFactory;
+        _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        _areaFilterService = areaFilterService ?? throw new ArgumentNullException(nameof(areaFilterService));
+        _areaCardViewModelFactory = areaCardViewModelFactory ?? throw new ArgumentNullException(nameof(areaCardViewModelFactory));
+        ArgumentNullException.ThrowIfNull(areaCatalogService);
+        ArgumentNullException.ThrowIfNull(areaModelFactory);
 
         _selectedFilterBackgroundBrush = AppResourceLookup.GetBrush("OrangeFocusBrush", AppColors.OrangeFocus);
         _selectedFilterForegroundBrush = AppResourceLookup.GetBrush("WhiteBrush", AppColors.White);
@@ -166,9 +187,14 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         RoomFilterCommand = new AsyncRelayCommand(ApplyRoomFilterAsync);
         EditAreaCommand = new AsyncRelayCommand<ISummarizedAreaCardViewModel?>(ExecuteEditAreaAsync);
         DeleteAreaCommand = new AsyncRelayCommand<ISummarizedAreaCardViewModel?>(ExecuteDeleteAreaAsync);
+        EditSelectedAreaCommand = new AsyncRelayCommand(ExecuteEditSelectedAreaAsync, CanManageSelectedArea);
+        DeleteSelectedAreaCommand = new AsyncRelayCommand(ExecuteDeleteSelectedAreaAsync, CanManageSelectedArea);
         SelectSummarizedAreaCardCommand = new RelayCommand<ISummarizedAreaCardViewModel?>(SelectSummarizedAreaCard);
 
-        _allAreaModels = CreateMockAreaModels();
+        _allAreaModels = areaCatalogService
+            .GetAreas()
+            .Select(areaModelFactory.Create)
+            .ToList();
         foreach (var areaModel in _allAreaModels)
         {
             SubscribeToAreaModel(areaModel);
@@ -202,6 +228,10 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
 
     public IAsyncRelayCommand<ISummarizedAreaCardViewModel?> DeleteAreaCommand { get; }
 
+    public IAsyncRelayCommand EditSelectedAreaCommand { get; }
+
+    public IAsyncRelayCommand DeleteSelectedAreaCommand { get; }
+
     public IRelayCommand<ISummarizedAreaCardViewModel?> SelectSummarizedAreaCardCommand { get; }
 
     protected override void RefreshLocalizedText()
@@ -214,7 +244,9 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         RoomFilterText = LocalizationService.GetString("AreaManagementPageRoomFilter");
         NoAreasText = LocalizationService.GetString("AreaManagementPageNoAreasText");
         EditAreaMenuText = LocalizationService.GetString("AreaManagementPageEditMenuText");
+        EditAreaShortcutText = LocalizationService.GetString("AreaManagementPageEditShortcutText");
         DeleteAreaMenuText = LocalizationService.GetString("AreaManagementPageDeleteMenuText");
+        DeleteAreaShortcutText = LocalizationService.GetString("AreaManagementPageDeleteShortcutText");
     }
 
     public new void Dispose()
@@ -236,11 +268,6 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         _detailedAreaCardDisposable = null;
         _isDisposed = true;
         base.Dispose();
-    }
-
-    private static Task ExecuteNoopAsync()
-    {
-        return Task.CompletedTask;
     }
 
     private Task OpenAreaFilterDialogAsync()
@@ -305,8 +332,48 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
  
     private Task ExecuteDeleteAreaAsync(ISummarizedAreaCardViewModel? areaCardViewModel)
     {
-        SelectSummarizedAreaCard(areaCardViewModel ?? _selectedSummarizedAreaCardViewModel);
-        return Task.CompletedTask;
+        return DeleteAreaAsync(areaCardViewModel ?? _selectedSummarizedAreaCardViewModel);
+    }
+
+    private Task ExecuteEditSelectedAreaAsync()
+    {
+        return ExecuteEditAreaAsync(_selectedSummarizedAreaCardViewModel);
+    }
+
+    private Task ExecuteDeleteSelectedAreaAsync()
+    {
+        return DeleteAreaAsync(_selectedSummarizedAreaCardViewModel);
+    }
+
+    private async Task DeleteAreaAsync(ISummarizedAreaCardViewModel? areaCardViewModel)
+    {
+        if (areaCardViewModel is null || areaCardViewModel.Status != PlayAreaStatus.Available)
+        {
+            return;
+        }
+
+        SelectSummarizedAreaCard(areaCardViewModel);
+
+        bool isConfirmed = await _dialogService.ShowConfirmationAsync(
+            titleKey: "ConfirmDeleteAreaTitle",
+            messageKey: "ConfirmDeleteAreaMessage",
+            confirmButtonTextKey: "ConfirmDeleteAreaButton",
+            cancelButtonTextKey: "CancelButtonText");
+
+        if (!isConfirmed)
+        {
+            return;
+        }
+
+        RemoveArea(areaCardViewModel);
+
+        await _notificationService.SendAsync(
+            LocalizationService.GetString("AreaDeletedSuccessTitle"),
+            string.Format(
+                LocalizationService.Culture,
+                LocalizationService.GetString("AreaDeletedSuccessMessage"),
+                areaCardViewModel.Model.AreaName),
+            NotificationType.Success);
     }
 
     private Task ApplyAllAreasFilterAsync()
@@ -330,20 +397,46 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
     private void SelectSummarizedAreaCard(ISummarizedAreaCardViewModel? selectedCardViewModel)
     {
         _selectedSummarizedAreaCardViewModel = selectedCardViewModel;
-        ReplaceDetailedAreaCardViewModel(CreateDetailedAreaCardViewModel(selectedCardViewModel));
+        OnPropertyChanged(nameof(SelectedSummarizedAreaCardViewModel));
+        ReplaceDetailedAreaCardViewModel(_areaCardViewModelFactory.CreateDetailed(selectedCardViewModel));
+        NotifySelectedAreaCommandStateChanged();
+    }
+
+    public void UpdateAreaCardsLayout(double availableWidth)
+    {
+        if (availableWidth <= 0)
+        {
+            return;
+        }
+
+        int columns = CalculateAreaCardColumnCount(availableWidth);
+        double totalSpacing = AreaCardsColumnSpacing * (columns - 1);
+
+        AreaCardsMaximumRowsOrColumns = columns;
+        AreaCardsMinItemWidth = Math.Floor((availableWidth - totalSpacing + LayoutPrecisionEpsilon) / columns);
+        AreaCardsMinItemHeight = AreaCardOuterHeight;
     }
 
     private void ApplyAreaFilter(PlayAreaType? playAreaType)
     {
         _activeAreaFilterType = playAreaType;
 
+        PlayAreaFilter filter = new()
+        {
+            AreaType = playAreaType,
+            Status = _activeStatusFilter,
+            StartTimeFrom = _activeStartTimeFromFilter,
+            StartTimeTo = _activeStartTimeToFilter,
+            CapacityMin = _activeCapacityMinFilter,
+            CapacityMax = _activeCapacityMaxFilter,
+            HourlyPriceMin = _activeHourlyPriceMinFilter,
+            HourlyPriceMax = _activeHourlyPriceMaxFilter,
+        };
+
+        var filteredAreas = _areaFilterService.Apply(_allAreaModels, filter, LocalizationService.TimeZone);
+        var filteredAreaLookup = filteredAreas.ToHashSet();
         var filteredAreaCards = _allSummarizedAreaCardViewModels
-            .Where(card =>
-                (playAreaType is null || card.PlayAreaType == playAreaType) &&
-                (_activeStatusFilter is null || card.Status == _activeStatusFilter) &&
-                MatchesStartTimeFilter(card.Model) &&
-                MatchesCapacityFilter(card.Model) &&
-                MatchesHourlyPriceFilter(card.Model));
+            .Where(card => filteredAreaLookup.Contains(card.Model));
 
         ReplaceSummarizedAreaCardViewModels(filteredAreaCards);
         RefreshAreaFilterButtonState();
@@ -359,7 +452,9 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         }
 
         _selectedSummarizedAreaCardViewModel = null;
+        OnPropertyChanged(nameof(SelectedSummarizedAreaCardViewModel));
         ReplaceDetailedAreaCardViewModel(null);
+        NotifySelectedAreaCommandStateChanged();
     }
  
     private void ReplaceSummarizedAreaCardViewModels(IEnumerable<ISummarizedAreaCardViewModel> filteredAreaCards)
@@ -405,25 +500,19 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         };
     }
 
-    private object? CreateDetailedAreaCardViewModel(ISummarizedAreaCardViewModel? selectedCardViewModel)
+    private static int CalculateAreaCardColumnCount(double availableWidth)
     {
-        return selectedCardViewModel switch
+        if (availableWidth < MinimumSingleColumnWidth)
         {
-            SummarizedAvailableCardViewModel availableCardViewModel => new DetailedAvailableCardViewModel(
-                LocalizationService,
-                _dialogService,
-                availableCardViewModel.Model),
-            SummarizedReservedCardViewModel reservedCardViewModel => new DetailedReservedCardViewModel(
-                LocalizationService,
-                _localizationPreferencesService,
-                _dialogService,
-                reservedCardViewModel.Model),
-            SummarizedRentedCardViewModel rentedCardViewModel => new DetailedRentedCardViewModel(
-                LocalizationService,
-                _dialogService,
-                rentedCardViewModel.Model),
-            _ => null,
-        };
+            return 1;
+        }
+
+        if (availableWidth < MinimumTwoColumnWidth)
+        {
+            return 2;
+        }
+
+        return PreferredAreaCardsPerRow;
     }
 
     private void ReplaceDetailedAreaCardViewModel(object? detailedAreaCardViewModel)
@@ -431,6 +520,40 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         _detailedAreaCardDisposable?.Dispose();
         _detailedAreaCardDisposable = detailedAreaCardViewModel as IDisposable;
         DetailedAreaCardViewModel = detailedAreaCardViewModel;
+    }
+
+    private bool CanManageSelectedArea()
+    {
+        return _selectedSummarizedAreaCardViewModel?.Status == PlayAreaStatus.Available;
+    }
+
+    private void NotifySelectedAreaCommandStateChanged()
+    {
+        EditSelectedAreaCommand.NotifyCanExecuteChanged();
+        DeleteSelectedAreaCommand.NotifyCanExecuteChanged();
+    }
+
+    private void RemoveArea(ISummarizedAreaCardViewModel areaCardViewModel)
+    {
+        AreaModel area = areaCardViewModel.Model;
+        bool wasSelected = ReferenceEquals(_selectedSummarizedAreaCardViewModel, areaCardViewModel)
+            || ReferenceEquals(_selectedSummarizedAreaCardViewModel?.Model, area);
+
+        _allAreaModels.Remove(area);
+        UnsubscribeFromAreaModel(area);
+        _allSummarizedAreaCardViewModels.Remove(areaCardViewModel);
+
+        if (wasSelected)
+        {
+            SelectSummarizedAreaCard(null);
+        }
+
+        ApplyAreaFilter(_activeAreaFilterType);
+
+        if (areaCardViewModel is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
     }
 
     private Task HandleAreaCreatedAsync(AreaModel area)
@@ -490,13 +613,15 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         if (wasSelected)
         {
             _selectedSummarizedAreaCardViewModel = replacementViewModel;
+            OnPropertyChanged(nameof(SelectedSummarizedAreaCardViewModel));
         }
 
         ApplyAreaFilter(_activeAreaFilterType);
 
         if (wasSelected)
         {
-            ReplaceDetailedAreaCardViewModel(CreateDetailedAreaCardViewModel(replacementViewModel));
+            ReplaceDetailedAreaCardViewModel(_areaCardViewModelFactory.CreateDetailed(replacementViewModel));
+            NotifySelectedAreaCommandStateChanged();
         }
 
         if (previousViewModel is IDisposable disposable)
@@ -511,8 +636,10 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
 
         if (_selectedSummarizedAreaCardViewModel?.Model == area)
         {
-            ReplaceDetailedAreaCardViewModel(CreateDetailedAreaCardViewModel(_selectedSummarizedAreaCardViewModel));
+            ReplaceDetailedAreaCardViewModel(_areaCardViewModelFactory.CreateDetailed(_selectedSummarizedAreaCardViewModel));
         }
+
+        NotifySelectedAreaCommandStateChanged();
 
         return Task.CompletedTask;
     }
@@ -530,213 +657,8 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         return Task.CompletedTask;
     }
 
-    private bool MatchesStartTimeFilter(AreaModel area)
-    {
-        if (_activeStartTimeFromFilter is null && _activeStartTimeToFilter is null)
-        {
-            return true;
-        }
-
-        TimeSpan? areaStartTime = GetComparableStartTime(area);
-        if (!areaStartTime.HasValue)
-        {
-            return false;
-        }
-
-        return (_activeStartTimeFromFilter is null || areaStartTime.Value >= _activeStartTimeFromFilter.Value)
-            && (_activeStartTimeToFilter is null || areaStartTime.Value <= _activeStartTimeToFilter.Value);
-    }
-
-    private bool MatchesCapacityFilter(AreaModel area)
-    {
-        int comparableCapacity = area.MaxCapacity > 0 ? area.MaxCapacity : area.Capacity;
-
-        return (_activeCapacityMinFilter is null || comparableCapacity >= _activeCapacityMinFilter.Value)
-            && (_activeCapacityMaxFilter is null || comparableCapacity <= _activeCapacityMaxFilter.Value);
-    }
-
-    private bool MatchesHourlyPriceFilter(AreaModel area)
-    {
-        return (_activeHourlyPriceMinFilter is null || area.HourlyPrice >= _activeHourlyPriceMinFilter.Value)
-            && (_activeHourlyPriceMaxFilter is null || area.HourlyPrice <= _activeHourlyPriceMaxFilter.Value);
-    }
-
-    private TimeSpan? GetComparableStartTime(AreaModel area)
-    {
-        if (area.StartTime is DateTime startTime)
-        {
-            return ConvertUtcToConfiguredTime(startTime).TimeOfDay;
-        }
-
-        if (area.CheckInDateTime is DateTime checkInDateTime)
-        {
-            return checkInDateTime.TimeOfDay;
-        }
-
-        return null;
-    }
-
-    private DateTime ConvertUtcToConfiguredTime(DateTime value)
-    {
-        DateTime utcValue = value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime();
-        return utcValue.AddHours(ParseTimeZoneOffset(LocalizationService.TimeZone));
-    }
-
-    private static int ParseTimeZoneOffset(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            return 0;
-        }
-
-        string normalized = value.Trim().ToUpperInvariant().Replace("UTC", string.Empty);
-        return int.TryParse(normalized, out int offset) ? offset : 0;
-    }
-
     private ISummarizedAreaCardViewModel CreateSummarizedAreaCardViewModel(AreaModel area)
     {
-        return area.Status switch
-        {
-            PlayAreaStatus.Available => _availableCardViewModelFactory.Create(area),
-            PlayAreaStatus.Reserved => _reservedCardViewModelFactory.Create(area),
-            PlayAreaStatus.Rented => _rentedCardViewModelFactory.Create(area),
-            _ => _availableCardViewModelFactory.Create(area),
-        };
-    }
-
-    private static List<AreaModel> CreateMockAreaModels()
-    {
-        return
-        [
-            new AreaModel
-            {
-                AreaName = "Ban A01",
-                PlayAreaType = PlayAreaType.Table,
-                Status = PlayAreaStatus.Available,
-                MaxCapacity = 4,
-                HourlyPrice = 30000m,
-            },
-            new AreaModel
-            {
-                AreaName = "Ban A02",
-                PlayAreaType = PlayAreaType.Table,
-                Status = PlayAreaStatus.Available,
-                MaxCapacity = 4,
-                HourlyPrice = 30000m,
-            },
-            new AreaModel
-            {
-                AreaName = "Ban B01",
-                PlayAreaType = PlayAreaType.Table,
-                Status = PlayAreaStatus.Available,
-                MaxCapacity = 6,
-                HourlyPrice = 45000m,
-            },
-            new AreaModel
-            {
-                AreaName = "Phong VIP 01",
-                PlayAreaType = PlayAreaType.Room,
-                Status = PlayAreaStatus.Available,
-                MaxCapacity = 8,
-                HourlyPrice = 80000m,
-            },
-            new AreaModel
-            {
-                AreaName = "Phong VIP 02",
-                PlayAreaType = PlayAreaType.Room,
-                Status = PlayAreaStatus.Available,
-                MaxCapacity = 10,
-                HourlyPrice = 100000m,
-            },
-            new AreaModel
-            {
-                AreaName = "Ban S05",
-                PlayAreaType = PlayAreaType.Table,
-                Status = PlayAreaStatus.Available,
-                MaxCapacity = 4,
-                HourlyPrice = 35000m,
-            },
-            new AreaModel
-            {
-                AreaName = "Phong R01",
-                PlayAreaType = PlayAreaType.Room,
-                Status = PlayAreaStatus.Reserved,
-                MaxCapacity = 8,
-                CustomerName = "Tran Minh Anh",
-                PhoneNumber = "0789 608 537",
-                CheckInDateTime = DateTime.Today.AddHours(13).AddMinutes(30),
-                Capacity = 6,
-                HourlyPrice = 80000m,
-            },
-            new AreaModel
-            {
-                AreaName = "Ban C02",
-                PlayAreaType = PlayAreaType.Table,
-                Status = PlayAreaStatus.Reserved,
-                MaxCapacity = 4,
-                CustomerName = "Nguyen Hoang Long",
-                PhoneNumber = "0789 608 537",
-                CheckInDateTime = DateTime.Today.AddHours(15),
-                Capacity = 4,
-                HourlyPrice = 40000m,
-            },
-            new AreaModel
-            {
-                AreaName = "Phong VIP 03",
-                PlayAreaType = PlayAreaType.Room,
-                Status = PlayAreaStatus.Reserved,
-                MaxCapacity = 10,
-                CustomerName = "Le Thu Ha",
-                PhoneNumber = "0789 608 537",
-                CheckInDateTime = DateTime.Today.AddHours(18).AddMinutes(15),
-                Capacity = 8,
-                HourlyPrice = 100000m,
-            },
-            new AreaModel
-            {
-                AreaName = "Ban K04 (Future)",
-                PlayAreaType = PlayAreaType.Table,
-                Status = PlayAreaStatus.Reserved,
-                MaxCapacity = 6,
-                CustomerName = "Ngo Bao Toan",
-                PhoneNumber = "0123 456 789",
-                CheckInDateTime = DateTime.Now.AddHours(2),
-                Capacity = 5,
-                HourlyPrice = 50000m,
-            },
-            new AreaModel
-            {
-                AreaName = "Phong 01",
-                PlayAreaType = PlayAreaType.Room,
-                Status = PlayAreaStatus.Rented,
-                MaxCapacity = 8,
-                Capacity = 6,
-                StartTime = DateTime.UtcNow - new TimeSpan(1, 31, 34),
-                HourlyPrice = 10000m,
-                TotalAmount = 110000m,
-            },
-            new AreaModel
-            {
-                AreaName = "Ban D02",
-                PlayAreaType = PlayAreaType.Table,
-                Status = PlayAreaStatus.Rented,
-                MaxCapacity = 4,
-                Capacity = 3,
-                StartTime = DateTime.UtcNow - TimeSpan.FromMinutes(52),
-                HourlyPrice = 30000m,
-                TotalAmount = 85000m,
-            },
-            new AreaModel
-            {
-                AreaName = "Phong VIP 04",
-                PlayAreaType = PlayAreaType.Room,
-                Status = PlayAreaStatus.Rented,
-                MaxCapacity = 10,
-                Capacity = 8,
-                StartTime = DateTime.UtcNow - TimeSpan.FromHours(2),
-                HourlyPrice = 40000m,
-                TotalAmount = 205000m,
-            },
-        ];
+        return _areaCardViewModelFactory.CreateSummarized(area);
     }
 }

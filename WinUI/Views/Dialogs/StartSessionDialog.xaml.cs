@@ -1,7 +1,7 @@
 using System;
 using Microsoft.UI.Xaml.Controls;
 using WinUI.UIModels;
-using WinUI.UIModels.AreaManagement;
+using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
 using WinUI.ViewModels.Dialogs;
 

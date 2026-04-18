@@ -207,7 +207,7 @@
   <data name="LoginDialogLoginButtonText" xml:space="preserve">
         <value>Login</value>
     </data>
-	<data name="LoginDialogForgotPasswordButtonText" xml:space="preserve">
+  <data name="LoginDialogForgotPasswordButtonText" xml:space="preserve">
         <value>Forgot password?</value>
     </data>
   <data name="ForgotPasswordDialogTitleText" xml:space="preserve">
@@ -418,19 +418,19 @@
     <value>Game</value>
   </data>
   <data name="TrendingListGameName" xml:space="preserve">
-    <value>Ma s&#xF3;i</value>
+    <value>Ma s�i</value>
   </data>
   <data name="TrendingListFoodLabel" xml:space="preserve">
     <value>Food</value>
   </data>
   <data name="TrendingListFoodName" xml:space="preserve">
-    <value>M&#x1EF3; cay</value>
+    <value>M? cay</value>
   </data>
   <data name="TrendingListDrinkLabel" xml:space="preserve">
     <value>Drink</value>
   </data>
   <data name="TrendingListDrinkName" xml:space="preserve">
-    <value>B&#x1EA1;c x&#x1EC9;u</value>
+    <value>B?c x?u</value>
   </data>
   <data name="QuickStatsTitle" xml:space="preserve">
     <value>Quick Stats</value>
@@ -491,6 +491,9 @@
   </data>
   <data name="RevenueChartTitle" xml:space="preserve">
     <value>Revenue trends</value>
+  </data>
+  <data name="RevenueChartExportUnavailableMessage" xml:space="preserve">
+    <value>Export for {0} ({1}) is not available yet.</value>
   </data>
   <data name="RevenueChartRevenueLabel" xml:space="preserve">
     <value>Revenue</value>
@@ -729,8 +732,29 @@
   <data name="AreaManagementPageEditMenuText" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="AreaManagementPageEditShortcutText" xml:space="preserve">
+    <value>Ctrl + E</value>
+  </data>
   <data name="AreaManagementPageDeleteMenuText" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="AreaManagementPageDeleteShortcutText" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="ConfirmDeleteAreaTitle" xml:space="preserve">
+    <value>Delete area</value>
+  </data>
+  <data name="ConfirmDeleteAreaMessage" xml:space="preserve">
+    <value>This area will be removed from the list. This action cannot be undone.</value>
+  </data>
+  <data name="ConfirmDeleteAreaButton" xml:space="preserve">
+    <value>Delete area</value>
+  </data>
+  <data name="AreaDeletedSuccessTitle" xml:space="preserve">
+    <value>Area deleted</value>
+  </data>
+  <data name="AreaDeletedSuccessMessage" xml:space="preserve">
+    <value>{0} was removed successfully.</value>
   </data>
   <data name="AreaManagementAvailableStatusText" xml:space="preserve">
     <value>Available</value>
@@ -792,7 +816,7 @@
   <data name="AreaFilterDialogInvalidRangeText" xml:space="preserve">
     <value>Please enter a valid filter range.</value>
   </data>
-	<data name="AreaManagementRentedTotalAmountFormat" xml:space="preserve">
+  <data name="AreaManagementRentedTotalAmountFormat" xml:space="preserve">
     <value>{0}</value>
   </data>
   <data name="AreaManagementCapacityFormat" xml:space="preserve">
@@ -810,334 +834,586 @@
   <data name="PaginationConfirmButtonText" xml:space="preserve">
     <value>Go</value>
   </data>
-	<data name="DetailedCardMaxCapacityFormat" xml:space="preserve">
+  <data name="DetailedCardMaxCapacityFormat" xml:space="preserve">
 		<value>Capacity: {0} people</value>
 	</data>
-	<data name="StartSessionButtonText" xml:space="preserve">
+  <data name="StartSessionButtonText" xml:space="preserve">
 		<value>Open</value>
 	</data>
-	<data name="ResumeSessionButtonText" xml:space="preserve">
+  <data name="ResumeSessionButtonText" xml:space="preserve">
 		<value>Resume</value>
 	</data>
-	<data name="ReserveButtonText" xml:space="preserve">
+  <data name="ReserveButtonText" xml:space="preserve">
 		<value>Reserve</value>
 	</data>
-	<data name="CheckInButtonText" xml:space="preserve">
+  <data name="CheckInButtonText" xml:space="preserve">
 		<value>Check in</value>
 	</data>
-	<data name="EditReservationButtonText" xml:space="preserve">
+  <data name="EditReservationButtonText" xml:space="preserve">
 		<value>Edit</value>
 	</data>
-	<data name="CancelReservationButtonText" xml:space="preserve">
+  <data name="CancelReservationButtonText" xml:space="preserve">
 		<value>Cancel</value>
 	</data>
-	<data name="ReservationInfoTitleText" xml:space="preserve">
+  <data name="ReservationInfoTitleText" xml:space="preserve">
 		<value>Reservation Information</value>
 	</data>
-	<data name="ReservationCustomerNameLabelText" xml:space="preserve">
+  <data name="ReservationCustomerNameLabelText" xml:space="preserve">
 		<value>Customer name:</value>
 	</data>
-	<data name="ReservationCustomerPhoneNumberLabelText" xml:space="preserve">
+  <data name="ReservationCustomerPhoneNumberLabelText" xml:space="preserve">
 		<value>Phone number:</value>
 	</data>
-	<data name="ReservationDateLabelText" xml:space="preserve">
+  <data name="ReservationDateLabelText" xml:space="preserve">
 		<value>Reservation date:</value>
 	</data>
-	<data name="ReservationTimeLabelText" xml:space="preserve">
+  <data name="ReservationTimeLabelText" xml:space="preserve">
 		<value>Reservation time:</value>
 	</data>
-	<data name="ReservationCustomerNumberLabelText" xml:space="preserve">
+  <data name="ReservationCustomerNumberLabelText" xml:space="preserve">
 		<value>Guest count:</value>
 	</data>
-	<data name="ReservationPriceLabelText" xml:space="preserve">
+  <data name="ReservationPriceLabelText" xml:space="preserve">
 		<value>Reservation price:</value>
 	</data>
-	<data name="ReservationDialogTitleText" xml:space="preserve">
+  <data name="ReservationDialogTitleText" xml:space="preserve">
 		<value>Reserve</value>
 	</data>
-	<data name="ReservationDialogEditTitleText" xml:space="preserve">
+  <data name="ReservationDialogEditTitleText" xml:space="preserve">
 		<value>Edit Reservation</value>
 	</data>
-	<data name="ReservationDialogNameLabelText" xml:space="preserve">
+  <data name="ReservationDialogNameLabelText" xml:space="preserve">
 		<value>Customer name</value>
 		</data>
-	<data name="ReservationDialogNamePlaceholderText" xml:space="preserve">
+  <data name="ReservationDialogNamePlaceholderText" xml:space="preserve">
 		<value>Enter customer name...</value>
 		</data>
-	<data name="ReservationDialogAreaLabelText" xml:space="preserve">
+  <data name="ReservationDialogAreaLabelText" xml:space="preserve">
 		<value>Area</value>
 		</data>
-	<data name="ReservationDialogAreaPlaceholderText" xml:space="preserve">
+  <data name="ReservationDialogAreaPlaceholderText" xml:space="preserve">
 		<value>Select area...</value>
 		</data>
-	<data name="ReservationDialogReservationPriceLabelText" xml:space="preserve">
+  <data name="ReservationDialogReservationPriceLabelText" xml:space="preserve">
 		<value>Reservation price</value>
 		</data>
-	<data name="ReservationDialogPhoneLabelText" xml:space="preserve">
+  <data name="ReservationDialogPhoneLabelText" xml:space="preserve">
 		<value>Phone number</value>
 		</data>
-	<data name="ReservationDialogPhonePlaceholderText" xml:space="preserve">
+  <data name="ReservationDialogPhonePlaceholderText" xml:space="preserve">
 		<value>Enter phone number...</value>
 		</data>
-	<data name="ReservationDialogDateLabelText" xml:space="preserve">
+  <data name="ReservationDialogDateLabelText" xml:space="preserve">
 		<value>Reservation date</value>
 		</data>
-	<data name="ReservationDialogDatePlaceholderText" xml:space="preserve">
+  <data name="ReservationDialogDatePlaceholderText" xml:space="preserve">
 		<value>Select date...</value>
 		</data>
-	<data name="ReservationDialogTimeLabelText" xml:space="preserve">
+  <data name="ReservationDialogTimeLabelText" xml:space="preserve">
 		<value>Reservation time</value>
 		</data>
-	<data name="ReservationDialogTimePlaceholderText" xml:space="preserve">
+  <data name="ReservationDialogTimePlaceholderText" xml:space="preserve">
 		<value>Select time...</value>
 		</data>
-	<data name="ReservationDialogConfirmButtonText" xml:space="preserve">
+  <data name="ReservationDialogConfirmButtonText" xml:space="preserve">
 		<value>Confirm</value>
 		</data>
   <data name="ReservationDialogCancelButtonText" xml:space="preserve">
 		<value>Cancel</value>
 		</data>
-	<data name="StartSessionDialogTitleText" xml:space="preserve">
+  <data name="StartSessionDialogTitleText" xml:space="preserve">
 		<value>Enter guest count to start</value>
 	</data>
-	<data name="StartSessionDialogMemberToggleText" xml:space="preserve">
+  <data name="StartSessionDialogMemberToggleText" xml:space="preserve">
 		<value>Customer is a member</value>
 	</data>
-	<data name="StartSessionDialogMemberLabelText" xml:space="preserve">
+  <data name="StartSessionDialogMemberLabelText" xml:space="preserve">
 		<value>Member</value>
 	</data>
-	<data name="StartSessionDialogMemberPlaceholderText" xml:space="preserve">
+  <data name="StartSessionDialogMemberPlaceholderText" xml:space="preserve">
 		<value>Select a member...</value>
 	</data>
-	<data name="StartSessionDialogCapacityLabelText" xml:space="preserve">
+  <data name="StartSessionDialogCapacityLabelText" xml:space="preserve">
 		<value>Guest count</value>
 	</data>
-	<data name="StartSessionDialogConfirmButtonText" xml:space="preserve">
+  <data name="StartSessionDialogConfirmButtonText" xml:space="preserve">
 		<value>Confirm</value>
 	</data>
-	<data name="StartSessionDialogCancelButtonText" xml:space="preserve">
+  <data name="StartSessionDialogCancelButtonText" xml:space="preserve">
 		<value>Cancel</value>
 	</data>
-	<data name="StartSessionDialogMemberRequiredText" xml:space="preserve">
+  <data name="StartSessionDialogMemberRequiredText" xml:space="preserve">
 		<value>Please select a member.</value>
 	</data>
-	<data name="StartSessionDialogCapacityInvalidText" xml:space="preserve">
+  <data name="StartSessionDialogCapacityInvalidText" xml:space="preserve">
 		<value>Please enter a valid guest count.</value>
 	</data>
-	<data name="StartSessionDialogCapacityLimitText" xml:space="preserve">
+  <data name="StartSessionDialogCapacityLimitText" xml:space="preserve">
 		<value>Guest count cannot exceed capacity {0}.</value>
 	</data>
-	<data name="GameServiceInfoFormat" xml:space="preserve">
+  <data name="GameServiceInfoFormat" xml:space="preserve">
 		<value>Rented at: {0}</value>
 	</data>
-	<data name="PaidButtonText" xml:space="preserve">
+  <data name="PaidButtonText" xml:space="preserve">
 		<value>Paid</value>
 	</data>
-	<data name="EndSessionButtonText" xml:space="preserve">
+  <data name="EndSessionButtonText" xml:space="preserve">
 		<value>Close</value>
 	</data>
-	<data name="ReturnButtonText" xml:space="preserve">
+  <data name="ReturnButtonText" xml:space="preserve">
 		<value>Return</value>
 	</data>
-	<data name="EditButtonText" xml:space="preserve">
+  <data name="EditButtonText" xml:space="preserve">
 		<value>Edit</value>
 	</data>
-	<data name="RemoveButtonText" xml:space="preserve">
+  <data name="RemoveButtonText" xml:space="preserve">
 		<value>Remove</value>
 	</data>
-	<data name="ServiceActionPlaceholderText" xml:space="preserve">
+  <data name="ServiceActionPlaceholderText" xml:space="preserve">
 		<value>Actions</value>
 	</data>
-	<data name="DetailedRentedCardCapacityFormat" xml:space="preserve">
+  <data name="DetailedRentedCardCapacityFormat" xml:space="preserve">
 		<value>{0}/{1} people</value>
 	</data>
-	<data name="SessionInfoTitleText" xml:space="preserve">
+  <data name="SessionInfoTitleText" xml:space="preserve">
 		<value>Play time</value>
 	</data>
-	<data name="SessionStartTimeLabelText" xml:space="preserve">
+  <data name="SessionStartTimeLabelText" xml:space="preserve">
 		<value>Started:</value>
 	</data>
-	<data name="SessionDurationLabelText" xml:space="preserve">
+  <data name="SessionDurationLabelText" xml:space="preserve">
 		<value>Duration:</value>
 	</data>
-	<data name="AreaHourlyPriceLabelText" xml:space="preserve">
+  <data name="AreaHourlyPriceLabelText" xml:space="preserve">
 		<value>Hourly rate:</value>
 	</data>
-	<data name="AreaSessionTotalPriceLabelText" xml:space="preserve">
+  <data name="AreaSessionTotalPriceLabelText" xml:space="preserve">
 		<value>Area total:</value>
 	</data>
-	<data name="GameServicesTitleText" xml:space="preserve">
+  <data name="GameServicesTitleText" xml:space="preserve">
 		<value>Borrowed games</value>
 	</data>
-	<data name="AddGameButtonText" xml:space="preserve">
+  <data name="AddGameButtonText" xml:space="preserve">
 		<value>Add</value>
 	</data>
-	<data name="GameServicesCurrentTotalPriceLabelText" xml:space="preserve">
+  <data name="AreaSessionAddGameUnavailableMessage" xml:space="preserve">
+		<value>Adding borrowed games to an active session is not available yet.</value>
+	</data>
+  <data name="GameServicesCurrentTotalPriceLabelText" xml:space="preserve">
 		<value>Game total:</value>
 	</data>
-	<data name="ProductServicesTitleText" xml:space="preserve">
+  <data name="ProductServicesTitleText" xml:space="preserve">
 		<value>Food &amp; drinks</value>
 	</data>
-	<data name="AddProductButtonText" xml:space="preserve">
+  <data name="AddProductButtonText" xml:space="preserve">
 		<value>Add</value>
 	</data>
-	<data name="ProductServicesTotalPriceLabelText" xml:space="preserve">
+  <data name="AreaSessionAddProductUnavailableMessage" xml:space="preserve">
+		<value>Adding food and drinks to an active session is not available yet.</value>
+	</data>
+  <data name="ProductServicesTotalPriceLabelText" xml:space="preserve">
 		<value>Food total:</value>
 	</data>
-	<data name="CurrentTotalPriceLabelText" xml:space="preserve">
+  <data name="CurrentTotalPriceLabelText" xml:space="preserve">
 		<value>GRAND TOTAL</value>
 	</data>
-	<data name="SaveButtonText" xml:space="preserve">
+  <data name="SaveButtonText" xml:space="preserve">
 		<value>Save</value>
 	</data>
-	<data name="CreateButtonText" xml:space="preserve">
+  <data name="CreateButtonText" xml:space="preserve">
 		<value>Create</value>
 	</data>
-	<data name="AreaDialogCreateTitleText" xml:space="preserve">
+  <data name="AreaDialogCreateTitleText" xml:space="preserve">
 		<value>Add new area</value>
 	</data>
-	<data name="AreaDialogEditTitleText" xml:space="preserve">
+  <data name="AreaDialogEditTitleText" xml:space="preserve">
 		<value>Edit area</value>
 	</data>
-	<data name="AreaDialogNameLabelText" xml:space="preserve">
+  <data name="AreaDialogNameLabelText" xml:space="preserve">
 		<value>Name</value>
 	</data>
-	<data name="AreaDialogNamePlaceholderText" xml:space="preserve">
+  <data name="AreaDialogNamePlaceholderText" xml:space="preserve">
 		<value>Name...</value>
 	</data>
-	<data name="AreaDialogTypeLabelText" xml:space="preserve">
+  <data name="AreaDialogTypeLabelText" xml:space="preserve">
 		<value>Type</value>
 	</data>
-	<data name="AreaDialogTableTypeText" xml:space="preserve">
+  <data name="AreaDialogTableTypeText" xml:space="preserve">
 		<value>Table</value>
 	</data>
-	<data name="AreaDialogRoomTypeText" xml:space="preserve">
+  <data name="AreaDialogRoomTypeText" xml:space="preserve">
 		<value>Room</value>
 	</data>
-	<data name="AreaDialogMaxCapacityLabelText" xml:space="preserve">
+  <data name="AreaDialogMaxCapacityLabelText" xml:space="preserve">
 		<value>Max capacity</value>
 	</data>
-	<data name="AreaDialogHourlyPriceLabelText" xml:space="preserve">
+  <data name="AreaDialogHourlyPriceLabelText" xml:space="preserve">
 		<value>Hourly price</value>
 	</data>
-	<data name="AreaDialogHourlyPricePlaceholderText" xml:space="preserve">
+  <data name="AreaDialogHourlyPricePlaceholderText" xml:space="preserve">
 		<value>Hourly price...</value>
 	</data>
-	<data name="AreaDialogResetButtonText" xml:space="preserve">
+  <data name="AreaDialogResetButtonText" xml:space="preserve">
 		<value>Reset</value>
 	</data>
-	<data name="AreaDialogApplyButtonText" xml:space="preserve">
+  <data name="AreaDialogApplyButtonText" xml:space="preserve">
 		<value>Apply</value>
 	</data>
-	<data name="CancelButtonText" xml:space="preserve">
+  <data name="CancelButtonText" xml:space="preserve">
 		<value>Cancel</value>
 	</data>
-	<data name="ConfirmCloseTitle" xml:space="preserve">
+  <data name="ConfirmCloseTitle" xml:space="preserve">
 		<value>Close dialog?</value>
 	</data>
-	<data name="ConfirmCloseMessage" xml:space="preserve">
+  <data name="ConfirmCloseMessage" xml:space="preserve">
 		<value>Unsaved changes will be lost. Are you sure you want to close this dialog?</value>
 	</data>
-	<data name="ConfirmCloseButton" xml:space="preserve">
+  <data name="ConfirmCloseButton" xml:space="preserve">
 		<value>Close</value>
 	</data>
-	<data name="ConfirmEditTitle" xml:space="preserve">
+  <data name="ConfirmEditTitle" xml:space="preserve">
 		<value>Save changes?</value>
 	</data>
-	<data name="ConfirmEditMessage" xml:space="preserve">
+  <data name="ConfirmEditMessage" xml:space="preserve">
 		<value>Are you sure you want to save changes to this area?</value>
 	</data>
-	<data name="ConfirmEditButton" xml:space="preserve">
+  <data name="ConfirmEditButton" xml:space="preserve">
 		<value>Save</value>
 	</data>
-	<data name="ConfirmAddTitle" xml:space="preserve">
+  <data name="ConfirmAddTitle" xml:space="preserve">
 		<value>Add area?</value>
 	</data>
-	<data name="ConfirmAddMessage" xml:space="preserve">
+  <data name="ConfirmAddMessage" xml:space="preserve">
 		<value>Are you sure you want to add this area?</value>
 	</data>
-	<data name="ConfirmAddButton" xml:space="preserve">
+  <data name="ConfirmAddButton" xml:space="preserve">
 		<value>Add</value>
 	</data>
-	<data name="ConfirmExitTitle" xml:space="preserve">
+  <data name="ConfirmExitTitle" xml:space="preserve">
 		<value>Exit application?</value>
 	</data>
-	<data name="ConfirmExitMessage" xml:space="preserve">
+  <data name="ConfirmExitMessage" xml:space="preserve">
 		<value>Are you sure you want to exit PlayPoint POS?</value>
 	</data>
-	<data name="ConfirmExitButton" xml:space="preserve">
+  <data name="ConfirmExitButton" xml:space="preserve">
 		<value>Exit</value>
 	</data>
-	<data name="ConfirmLogoutTitle" xml:space="preserve">
+  <data name="ConfirmLogoutTitle" xml:space="preserve">
 		<value>Log out?</value>
 	</data>
-	<data name="ConfirmLogoutMessage" xml:space="preserve">
+  <data name="ConfirmLogoutMessage" xml:space="preserve">
 		<value>Are you sure you want to log out of your account?</value>
 	</data>
-	<data name="ConfirmLogoutButton" xml:space="preserve">
+  <data name="ConfirmLogoutButton" xml:space="preserve">
 		<value>Log out</value>
 	</data>
-	<data name="ConfirmChangePasswordTitle" xml:space="preserve">
+  <data name="ConfirmChangePasswordTitle" xml:space="preserve">
 		<value>Change password?</value>
 	</data>
-	<data name="ConfirmChangePasswordMessage" xml:space="preserve">
+  <data name="ConfirmChangePasswordMessage" xml:space="preserve">
 		<value>You'll need to verify your identity before changing your password. Continue?</value>
 	</data>
-	<data name="ConfirmChangePasswordButton" xml:space="preserve">
+  <data name="ConfirmChangePasswordButton" xml:space="preserve">
 		<value>Continue</value>
 	</data>
-	<data name="ConfirmCheckInTitle" xml:space="preserve">
+  <data name="ConfirmCheckInTitle" xml:space="preserve">
 		<value>Check in reservation?</value>
 	</data>
-	<data name="ConfirmCheckInMessage" xml:space="preserve">
+  <data name="ConfirmCheckInMessage" xml:space="preserve">
 		<value>Are you sure you want to check in this reservation now?</value>
 	</data>
-	<data name="ConfirmCheckInButton" xml:space="preserve">
+  <data name="ConfirmCheckInButton" xml:space="preserve">
 		<value>Check in</value>
 	</data>
-	<data name="ConfirmCancelReservationTitle" xml:space="preserve">
+  <data name="ConfirmCancelReservationTitle" xml:space="preserve">
 		<value>Cancel reservation?</value>
 	</data>
-	<data name="ConfirmCancelReservationMessage" xml:space="preserve">
+  <data name="ConfirmCancelReservationMessage" xml:space="preserve">
 		<value>This reservation will be removed and the area will become available again. Continue?</value>
 	</data>
-	<data name="ConfirmCancelReservationButton" xml:space="preserve">
+  <data name="ConfirmCancelReservationButton" xml:space="preserve">
 		<value>Cancel reservation</value>
 	</data>
-	<data name="PaymentDialogTitleText" xml:space="preserve">
+  <data name="PaymentDialogTitleText" xml:space="preserve">
 		<value>Payment</value>
 	</data>
-	<data name="PaymentDialogDurationLabelText" xml:space="preserve">
+  <data name="PaymentDialogDurationLabelText" xml:space="preserve">
 		<value>Play time:</value>
 	</data>
-	<data name="PaymentDialogAreaFeeLabelText" xml:space="preserve">
+  <data name="PaymentDialogAreaFeeLabelText" xml:space="preserve">
 		<value>Hourly fee:</value>
 	</data>
-	<data name="PaymentDialogProductFeeLabelText" xml:space="preserve">
+  <data name="PaymentDialogProductFeeLabelText" xml:space="preserve">
 		<value>Food/drink fee:</value>
 	</data>
-	<data name="PaymentDialogGameFeeLabelText" xml:space="preserve">
+  <data name="PaymentDialogGameFeeLabelText" xml:space="preserve">
 		<value>Game fee:</value>
 	</data>
-	<data name="PaymentDialogDepositLabelText" xml:space="preserve">
+  <data name="PaymentDialogDepositLabelText" xml:space="preserve">
 		<value>Deposit:</value>
 	</data>
-	<data name="PaymentDialogDiscountLabelText" xml:space="preserve">
+  <data name="PaymentDialogDiscountLabelText" xml:space="preserve">
 		<value>Discount:</value>
 	</data>
-	<data name="PaymentDialogTotalLabelText" xml:space="preserve">
+  <data name="PaymentDialogTotalLabelText" xml:space="preserve">
 		<value>GRAND TOTAL:</value>
 	</data>
-	<data name="PaymentDialogConfirmButtonText" xml:space="preserve">
+  <data name="PaymentDialogConfirmButtonText" xml:space="preserve">
 		<value>Confirm</value>
 	</data>
-	<data name="ConfirmPaymentTitle" xml:space="preserve">
+  <data name="ConfirmPaymentTitle" xml:space="preserve">
 		<value>Confirm payment?</value>
 	</data>
-	<data name="ConfirmPaymentMessage" xml:space="preserve">
+  <data name="ConfirmPaymentMessage" xml:space="preserve">
 		<value>After payment, this area will return to available status. Continue?</value>
 	</data>
-	<data name="ConfirmPaymentButton" xml:space="preserve">
+  <data name="ConfirmPaymentButton" xml:space="preserve">
 		<value>Pay</value>
 	</data>
+  <data name="GameAddNewGameLabel" xml:space="preserve">
+		<value>Add game</value>
+	</data>
+  <data name="GameAddNewCategoryLabel" xml:space="preserve">
+		<value>Add game category</value>
+	</data>
+  <data name="GameAddComboBoxPlaceholder" xml:space="preserve">
+		<value>Add new</value>
+	</data>
+  <data name="SearchPlaceholderText" xml:space="preserve">
+		<value>Search games...</value>
+	</data>
+  <data name="GameManagementPageFilterButton" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="GameManagementPageManageGameTypesButton" xml:space="preserve">
+    <value>Game categories</value>
+  </data>
+  <data name="GameManagementPageItemsCountFormat" xml:space="preserve">
+    <value>{0} games</value>
+  </data>
+  <data name="GameManagementPagePageInfoFormat" xml:space="preserve">
+    <value>Showing {0} to {1} of {2} � Page {3} of {4}</value>
+  </data>
+  <data name="GameManagementPageNoGamesText" xml:space="preserve">
+    <value>No games match the current search and sorting state.</value>
+  </data>
+  <data name="GameManagementPageSortFieldNameOption" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="GameManagementPageSortFieldPriceOption" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="GameManagementPageSortFieldDifficultyOption" xml:space="preserve">
+    <value>Difficulty</value>
+  </data>
+  <data name="GameManagementPageSortFieldStockOption" xml:space="preserve">
+    <value>Stock</value>
+  </data>
+  <data name="GameManagementPageSortFieldPlayersOption" xml:space="preserve">
+    <value>Players</value>
+  </data>
+  <data name="GameManagementPageSortDirectionAscendingOption" xml:space="preserve">
+    <value>Ascending</value>
+  </data>
+  <data name="GameManagementPageSortDirectionDescendingOption" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+  <data name="GameManagementPageNewGameNameFormat" xml:space="preserve">
+    <value>New game {0}</value>
+  </data>
+  <data name="GameManagementPageNewGameTypeFormat" xml:space="preserve">
+    <value>Category {0}</value>
+  </data>
+  <data name="GameDifficultyEasyText" xml:space="preserve">
+    <value>Easy</value>
+  </data>
+  <data name="GameDifficultyMediumText" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="GameDifficultyHardText" xml:space="preserve">
+    <value>Hard</value>
+  </data>
+  <data name="GameManagementPageSortFieldComboBox.PlaceholderText" xml:space="preserve">
+    <value>Sort by</value>
+  </data>
+  <data name="GameManagementPageSortDirectionComboBox.PlaceholderText" xml:space="preserve">
+    <value>Direction</value>
+  </data>
+  <data name="GridGameCardControlPlayersSuffix" xml:space="preserve">
+    <value>players</value>
+  </data>
+  <data name="GridGameCardControlDifficultyLabel" xml:space="preserve">
+    <value>Difficulty:</value>
+  </data>
+  <data name="GridGameCardControlPriceLabel" xml:space="preserve">
+    <value>Price / Hour:</value>
+  </data>
+  <data name="ListGameCardControlPlayersLabel" xml:space="preserve">
+    <value>Players</value>
+  </data>
+  <data name="ListGameCardControlPriceLabel" xml:space="preserve">
+    <value>Price / Hour</value>
+  </data>
+  <data name="ListGameCardControlStockLabel" xml:space="preserve">
+    <value>Stock:</value>
+  </data>
+  <data name="GameManagementPageManageTypesUnavailableTitle" xml:space="preserve">
+    <value>Game categories</value>
+  </data>
+  <data name="GameManagementPageManageTypesUnavailableMessage" xml:space="preserve">
+    <value>Game category management will be added in the next step.</value>
+  </data>
+  <data name="GameTypeDialogTitleText" xml:space="preserve">
+    <value>Category management</value>
+  </data>
+  <data name="GameTypeDialogAddButtonText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="GameTypeDialogNamePlaceholderText" xml:space="preserve">
+    <value>Category name...</value>
+  </data>
+  <data name="ConfirmDeleteGameTypeTitle" xml:space="preserve">
+    <value>Delete category?</value>
+  </data>
+  <data name="ConfirmDeleteGameTypeMessage" xml:space="preserve">
+    <value>This category will be removed from the list. This action cannot be undone.</value>
+  </data>
+  <data name="ConfirmDeleteGameTypeButton" xml:space="preserve">
+    <value>Delete category</value>
+  </data>
+  <data name="GameCreatedSuccessTitle" xml:space="preserve">
+    <value>Game added</value>
+  </data>
+  <data name="GameCreatedSuccessMessage" xml:space="preserve">
+    <value>{0} was added successfully.</value>
+  </data>
+  <data name="GameUpdatedSuccessTitle" xml:space="preserve">
+    <value>Game updated</value>
+  </data>
+  <data name="GameUpdatedSuccessMessage" xml:space="preserve">
+    <value>Saved changes for {0}.</value>
+  </data>
+  <data name="GameDeletedSuccessTitle" xml:space="preserve">
+    <value>Game deleted</value>
+  </data>
+  <data name="GameDeletedSuccessMessage" xml:space="preserve">
+    <value>{0} was removed from the list.</value>
+  </data>
+  <data name="GameDialogCreateTitleText" xml:space="preserve">
+    <value>Add new game</value>
+  </data>
+  <data name="GameDialogEditTitleText" xml:space="preserve">
+    <value>Edit game</value>
+  </data>
+  <data name="GameDialogNameLabelText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="GameDialogNamePlaceholderText" xml:space="preserve">
+    <value>Game name...</value>
+  </data>
+  <data name="GameDialogGameTypeLabelText" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="GameDialogDifficultyLabelText" xml:space="preserve">
+    <value>Difficulty</value>
+  </data>
+  <data name="GameDialogPlayerCountLabelText" xml:space="preserve">
+    <value>Player count</value>
+  </data>
+  <data name="GameDialogMinPlayersPlaceholderText" xml:space="preserve">
+    <value>Minimum...</value>
+  </data>
+  <data name="GameDialogMaxPlayersPlaceholderText" xml:space="preserve">
+    <value>Maximum...</value>
+  </data>
+  <data name="GameDialogAcquisitionPriceLabelText" xml:space="preserve">
+    <value>Cost price</value>
+  </data>
+  <data name="GameDialogAcquisitionPricePlaceholderText" xml:space="preserve">
+    <value>Acquisition cost...</value>
+  </data>
+  <data name="GameDialogHourlyPriceLabelText" xml:space="preserve">
+    <value>Price / Hour</value>
+  </data>
+  <data name="GameDialogHourlyPricePlaceholderText" xml:space="preserve">
+    <value>Hourly price...</value>
+  </data>
+  <data name="GameDialogStockQuantityLabelText" xml:space="preserve">
+    <value>Initial stock</value>
+  </data>
+  <data name="GameDialogStockQuantityPlaceholderText" xml:space="preserve">
+    <value>Starting quantity...</value>
+  </data>
+  <data name="GameDialogResetButtonText" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="GameDialogApplyButtonText" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="GameFilterDialogTitleText" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="GameFilterDialogGameTypeLabelText" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="GameFilterDialogDifficultyLabelText" xml:space="preserve">
+    <value>Difficulty</value>
+  </data>
+  <data name="GameFilterDialogPlayerCountLabelText" xml:space="preserve">
+    <value>Player count</value>
+  </data>
+  <data name="GameFilterDialogPlayerCountPlaceholderText" xml:space="preserve">
+    <value>Player count...</value>
+  </data>
+  <data name="GameFilterDialogHourlyPriceRangeLabelText" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="GameFilterDialogHourlyPriceFromPlaceholderText" xml:space="preserve">
+    <value>Lowest...</value>
+  </data>
+  <data name="GameFilterDialogHourlyPriceToPlaceholderText" xml:space="preserve">
+    <value>Highest...</value>
+  </data>
+  <data name="GameFilterDialogAllOptionsText" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="GameFilterDialogResetButtonText" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="GameFilterDialogApplyButtonText" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="GameFilterDialogInvalidRangeText" xml:space="preserve">
+    <value>Please enter a valid filter range.</value>
+  </data>
+  <data name="ConfirmDeleteGameTitle" xml:space="preserve">
+    <value>Delete game?</value>
+  </data>
+  <data name="ConfirmDeleteGameMessage" xml:space="preserve">
+    <value>This game will be removed from the list. This action cannot be undone.</value>
+  </data>
+  <data name="ConfirmDeleteGameButton" xml:space="preserve">
+    <value>Delete game</value>
+  </data>
+  <data name="ConfirmAddGameTitle" xml:space="preserve">
+    <value>Add game?</value>
+  </data>
+  <data name="ConfirmAddGameMessage" xml:space="preserve">
+    <value>Are you sure you want to add this game?</value>
+  </data>
+  <data name="ConfirmAddGameButton" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ConfirmEditGameTitle" xml:space="preserve">
+    <value>Save game changes?</value>
+  </data>
+  <data name="ConfirmEditGameMessage" xml:space="preserve">
+    <value>Are you sure you want to save changes for this game?</value>
+  </data>
+  <data name="ConfirmEditGameButton" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="GridGameCardControlStockLabel" xml:space="preserve">
+    <value>Stock</value>
+  </data>
 </root>

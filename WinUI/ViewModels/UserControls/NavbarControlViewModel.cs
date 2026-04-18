@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Application.Navigation;
 using Application.Navigation.Requests;
 using Application.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
@@ -11,9 +12,17 @@ namespace WinUI.ViewModels.UserControls;
 
 public partial class NavbarControlViewModel : LocalizedViewModelBase
 {
+    private const double WideEnoughThreshold = 120.0;
+
     private readonly INavigationService _navigationService;
 
     public ObservableCollection<NavbarItemModel> NavigationItems { get; } = [];
+
+    [ObservableProperty]
+    public partial double MinItemWidth { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsWideEnough { get; set; } = true;
 
     public IRelayCommand<NavbarItemModel> NavigateCommand { get; }
 
@@ -41,6 +50,18 @@ public partial class NavbarControlViewModel : LocalizedViewModelBase
         {
             navItem.IsSelected = requestType != null && navItem.RequestType == requestType;
         }
+    }
+
+    public void UpdateLayout(double availableWidth)
+    {
+        if (NavigationItems.Count == 0 || availableWidth <= 0)
+        {
+            return;
+        }
+
+        double itemWidth = Math.Floor(availableWidth / NavigationItems.Count);
+        MinItemWidth = itemWidth;
+        IsWideEnough = itemWidth >= WideEnoughThreshold;
     }
 
     private void InitializeNavigationItems()

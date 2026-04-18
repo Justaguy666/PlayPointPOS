@@ -6,7 +6,7 @@ using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using WinUI.UIModels;
-using WinUI.UIModels.AreaManagement;
+using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
 using WinUI.ViewModels.Dialogs.Management;
 
@@ -60,11 +60,6 @@ public partial class DetailedAvailableCardViewModel : LocalizedViewModelBase, ID
 
         StartSessionButtonText = LocalizationService.GetString("StartSessionButtonText");
         ReserveButtonText = LocalizationService.GetString("ReserveButtonText");
-    }
-
-    private Task ExecuteNoopAsync()
-    {
-        return Task.CompletedTask;
     }
 
     private Task OpenStartSessionDialogAsync()

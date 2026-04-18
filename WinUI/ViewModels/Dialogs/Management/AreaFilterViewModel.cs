@@ -5,6 +5,7 @@ using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
+using WinUI.Helpers;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
 using WinUI.ViewModels;
@@ -124,11 +125,13 @@ public partial class AreaFilterViewModel : LocalizedViewModelBase
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasStartTimeFrom))]
     [NotifyPropertyChangedFor(nameof(StartTimeFromDisplayText))]
+    [NotifyPropertyChangedFor(nameof(StartTimeFromFlyoutTime))]
     public partial TimeSpan? StartTimeFrom { get; set; }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasStartTimeTo))]
     [NotifyPropertyChangedFor(nameof(StartTimeToDisplayText))]
+    [NotifyPropertyChangedFor(nameof(StartTimeToFlyoutTime))]
     public partial TimeSpan? StartTimeTo { get; set; }
 
     [ObservableProperty]
@@ -206,6 +209,10 @@ public partial class AreaFilterViewModel : LocalizedViewModelBase
     public string StartTimeToDisplayText => StartTimeTo.HasValue
         ? FormatTime(StartTimeTo.Value)
         : StartTimeToPlaceholderText;
+
+    public TimeSpan StartTimeFromFlyoutTime => CoerceFilterTime(StartTimeFrom ?? TimeSpan.Zero);
+
+    public TimeSpan StartTimeToFlyoutTime => CoerceFilterTime(StartTimeTo ?? new TimeSpan(23, 55, 0));
 
     public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
 
@@ -296,6 +303,16 @@ public partial class AreaFilterViewModel : LocalizedViewModelBase
     private void Close()
     {
         CloseRequestedInternal?.Invoke();
+    }
+
+    public void ApplyStartTimeFromSelection(TimeSpan selectedTime)
+    {
+        StartTimeFrom = CoerceFilterTime(selectedTime);
+    }
+
+    public void ApplyStartTimeToSelection(TimeSpan selectedTime)
+    {
+        StartTimeTo = CoerceFilterTime(selectedTime);
     }
 
     partial void OnSelectedStatusChanged(PlayAreaStatus? value) => NotifyFilterInputChanged();
@@ -424,5 +441,13 @@ public partial class AreaFilterViewModel : LocalizedViewModelBase
         }
 
         return (min, max);
+    }
+
+    private static TimeSpan CoerceFilterTime(TimeSpan selectedTime)
+    {
+        int minuteIncrement = ReservationDateTimeHelper.MinuteIncrement;
+        int totalMinutes = (int)Math.Round(selectedTime.TotalMinutes / minuteIncrement, MidpointRounding.AwayFromZero) * minuteIncrement;
+        totalMinutes = Math.Clamp(totalMinutes, 0, (24 * 60) - minuteIncrement);
+        return TimeSpan.FromMinutes(totalMinutes);
     }
 }

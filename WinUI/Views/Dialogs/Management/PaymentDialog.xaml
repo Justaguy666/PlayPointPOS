@@ -11,46 +11,6 @@
     Style="{StaticResource StandardFormDialogStyle}"
     mc:Ignorable="d">
 
-    <ContentDialog.Resources>
-        <Style x:Key="PaymentDialogRowLabelTextStyle"
-               TargetType="TextBlock"
-               BasedOn="{StaticResource KeyValueRowLabelTextStyle}">
-            <Setter Property="FontSize" Value="{StaticResource FontSizeMedium}" />
-        </Style>
-
-        <Style x:Key="PaymentDialogValueTextStyle"
-               TargetType="TextBlock"
-               BasedOn="{StaticResource KeyValueRowValueTextStyle}">
-            <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-            <Setter Property="MaxWidth" Value="220" />
-        </Style>
-
-        <Style x:Key="PaymentDialogMoneyValueTextStyle"
-               TargetType="TextBlock"
-               BasedOn="{StaticResource PaymentDialogValueTextStyle}">
-            <Setter Property="Foreground" Value="{StaticResource PrimaryOrangeDarkBrush}" />
-        </Style>
-
-        <Style x:Key="PaymentDialogTotalLabelTextStyle"
-               TargetType="TextBlock">
-            <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
-
-        <Style x:Key="PaymentDialogTotalValueTextStyle"
-               TargetType="TextBlock">
-            <Setter Property="FontSize" Value="34" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Foreground" Value="{StaticResource PrimaryOrangeDarkBrush}" />
-            <Setter Property="TextAlignment" Value="Right" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
-    </ContentDialog.Resources>
-
     <Grid x:Name="RootGrid"
           Style="{StaticResource DialogFormRootGridStyle}"
           MinWidth="460"
@@ -94,8 +54,12 @@
         <controls:DividerControl Grid.Row="1"
                                  Style="{StaticResource DialogHeaderDividerStyle}" />
 
-        <StackPanel Grid.Row="2"
-                    Style="{StaticResource DialogFormContentPanelStyle}"
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
+                      VerticalScrollMode="Enabled"
+                      Margin="0,0,-16,0"
+                      Padding="0,0,16,20">
+        <StackPanel Style="{StaticResource DialogFormContentPanelStyle}"
                     Margin="0,12,0,16"
                     Spacing="16">
             <Grid>
@@ -237,6 +201,7 @@
                 </Grid>
             </Border>
         </StackPanel>
+        </ScrollViewer>
 
         <controls:DividerControl Grid.Row="3"
                                  Style="{StaticResource DialogSectionDividerStyle}" />

@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
 using Microsoft.UI.Xaml;
 using WinUI.UIModels;
-using WinUI.UIModels.AreaManagement;
+using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
 using WinUI.ViewModels.Dialogs.Management;
 
@@ -181,11 +181,6 @@ public partial class DetailedReservedCardViewModel : LocalizedViewModelBase, IDe
                 Mode = UpsertDialogMode.Edit,
                 Model = Model,
             });
-    }
-
-    private static Task ExecuteNoopAsync()
-    {
-        return Task.CompletedTask;
     }
 
     private async Task ExecuteCancelReservationAsync()

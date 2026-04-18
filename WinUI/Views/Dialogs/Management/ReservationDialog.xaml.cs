@@ -14,8 +14,6 @@ public sealed partial class ReservationDialog : ContentDialog
 {
     private static readonly SolidColorBrush DarkForegroundBrush = new(Windows.UI.Color.FromArgb(255, 31, 31, 31));
 
-    private readonly DatePickerFlyout _datePickerFlyout;
-    private readonly TimePickerFlyout _timePickerFlyout;
     private bool _isTemporarilyHiddenForConfirmation;
     private bool _isCleanedUp;
 
@@ -33,8 +31,6 @@ public sealed partial class ReservationDialog : ContentDialog
     {
         ViewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
         ViewModel.Configure(request);
-        _datePickerFlyout = CreateDatePickerFlyout();
-        _timePickerFlyout = CreateTimePickerFlyout();
         DataContext = ViewModel;
         InitializeComponent();
 
@@ -67,25 +63,6 @@ public sealed partial class ReservationDialog : ContentDialog
         await ShowAsync();
     }
 
-    private async void ReservationDateFieldButton_Click(object sender, RoutedEventArgs e)
-    {
-        DateTimeOffset minimumDateTime = ReservationDateTimeHelper.GetMinimumSelectableDateTime();
-        DateTimeOffset selectedDate = ViewModel.ReservationDate ?? minimumDateTime;
-        _datePickerFlyout.MinYear = ReservationDateTimeHelper.CreateDate(minimumDateTime);
-        _datePickerFlyout.MaxYear = ReservationDateTimeHelper.CreateDate(minimumDateTime.AddYears(2));
-        _datePickerFlyout.Date = ReservationDateTimeHelper.CoerceDate(selectedDate);
-        await _datePickerFlyout.ShowAtAsync(ReservationDateFieldButton);
-    }
-
-    private async void ReservationTimeFieldButton_Click(object sender, RoutedEventArgs e)
-    {
-        DateTimeOffset minimumDateTime = ReservationDateTimeHelper.GetMinimumSelectableDateTime();
-        DateTimeOffset selectedDate = ReservationDateTimeHelper.CoerceDate(ViewModel.ReservationDate ?? minimumDateTime);
-        TimeSpan selectedTime = ViewModel.ReservationTime ?? ReservationDateTimeHelper.GetMinimumSelectableTime(selectedDate);
-        _timePickerFlyout.Time = ReservationDateTimeHelper.CoerceTime(selectedDate, selectedTime);
-        await _timePickerFlyout.ShowAtAsync(ReservationTimeFieldButton);
-    }
-
     private void HandleClosed(ContentDialog sender, ContentDialogClosedEventArgs args)
     {
         if (_isTemporarilyHiddenForConfirmation)
@@ -109,41 +86,7 @@ public sealed partial class ReservationDialog : ContentDialog
         ViewModel.CloseRequested -= HandleCloseRequested;
         ViewModel.DialogHideRequested -= HandleDialogHideRequested;
         ViewModel.DialogShowRequested -= HandleDialogShowRequested;
-        _datePickerFlyout.DatePicked -= HandleDatePicked;
-        _datePickerFlyout.Opened -= HandleFlyoutOpened;
-        _timePickerFlyout.TimePicked -= HandleTimePicked;
-        _timePickerFlyout.Opened -= HandleFlyoutOpened;
         ViewModel.Dispose();
-    }
-
-    private DatePickerFlyout CreateDatePickerFlyout()
-    {
-        DateTimeOffset minimumDateTime = ReservationDateTimeHelper.GetMinimumSelectableDateTime();
-        var flyout = new DatePickerFlyout
-        {
-            Date = ReservationDateTimeHelper.CreateDate(minimumDateTime),
-            MinYear = ReservationDateTimeHelper.CreateDate(minimumDateTime),
-            MaxYear = ReservationDateTimeHelper.CreateDate(minimumDateTime.AddYears(2))
-        };
-
-        flyout.DatePicked += HandleDatePicked;
-        flyout.Opened += HandleFlyoutOpened;
-        return flyout;
-    }
-
-    private TimePickerFlyout CreateTimePickerFlyout()
-    {
-        DateTimeOffset minimumDateTime = ReservationDateTimeHelper.GetMinimumSelectableDateTime();
-        var flyout = new TimePickerFlyout
-        {
-            Time = minimumDateTime.TimeOfDay,
-            ClockIdentifier = "24HourClock",
-            MinuteIncrement = ReservationDateTimeHelper.MinuteIncrement
-        };
-
-        flyout.TimePicked += HandleTimePicked;
-        flyout.Opened += HandleFlyoutOpened;
-        return flyout;
     }
 
     private void HandleFlyoutOpened(object? sender, object e)
@@ -179,25 +122,11 @@ public sealed partial class ReservationDialog : ContentDialog
 
     private void HandleDatePicked(DatePickerFlyout sender, DatePickedEventArgs args)
     {
-        DateTimeOffset selectedDate = ReservationDateTimeHelper.CoerceDate(args.NewDate);
-        ViewModel.ReservationDate = selectedDate;
-
-        if (ViewModel.ReservationTime.HasValue)
-        {
-            ViewModel.ReservationTime = ReservationDateTimeHelper.CoerceTime(selectedDate, ViewModel.ReservationTime.Value);
-        }
+        ViewModel.ApplyReservationDateSelection(args.NewDate);
     }
 
     private void HandleTimePicked(TimePickerFlyout sender, TimePickedEventArgs args)
     {
-        DateTimeOffset selectedDate = ReservationDateTimeHelper.CoerceDate(
-            ViewModel.ReservationDate ?? ReservationDateTimeHelper.GetMinimumSelectableDateTime());
-
-        if (!ViewModel.ReservationDate.HasValue)
-        {
-            ViewModel.ReservationDate = selectedDate;
-        }
-
-        ViewModel.ReservationTime = ReservationDateTimeHelper.CoerceTime(selectedDate, args.NewTime);
+        ViewModel.ApplyReservationTimeSelection(args.NewTime);
     }
 }

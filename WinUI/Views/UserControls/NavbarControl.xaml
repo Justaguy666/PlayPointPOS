@@ -31,6 +31,7 @@
             <ItemsRepeater.Layout>
                 <UniformGridLayout x:Name="NavGridLayout"
                                    Orientation="Horizontal" 
+                                   MinItemWidth="{Binding DataContext.MinItemWidth, ElementName=RootNavbar}"
                                    MinColumnSpacing="0"
                                    MinRowSpacing="0"
                                    ItemsStretch="Fill" />
@@ -38,7 +39,8 @@
 
             <ItemsRepeater.ItemTemplate>
                 <DataTemplate>
-                    <Button Click="OnNavigateClicked"
+                    <Button Command="{Binding DataContext.NavigateCommand, ElementName=RootNavbar}"
+                            CommandParameter="{Binding}"
                             Style="{StaticResource NavbarItemButtonStyle}">
 
                         <Grid HorizontalAlignment="Stretch"
@@ -63,7 +65,7 @@
                                            FontSize="{StaticResource FontSizeMedium}"
                                            FontWeight="SemiBold"
                                            Foreground="{Binding IsSelected, Converter={StaticResource BoolToOrangeBrushConverter}}"
-                                           Visibility="{Binding IsWideEnough, ElementName=RootNavbar, Converter={StaticResource BoolToVisible}}"/>
+                                           Visibility="{Binding DataContext.IsWideEnough, ElementName=RootNavbar, Converter={StaticResource BoolToVisible}}"/>
                             </StackPanel>
 
                             <Border Grid.Row="1"

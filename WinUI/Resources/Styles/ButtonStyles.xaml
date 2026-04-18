@@ -111,15 +111,15 @@
     <Style x:Key="PaginationNavigationButtonStyle"
        TargetType="Button">
         <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
-        <Setter Property="MinWidth" Value="72" />
-        <Setter Property="Height" Value="72" />
+        <Setter Property="MinWidth" Value="48" />
+        <Setter Property="Height" Value="48" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Background" Value="{StaticResource OrangeFocusBrush}" />
         <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource OrangeFocusBrush}" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMedium}" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -128,12 +128,12 @@
     <Style x:Key="PaginationPageButtonStyle"
        TargetType="Button">
         <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
-        <Setter Property="MinWidth" Value="72" />
-        <Setter Property="Height" Value="72" />
+        <Setter Property="MinWidth" Value="48" />
+        <Setter Property="Height" Value="48" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="CornerRadius" Value="8" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMedium}" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -142,14 +142,14 @@
     <Style x:Key="PaginationJumpButtonStyle"
        TargetType="Button">
         <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
-        <Setter Property="Height" Value="72" />
-        <Setter Property="Padding" Value="28,0" />
-        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Height" Value="48" />
+        <Setter Property="Padding" Value="20,0" />
+        <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Background" Value="{StaticResource OrangeFocusBrush}" />
         <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource OrangeFocusBrush}" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMedium}" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -158,28 +158,28 @@
     <Style x:Key="PaginationDialogSecondaryButtonStyle"
        TargetType="Button">
         <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
-        <Setter Property="Height" Value="56" />
+        <Setter Property="Height" Value="48" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
         <Setter Property="Foreground" Value="{StaticResource DarkGrayBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource LightGrayBrush}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMedium}" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
     <Style x:Key="PaginationDialogPrimaryButtonStyle"
        TargetType="Button">
         <Setter Property="helpers:CursorBehavior.UseHandCursor" Value="True" />
-        <Setter Property="Height" Value="56" />
+        <Setter Property="Height" Value="48" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Background" Value="{StaticResource OrangeFocusBrush}" />
         <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource OrangeFocusBrush}" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMedium}" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 

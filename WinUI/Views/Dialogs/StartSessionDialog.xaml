@@ -38,7 +38,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"
@@ -72,8 +72,12 @@
         <controls:DividerControl Grid.Row="1"
                                  Style="{StaticResource DialogHeaderDividerStyle}" />
 
-        <StackPanel Grid.Row="2"
-                    Style="{StaticResource DialogFormContentPanelStyle}">
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
+                      VerticalScrollMode="Enabled"
+                      Margin="0,0,-16,0"
+                      Padding="0,0,16,20">
+        <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
             <CheckBox Content="{x:Bind ViewModel.MemberToggleText, Mode=OneWay}"
                       IsChecked="{x:Bind ViewModel.IsMember, Mode=TwoWay}"
                       Style="{StaticResource OrangeCheckBoxStyle}" />
@@ -166,5 +170,6 @@
                 </Button>
             </Grid>
         </StackPanel>
+        </ScrollViewer>
     </Grid>
 </ContentDialog>

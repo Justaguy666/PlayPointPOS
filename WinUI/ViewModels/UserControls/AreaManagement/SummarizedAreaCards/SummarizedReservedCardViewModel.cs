@@ -2,7 +2,7 @@ using System;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Domain.Enums;
-using WinUI.UIModels.AreaManagement;
+using WinUI.UIModels.Management;
 
 namespace WinUI.ViewModels.AreaManagement.SummarizedAreaCards;
 

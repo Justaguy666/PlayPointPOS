@@ -94,9 +94,13 @@
     <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}" />
     <SolidColorBrush x:Key="AntiqueWhiteBrush" Color="{StaticResource AlmostWhiteGray}" />
     <SolidColorBrush x:Key="VeryLightGrayBrush" Color="{StaticResource VeryLightGray}" />
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource VeryLightGray}" />
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource White}" />
     
     <!-- Solid Color Brushes - Text -->
     <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}" />
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource Black}" />
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource PlaceholderGray}" />
     <SolidColorBrush x:Key="PlaceholderGrayBrush" Color="{StaticResource PlaceholderGray}" />
     
     <!-- Solid Color Brushes - Primary Colors -->
@@ -113,6 +117,7 @@
     <SolidColorBrush x:Key="MediumDarkGrayBrush" Color="{StaticResource MediumDarkGray}" />
     <SolidColorBrush x:Key="LighterGrayBrush" Color="{StaticResource LighterGray}" />
     <SolidColorBrush x:Key="DarkGrayBrush" Color="{StaticResource SecondaryGray}" />
+    <SolidColorBrush x:Key="SecondaryGrayBrush" Color="{StaticResource SecondaryGray}" />
     <SolidColorBrush x:Key="TextBoxBorderBrush" Color="{StaticResource LightGray}" />
     <SolidColorBrush x:Key="TextBoxBackgroundBrush" Color="{StaticResource VeryLightGray}" />
     

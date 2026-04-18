@@ -293,4 +293,42 @@
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
+
+    <Style x:Key="PaymentDialogRowLabelTextStyle"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource KeyValueRowLabelTextStyle}">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMedium}" />
+    </Style>
+
+    <Style x:Key="PaymentDialogValueTextStyle"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource KeyValueRowValueTextStyle}">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        <Setter Property="MaxWidth" Value="220" />
+    </Style>
+
+    <Style x:Key="PaymentDialogMoneyValueTextStyle"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource PaymentDialogValueTextStyle}">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryOrangeDarkBrush}" />
+    </Style>
+
+    <Style x:Key="PaymentDialogTotalLabelTextStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="PaymentDialogTotalValueTextStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="34" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource PrimaryOrangeDarkBrush}" />
+        <Setter Property="TextAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
 </ResourceDictionary>

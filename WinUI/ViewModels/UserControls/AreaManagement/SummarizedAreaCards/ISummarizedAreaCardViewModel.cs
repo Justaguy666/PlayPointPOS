@@ -1,5 +1,5 @@
 using Domain.Enums;
-using WinUI.UIModels.AreaManagement;
+using WinUI.UIModels.Management;
 
 namespace WinUI.ViewModels.AreaManagement.SummarizedAreaCards;
 

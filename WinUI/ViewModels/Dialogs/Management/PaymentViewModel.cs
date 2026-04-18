@@ -5,15 +5,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
 using WinUI.UIModels;
-using WinUI.UIModels.AreaManagement;
+using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
-using WinUI.ViewModels;
+using Application.Services.Areas;
 
 namespace WinUI.ViewModels.Dialogs.Management;
 
 public partial class PaymentViewModel : LocalizedViewModelBase
 {
     private readonly IDialogService _dialogService;
+    private readonly IAreaSessionService _areaSessionService;
     private AreaModel? _model;
     private event Action? CloseRequestedInternal;
 
@@ -22,10 +23,12 @@ public partial class PaymentViewModel : LocalizedViewModelBase
 
     public PaymentViewModel(
         ILocalizationService localizationService,
-        IDialogService dialogService)
+        IDialogService dialogService,
+        IAreaSessionService areaSessionService)
         : base(localizationService)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _areaSessionService = areaSessionService ?? throw new ArgumentNullException(nameof(areaSessionService));
         RefreshLocalizedText();
     }
 
@@ -151,7 +154,7 @@ public partial class PaymentViewModel : LocalizedViewModelBase
             return;
         }
 
-        CompletePayment(_model);
+        _areaSessionService.CompletePayment(_model);
         CloseRequestedInternal?.Invoke();
     }
 
@@ -171,8 +174,8 @@ public partial class PaymentViewModel : LocalizedViewModelBase
             return;
         }
 
-        TimeSpan elapsedTime = _model.GetSessionElapsedTime(DateTime.UtcNow);
-        decimal areaFee = CalculateAreaSessionTotal(_model, elapsedTime);
+        TimeSpan elapsedTime = _areaSessionService.GetSessionElapsedTime(_model, DateTime.UtcNow);
+        decimal areaFee = _areaSessionService.CalculateAreaSessionTotal(_model, elapsedTime);
         decimal productFee = 0m;
         decimal gameFee = 0m;
         decimal deposit = 0m;
@@ -196,17 +199,6 @@ public partial class PaymentViewModel : LocalizedViewModelBase
         TotalValueText = LocalizationService.FormatCurrency(total);
     }
 
-    private static decimal CalculateAreaSessionTotal(AreaModel model, TimeSpan elapsedTime)
-    {
-        if (model.HourlyPrice <= 0m || elapsedTime <= TimeSpan.Zero)
-        {
-            return 0m;
-        }
-
-        int billableHalfHours = Math.Max(1, (int)Math.Floor(elapsedTime.TotalMinutes / 30d));
-        return model.HourlyPrice * billableHalfHours / 2m;
-    }
-
     private string FormatElapsedTime(TimeSpan elapsedTime)
     {
         return string.Format(
@@ -225,21 +217,6 @@ public partial class PaymentViewModel : LocalizedViewModelBase
         }
 
         return $"-{LocalizationService.FormatCurrency(amount)}";
-    }
-
-    private static void CompletePayment(AreaModel model)
-    {
-        model.CustomerName = string.Empty;
-        model.PhoneNumber = string.Empty;
-        model.MemberId = null;
-        model.CheckInDateTime = null;
-        model.Capacity = 0;
-        model.StartTime = null;
-        model.IsSessionPaused = false;
-        model.SessionPausedAt = null;
-        model.SessionPausedDuration = TimeSpan.Zero;
-        model.TotalAmount = 0m;
-        model.Status = PlayAreaStatus.Available;
     }
 
     private static IconState CreateIconState(AreaModel? model)

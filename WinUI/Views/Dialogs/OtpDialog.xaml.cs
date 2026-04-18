@@ -1,5 +1,4 @@
 using System;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
@@ -33,26 +32,6 @@ public sealed partial class OtpDialog : ContentDialog
     private async void HandleDialogShowRequested()
     {
         await ShowAsync();
-    }
-
-    private void NewPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
-
-        ViewModel.NewPassword = NewPasswordBox.Password;
-    }
-
-    private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
-
-        ViewModel.ConfirmPassword = ConfirmPasswordBox.Password;
     }
 
     private void HandleCloseRequested()

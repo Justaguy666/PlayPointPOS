@@ -10,8 +10,9 @@ using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
 using Domain.Enums;
 using WinUI.Helpers;
+using WinUI.Services.Factories;
 using WinUI.UIModels;
-using WinUI.UIModels.AreaManagement;
+using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
 
 namespace WinUI.ViewModels.Dialogs.Management;
@@ -21,6 +22,7 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
     private readonly IRepository<Member> _memberRepository;
     private readonly ILocalizationPreferencesService _localizationPreferencesService;
     private readonly IDialogService _dialogService;
+    private readonly AreaModelFactory _areaModelFactory;
     private AreaModel _targetModel = new();
     private Func<AreaModel, Task>? _onSubmittedAsync;
     private event Action? CloseRequestedInternal;
@@ -33,12 +35,14 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
         ILocalizationPreferencesService localizationPreferencesService,
         IRepository<Member> memberRepository,
         IDialogService dialogService,
+        AreaModelFactory areaModelFactory,
         UpsertDialogMode mode)
         : base(localizationService, mode)
     {
         _memberRepository = memberRepository ?? throw new ArgumentNullException(nameof(memberRepository));
         _localizationPreferencesService = localizationPreferencesService ?? throw new ArgumentNullException(nameof(localizationPreferencesService));
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _areaModelFactory = areaModelFactory ?? throw new ArgumentNullException(nameof(areaModelFactory));
         Members = new ObservableCollection<Member>();
         LoadMembers();
         ApplyModel(_targetModel);
@@ -93,6 +97,8 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
     [NotifyPropertyChangedFor(nameof(CanSubmit))]
     [NotifyPropertyChangedFor(nameof(HasReservationDate))]
     [NotifyPropertyChangedFor(nameof(ReservationDateDisplayText))]
+    [NotifyPropertyChangedFor(nameof(ReservationDateFlyoutDate))]
+    [NotifyPropertyChangedFor(nameof(ReservationTimeFlyoutTime))]
     public partial DateTimeOffset? ReservationDate { get; set; }
 
     [ObservableProperty]
@@ -105,6 +111,7 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
     [NotifyPropertyChangedFor(nameof(CanSubmit))]
     [NotifyPropertyChangedFor(nameof(HasReservationTime))]
     [NotifyPropertyChangedFor(nameof(ReservationTimeDisplayText))]
+    [NotifyPropertyChangedFor(nameof(ReservationTimeFlyoutTime))]
     public partial TimeSpan? ReservationTime { get; set; }
 
     [ObservableProperty]
@@ -149,6 +156,31 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
     public string ReservationTimeDisplayText => ReservationTime.HasValue
         ? DateTime.Today.Add(ReservationTime.Value).ToString("HH:mm", LocalizationService.Culture)
         : ReservationTimePlaceholderText;
+
+    public DateTimeOffset ReservationDateFlyoutMinYear => ReservationDateTimeHelper.CreateDate(GetMinimumSelectableReservationDateTime());
+
+    public DateTimeOffset ReservationDateFlyoutMaxYear => ReservationDateTimeHelper.CreateDate(GetMinimumSelectableReservationDateTime().AddYears(2));
+
+    public DateTimeOffset ReservationDateFlyoutDate
+    {
+        get
+        {
+            DateTimeOffset minimumDateTime = GetMinimumSelectableReservationDateTime();
+            DateTimeOffset selectedDate = ReservationDate ?? minimumDateTime;
+            return ReservationDateTimeHelper.CoerceDate(selectedDate);
+        }
+    }
+
+    public TimeSpan ReservationTimeFlyoutTime
+    {
+        get
+        {
+            DateTimeOffset minimumDateTime = GetMinimumSelectableReservationDateTime();
+            DateTimeOffset selectedDate = ReservationDateTimeHelper.CoerceDate(ReservationDate ?? minimumDateTime);
+            TimeSpan selectedTime = ReservationTime ?? ReservationDateTimeHelper.GetMinimumSelectableTime(selectedDate);
+            return ReservationDateTimeHelper.CoerceTime(selectedDate, selectedTime);
+        }
+    }
 
     public event Action? CloseRequested
     {
@@ -276,6 +308,30 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
 
     partial void OnSelectedMemberChanged(Member? value) => NotifyFormStateChanged();
 
+    public void ApplyReservationDateSelection(DateTimeOffset selectedDate)
+    {
+        DateTimeOffset normalizedDate = ReservationDateTimeHelper.CoerceDate(selectedDate);
+        ReservationDate = normalizedDate;
+
+        if (ReservationTime.HasValue)
+        {
+            ReservationTime = ReservationDateTimeHelper.CoerceTime(normalizedDate, ReservationTime.Value);
+        }
+    }
+
+    public void ApplyReservationTimeSelection(TimeSpan selectedTime)
+    {
+        DateTimeOffset selectedDate = ReservationDateTimeHelper.CoerceDate(
+            ReservationDate ?? GetMinimumSelectableReservationDateTime());
+
+        if (!ReservationDate.HasValue)
+        {
+            ReservationDate = selectedDate;
+        }
+
+        ReservationTime = ReservationDateTimeHelper.CoerceTime(selectedDate, selectedTime);
+    }
+
     [RelayCommand(CanExecute = nameof(CanDecrementReservationCapacity))]
     private void DecrementReservationCapacity()
     {
@@ -390,9 +446,14 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
         OnPropertyChanged(nameof(ShowCustomerFields));
     }
 
+    private static DateTimeOffset GetMinimumSelectableReservationDateTime()
+    {
+        return ReservationDateTimeHelper.GetMinimumSelectableDateTime();
+    }
+
     private bool TryBuildUpdatedModel(out AreaModel model)
     {
-        model = _targetModel.Clone();
+        model = _areaModelFactory.Clone(_targetModel);
 
         if (!TryGetParsedFormValues(out string trimmedCustomerName, out string trimmedPhoneNumber, out int capacity, out DateTime reservationDateTime))
         {

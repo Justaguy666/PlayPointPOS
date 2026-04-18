@@ -37,7 +37,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"
@@ -71,8 +71,12 @@
         <controls:DividerControl Grid.Row="1"
                                  Style="{StaticResource DialogHeaderDividerStyle}" />
 
-        <StackPanel Grid.Row="2"
-                    Style="{StaticResource DialogFormContentPanelStyle}">
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
+                      VerticalScrollMode="Enabled"
+                      Margin="0,0,-16,0"
+                      Padding="0,0,16,20">
+        <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
             <CheckBox Content="{x:Bind ViewModel.MemberToggleText, Mode=OneWay}"
                       IsChecked="{x:Bind ViewModel.IsMember, Mode=TwoWay}"
                       Style="{StaticResource OrangeCheckBoxStyle}" />
@@ -121,8 +125,14 @@
                     <Button x:Name="ReservationDateFieldButton"
                             Style="{StaticResource DialogPickerButtonStyle}"
                             HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center"
-                            Click="ReservationDateFieldButton_Click">
+                            VerticalAlignment="Center">
+                        <Button.Flyout>
+                            <DatePickerFlyout Date="{x:Bind ViewModel.ReservationDateFlyoutDate, Mode=OneWay}"
+                                              DatePicked="HandleDatePicked"
+                                              MaxYear="{x:Bind ViewModel.ReservationDateFlyoutMaxYear, Mode=OneWay}"
+                                              MinYear="{x:Bind ViewModel.ReservationDateFlyoutMinYear, Mode=OneWay}"
+                                              Opened="HandleFlyoutOpened" />
+                        </Button.Flyout>
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogInputButtonStateResources.xaml" />
                         </Button.Resources>
@@ -154,8 +164,14 @@
                     <Button x:Name="ReservationTimeFieldButton"
                             Style="{StaticResource DialogPickerButtonStyle}"
                             HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center"
-                            Click="ReservationTimeFieldButton_Click">
+                            VerticalAlignment="Center">
+                        <Button.Flyout>
+                            <TimePickerFlyout ClockIdentifier="24HourClock"
+                                              MinuteIncrement="5"
+                                              Opened="HandleFlyoutOpened"
+                                              Time="{x:Bind ViewModel.ReservationTimeFlyoutTime, Mode=OneWay}"
+                                              TimePicked="HandleTimePicked" />
+                        </Button.Flyout>
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogInputButtonStateResources.xaml" />
                         </Button.Resources>
@@ -251,5 +267,6 @@
                 <TextBlock Text="{x:Bind ViewModel.SubmitButtonText, Mode=OneWay}" />
             </Button>
         </StackPanel>
+        </ScrollViewer>
     </Grid>
 </ContentDialog>

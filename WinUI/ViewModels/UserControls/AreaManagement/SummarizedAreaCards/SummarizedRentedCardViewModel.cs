@@ -1,14 +1,16 @@
 using System;
 using Application.Services;
+using Application.Services.Areas;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Domain.Enums;
 using Microsoft.UI.Dispatching;
-using WinUI.UIModels.AreaManagement;
+using WinUI.UIModels.Management;
 
 namespace WinUI.ViewModels.AreaManagement.SummarizedAreaCards;
 
 public sealed partial class SummarizedRentedCardViewModel : LocalizedViewModelBase, ISummarizedAreaCardViewModel, IDisposable
 {
+    private readonly IAreaSessionService _areaSessionService;
     private readonly DispatcherQueueTimer? _timer;
     private bool _isDisposed;
 
@@ -29,9 +31,11 @@ public sealed partial class SummarizedRentedCardViewModel : LocalizedViewModelBa
 
     public SummarizedRentedCardViewModel(
         ILocalizationService localizationService,
+        IAreaSessionService areaSessionService,
         AreaModel model)
         : base(localizationService)
     {
+        _areaSessionService = areaSessionService ?? throw new ArgumentNullException(nameof(areaSessionService));
         Model = model ?? throw new ArgumentNullException(nameof(model));
         Model.PropertyChanged += HandleModelPropertyChanged;
 
@@ -92,7 +96,7 @@ public sealed partial class SummarizedRentedCardViewModel : LocalizedViewModelBa
 
     private void UpdateElapsedTimeText()
     {
-        TimeSpan elapsedTime = Model.GetSessionElapsedTime(DateTime.UtcNow);
+        TimeSpan elapsedTime = _areaSessionService.GetSessionElapsedTime(Model, DateTime.UtcNow);
 
         ElapsedTimeText = string.Format(
             LocalizationService.Culture,

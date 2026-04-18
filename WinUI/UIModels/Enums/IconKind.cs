@@ -51,4 +51,5 @@ public enum IconKind
     Error,
     Info,
     More,
+    Folder,
 }

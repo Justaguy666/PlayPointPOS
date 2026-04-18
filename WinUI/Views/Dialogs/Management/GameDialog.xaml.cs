@@ -1,28 +1,81 @@
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Microsoft.UI.Xaml.Controls;
+using WinUI.UIModels;
+using WinUI.UIModels.Enums;
+using WinUI.ViewModels.Dialogs.Management;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+namespace WinUI.Views.Dialogs.Management;
 
-namespace WinUI.Views.Dialogs.Management
+public sealed partial class GameDialog : ContentDialog
 {
-    public sealed partial class GameDialog : UserControl
+    private bool _isTemporarilyHiddenForConfirmation;
+    private bool _isCleanedUp;
+
+    public GameDialogViewModel ViewModel { get; }
+
+    public IconState HeaderIconState => ViewModel.Icon;
+
+    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
+
+    public GameDialog(GameDialogViewModel viewModel, GameDialogRequest? request)
     {
-        public GameDialog()
+        ViewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
+        ViewModel.Configure(request);
+        DataContext = ViewModel;
+        InitializeComponent();
+
+        ViewModel.CloseRequested += HandleCloseRequested;
+        ViewModel.DialogHideRequested += HandleDialogHideRequested;
+        ViewModel.DialogShowRequested += HandleDialogShowRequested;
+        Closed += HandleClosed;
+    }
+
+    private void HandleDialogHideRequested()
+    {
+        _isTemporarilyHiddenForConfirmation = true;
+        Hide();
+    }
+
+    private async void HandleDialogShowRequested()
+    {
+        _isTemporarilyHiddenForConfirmation = false;
+        await ShowAsync();
+    }
+
+    private void HandleCloseRequested()
+    {
+        if (_isTemporarilyHiddenForConfirmation)
         {
-            InitializeComponent();
+            Cleanup();
+            return;
         }
+
+        Hide();
+    }
+
+    private void HandleClosed(ContentDialog sender, ContentDialogClosedEventArgs args)
+    {
+        if (_isTemporarilyHiddenForConfirmation)
+        {
+            return;
+        }
+
+        Cleanup();
+    }
+
+    private void Cleanup()
+    {
+        if (_isCleanedUp)
+        {
+            return;
+        }
+
+        _isCleanedUp = true;
+        _isTemporarilyHiddenForConfirmation = false;
+        Closed -= HandleClosed;
+        ViewModel.CloseRequested -= HandleCloseRequested;
+        ViewModel.DialogHideRequested -= HandleDialogHideRequested;
+        ViewModel.DialogShowRequested -= HandleDialogShowRequested;
+        ViewModel.Dispose();
     }
 }

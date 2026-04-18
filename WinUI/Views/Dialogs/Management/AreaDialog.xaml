@@ -20,7 +20,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"
@@ -55,9 +55,13 @@
         <controls:DividerControl Grid.Row="1"
                                  Style="{StaticResource DialogHeaderDividerStyle}" />
 
-        <StackPanel Grid.Row="2"
-                    Style="{StaticResource DialogFormContentPanelStyle}">
-            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
+                      VerticalScrollMode="Enabled"
+                      Margin="0,0,-16,0"
+                      Padding="0,0,16,20">
+            <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
                 <TextBlock Text="{Binding NameLabelText}"
                            Style="{StaticResource DialogFormLabelTextStyle}" />
                 <TextBox PlaceholderText="{Binding NamePlaceholderText}"
@@ -181,5 +185,6 @@
                 </Grid>
             </Grid>
         </StackPanel>
+        </ScrollViewer>
     </Grid>
 </ContentDialog>

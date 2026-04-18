@@ -10,7 +10,25 @@
 
     <ScrollViewer>
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
+            <!-- Header -->
+
+            <!-- Sorts & Page Info -->
+
+            <!-- Item View -->
+
+
+            <!-- Pagination -->
+            <!--<controls:PaginationControl
+                DataContext="{x:Bind ViewModel.PaginationViewModel, Mode=OneWay}"
+                HorizontalAlignment="Center"
+                Margin="0,24" />-->
         </Grid>
     </ScrollViewer>
 </Page>

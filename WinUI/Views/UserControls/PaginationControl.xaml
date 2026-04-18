@@ -11,13 +11,14 @@
     d:DataContext="{d:DesignInstance Type=vm:PaginationControlViewModel, IsDesignTimeCreatable=False}"
     mc:Ignorable="d">
 
-    <Grid ColumnSpacing="18">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+    <Grid RowSpacing="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="0"
+        <StackPanel Grid.Row="0"
+                    HorizontalAlignment="Center"
                     Orientation="Horizontal"
                     Spacing="12"
                     VerticalAlignment="Center">
@@ -92,82 +93,85 @@
             </Button>
         </StackPanel>
 
-        <Grid Grid.Column="1"
+        <Grid Grid.Row="1"
+              HorizontalAlignment="Right"
+              Margin="0,0,0,0"
               Visibility="{Binding IsJumpToPageOpen, Converter={StaticResource BoolToVisible}, Mode=OneWay}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-            <Path Grid.Column="0"
-                  Width="22"
-                  Height="28"
-                  Margin="0,0,-1,0"
-                  VerticalAlignment="Center"
-                  Fill="{StaticResource WhiteBrush}"
-                  Stroke="{StaticResource LighterGrayBrush}"
-                  StrokeThickness="1"
-                  Data="M 18 0 L 0 14 L 18 28 Z" />
+                    <Path Grid.Row="0"
+                          Width="28"
+                          Height="16"
+                          Margin="0,0,32,-2"
+                          HorizontalAlignment="Right"
+                          Fill="{StaticResource WhiteBrush}"
+                          StrokeThickness="0"
+                          Data="M 0 16 L 14 0 L 28 16 Z" />
 
-            <Border Grid.Column="1"
-                    Background="{StaticResource WhiteBrush}"
-                    BorderBrush="{StaticResource LighterGrayBrush}"
-                    BorderThickness="1"
-                    CornerRadius="18"
-                    Padding="24,20"
-                    MinWidth="320">
-                <Border.Shadow>
-                    <ThemeShadow />
-                </Border.Shadow>
+                    <Border Grid.Row="1"
+                            Background="{StaticResource WhiteBrush}"
+                            BorderThickness="0"
+                            CornerRadius="12"
+                            Padding="16,16"
+                            MinWidth="240">
+                        <Border.Shadow>
+                            <ThemeShadow />
+                        </Border.Shadow>
 
-                <StackPanel Spacing="18">
-                    <TextBlock Text="{Binding JumpToPageTitleText}"
-                               Foreground="{StaticResource PrimaryOrangeBrush}"
-                               FontSize="{StaticResource FontSizeExtraExtraLarge}"
-                               FontWeight="Bold" />
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="{Binding JumpToPageTitleText}"
+                                       Foreground="{StaticResource PrimaryOrangeBrush}"
+                                       FontSize="{StaticResource FontSizeLarge}"
+                                       FontWeight="Bold" />
 
-                    <TextBox Text="{Binding JumpPageInputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             PlaceholderText="{Binding JumpPageRangeText}"
-                             FontSize="{StaticResource FontSizeExtraLarge}"
-                             BorderBrush="{StaticResource LightGrayBrush}"
-                             Background="{StaticResource WhiteBrush}"
-                             CornerRadius="12"
-                             Padding="16,14">
-                        <TextBox.InputScope>
-                            <InputScope>
-                                <InputScope.Names>
-                                    <InputScopeName NameValue="Number" />
-                                </InputScope.Names>
-                            </InputScope>
-                        </TextBox.InputScope>
-                    </TextBox>
+                            <TextBox Text="{Binding JumpPageInputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource DialogFormTextBoxStyle}"
+                                     PlaceholderText="{Binding JumpPageRangeText}"
+                                     FontSize="{StaticResource FontSizeMedium}"
+                                     MinHeight="48">
+                                <TextBox.Resources>
+                                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/FormInputStateResources.xaml" />
+                                </TextBox.Resources>
+                                <TextBox.InputScope>
+                                    <InputScope>
+                                        <InputScope.Names>
+                                            <InputScopeName NameValue="Number" />
+                                        </InputScope.Names>
+                                    </InputScope>
+                                </TextBox.InputScope>
+                            </TextBox>
 
-                    <Grid ColumnSpacing="12">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="0"
-                                Style="{StaticResource PaginationDialogSecondaryButtonStyle}"
-                                Command="{Binding CloseJumpToPageCommand}">
-                            <Button.Resources>
-                                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
-                            </Button.Resources>
-                            <TextBlock Text="{Binding CancelButtonText}" />
-                        </Button>
+                                <Button Grid.Column="0"
+                                        Style="{StaticResource PaginationDialogSecondaryButtonStyle}"
+                                        Command="{Binding CloseJumpToPageCommand}"
+                                        HorizontalAlignment="Stretch">
+                                    <Button.Resources>
+                                        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
+                                    </Button.Resources>
+                                    <TextBlock Text="{Binding CancelButtonText}" />
+                                </Button>
 
-                        <Button Grid.Column="1"
-                                Style="{StaticResource PaginationDialogPrimaryButtonStyle}"
-                                Command="{Binding ConfirmJumpToPageCommand}">
-                            <Button.Resources>
-                                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PaginationDialogPrimaryButtonStateResources.xaml" />
-                            </Button.Resources>
-                            <TextBlock Text="{Binding ConfirmButtonText}" />
-                        </Button>
-                    </Grid>
-                </StackPanel>
-            </Border>
+                                <Button Grid.Column="1"
+                                        Style="{StaticResource PaginationDialogPrimaryButtonStyle}"
+                                        Command="{Binding ConfirmJumpToPageCommand}"
+                                        HorizontalAlignment="Stretch">
+                                    <Button.Resources>
+                                        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PaginationDialogPrimaryButtonStateResources.xaml" />
+                                    </Button.Resources>
+                                    <TextBlock Text="{Binding ConfirmButtonText}" />
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
         </Grid>
     </Grid>
 </UserControl>

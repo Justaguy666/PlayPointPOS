@@ -19,9 +19,9 @@
     <Page.KeyboardAccelerators>
         <KeyboardAccelerator Key="E"
                              Modifiers="Control"
-                             Invoked="HandleEditAreaKeyboardAcceleratorInvoked" />
+                             Invoked="EditSelectedArea_Invoked" />
         <KeyboardAccelerator Key="Delete"
-                             Invoked="HandleDeleteAreaKeyboardAcceleratorInvoked" />
+                             Invoked="DeleteSelectedArea_Invoked" />
     </Page.KeyboardAccelerators>
 
     <Page.Resources>
@@ -92,7 +92,8 @@
                     </StackPanel.Resources>
 
                     <Button Style="{StaticResource AppContextActionButtonStyle}"
-                            Click="HandleEditAreaContextButtonClick">
+                            Command="{x:Bind ViewModel.EditSelectedAreaCommand, Mode=OneWay}"
+                            Click="HandleAreaContextActionClick">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -103,13 +104,14 @@
                                        Style="{StaticResource AppContextActionLabelTextStyle}" />
 
                             <TextBlock Grid.Column="1"
-                                       Text="Ctrl + E"
+                                       Text="{x:Bind ViewModel.EditAreaShortcutText, Mode=OneWay}"
                                        Style="{StaticResource AppContextActionShortcutTextStyle}" />
                         </Grid>
                     </Button>
 
                     <Button Style="{StaticResource AppContextActionButtonStyle}"
-                            Click="HandleDeleteAreaContextButtonClick">
+                            Command="{x:Bind ViewModel.DeleteSelectedAreaCommand, Mode=OneWay}"
+                            Click="HandleAreaContextActionClick">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -120,7 +122,7 @@
                                        Style="{StaticResource AppContextActionLabelTextStyle}" />
 
                             <TextBlock Grid.Column="1"
-                                       Text="Del"
+                                       Text="{x:Bind ViewModel.DeleteAreaShortcutText, Mode=OneWay}"
                                        Style="{StaticResource AppContextActionShortcutTextStyle}" />
                         </Grid>
                     </Button>
@@ -331,7 +333,9 @@
                             <ItemsRepeater.Layout>
                             <UniformGridLayout x:Name="AreaCardsGridLayout"
                                                    Orientation="Horizontal"
-                                                   MaximumRowsOrColumns="5"
+                                                   MaximumRowsOrColumns="{x:Bind ViewModel.AreaCardsMaximumRowsOrColumns, Mode=OneWay}"
+                                                   MinItemWidth="{x:Bind ViewModel.AreaCardsMinItemWidth, Mode=OneWay}"
+                                                   MinItemHeight="{x:Bind ViewModel.AreaCardsMinItemHeight, Mode=OneWay}"
                                                    MinColumnSpacing="8"
                                                    MinRowSpacing="12"
                                                    ItemsStretch="Uniform" />

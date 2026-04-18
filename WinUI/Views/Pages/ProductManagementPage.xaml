@@ -8,9 +8,25 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <ScrollViewer>
-        <Grid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-        </Grid>
-    </ScrollViewer>
+        <!-- Header -->
+
+        <!-- Sorts & Page Info -->
+
+        <!-- Item View -->
+
+
+        <!-- Pagination -->
+        <!--<controls:PaginationControl
+                DataContext="{x:Bind ViewModel.PaginationViewModel, Mode=OneWay}"
+                HorizontalAlignment="Center"
+                Margin="0,24" />-->
+    </Grid>
 </Page>

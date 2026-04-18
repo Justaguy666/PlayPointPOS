@@ -7,7 +7,7 @@ using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
-using WinUI.UIModels.AreaManagement;
+using WinUI.UIModels.Management;
 using WinUI.ViewModels;
 
 namespace WinUI.ViewModels.Dialogs;

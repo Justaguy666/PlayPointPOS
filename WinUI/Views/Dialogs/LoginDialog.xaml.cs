@@ -1,5 +1,4 @@
 using System;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
@@ -21,16 +20,6 @@ public sealed partial class LoginDialog : ContentDialog
 
         ViewModel.CloseRequested += HandleCloseRequested;
         Closed += HandleClosed;
-    }
-
-    private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
-
-        ViewModel.Password = LoginPasswordBox.Password;
     }
 
     private void HandleCloseRequested()

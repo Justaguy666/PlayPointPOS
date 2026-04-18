@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using WinUI.UIModels.AreaManagement;
+using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
 
 namespace WinUI.ViewModels.Dialogs.Management;

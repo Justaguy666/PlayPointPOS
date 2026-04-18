@@ -1,5 +1,4 @@
 using System;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
@@ -21,36 +20,6 @@ public sealed partial class RegisterDialog : ContentDialog
 
         ViewModel.CloseRequested += HandleCloseRequested;
         Closed += HandleClosed;
-    }
-
-    private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
-
-        ViewModel.Password = PasswordBox.Password;
-    }
-
-    private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
-
-        ViewModel.ConfirmPassword = ConfirmPasswordBox.Password;
-    }
-
-    private void ResetButton_Click(object sender, RoutedEventArgs e)
-    {
-        ViewModel.ResetCommand.Execute(null);
-        PasswordBox.Password = string.Empty;
-        if (ConfirmPasswordBox != null)
-        {
-            ConfirmPasswordBox.Password = string.Empty;
-        }
     }
 
     private void HandleCloseRequested()

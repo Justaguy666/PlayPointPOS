@@ -1,9 +1,13 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using Application.Areas;
+using Application.Games;
 using Application.Interfaces;
 using Application.Navigation;
 using Application.Services;
+using Application.Services.Games;
+using Application.Services.Areas;
 using Domain.Entities;
 using Infrastructure.Repositories.Mock;
 using Infrastructure.Services.Navigation;
@@ -69,6 +73,12 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddSingleton<Infrastructure.Services.ConfigurationService>(configurationService);
                     services.AddSingleton<IConfigurationService>(configurationService);
                     services.AddSingleton<ILocalizationPreferencesService>(configurationService);
+                    services.AddSingleton<IAreaCatalogService, Infrastructure.Services.Areas.MockAreaCatalogService>();
+                    services.AddSingleton<IAreaFilterService, AreaFilterService>();
+                    services.AddSingleton<IAreaSessionService, AreaSessionService>();
+                    services.AddSingleton<IGameTypeCatalogService, Infrastructure.Services.Games.MockGameTypeCatalogService>();
+                    services.AddSingleton<IGameCatalogService, Infrastructure.Services.Games.MockGameCatalogService>();
+                    services.AddSingleton<IGameFilterService, GameFilterService>();
 
                     services.AddSingleton<Infrastructure.Services.Notification.ToastNotificationService>();
                     services.AddSingleton<INotificationService>(sp => sp.GetRequiredService<Infrastructure.Services.Notification.ToastNotificationService>());
@@ -86,9 +96,12 @@ public partial class App : Microsoft.UI.Xaml.Application
                             "Otp" => CreateOtpDialog(provider, parameter),
                             "Reservation" => CreateReservationDialog(provider, parameter),
                             "AreaFilter" => CreateAreaFilterDialog(provider, parameter),
+                            "GameFilter" => CreateGameFilterDialog(provider, parameter),
                             "Payment" => CreatePaymentDialog(provider, parameter),
                             "StartSession" => CreateStartSessionDialog(provider, parameter),
                             "Area" => CreateAreaDialog(provider, parameter),
+                            "Game" => CreateGameDialog(provider, parameter),
+                            "GameType" => CreateGameTypeDialog(provider, parameter),
                             _ => null
                         };
                     });
@@ -110,11 +123,16 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddSingleton<ViewModels.MainViewModel>();
                     services.AddSingleton<ViewModels.UserControls.NavbarControlViewModel>();
                     services.AddSingleton<ViewModels.UserControls.NotificationControlViewModel>();
+                    services.AddSingleton<ViewModels.UserControls.SearchControlViewModel>();
                     services.AddSingleton<StatCardControlViewModelFactory>();
                     services.AddSingleton<PopularCardControlViewModelFactory>();
+                    services.AddSingleton<AreaModelFactory>();
+                    services.AddSingleton<GameModelFactory>();
+                    services.AddSingleton<GameCardControlViewModelFactory>();
                     services.AddSingleton<SummarizedAvailableCardViewModelFactory>();
                     services.AddSingleton<SummarizedReservedCardViewModelFactory>();
                     services.AddSingleton<SummarizedRentedCardViewModelFactory>();
+                    services.AddSingleton<AreaManagementCardViewModelFactory>();
                     
                     services.AddTransient<ViewModels.Dialogs.ConfigViewModel>();
                     services.AddTransient<ViewModels.Dialogs.LoginViewModel>();
@@ -123,6 +141,8 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddTransient<ViewModels.Dialogs.OtpViewModel>();
                     services.AddTransient<ViewModels.Dialogs.Management.ReservationViewModel>();
                     services.AddTransient<ViewModels.Dialogs.Management.AreaFilterViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.Management.GameFilterViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.Management.GameTypeDialogViewModel>();
                     services.AddTransient<ViewModels.Dialogs.Management.PaymentViewModel>();
                     services.AddTransient<ViewModels.Dialogs.StartSessionViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.RevenueChartControlViewModel>();
@@ -134,6 +154,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddTransient<ViewModels.UserControls.Settings.GeneralSettingsCardControlViewModel>();
                     services.AddTransient<ViewModels.Pages.DashboardPageViewModel>();
                     services.AddTransient<ViewModels.Pages.AreaManagementPageViewModel>();
+                    services.AddTransient<ViewModels.Pages.GameManagementPageViewModel>();
                     services.AddTransient<ViewModels.Pages.StartingPageViewModel>();
                     services.AddTransient<ViewModels.Pages.SettingsPageViewModel>();
 
@@ -293,7 +314,7 @@ public partial class App : Microsoft.UI.Xaml.Application
         var request = parameter switch
         {
             ViewModels.Dialogs.Management.ReservationDialogRequest reservationRequest => reservationRequest,
-            UIModels.AreaManagement.AreaModel areaModel => new ViewModels.Dialogs.Management.ReservationDialogRequest
+            UIModels.Management.AreaModel areaModel => new ViewModels.Dialogs.Management.ReservationDialogRequest
             {
                 Mode = UIModels.Enums.UpsertDialogMode.Add,
                 Model = areaModel,
@@ -306,6 +327,7 @@ public partial class App : Microsoft.UI.Xaml.Application
             provider.GetRequiredService<ILocalizationPreferencesService>(),
             provider.GetRequiredService<IRepository<Member>>(),
             provider.GetRequiredService<IDialogService>(),
+            provider.GetRequiredService<AreaModelFactory>(),
             request.Mode);
 
         return new Views.Dialogs.Management.ReservationDialog(viewModel, request);
@@ -314,7 +336,7 @@ public partial class App : Microsoft.UI.Xaml.Application
     private static ContentDialog CreateStartSessionDialog(IServiceProvider provider, object? parameter)
     {
         var viewModel = provider.GetRequiredService<ViewModels.Dialogs.StartSessionViewModel>();
-        return new StartSessionDialog(viewModel, parameter as UIModels.AreaManagement.AreaModel);
+        return new StartSessionDialog(viewModel, parameter as UIModels.Management.AreaModel);
     }
 
     private static ContentDialog CreateAreaFilterDialog(IServiceProvider provider, object? parameter)
@@ -328,7 +350,7 @@ public partial class App : Microsoft.UI.Xaml.Application
     private static ContentDialog CreatePaymentDialog(IServiceProvider provider, object? parameter)
     {
         var viewModel = provider.GetRequiredService<ViewModels.Dialogs.Management.PaymentViewModel>();
-        return new Views.Dialogs.Management.PaymentDialog(viewModel, parameter as UIModels.AreaManagement.AreaModel);
+        return new Views.Dialogs.Management.PaymentDialog(viewModel, parameter as UIModels.Management.AreaModel);
     }
 
     private static ContentDialog CreateAreaDialog(IServiceProvider provider, object? parameter)
@@ -337,8 +359,38 @@ public partial class App : Microsoft.UI.Xaml.Application
         var viewModel = new ViewModels.Dialogs.Management.AreaDialogViewModel(
             provider.GetRequiredService<ILocalizationService>(),
             provider.GetRequiredService<IDialogService>(),
+            provider.GetRequiredService<AreaModelFactory>(),
             request?.Mode ?? UIModels.Enums.UpsertDialogMode.Add);
         return new Views.Dialogs.Management.AreaDialog(viewModel, request);
+    }
+
+    private static ContentDialog CreateGameFilterDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.Management.GameFilterViewModel>();
+        return new Views.Dialogs.Management.GameFilterDialog(
+            viewModel,
+            parameter as ViewModels.Dialogs.Management.GameFilterDialogRequest);
+    }
+
+    private static ContentDialog CreateGameTypeDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.Management.GameTypeDialogViewModel>();
+        if (parameter is ViewModels.Dialogs.Management.GameTypeDialogRequest request)
+        {
+            viewModel.Configure(request);
+        }
+        return new Views.Dialogs.Management.GameTypeDialog(viewModel);
+    }
+
+    private static ContentDialog CreateGameDialog(IServiceProvider provider, object? parameter)
+    {
+        var request = parameter as ViewModels.Dialogs.Management.GameDialogRequest;
+        var viewModel = new ViewModels.Dialogs.Management.GameDialogViewModel(
+            provider.GetRequiredService<ILocalizationService>(),
+            provider.GetRequiredService<IDialogService>(),
+            provider.GetRequiredService<GameModelFactory>(),
+            request?.Mode ?? UIModels.Enums.UpsertDialogMode.Add);
+        return new Views.Dialogs.Management.GameDialog(viewModel, request);
     }
 
     private static IRepository<Member> CreateMockMemberRepository()

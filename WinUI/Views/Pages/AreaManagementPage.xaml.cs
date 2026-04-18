@@ -10,15 +10,8 @@ namespace WinUI.Views.Pages;
 
 public sealed partial class AreaManagementPage : Page
 {
-    private const int PreferredAreaCardsPerRow = 3;
-    private const double MinimumSingleColumnWidth = 240;
-    private const double MinimumTwoColumnWidth = 420;
-    private const double AreaCardOuterHeight = 168;
     private const double AreaCardsLeftPadding = 10;
     private const double AreaCardsRightPadding = 28;
-    private const double AreaCardsColumnSpacing = 8;
-    private const double LayoutPrecisionEpsilon = 0.01;
-    private ISummarizedAreaCardViewModel? _contextMenuAreaCardViewModel;
 
     public AreaManagementPageViewModel ViewModel { get; }
 
@@ -56,6 +49,24 @@ public sealed partial class AreaManagementPage : Page
         }
     }
 
+    private void EditSelectedArea_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        if (ViewModel.EditSelectedAreaCommand.CanExecute(null))
+        {
+            ViewModel.EditSelectedAreaCommand.Execute(null);
+            args.Handled = true;
+        }
+    }
+
+    private void DeleteSelectedArea_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        if (ViewModel.DeleteSelectedAreaCommand.CanExecute(null))
+        {
+            ViewModel.DeleteSelectedAreaCommand.Execute(null);
+            args.Handled = true;
+        }
+    }
+
     private void HandleAreaCardRightTapped(object sender, RightTappedRoutedEventArgs e)
     {
         if (sender is not FrameworkElement areaCardElement ||
@@ -69,7 +80,6 @@ public sealed partial class AreaManagementPage : Page
             return;
         }
 
-        _contextMenuAreaCardViewModel = areaCardViewModel;
         ViewModel.SelectSummarizedAreaCardCommand.Execute(areaCardViewModel);
 
         AreaCardActionsFlyout.ShowAt(
@@ -121,38 +131,9 @@ public sealed partial class AreaManagementPage : Page
         }
     }
 
-    private void HandleEditAreaContextButtonClick(object sender, RoutedEventArgs e)
+    private void HandleAreaContextActionClick(object sender, RoutedEventArgs e)
     {
-        ViewModel.EditAreaCommand.Execute(_contextMenuAreaCardViewModel);
         AreaCardActionsFlyout.Hide();
-    }
-
-    private void HandleDeleteAreaContextButtonClick(object sender, RoutedEventArgs e)
-    {
-        ViewModel.DeleteAreaCommand.Execute(_contextMenuAreaCardViewModel);
-        AreaCardActionsFlyout.Hide();
-    }
-
-    private void HandleEditAreaKeyboardAcceleratorInvoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
-    {
-        if (ViewModel.SelectedSummarizedAreaCardViewModel is null)
-        {
-            return;
-        }
-
-        ViewModel.EditAreaCommand.Execute(ViewModel.SelectedSummarizedAreaCardViewModel);
-        args.Handled = true;
-    }
-
-    private void HandleDeleteAreaKeyboardAcceleratorInvoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
-    {
-        if (ViewModel.SelectedSummarizedAreaCardViewModel is null)
-        {
-            return;
-        }
-
-        ViewModel.DeleteAreaCommand.Execute(ViewModel.SelectedSummarizedAreaCardViewModel);
-        args.Handled = true;
     }
 
     private void UpdateAreaCardsLayout()
@@ -163,28 +144,7 @@ public sealed partial class AreaManagementPage : Page
             return;
         }
 
-        var columns = CalculateColumnCount(availableWidth);
-        var totalSpacing = AreaCardsColumnSpacing * (columns - 1);
-        var itemWidth = Math.Floor((availableWidth - totalSpacing + LayoutPrecisionEpsilon) / columns);
-
-        AreaCardsGridLayout.MaximumRowsOrColumns = columns;
-        AreaCardsGridLayout.MinItemWidth = itemWidth;
-        AreaCardsGridLayout.MinItemHeight = AreaCardOuterHeight;
-    }
-
-    private static int CalculateColumnCount(double availableWidth)
-    {
-        if (availableWidth < MinimumSingleColumnWidth)
-        {
-            return 1;
-        }
-
-        if (availableWidth < MinimumTwoColumnWidth)
-        {
-            return 2;
-        }
-
-        return PreferredAreaCardsPerRow;
+        ViewModel.UpdateAreaCardsLayout(availableWidth);
     }
 
     private static Border? TryGetAreaFilterHoverOverlay(Grid contentGrid)

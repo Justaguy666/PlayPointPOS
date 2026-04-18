@@ -1,10 +1,11 @@
 using System;
+using Application.Areas;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Domain.Enums;
 
-namespace WinUI.UIModels.AreaManagement;
+namespace WinUI.UIModels.Management;
 
-public sealed class AreaModel : ObservableObject
+public sealed class AreaModel : ObservableObject, IAreaFilterable, IAreaSessionState
 {
     private string _areaName = string.Empty;
     private PlayAreaType _playAreaType = PlayAreaType.Table;
@@ -120,79 +121,4 @@ public sealed class AreaModel : ObservableObject
         set => SetProperty(ref _totalAmount, value);
     }
 
-    public TimeSpan GetSessionElapsedTime(DateTime utcNow)
-    {
-        if (StartTime is not DateTime startTime)
-        {
-            return TimeSpan.Zero;
-        }
-
-        DateTime effectiveNowUtc = IsSessionPaused && SessionPausedAt is DateTime pausedAt
-            ? NormalizeToUtc(pausedAt)
-            : NormalizeToUtc(utcNow);
-
-        TimeSpan elapsedTime = effectiveNowUtc - NormalizeToUtc(startTime) - SessionPausedDuration;
-        return elapsedTime < TimeSpan.Zero ? TimeSpan.Zero : elapsedTime;
-    }
-
-    public void PauseSession(DateTime utcNow)
-    {
-        if (IsSessionPaused || StartTime is null)
-        {
-            return;
-        }
-
-        SessionPausedAt = NormalizeToUtc(utcNow);
-        IsSessionPaused = true;
-    }
-
-    public void ResumeSession(DateTime utcNow)
-    {
-        if (!IsSessionPaused)
-        {
-            return;
-        }
-
-        DateTime resumedAtUtc = NormalizeToUtc(utcNow);
-        if (SessionPausedAt is DateTime pausedAt)
-        {
-            TimeSpan pausedDuration = resumedAtUtc - NormalizeToUtc(pausedAt);
-            if (pausedDuration > TimeSpan.Zero)
-            {
-                SessionPausedDuration += pausedDuration;
-            }
-        }
-
-        SessionPausedAt = null;
-        IsSessionPaused = false;
-    }
-
-    public AreaModel Clone()
-    {
-        return new AreaModel
-        {
-            AreaName = AreaName,
-            PlayAreaType = PlayAreaType,
-            Status = Status,
-            MaxCapacity = MaxCapacity,
-            HourlyPrice = HourlyPrice,
-            CustomerName = CustomerName,
-            PhoneNumber = PhoneNumber,
-            MemberId = MemberId,
-            CheckInDateTime = CheckInDateTime,
-            Capacity = Capacity,
-            StartTime = StartTime,
-            IsSessionPaused = IsSessionPaused,
-            SessionPausedAt = SessionPausedAt,
-            SessionPausedDuration = SessionPausedDuration,
-            TotalAmount = TotalAmount,
-        };
-    }
-
-    private static DateTime NormalizeToUtc(DateTime value)
-    {
-        return value.Kind == DateTimeKind.Utc
-            ? value
-            : value.ToUniversalTime();
-    }
 }

@@ -9,31 +9,38 @@ using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
 using Microsoft.UI.Dispatching;
 using WinUI.UIModels;
-using WinUI.UIModels.AreaManagement;
+using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
+using Application.Services.Areas;
 
 namespace WinUI.ViewModels.AreaManagement.DetailedAreaCards;
 
 public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDetailedAreaCardViewModel, IDisposable
 {
     private readonly IDialogService _dialogService;
+    private readonly INotificationService _notificationService;
+    private readonly IAreaSessionService _areaSessionService;
     private readonly DispatcherQueueTimer? _timer;
     private bool _isDisposed;
 
     public DetailedRentedCardViewModel(
         ILocalizationService localizationService,
         IDialogService dialogService,
+        INotificationService notificationService,
+        IAreaSessionService areaSessionService,
         AreaModel model)
         : base(localizationService)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        _areaSessionService = areaSessionService ?? throw new ArgumentNullException(nameof(areaSessionService));
         Model = model ?? throw new ArgumentNullException(nameof(model));
         Model.PropertyChanged += HandleModelPropertyChanged;
 
         PaidCommand = new AsyncRelayCommand(OpenPaymentDialogAsync);
         EndSessionCommand = new AsyncRelayCommand(ToggleSessionAsync);
-        AddGameCommand = new AsyncRelayCommand(ExecuteNoopAsync);
-        AddProductCommand = new AsyncRelayCommand(ExecuteNoopAsync);
+        AddGameCommand = new AsyncRelayCommand(AddGameAsync);
+        AddProductCommand = new AsyncRelayCommand(AddProductAsync);
 
         var dispatcherQueue = DispatcherQueue.GetForCurrentThread();
         if (dispatcherQueue is not null)
@@ -245,9 +252,9 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
     {
         DateTime startTime = Model.StartTime ?? DateTime.UtcNow;
         DateTime configuredStartTime = ConvertUtcToConfiguredTime(startTime);
-        TimeSpan elapsedTime = Model.GetSessionElapsedTime(DateTime.UtcNow);
+        TimeSpan elapsedTime = _areaSessionService.GetSessionElapsedTime(Model, DateTime.UtcNow);
 
-        decimal areaSessionTotal = CalculateAreaSessionTotal(elapsedTime);
+        decimal areaSessionTotal = _areaSessionService.CalculateAreaSessionTotal(Model, elapsedTime);
         decimal gameServicesTotal = GameServicesInSession.Sum(service => service.TotalPrice);
         decimal productServicesTotal = ProductServicesInSession.Sum(service => service.TotalPrice);
         decimal currentTotal = areaSessionTotal + gameServicesTotal + productServicesTotal;
@@ -267,17 +274,6 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
         Model.TotalAmount = currentTotal;
     }
 
-    private decimal CalculateAreaSessionTotal(TimeSpan elapsedTime)
-    {
-        if (Model.HourlyPrice <= 0m || elapsedTime <= TimeSpan.Zero)
-        {
-            return 0m;
-        }
-
-        int billableHalfHours = Math.Max(1, (int)Math.Floor(elapsedTime.TotalMinutes / 30d));
-        return Model.HourlyPrice * billableHalfHours / 2m;
-    }
-
     private DateTime ConvertUtcToConfiguredTime(DateTime value)
     {
         DateTime utcValue = value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime();
@@ -295,14 +291,31 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
         return int.TryParse(normalized, out int offset) ? offset : 0;
     }
 
-    private static Task ExecuteNoopAsync()
-    {
-        return Task.CompletedTask;
-    }
-
     private Task OpenPaymentDialogAsync()
     {
         return _dialogService.ShowDialogAsync("Payment", Model);
+    }
+
+    private Task AddGameAsync()
+    {
+        return NotifyFeatureUnavailableAsync(
+            GameServicesTitleText,
+            "AreaSessionAddGameUnavailableMessage");
+    }
+
+    private Task AddProductAsync()
+    {
+        return NotifyFeatureUnavailableAsync(
+            ProductServicesTitleText,
+            "AreaSessionAddProductUnavailableMessage");
+    }
+
+    private Task NotifyFeatureUnavailableAsync(string title, string messageKey)
+    {
+        return _notificationService.SendAsync(
+            title,
+            LocalizationService.GetString(messageKey),
+            NotificationType.Info);
     }
 
     private Task ToggleSessionAsync()
@@ -311,11 +324,11 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
 
         if (Model.IsSessionPaused)
         {
-            Model.ResumeSession(utcNow);
+            _areaSessionService.ResumeSession(Model, utcNow);
         }
         else
         {
-            Model.PauseSession(utcNow);
+            _areaSessionService.PauseSession(Model, utcNow);
         }
 
         SyncTimerState();

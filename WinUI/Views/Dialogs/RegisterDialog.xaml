@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:helpers="using:WinUI.Helpers"
     Style="{StaticResource StandardFormDialogStyle}">
 
     <ContentDialog.Resources>
@@ -13,7 +14,6 @@
     <Grid x:Name="RootGrid"
           Style="{StaticResource DialogFormRootGridStyle}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -53,9 +53,13 @@
         <controls:DividerControl Grid.Row="1"
                                  Style="{StaticResource DialogHeaderDividerStyle}"/>
 
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
+                      VerticalScrollMode="Enabled"
+                      Margin="0,0,-16,0"
+                      Padding="0,0,16,20">
         <!-- Content -->
-        <StackPanel Grid.Row="2"
-                    Style="{StaticResource DialogFormContentPanelStyle}">
+        <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
             <!-- Email -->
             <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
                 <TextBlock Text="{x:Bind ViewModel.EmailLabelText, Mode=OneWay}" 
@@ -72,7 +76,8 @@
                            Style="{StaticResource DialogFormLabelTextStyle}"/>
                 <PasswordBox x:Name="PasswordBox"
                              PlaceholderText="{x:Bind ViewModel.PasswordPlaceholderText, Mode=OneWay}"
-                             PasswordChanged="PasswordBox_PasswordChanged"
+                             helpers:PasswordBoxBindingHelper.BindPassword="True"
+                             helpers:PasswordBoxBindingHelper.BoundPassword="{Binding Password, Mode=TwoWay}"
                              Style="{StaticResource DialogFormPasswordBoxStyle}" />
             </StackPanel>
 
@@ -82,7 +87,8 @@
                            Style="{StaticResource DialogFormLabelTextStyle}"/>
                 <PasswordBox x:Name="ConfirmPasswordBox"
                              PlaceholderText="{x:Bind ViewModel.ConfirmPasswordPlaceholderText, Mode=OneWay}"
-                             PasswordChanged="ConfirmPasswordBox_PasswordChanged"
+                             helpers:PasswordBoxBindingHelper.BindPassword="True"
+                             helpers:PasswordBoxBindingHelper.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay}"
                              Style="{StaticResource DialogFormPasswordBoxStyle}" />
             </StackPanel>
 
@@ -106,7 +112,7 @@
 
                 <Grid Grid.Column="0">
                     <Button x:Name="ResetButton"
-                            Click="ResetButton_Click"
+                            Command="{x:Bind ViewModel.ResetCommand, Mode=OneWay}"
                             Visibility="{x:Bind ViewModel.IsNotResetting, Mode=OneWay}"
                             Style="{StaticResource DialogSecondaryFooterButtonStyle}">
                         
@@ -147,5 +153,6 @@
                 </Grid>
             </Grid>
         </StackPanel>
+        </ScrollViewer>
     </Grid>
 </ContentDialog>
