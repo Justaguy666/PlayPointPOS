@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
@@ -105,6 +105,10 @@
     <Page Update="Views\Dialogs\Management\ReservationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Update="Views\Dialogs\Management\MembershipPackageEditDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+
     <Page Update="Views\Dialogs\StartSessionDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -241,6 +245,7 @@
     <None Remove="Views\Dialogs\ForgotPasswordDialog.xaml" />
     <None Remove="Views\Dialogs\Management\AreaDialog.xaml" />
     <None Remove="Views\Dialogs\Management\GameDialog.xaml" />
+    <None Remove="Views\Dialogs\Management\MembershipPackageEditDialog.xaml" />
     <None Remove="Views\Dialogs\Management\ProductDialog.xaml" />
     <None Remove="Views\Dialogs\OtpDialog.xaml" />
     <None Remove="Views\Dialogs\Management\ReservationDialog.xaml" />
@@ -254,6 +259,16 @@
     <None Remove="Views\UserControls\Dashboard\TrendingListControl.xaml" />
     <None Remove="Views\UserControls\Settings\GeneralSettingsCardControl.xaml" />
     <None Remove="Views\UserControls\Settings\ShopInformationCardControl.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Dialogs\Management\MembershipPackageEditDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Dialogs\Dashboard\GoalKpiDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Dialogs\Management\GameTypeDialog.xaml">

@@ -92,6 +92,7 @@
     <!-- Solid Color Brushes - Backgrounds -->
     <SolidColorBrush x:Key="TransparentBrush" Color="{StaticResource TransparentColor}" />
     <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}" />
+    <SolidColorBrush x:Key="AlmostWhiteGrayBrush" Color="{StaticResource AlmostWhiteGray}" />
     <SolidColorBrush x:Key="AntiqueWhiteBrush" Color="{StaticResource AlmostWhiteGray}" />
     <SolidColorBrush x:Key="VeryLightGrayBrush" Color="{StaticResource VeryLightGray}" />
     <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource VeryLightGray}" />
@@ -99,6 +100,7 @@
     
     <!-- Solid Color Brushes - Text -->
     <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}" />
+    <SolidColorBrush x:Key="DarkSlateGrayBrush" Color="{StaticResource Black}" />
     <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource Black}" />
     <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource PlaceholderGray}" />
     <SolidColorBrush x:Key="PlaceholderGrayBrush" Color="{StaticResource PlaceholderGray}" />

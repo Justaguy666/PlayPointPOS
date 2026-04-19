@@ -15,6 +15,14 @@
         <Setter Property="BorderBrush" Value="{StaticResource WarningAmberBrush}" />
     </Style>
 
+    <Style x:Key="GameCardActionButtonSmallStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource GameCardActionButtonStyle}">
+        <Setter Property="Width" Value="30" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="CornerRadius" Value="8" />
+    </Style>
+
     <Style x:Key="GameCardDangerButtonStyle"
            TargetType="Button"
            BasedOn="{StaticResource DangerActionButtonStyle}">

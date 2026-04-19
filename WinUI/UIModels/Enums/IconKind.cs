@@ -52,4 +52,5 @@ public enum IconKind
     Info,
     More,
     Folder,
+    Wallet,
 }

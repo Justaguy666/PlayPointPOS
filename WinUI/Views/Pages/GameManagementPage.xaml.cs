@@ -1,6 +1,8 @@
 using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using WinUI.UIModels;
+using WinUI.UIModels.Enums;
 using WinUI.ViewModels.Pages;
 
 namespace WinUI.Views.Pages;
@@ -11,6 +13,13 @@ public sealed partial class GameManagementPage : Page
     private const double GamesRightPadding = 24;
 
     public GameManagementPageViewModel ViewModel { get; }
+
+    public IconState ManageTypesIconState { get; } = new()
+    {
+        Kind = IconKind.Folder,
+        Size = 20,
+        AlwaysFilled = true,
+    };
 
     public GameManagementPage(GameManagementPageViewModel viewModel)
     {

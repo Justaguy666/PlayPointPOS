@@ -66,112 +66,148 @@
                       Padding="0,0,16,20">
             <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
                 <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                <TextBlock Text="{x:Bind ViewModel.NameLabelText, Mode=OneWay}"
-                           Style="{StaticResource DialogFormLabelTextStyle}" />
-                <TextBox PlaceholderText="{x:Bind ViewModel.NamePlaceholderText, Mode=OneWay}"
-                         Style="{StaticResource DialogFormTextBoxStyle}"
-                         Text="{x:Bind ViewModel.GameName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
+                    <TextBlock Text="{x:Bind ViewModel.NameLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <TextBox PlaceholderText="{x:Bind ViewModel.NamePlaceholderText, Mode=OneWay}"
+                             Style="{StaticResource DialogFormTextBoxStyle}"
+                             Text="{x:Bind ViewModel.GameName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
 
-            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                <TextBlock Text="{x:Bind ViewModel.GameTypeLabelText, Mode=OneWay}"
-                           Style="{StaticResource DialogFormLabelTextStyle}" />
-                <ComboBox MinHeight="48"
-                          ItemsSource="{x:Bind ViewModel.GameTypeOptions, Mode=OneWay}"
-                          DisplayMemberPath="DisplayName"
-                          SelectedValuePath="Value"
-                          SelectedValue="{x:Bind ViewModel.SelectedGameTypeName, Mode=TwoWay}"
-                          HorizontalAlignment="Stretch" />
-            </StackPanel>
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.GameTypeLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <ComboBox MinHeight="48"
+                              ItemsSource="{x:Bind ViewModel.GameTypeOptions, Mode=OneWay}"
+                              DisplayMemberPath="DisplayName"
+                              SelectedValuePath="Value"
+                              SelectedValue="{x:Bind ViewModel.SelectedGameTypeName, Mode=TwoWay}"
+                              HorizontalAlignment="Stretch" />
+                </StackPanel>
 
-            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                <TextBlock Text="{x:Bind ViewModel.DifficultyLabelText, Mode=OneWay}"
-                           Style="{StaticResource DialogFormLabelTextStyle}" />
-                <ComboBox MinHeight="48"
-                          ItemsSource="{x:Bind ViewModel.DifficultyOptions, Mode=OneWay}"
-                          DisplayMemberPath="DisplayName"
-                          SelectedValuePath="Value"
-                          SelectedValue="{x:Bind ViewModel.SelectedDifficultyValue, Mode=TwoWay}"
-                          HorizontalAlignment="Stretch" />
-            </StackPanel>
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.DifficultyLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <ComboBox MinHeight="48"
+                              ItemsSource="{x:Bind ViewModel.DifficultyOptions, Mode=OneWay}"
+                              DisplayMemberPath="DisplayName"
+                              SelectedValuePath="Value"
+                              SelectedValue="{x:Bind ViewModel.SelectedDifficultyValue, Mode=TwoWay}"
+                              HorizontalAlignment="Stretch" />
+                </StackPanel>
 
-            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                <TextBlock Text="{x:Bind ViewModel.PlayerCountLabelText, Mode=OneWay}"
-                           Style="{StaticResource DialogFormLabelTextStyle}" />
-                <Grid ColumnSpacing="12">
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.PlayerCountLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Grid.Column="0"
+                                 PlaceholderText="{x:Bind ViewModel.MinPlayersPlaceholderText, Mode=OneWay}"
+                                 Style="{StaticResource DialogFormTextBoxStyle}"
+                                 Text="{x:Bind ViewModel.MinPlayersText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 InputScope="Number" />
+
+                        <TextBox Grid.Column="1"
+                                 PlaceholderText="{x:Bind ViewModel.MaxPlayersPlaceholderText, Mode=OneWay}"
+                                 Style="{StaticResource DialogFormTextBoxStyle}"
+                                 Text="{x:Bind ViewModel.MaxPlayersText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 InputScope="Number" />
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.HourlyPriceLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <TextBox PlaceholderText="{x:Bind ViewModel.HourlyPricePlaceholderText, Mode=OneWay}"
+                             Style="{StaticResource DialogFormTextBoxStyle}"
+                             Text="{x:Bind ViewModel.HourlyPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.ImageUriLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+
+                    <Border Height="160"
+                            CornerRadius="16"
+                            Background="{StaticResource AntiqueWhiteBrush}"
+                            BorderBrush="{StaticResource LighterGrayBrush}"
+                            BorderThickness="1">
+                        <Image Source="{x:Bind ViewModel.ImagePreviewSource, Mode=OneWay}"
+                               Stretch="UniformToFill" />
+                    </Border>
+
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Grid.Column="0"
+                                 PlaceholderText="{x:Bind ViewModel.ImageUriPlaceholderText, Mode=OneWay}"
+                                 Style="{StaticResource DialogFormTextBoxStyle}"
+                                 IsReadOnly="True"
+                                 Text="{x:Bind ViewModel.ImageUriText, Mode=OneWay}" />
+
+                        <Button Grid.Column="1"
+                                Style="{StaticResource DialogSecondaryFooterButtonStyle}"
+                                Click="HandleBrowseImageClick">
+                            <Button.Resources>
+                                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
+                            </Button.Resources>
+                            <TextBlock Text="{x:Bind ViewModel.BrowseImageButtonText, Mode=OneWay}" />
+                        </Button>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}"
+                            Visibility="{x:Bind ViewModel.IsEdit, Mode=OneWay, Converter={StaticResource BoolToInvisible}}">
+                    <TextBlock Text="{x:Bind ViewModel.StockQuantityLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <TextBox PlaceholderText="{x:Bind ViewModel.StockQuantityPlaceholderText, Mode=OneWay}"
+                             Style="{StaticResource DialogFormTextBoxStyle}"
+                             Text="{x:Bind ViewModel.StockQuantityText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             InputScope="Number" />
+                </StackPanel>
+
+                <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+                           Visibility="{x:Bind ViewModel.HasError, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
+                           Foreground="{StaticResource ErrorRedBrush}"
+                           FontSize="{StaticResource FontSizeSmall}"
+                           FontWeight="SemiBold"
+                           TextWrapping="Wrap" />
+
+                <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+                <Grid Margin="0,8,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="16" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0"
-                             PlaceholderText="{x:Bind ViewModel.MinPlayersPlaceholderText, Mode=OneWay}"
-                             Style="{StaticResource DialogFormTextBoxStyle}"
-                             Text="{x:Bind ViewModel.MinPlayersText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             InputScope="Number" />
+                    <Button Grid.Column="0"
+                            Style="{StaticResource DialogSecondaryFooterButtonStyle}"
+                            Command="{x:Bind ViewModel.ResetCommand, Mode=OneWay}">
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <TextBlock Text="{x:Bind ViewModel.ResetButtonText, Mode=OneWay}" />
+                    </Button>
 
-                    <TextBox Grid.Column="1"
-                             PlaceholderText="{x:Bind ViewModel.MaxPlayersPlaceholderText, Mode=OneWay}"
-                             Style="{StaticResource DialogFormTextBoxStyle}"
-                             Text="{x:Bind ViewModel.MaxPlayersText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             InputScope="Number" />
+                    <Button Grid.Column="2"
+                            Style="{StaticResource DialogPrimaryFooterButtonStyle}"
+                            Command="{x:Bind ViewModel.SubmitCommand, Mode=OneWay}"
+                            IsEnabled="{x:Bind ViewModel.CanSubmit, Mode=OneWay}">
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <TextBlock Text="{x:Bind ViewModel.SubmitButtonText, Mode=OneWay}" />
+                    </Button>
                 </Grid>
             </StackPanel>
-
-            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                <TextBlock Text="{x:Bind ViewModel.HourlyPriceLabelText, Mode=OneWay}"
-                           Style="{StaticResource DialogFormLabelTextStyle}" />
-                <TextBox PlaceholderText="{x:Bind ViewModel.HourlyPricePlaceholderText, Mode=OneWay}"
-                         Style="{StaticResource DialogFormTextBoxStyle}"
-                         Text="{x:Bind ViewModel.HourlyPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-
-            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}"
-                        Visibility="{x:Bind ViewModel.IsEdit, Mode=OneWay, Converter={StaticResource BoolToInvisible}}">
-                <TextBlock Text="{x:Bind ViewModel.StockQuantityLabelText, Mode=OneWay}"
-                           Style="{StaticResource DialogFormLabelTextStyle}" />
-                <TextBox PlaceholderText="{x:Bind ViewModel.StockQuantityPlaceholderText, Mode=OneWay}"
-                         Style="{StaticResource DialogFormTextBoxStyle}"
-                         Text="{x:Bind ViewModel.StockQuantityText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         InputScope="Number" />
-            </StackPanel>
-
-            <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
-                       Visibility="{x:Bind ViewModel.HasError, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
-                       Foreground="{StaticResource ErrorRedBrush}"
-                       FontSize="{StaticResource FontSizeSmall}"
-                       FontWeight="SemiBold"
-                       TextWrapping="Wrap" />
-
-            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
-
-            <Grid Margin="0,8,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="16" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Button Grid.Column="0"
-                        Style="{StaticResource DialogSecondaryFooterButtonStyle}"
-                        Command="{x:Bind ViewModel.ResetCommand, Mode=OneWay}">
-                    <Button.Resources>
-                        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
-                    </Button.Resources>
-                    <TextBlock Text="{x:Bind ViewModel.ResetButtonText, Mode=OneWay}" />
-                </Button>
-
-                <Button Grid.Column="2"
-                        Style="{StaticResource DialogPrimaryFooterButtonStyle}"
-                        Command="{x:Bind ViewModel.SubmitCommand, Mode=OneWay}"
-                        IsEnabled="{x:Bind ViewModel.CanSubmit, Mode=OneWay}">
-                    <Button.Resources>
-                        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
-                    </Button.Resources>
-                    <TextBlock Text="{x:Bind ViewModel.SubmitButtonText, Mode=OneWay}" />
-                </Button>
-            </Grid>
-        </StackPanel>
         </ScrollViewer>
     </Grid>
 </ContentDialog>

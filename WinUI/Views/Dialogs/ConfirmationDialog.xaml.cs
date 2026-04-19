@@ -7,7 +7,6 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Threading.Tasks;
-using Microsoft.UI.Xaml.Controls;
 using WinUI.ViewModels.Dialogs;
 
 namespace WinUI.Views.Dialogs

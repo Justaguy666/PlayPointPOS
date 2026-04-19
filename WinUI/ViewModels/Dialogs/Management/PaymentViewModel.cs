@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -32,8 +33,7 @@ public partial class PaymentViewModel : LocalizedViewModelBase
         RefreshLocalizedText();
     }
 
-    [ObservableProperty]
-    public partial IconState Icon { get; set; } = new();
+    public IconState Icon { get; set; } = new() { Kind = IconKind.Wallet, Size = 24, AlwaysFilled = true };
 
     [ObservableProperty]
     public partial string TitleText { get; set; } = string.Empty;
@@ -80,6 +80,20 @@ public partial class PaymentViewModel : LocalizedViewModelBase
     [ObservableProperty]
     public partial string DiscountValueText { get; set; } = string.Empty;
 
+    private string _paymentMethodLabelText = string.Empty;
+    public string PaymentMethodLabelText
+    {
+        get => _paymentMethodLabelText;
+        set => SetProperty(ref _paymentMethodLabelText, value);
+    }
+
+    private string _selectedPaymentMethodValue = nameof(PaymentMethod.Cash);
+    public string SelectedPaymentMethodValue
+    {
+        get => _selectedPaymentMethodValue;
+        set => SetProperty(ref _selectedPaymentMethodValue, value);
+    }
+
     [ObservableProperty]
     public partial string TotalLabelText { get; set; } = string.Empty;
 
@@ -95,6 +109,8 @@ public partial class PaymentViewModel : LocalizedViewModelBase
     [ObservableProperty]
     public partial string CloseTooltipText { get; set; } = string.Empty;
 
+    public ObservableCollection<LocalizationOptionModel> PaymentMethodOptions { get; } = [];
+
     public event Action? CloseRequested
     {
         add => CloseRequestedInternal += value;
@@ -104,7 +120,6 @@ public partial class PaymentViewModel : LocalizedViewModelBase
     public void Configure(AreaModel? model)
     {
         _model = model;
-        Icon = CreateIconState(model);
         RefreshLocalizedText();
     }
 
@@ -117,10 +132,13 @@ public partial class PaymentViewModel : LocalizedViewModelBase
         GameFeeLabelText = LocalizationService.GetString("PaymentDialogGameFeeLabelText");
         DepositLabelText = LocalizationService.GetString("PaymentDialogDepositLabelText");
         DiscountLabelText = LocalizationService.GetString("PaymentDialogDiscountLabelText");
+        PaymentMethodLabelText = LocalizationService.GetString("PaymentDialogMethodLabelText");
         TotalLabelText = LocalizationService.GetString("PaymentDialogTotalLabelText");
         ConfirmButtonText = LocalizationService.GetString("PaymentDialogConfirmButtonText");
         CancelButtonText = LocalizationService.GetString("CancelButtonText");
         CloseTooltipText = LocalizationService.GetString("CloseTooltipText");
+
+        RefreshPaymentMethodOptions();
 
         UpdateComputedValues();
     }
@@ -219,13 +237,25 @@ public partial class PaymentViewModel : LocalizedViewModelBase
         return $"-{LocalizationService.FormatCurrency(amount)}";
     }
 
-    private static IconState CreateIconState(AreaModel? model)
+    private void RefreshPaymentMethodOptions()
     {
-        return new IconState
+        PaymentMethodOptions.Clear();
+        PaymentMethodOptions.Add(new LocalizationOptionModel
         {
-            Kind = model?.PlayAreaType == PlayAreaType.Room ? IconKind.Room : IconKind.Table,
-            Size = 24,
-            AlwaysFilled = true,
-        };
+            Value = nameof(PaymentMethod.Cash),
+            DisplayName = LocalizationService.GetString("PaymentMethodCashText"),
+        });
+        PaymentMethodOptions.Add(new LocalizationOptionModel
+        {
+            Value = nameof(PaymentMethod.Banking),
+            DisplayName = LocalizationService.GetString("PaymentMethodBankingText"),
+        });
+
+        if (string.IsNullOrWhiteSpace(SelectedPaymentMethodValue)
+            || (SelectedPaymentMethodValue != nameof(PaymentMethod.Cash)
+                && SelectedPaymentMethodValue != nameof(PaymentMethod.Banking)))
+        {
+            SelectedPaymentMethodValue = nameof(PaymentMethod.Cash);
+        }
     }
 }

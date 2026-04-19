@@ -3,14 +3,21 @@ using System.Diagnostics;
 using System.IO;
 using Application.Areas;
 using Application.Games;
+using Application.Members;
+using Application.Products;
+using Application.Transactions;
 using Application.Interfaces;
 using Application.Navigation;
 using Application.Services;
 using Application.Services.Games;
+using Application.Services.Members;
+using Application.Services.Products;
 using Application.Services.Areas;
+using Application.Services.Transactions;
 using Domain.Entities;
 using Infrastructure.Repositories.Mock;
 using Infrastructure.Services.Navigation;
+using Infrastructure.Services.Members;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -79,6 +86,13 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddSingleton<IGameTypeCatalogService, Infrastructure.Services.Games.MockGameTypeCatalogService>();
                     services.AddSingleton<IGameCatalogService, Infrastructure.Services.Games.MockGameCatalogService>();
                     services.AddSingleton<IGameFilterService, GameFilterService>();
+                    services.AddSingleton<IProductCatalogService, Infrastructure.Services.Products.MockProductCatalogService>();
+                    services.AddSingleton<IProductFilterService, ProductFilterService>();
+                    services.AddSingleton<IMembershipRankCatalogService, MockMembershipRankCatalogService>();
+                    services.AddSingleton<IMemberCatalogService, MockMemberCatalogService>();
+                    services.AddSingleton<IMemberFilterService, MemberFilterService>();
+                    services.AddSingleton<ITransactionCatalogService, Infrastructure.Services.Transactions.MockTransactionCatalogService>();
+                    services.AddSingleton<ITransactionFilterService, TransactionFilterService>();
 
                     services.AddSingleton<Infrastructure.Services.Notification.ToastNotificationService>();
                     services.AddSingleton<INotificationService>(sp => sp.GetRequiredService<Infrastructure.Services.Notification.ToastNotificationService>());
@@ -101,7 +115,16 @@ public partial class App : Microsoft.UI.Xaml.Application
                             "StartSession" => CreateStartSessionDialog(provider, parameter),
                             "Area" => CreateAreaDialog(provider, parameter),
                             "Game" => CreateGameDialog(provider, parameter),
+                            "Product" => CreateProductDialog(provider, parameter),
+                            "ProductFilter" => CreateProductFilterDialog(provider, parameter),
+                            "Member" => CreateMemberDialog(provider, parameter),
+                            "MemberFilter" => CreateMemberFilterDialog(provider, parameter),
+                            "MembershipPackage" => CreateMembershipPackageDialog(provider, parameter),
+                            "MembershipPackageEdit" => CreateMembershipPackageEditDialog(provider, parameter),
                             "GameType" => CreateGameTypeDialog(provider, parameter),
+                            "GoalKpi" => CreateGoalKpiDialog(provider, parameter),
+                            "TransactionDetail" => CreateTransactionDetailDialog(provider, parameter),
+                            "TransactionFilter" => CreateTransactionFilterDialog(provider, parameter),
                             _ => null
                         };
                     });
@@ -129,6 +152,12 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddSingleton<AreaModelFactory>();
                     services.AddSingleton<GameModelFactory>();
                     services.AddSingleton<GameCardControlViewModelFactory>();
+                    services.AddSingleton<ProductModelFactory>();
+                    services.AddSingleton<ProductCardControlViewModelFactory>();
+                    services.AddSingleton<MemberModelFactory>();
+                    services.AddSingleton<MemberCardControlViewModelFactory>();
+                    services.AddSingleton<TransactionModelFactory>();
+                    services.AddSingleton<TransactionCardControlViewModelFactory>();
                     services.AddSingleton<SummarizedAvailableCardViewModelFactory>();
                     services.AddSingleton<SummarizedReservedCardViewModelFactory>();
                     services.AddSingleton<SummarizedRentedCardViewModelFactory>();
@@ -142,9 +171,17 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddTransient<ViewModels.Dialogs.Management.ReservationViewModel>();
                     services.AddTransient<ViewModels.Dialogs.Management.AreaFilterViewModel>();
                     services.AddTransient<ViewModels.Dialogs.Management.GameFilterViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.Management.ProductFilterViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.Management.MemberDialogViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.Management.MemberFilterViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.Management.MembershipPackageDialogViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.Management.MembershipPackageEditDialogViewModel>();
                     services.AddTransient<ViewModels.Dialogs.Management.GameTypeDialogViewModel>();
                     services.AddTransient<ViewModels.Dialogs.Management.PaymentViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.Management.TransactionDetailDialogViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.Management.TransactionFilterDialogViewModel>();
                     services.AddTransient<ViewModels.Dialogs.StartSessionViewModel>();
+                    services.AddTransient<ViewModels.Dialogs.Dashboard.GoalKpiDialogViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.RevenueChartControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.QuickStatsControlViewModel>();
                     services.AddTransient<ViewModels.UserControls.Dashboard.GoalProgressControlViewModel>();
@@ -155,10 +192,13 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddTransient<ViewModels.Pages.DashboardPageViewModel>();
                     services.AddTransient<ViewModels.Pages.AreaManagementPageViewModel>();
                     services.AddTransient<ViewModels.Pages.GameManagementPageViewModel>();
+                    services.AddTransient<ViewModels.Pages.MemberManagementPageViewModel>();
+                    services.AddTransient<ViewModels.Pages.ProductManagementPageViewModel>();
+                    services.AddTransient<ViewModels.Pages.TransactionManagementPageViewModel>();
                     services.AddTransient<ViewModels.Pages.StartingPageViewModel>();
                     services.AddTransient<ViewModels.Pages.SettingsPageViewModel>();
 
-                    services.AddTransient<MainWindow>();
+                    services.AddSingleton<MainWindow>();
                     services.AddTransient<Views.Pages.StartingPage>();
                     services.AddTransient<Views.Pages.DashboardPage>();
                     services.AddTransient<Views.Pages.AreaManagementPage>();
@@ -390,7 +430,93 @@ public partial class App : Microsoft.UI.Xaml.Application
             provider.GetRequiredService<IDialogService>(),
             provider.GetRequiredService<GameModelFactory>(),
             request?.Mode ?? UIModels.Enums.UpsertDialogMode.Add);
-        return new Views.Dialogs.Management.GameDialog(viewModel, request);
+        return new Views.Dialogs.Management.GameDialog(
+            viewModel,
+            request,
+            provider.GetRequiredService<MainWindow>());
+    }
+
+    private static ContentDialog CreateProductFilterDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.Management.ProductFilterViewModel>();
+        return new Views.Dialogs.Management.ProductFilterDialog(
+            viewModel,
+            parameter as ViewModels.Dialogs.Management.ProductFilterDialogRequest);
+    }
+
+    private static ContentDialog CreateTransactionDetailDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.Management.TransactionDetailDialogViewModel>();
+        return new Views.Dialogs.Management.TransactionDetailDialog(
+            viewModel,
+            parameter as ViewModels.Dialogs.Management.TransactionDetailDialogRequest);
+    }
+
+    private static ContentDialog CreateTransactionFilterDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.Management.TransactionFilterDialogViewModel>();
+        return new Views.Dialogs.Management.TransactionFilterDialog(
+            viewModel,
+            parameter as ViewModels.Dialogs.Management.TransactionFilterDialogRequest);
+    }
+
+    private static ContentDialog CreateProductDialog(IServiceProvider provider, object? parameter)
+    {
+        var request = parameter as ViewModels.Dialogs.Management.ProductDialogRequest;
+        var viewModel = new ViewModels.Dialogs.Management.ProductDialogViewModel(
+            provider.GetRequiredService<ILocalizationService>(),
+            provider.GetRequiredService<IDialogService>(),
+            provider.GetRequiredService<ProductModelFactory>(),
+            request?.Mode ?? UIModels.Enums.UpsertDialogMode.Add);
+        return new Views.Dialogs.Management.ProductDialog(
+            viewModel,
+            request,
+            provider.GetRequiredService<MainWindow>());
+    }
+
+    private static ContentDialog CreateMemberDialog(IServiceProvider provider, object? parameter)
+    {
+        var request = parameter as ViewModels.Dialogs.Management.MemberDialogRequest;
+        var viewModel = new ViewModels.Dialogs.Management.MemberDialogViewModel(
+            provider.GetRequiredService<ILocalizationService>(),
+            provider.GetRequiredService<IDialogService>(),
+            provider.GetRequiredService<MemberModelFactory>(),
+            request?.Mode ?? UIModels.Enums.UpsertDialogMode.Add);
+        return new Views.Dialogs.Management.MemberDialog(viewModel, request);
+    }
+
+    private static ContentDialog CreateMemberFilterDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.Management.MemberFilterViewModel>();
+        return new Views.Dialogs.Management.MemberFilterDialog(
+            viewModel,
+            parameter as ViewModels.Dialogs.Management.MemberFilterDialogRequest);
+    }
+
+    private static ContentDialog CreateMembershipPackageDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.Management.MembershipPackageDialogViewModel>();
+        return new Views.Dialogs.Management.MembershipPackageDialog(
+            viewModel,
+            parameter as ViewModels.Dialogs.Management.MembershipPackageDialogRequest
+                ?? throw new InvalidOperationException("Membership package dialog request is required."));
+    }
+
+    private static ContentDialog CreateMembershipPackageEditDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.Management.MembershipPackageEditDialogViewModel>();
+        return new Views.Dialogs.Management.MembershipPackageEditDialog(
+            viewModel,
+            parameter as ViewModels.Dialogs.Management.MembershipPackageEditDialogRequest
+                ?? throw new InvalidOperationException("Membership package edit dialog request is required."));
+    }
+
+    private static ContentDialog CreateGoalKpiDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.Dashboard.GoalKpiDialogViewModel>();
+        return new Views.Dialogs.Dashboard.GoalKpiDialog(
+            viewModel,
+            parameter as ViewModels.Dialogs.Dashboard.GoalKpiDialogRequest);
     }
 
     private static IRepository<Member> CreateMockMemberRepository()

@@ -615,6 +615,18 @@
   <data name="DashboardCompletionValueFormat" xml:space="preserve">
     <value>{0:0}% hoàn thành</value>
   </data>
+  <data name="GoalProgressEditTooltipText" xml:space="preserve">
+    <value>Chỉnh sửa KPI</value>
+  </data>
+  <data name="GoalProgressEditDialogTitleText" xml:space="preserve">
+    <value>Chỉnh sửa KPI</value>
+  </data>
+  <data name="GoalProgressEditDialogGoalPlaceholderText" xml:space="preserve">
+    <value>Nhập mục tiêu...</value>
+  </data>
+  <data name="GoalProgressEditDialogInvalidValueText" xml:space="preserve">
+    <value>Vui lòng nhập mục tiêu hợp lệ lớn hơn 0.</value>
+  </data>
   <data name="SettingsPageGeneralTitle" xml:space="preserve">
     <value>Cài đặt hệ thống</value>
   </data>
@@ -1152,6 +1164,15 @@
   <data name="PaymentDialogDiscountLabelText" xml:space="preserve">
 		<value>Giảm giá:</value>
 	</data>
+  <data name="PaymentDialogMethodLabelText" xml:space="preserve">
+        <value>Phương thức thanh toán:</value>
+    </data>
+  <data name="PaymentMethodCashText" xml:space="preserve">
+        <value>Tiền mặt</value>
+    </data>
+  <data name="PaymentMethodBankingText" xml:space="preserve">
+        <value>Chuyển khoản</value>
+    </data>
   <data name="PaymentDialogTotalLabelText" xml:space="preserve">
 		<value>TỔNG CỘNG:</value>
 	</data>
@@ -1335,6 +1356,12 @@
   <data name="GameDialogHourlyPricePlaceholderText" xml:space="preserve">
     <value>Giá thuê...</value>
   </data>
+  <data name="GameDialogImageUriLabelText" xml:space="preserve">
+    <value>Ảnh</value>
+  </data>
+  <data name="GameDialogImageUriPlaceholderText" xml:space="preserve">
+    <value>Chưa chọn ảnh</value>
+  </data>
   <data name="GameDialogStockQuantityLabelText" xml:space="preserve">
     <value>Số lượng khởi tạo</value>
   </data>
@@ -1412,5 +1439,452 @@
   </data>
   <data name="GridGameCardControlStockLabel" xml:space="preserve">
     <value>Kho</value>
+  </data>
+  <data name="ProductManagementPageAddProductButton" xml:space="preserve">
+    <value>Thêm mới</value>
+  </data>
+  <data name="ProductManagementPageSearchPlaceholderText" xml:space="preserve">
+    <value>Tìm kiếm món ăn và thức uống...</value>
+  </data>
+  <data name="ProductManagementPageFilterButton" xml:space="preserve">
+    <value>Bộ lọc</value>
+  </data>
+  <data name="ProductManagementPagePageInfoFormat" xml:space="preserve">
+    <value>Hiển thị {0} đến {1} trên {2} • Trang {3} trên {4}</value>
+  </data>
+  <data name="ProductManagementPageNoProductsText" xml:space="preserve">
+    <value>Không tìm thấy sản phẩm phù hợp với bộ lọc hiện tại.</value>
+  </data>
+  <data name="ProductManagementPageSortFieldNameOption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="ProductManagementPageSortFieldTypeOption" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="ProductManagementPageSortFieldPriceOption" xml:space="preserve">
+    <value>Giá</value>
+  </data>
+  <data name="ProductManagementPageSortFieldStockOption" xml:space="preserve">
+    <value>Tồn kho</value>
+  </data>
+  <data name="ProductManagementPageSortDirectionAscendingOption" xml:space="preserve">
+    <value>Tăng dần</value>
+  </data>
+  <data name="ProductManagementPageSortDirectionDescendingOption" xml:space="preserve">
+    <value>Giảm dần</value>
+  </data>
+  <data name="ProductManagementPageSortFieldComboBox.PlaceholderText" xml:space="preserve">
+    <value>Sắp xếp theo</value>
+  </data>
+  <data name="ProductManagementPageSortDirectionComboBox.PlaceholderText" xml:space="preserve">
+    <value>Thứ tự</value>
+  </data>
+  <data name="ProductCreatedSuccessTitle" xml:space="preserve">
+    <value>Đã thêm sản phẩm</value>
+  </data>
+  <data name="ProductCreatedSuccessMessage" xml:space="preserve">
+    <value>Đã thêm {0} thành công.</value>
+  </data>
+  <data name="ProductUpdatedSuccessTitle" xml:space="preserve">
+    <value>Đã cập nhật sản phẩm</value>
+  </data>
+  <data name="ProductUpdatedSuccessMessage" xml:space="preserve">
+    <value>Đã lưu thay đổi cho {0}.</value>
+  </data>
+  <data name="ProductDeletedSuccessTitle" xml:space="preserve">
+    <value>Đã xóa sản phẩm</value>
+  </data>
+  <data name="ProductDeletedSuccessMessage" xml:space="preserve">
+    <value>Đã xóa {0} khỏi danh sách.</value>
+  </data>
+  <data name="ProductDialogCreateTitleText" xml:space="preserve">
+    <value>Thêm sản phẩm mới</value>
+  </data>
+  <data name="ProductDialogEditTitleText" xml:space="preserve">
+    <value>Chỉnh sửa sản phẩm</value>
+  </data>
+  <data name="ProductDialogNameLabelText" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="ProductDialogNamePlaceholderText" xml:space="preserve">
+    <value>Tên sản phẩm...</value>
+  </data>
+  <data name="ProductDialogProductTypeLabelText" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="ProductDialogPriceLabelText" xml:space="preserve">
+    <value>Giá bán</value>
+  </data>
+  <data name="ProductDialogPricePlaceholderText" xml:space="preserve">
+    <value>Giá sản phẩm...</value>
+  </data>
+  <data name="ProductDialogImageUriLabelText" xml:space="preserve">
+    <value>Ảnh</value>
+  </data>
+  <data name="ProductDialogImageUriPlaceholderText" xml:space="preserve">
+    <value>Chưa chọn ảnh</value>
+  </data>
+  <data name="BrowseImageButtonText" xml:space="preserve">
+    <value>Chọn ảnh</value>
+  </data>
+  <data name="ProductDialogStockQuantityLabelText" xml:space="preserve">
+    <value>Số lượng khởi tạo</value>
+  </data>
+  <data name="ProductDialogStockQuantityPlaceholderText" xml:space="preserve">
+    <value>Số lượng ban đầu...</value>
+  </data>
+  <data name="ProductDialogResetButtonText" xml:space="preserve">
+    <value>Đặt lại</value>
+  </data>
+  <data name="ProductDialogApplyButtonText" xml:space="preserve">
+    <value>Áp dụng</value>
+  </data>
+  <data name="ProductFilterDialogTitleText" xml:space="preserve">
+    <value>Bộ lọc</value>
+  </data>
+  <data name="ProductFilterDialogProductTypeLabelText" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="ProductFilterDialogPriceRangeLabelText" xml:space="preserve">
+    <value>Giá</value>
+  </data>
+  <data name="ProductFilterDialogPriceFromPlaceholderText" xml:space="preserve">
+    <value>Thấp nhất...</value>
+  </data>
+  <data name="ProductFilterDialogPriceToPlaceholderText" xml:space="preserve">
+    <value>Cao nhất...</value>
+  </data>
+  <data name="ProductFilterDialogAllOptionsText" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="ProductFilterDialogResetButtonText" xml:space="preserve">
+    <value>Đặt lại</value>
+  </data>
+  <data name="ProductFilterDialogApplyButtonText" xml:space="preserve">
+    <value>Áp dụng</value>
+  </data>
+  <data name="ProductFilterDialogInvalidRangeText" xml:space="preserve">
+    <value>Vui lòng nhập khoảng lọc hợp lệ.</value>
+  </data>
+  <data name="ConfirmDeleteProductTitle" xml:space="preserve">
+    <value>Xóa sản phẩm?</value>
+  </data>
+  <data name="ConfirmDeleteProductMessage" xml:space="preserve">
+    <value>Sản phẩm này sẽ bị xóa khỏi danh sách. Hành động này không thể hoàn tác.</value>
+  </data>
+  <data name="ConfirmDeleteProductButton" xml:space="preserve">
+    <value>Xóa sản phẩm</value>
+  </data>
+  <data name="ConfirmAddProductTitle" xml:space="preserve">
+    <value>Thêm sản phẩm?</value>
+  </data>
+  <data name="ConfirmAddProductMessage" xml:space="preserve">
+    <value>Bạn có chắc muốn thêm sản phẩm này?</value>
+  </data>
+  <data name="ConfirmAddProductButton" xml:space="preserve">
+    <value>Thêm</value>
+  </data>
+  <data name="ConfirmEditProductTitle" xml:space="preserve">
+    <value>Lưu thay đổi sản phẩm?</value>
+  </data>
+  <data name="ConfirmEditProductMessage" xml:space="preserve">
+    <value>Bạn có chắc muốn lưu thay đổi cho sản phẩm này?</value>
+  </data>
+  <data name="ConfirmEditProductButton" xml:space="preserve">
+    <value>Lưu</value>
+  </data>
+  <data name="ProductCardControlStockLabel" xml:space="preserve">
+    <value>Kho</value>
+  </data>
+  <data name="ProductCardControlPriceLabel" xml:space="preserve">
+    <value>Giá</value>
+  </data>
+  <data name="ProductTypeFoodText" xml:space="preserve">
+    <value>Món ăn</value>
+  </data>
+  <data name="ProductTypeDrinkText" xml:space="preserve">
+    <value>Thức uống</value>
+  </data>
+  <data name="TransactionManagementPageSearchPlaceholderText" xml:space="preserve">
+    <value>Tìm kiếm giao dịch...</value>
+  </data>
+  <data name="TransactionManagementPageFilterButton" xml:space="preserve">
+    <value>Bộ lọc</value>
+  </data>
+  <data name="TransactionManagementPagePageInfoFormat" xml:space="preserve">
+    <value>Hiển thị {0} đến {1} trên {2} • Trang {3} trên {4}</value>
+  </data>
+  <data name="TransactionManagementPageNoTransactionsText" xml:space="preserve">
+    <value>Không có giao dịch phù hợp với bộ lọc hiện tại.</value>
+  </data>
+  <data name="TransactionCardCodeLabelText" xml:space="preserve">
+    <value>Mã:</value>
+  </data>
+  <data name="TransactionCardMemberIdLabelText" xml:space="preserve">
+    <value>ID:</value>
+  </data>
+  <data name="TransactionFilterDialogTitleText" xml:space="preserve">
+    <value>Bộ lọc giao dịch</value>
+  </data>
+  <data name="TransactionFilterPaymentMethodLabelText" xml:space="preserve">
+    <value>Phương thức thanh toán</value>
+  </data>
+  <data name="TransactionFilterAmountRangeLabelText" xml:space="preserve">
+    <value>Khoảng số tiền</value>
+  </data>
+  <data name="TransactionFilterAmountMinPlaceholderText" xml:space="preserve">
+    <value>Thấp nhất...</value>
+  </data>
+  <data name="TransactionFilterAmountMaxPlaceholderText" xml:space="preserve">
+    <value>Cao nhất...</value>
+  </data>
+  <data name="TransactionFilterDateRangeLabelText" xml:space="preserve">
+    <value>Khoảng ngày</value>
+  </data>
+  <data name="TransactionFilterDateFromPlaceholderText" xml:space="preserve">
+    <value>Từ...</value>
+  </data>
+  <data name="TransactionFilterDateToPlaceholderText" xml:space="preserve">
+    <value>Đến...</value>
+  </data>
+  <data name="TransactionFilterAllOptionsText" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="TransactionFilterResetButtonText" xml:space="preserve">
+    <value>Đặt lại</value>
+  </data>
+  <data name="TransactionFilterApplyButtonText" xml:space="preserve">
+    <value>Áp dụng</value>
+  </data>
+  <data name="TransactionFilterCloseTooltipText" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="TransactionFilterInvalidRangeText" xml:space="preserve">
+    <value>Vui lòng nhập khoảng số tiền hợp lệ.</value>
+  </data>
+  <data name="TransactionDetailDialogTitleFormat" xml:space="preserve">
+    <value>Giao dịch {0}</value>
+  </data>
+  <data name="TransactionDetailServiceHeaderText" xml:space="preserve">
+    <value>Chi tiết dịch vụ</value>
+  </data>
+  <data name="TransactionDetailAmountHeaderText" xml:space="preserve">
+    <value>Số tiền</value>
+  </data>
+  <data name="TransactionDetailDepositRefundText" xml:space="preserve">
+    <value>Hoàn cọc:</value>
+  </data>
+  <data name="TransactionDetailDiscountText" xml:space="preserve">
+    <value>Giảm giá:</value>
+  </data>
+  <data name="TransactionDetailTotalLabelText" xml:space="preserve">
+    <value>TỔNG CỘNG</value>
+  </data>
+  <data name="TransactionDetailCloseTooltipText" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="TransactionDetailHourSuffix" xml:space="preserve">
+    <value>giờ</value>
+  </data>
+  <data name="TransactionDetailQuantityPrefix" xml:space="preserve">
+    <value>Số lượng</value>
+  </data>
+  <data name="MembershipPackageDialogTitleText" xml:space="preserve">
+    <value>Quản lý gói thành viên</value>
+  </data>
+  <data name="MembershipPackageDialogAddButtonText" xml:space="preserve">
+    <value>Thêm</value>
+  </data>
+  <data name="MembershipPackageDialogNamePlaceholderText" xml:space="preserve">
+    <value>Tên gói...</value>
+  </data>
+  <data name="MembershipPackageDialogMinSpentPlaceholderText" xml:space="preserve">
+    <value>Mức chi tiêu tối thiểu...</value>
+  </data>
+  <data name="MembershipPackageDialogDiscountPlaceholderText" xml:space="preserve">
+    <value>Giảm giá %...</value>
+  </data>
+  <data name="MembershipPackageDialogMinSpentLabelText" xml:space="preserve">
+    <value>Mốc chi tiêu</value>
+  </data>
+  <data name="MembershipPackageDialogDiscountLabelText" xml:space="preserve">
+    <value>Giảm giá</value>
+  </data>
+  <data name="MembershipPackageDialogInvalidInputText" xml:space="preserve">
+    <value>Vui lòng nhập thông tin gói hợp lệ.</value>
+  </data>
+  <data name="ConfirmDeleteMembershipPackageTitle" xml:space="preserve">
+    <value>Xóa gói thành viên?</value>
+  </data>
+  <data name="ConfirmDeleteMembershipPackageMessage" xml:space="preserve">
+    <value>Gói này sẽ bị xóa và tiến trình thành viên sẽ được tính lại.</value>
+  </data>
+  <data name="ConfirmDeleteMembershipPackageButton" xml:space="preserve">
+    <value>Xóa gói</value>
+  </data>
+  <data name="MemberDialogCreateTitleText" xml:space="preserve">
+    <value>Thêm thành viên</value>
+  </data>
+  <data name="MemberDialogEditTitleText" xml:space="preserve">
+    <value>Chỉnh sửa thành viên</value>
+  </data>
+  <data name="MemberDialogNameLabelText" xml:space="preserve">
+    <value>Tên thành viên</value>
+  </data>
+  <data name="MemberDialogNamePlaceholderText" xml:space="preserve">
+    <value>Nhập tên thành viên...</value>
+  </data>
+  <data name="MemberDialogPhoneNumberLabelText" xml:space="preserve">
+    <value>Số điện thoại</value>
+  </data>
+  <data name="MemberDialogPhoneNumberPlaceholderText" xml:space="preserve">
+    <value>Nhập số điện thoại...</value>
+  </data>
+  <data name="MemberDialogTotalSpentLabelText" xml:space="preserve">
+    <value>Tổng chi tiêu</value>
+  </data>
+  <data name="MemberDialogTotalSpentPlaceholderText" xml:space="preserve">
+    <value>Nhập tổng chi tiêu...</value>
+  </data>
+  <data name="MemberDialogMembershipPreviewLabelText" xml:space="preserve">
+    <value>Gói hiện tại</value>
+  </data>
+  <data name="MemberDialogProgressPreviewLabelText" xml:space="preserve">
+    <value>Tiến trình</value>
+  </data>
+  <data name="MemberDialogNoMembershipPreviewText" xml:space="preserve">
+    <value>Chưa có gói</value>
+  </data>
+  <data name="MemberDialogProgressPreviewFormat" xml:space="preserve">
+    <value>{0}% đến gói tiếp theo</value>
+  </data>
+  <data name="MemberDialogResetButtonText" xml:space="preserve">
+    <value>Đặt lại</value>
+  </data>
+  <data name="MemberDialogApplyButtonText" xml:space="preserve">
+    <value>Áp dụng</value>
+  </data>
+  <data name="MemberDialogInvalidInputText" xml:space="preserve">
+    <value>Vui lòng nhập tên, số điện thoại và tổng chi tiêu hợp lệ.</value>
+  </data>
+  <data name="ConfirmAddMemberTitle" xml:space="preserve">
+    <value>Thêm thành viên?</value>
+  </data>
+  <data name="ConfirmAddMemberMessage" xml:space="preserve">
+    <value>Bạn có chắc muốn thêm thành viên này?</value>
+  </data>
+  <data name="ConfirmAddMemberButton" xml:space="preserve">
+    <value>Thêm</value>
+  </data>
+  <data name="ConfirmEditMemberTitle" xml:space="preserve">
+    <value>Lưu thay đổi thành viên?</value>
+  </data>
+  <data name="ConfirmEditMemberMessage" xml:space="preserve">
+    <value>Bạn có chắc muốn lưu thay đổi cho thành viên này?</value>
+  </data>
+  <data name="ConfirmEditMemberButton" xml:space="preserve">
+    <value>Lưu</value>
+  </data>
+  <data name="MemberFilterDialogTitleText" xml:space="preserve">
+    <value>Bộ lọc</value>
+  </data>
+  <data name="MemberFilterDialogMembershipRankLabelText" xml:space="preserve">
+    <value>Gói thành viên</value>
+  </data>
+  <data name="MemberFilterDialogTotalSpentRangeLabelText" xml:space="preserve">
+    <value>Tổng chi tiêu</value>
+  </data>
+  <data name="MemberFilterDialogTotalSpentFromPlaceholderText" xml:space="preserve">
+    <value>Thấp nhất...</value>
+  </data>
+  <data name="MemberFilterDialogTotalSpentToPlaceholderText" xml:space="preserve">
+    <value>Cao nhất...</value>
+  </data>
+  <data name="MemberFilterDialogAllOptionsText" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="MemberFilterDialogResetButtonText" xml:space="preserve">
+    <value>Đặt lại</value>
+  </data>
+  <data name="MemberFilterDialogApplyButtonText" xml:space="preserve">
+    <value>Áp dụng</value>
+  </data>
+  <data name="MemberFilterDialogInvalidRangeText" xml:space="preserve">
+    <value>Vui lòng nhập khoảng lọc hợp lệ.</value>
+  </data>
+  <data name="MemberManagementPageAddMemberButton" xml:space="preserve">
+    <value>Thêm mới</value>
+  </data>
+  <data name="MemberManagementPageManageMembershipPackagesButton" xml:space="preserve">
+    <value>Quản lý gói</value>
+  </data>
+  <data name="MemberManagementPageFilterButton" xml:space="preserve">
+    <value>Bộ Lọc</value>
+  </data>
+  <data name="MemberManagementPageSearchPlaceholderText" xml:space="preserve">
+    <value>Tìm kiếm thành viên...</value>
+  </data>
+  <data name="MemberManagementPageSortFieldComboBox.PlaceholderText" xml:space="preserve">
+    <value>Sắp xếp theo</value>
+  </data>
+  <data name="MemberManagementPageSortDirectionComboBox.PlaceholderText" xml:space="preserve">
+    <value>Thứ tự</value>
+  </data>
+  <data name="MemberManagementPageNoMembersText" xml:space="preserve">
+    <value>Không có thành viên phù hợp với bộ lọc hiện tại.</value>
+  </data>
+  <data name="MemberManagementPageSortFieldNameOption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="MemberManagementPageSortFieldSpentOption" xml:space="preserve">
+    <value>Tổng chi tiêu</value>
+  </data>
+  <data name="MemberManagementPageSortFieldPackageOption" xml:space="preserve">
+    <value>Gói thành viên</value>
+  </data>
+  <data name="MemberManagementPageSortFieldProgressOption" xml:space="preserve">
+    <value>Tiến trình</value>
+  </data>
+  <data name="MemberManagementPageSortDirectionAscendingOption" xml:space="preserve">
+    <value>Tăng dần</value>
+  </data>
+  <data name="MemberManagementPageSortDirectionDescendingOption" xml:space="preserve">
+    <value>Giảm dần</value>
+  </data>
+  <data name="MemberManagementPagePageInfoFormat" xml:space="preserve">
+    <value>Hiển thị {0} đến {1} trên {2} • Trang {3} trên {4}</value>
+  </data>
+  <data name="MemberCreatedSuccessTitle" xml:space="preserve">
+    <value>Đã thêm thành viên</value>
+  </data>
+  <data name="MemberCreatedSuccessMessage" xml:space="preserve">
+    <value>{0} đã được thêm thành công.</value>
+  </data>
+  <data name="MemberUpdatedSuccessTitle" xml:space="preserve">
+    <value>Đã cập nhật thành viên</value>
+  </data>
+  <data name="MemberUpdatedSuccessMessage" xml:space="preserve">
+    <value>{0} đã được cập nhật thành công.</value>
+  </data>
+  <data name="MemberDeletedSuccessTitle" xml:space="preserve">
+    <value>Đã xóa thành viên</value>
+  </data>
+  <data name="MemberDeletedSuccessMessage" xml:space="preserve">
+    <value>{0} đã được xóa khỏi danh sách.</value>
+  </data>
+  <data name="ConfirmDeleteMemberTitle" xml:space="preserve">
+    <value>Xóa thành viên?</value>
+  </data>
+  <data name="ConfirmDeleteMemberMessage" xml:space="preserve">
+    <value>Thành viên này sẽ bị xóa khỏi danh sách. Hành động này không thể hoàn tác.</value>
+  </data>
+  <data name="ConfirmDeleteMemberButton" xml:space="preserve">
+    <value>Xóa thành viên</value>
+  </data>
+  <data name="MemberCardTotalSpentLabelText" xml:space="preserve">
+    <value>Tổng chi tiêu</value>
+  </data>
+  <data name="MemberCardIdLabelText" xml:space="preserve">
+    <value>ID:</value>
   </data>
 </root>

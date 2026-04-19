@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="WinUI.Views.UserControls.Transactions.TransactionCardControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:WinUI.ViewModels.UserControls.Transactions"
+    HorizontalAlignment="Stretch"
+    d:DataContext="{d:DesignInstance Type=viewmodels:TransactionCardControlViewModel, IsDesignTimeCreatable=False}"
+    mc:Ignorable="d">
+
+    <Border Background="{StaticResource WhiteBrush}"
+            BorderBrush="{StaticResource LighterGrayBrush}"
+            BorderThickness="1"
+            CornerRadius="16"
+            HorizontalAlignment="Stretch"
+            MinHeight="136"
+            Padding="16">
+        <Border.Shadow>
+            <ThemeShadow />
+        </Border.Shadow>
+
+        <Grid RowSpacing="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            Spacing="4"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="{Binding TransactionCodeLabelText}"
+                               FontSize="11"
+                               Foreground="{StaticResource SecondaryGrayBrush}"
+                               VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding TransactionCode}"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource DarkSlateGrayBrush}"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        Command="{Binding ShowDetailCommand}"
+                        Width="32"
+                        Height="32"
+                        Padding="0"
+                        CornerRadius="6"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right">
+                    <FontIcon Glyph="&#xE712;"
+                              FontFamily="Segoe Fluent Icons"
+                              FontSize="16"
+                              Foreground="{StaticResource DarkSlateGrayBrush}" />
+                </Button>
+            </Grid>
+
+            <Grid Grid.Row="1"
+                  ColumnSpacing="24"
+                  RowSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.9*" />
+                    <ColumnDefinition Width="1.45*" />
+                    <ColumnDefinition Width="1.15*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Text="{Binding CustomerName}"
+                           FontSize="{StaticResource FontSizeLarge}"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource DarkSlateGrayBrush}"
+                           TextTrimming="CharacterEllipsis"
+                           VerticalAlignment="Top" />
+                <TextBlock Grid.Row="1"
+                           Grid.Column="0"
+                           Text="{Binding MemberIdText}"
+                           FontSize="12"
+                           Foreground="{StaticResource SecondaryGrayBrush}"
+                           TextTrimming="CharacterEllipsis"
+                           VerticalAlignment="Top" />
+
+                <TextBlock Grid.Row="0"
+                           Grid.Column="1"
+                           Text="{Binding TotalAmountText}"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource OrangeFocusBrush}"
+                           TextTrimming="CharacterEllipsis"
+                           VerticalAlignment="Top" />
+
+                <Grid Grid.Row="1"
+                      Grid.Column="1"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top">
+                    <Border MinWidth="96"
+                            Padding="10,5"
+                            Background="{Binding PaymentBadgeBackground}"
+                            CornerRadius="7">
+                        <TextBlock Text="{Binding PaymentMethodText}"
+                                   FontSize="11"
+                                   FontWeight="SemiBold"
+                                   Foreground="{Binding PaymentBadgeForeground}"
+                                   TextAlignment="Center"
+                                   TextTrimming="CharacterEllipsis" />
+                    </Border>
+
+                    <Button Command="{Binding TogglePaymentMethodCommand}"
+                            MinWidth="96"
+                            Padding="10,5"
+                            Background="{StaticResource TransparentBrush}"
+                            BorderBrush="{StaticResource TransparentBrush}"
+                            BorderThickness="0"
+                            CornerRadius="7"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                        <Button.Resources>
+                            <ResourceDictionary>
+                                <StaticResource x:Key="ButtonBackground" ResourceKey="TransparentBrush" />
+                                <StaticResource x:Key="ButtonForeground" ResourceKey="TransparentBrush" />
+                                <StaticResource x:Key="ButtonBorderBrush" ResourceKey="TransparentBrush" />
+                                <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="TransparentBrush" />
+                                <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="TransparentBrush" />
+                                <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="TransparentBrush" />
+                                <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="TransparentBrush" />
+                                <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="TransparentBrush" />
+                                <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="TransparentBrush" />
+                            </ResourceDictionary>
+                        </Button.Resources>
+                    </Button>
+                </Grid>
+
+                <StackPanel Grid.Row="0"
+                            Grid.Column="2"
+                            Orientation="Horizontal"
+                            Spacing="6"
+                            VerticalAlignment="Top">
+                    <PathIcon Width="16"
+                              Height="16"
+                              Foreground="{StaticResource SecondaryGrayBrush}"
+                              Data="{Binding CalendarIconState, Converter={StaticResource IconConverter}}" />
+                    <TextBlock Text="{Binding DateText}"
+                               FontSize="11"
+                               Foreground="{StaticResource SecondaryGrayBrush}"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="1"
+                            Grid.Column="2"
+                            Orientation="Horizontal"
+                            Spacing="6"
+                            VerticalAlignment="Top">
+                    <PathIcon Width="16"
+                              Height="16"
+                              Foreground="{StaticResource SecondaryGrayBrush}"
+                              Data="{Binding ClockIconState, Converter={StaticResource IconConverter}}" />
+                    <TextBlock Text="{Binding TimeText}"
+                               FontSize="11"
+                               Foreground="{StaticResource SecondaryGrayBrush}"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

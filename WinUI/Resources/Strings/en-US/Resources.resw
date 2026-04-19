@@ -615,6 +615,18 @@
   <data name="DashboardCompletionValueFormat" xml:space="preserve">
     <value>{0:0}% completed</value>
   </data>
+  <data name="GoalProgressEditTooltipText" xml:space="preserve">
+    <value>Edit KPI goals</value>
+  </data>
+  <data name="GoalProgressEditDialogTitleText" xml:space="preserve">
+    <value>Edit KPI goals</value>
+  </data>
+  <data name="GoalProgressEditDialogGoalPlaceholderText" xml:space="preserve">
+    <value>Enter target...</value>
+  </data>
+  <data name="GoalProgressEditDialogInvalidValueText" xml:space="preserve">
+    <value>Please enter valid goal values greater than 0.</value>
+  </data>
   <data name="SettingsPageGeneralTitle" xml:space="preserve">
     <value>General settings</value>
   </data>
@@ -1155,6 +1167,15 @@
   <data name="PaymentDialogDiscountLabelText" xml:space="preserve">
 		<value>Discount:</value>
 	</data>
+  <data name="PaymentDialogMethodLabelText" xml:space="preserve">
+        <value>Payment method:</value>
+    </data>
+  <data name="PaymentMethodCashText" xml:space="preserve">
+        <value>Cash</value>
+    </data>
+  <data name="PaymentMethodBankingText" xml:space="preserve">
+        <value>Banking</value>
+    </data>
   <data name="PaymentDialogTotalLabelText" xml:space="preserve">
 		<value>GRAND TOTAL:</value>
 	</data>
@@ -1338,6 +1359,12 @@
   <data name="GameDialogHourlyPricePlaceholderText" xml:space="preserve">
     <value>Hourly price...</value>
   </data>
+  <data name="GameDialogImageUriLabelText" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="GameDialogImageUriPlaceholderText" xml:space="preserve">
+    <value>No image selected</value>
+  </data>
   <data name="GameDialogStockQuantityLabelText" xml:space="preserve">
     <value>Initial stock</value>
   </data>
@@ -1415,5 +1442,452 @@
   </data>
   <data name="GridGameCardControlStockLabel" xml:space="preserve">
     <value>Stock</value>
+  </data>
+  <data name="ProductManagementPageAddProductButton" xml:space="preserve">
+    <value>Add product</value>
+  </data>
+  <data name="ProductManagementPageSearchPlaceholderText" xml:space="preserve">
+    <value>Search food and drink...</value>
+  </data>
+  <data name="ProductManagementPageFilterButton" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="ProductManagementPagePageInfoFormat" xml:space="preserve">
+    <value>Showing {0} to {1} of {2} • Page {3} of {4}</value>
+  </data>
+  <data name="ProductManagementPageNoProductsText" xml:space="preserve">
+    <value>No products match the current search and filter state.</value>
+  </data>
+  <data name="ProductManagementPageSortFieldNameOption" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ProductManagementPageSortFieldTypeOption" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ProductManagementPageSortFieldPriceOption" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="ProductManagementPageSortFieldStockOption" xml:space="preserve">
+    <value>Stock</value>
+  </data>
+  <data name="ProductManagementPageSortDirectionAscendingOption" xml:space="preserve">
+    <value>Ascending</value>
+  </data>
+  <data name="ProductManagementPageSortDirectionDescendingOption" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+  <data name="ProductManagementPageSortFieldComboBox.PlaceholderText" xml:space="preserve">
+    <value>Sort by</value>
+  </data>
+  <data name="ProductManagementPageSortDirectionComboBox.PlaceholderText" xml:space="preserve">
+    <value>Direction</value>
+  </data>
+  <data name="ProductCreatedSuccessTitle" xml:space="preserve">
+    <value>Product added</value>
+  </data>
+  <data name="ProductCreatedSuccessMessage" xml:space="preserve">
+    <value>{0} was added successfully.</value>
+  </data>
+  <data name="ProductUpdatedSuccessTitle" xml:space="preserve">
+    <value>Product updated</value>
+  </data>
+  <data name="ProductUpdatedSuccessMessage" xml:space="preserve">
+    <value>Saved changes for {0}.</value>
+  </data>
+  <data name="ProductDeletedSuccessTitle" xml:space="preserve">
+    <value>Product deleted</value>
+  </data>
+  <data name="ProductDeletedSuccessMessage" xml:space="preserve">
+    <value>{0} was removed from the list.</value>
+  </data>
+  <data name="ProductDialogCreateTitleText" xml:space="preserve">
+    <value>Add new product</value>
+  </data>
+  <data name="ProductDialogEditTitleText" xml:space="preserve">
+    <value>Edit product</value>
+  </data>
+  <data name="ProductDialogNameLabelText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ProductDialogNamePlaceholderText" xml:space="preserve">
+    <value>Product name...</value>
+  </data>
+  <data name="ProductDialogProductTypeLabelText" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ProductDialogPriceLabelText" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="ProductDialogPricePlaceholderText" xml:space="preserve">
+    <value>Selling price...</value>
+  </data>
+  <data name="ProductDialogImageUriLabelText" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="ProductDialogImageUriPlaceholderText" xml:space="preserve">
+    <value>No image selected</value>
+  </data>
+  <data name="BrowseImageButtonText" xml:space="preserve">
+    <value>Browse image</value>
+  </data>
+  <data name="ProductDialogStockQuantityLabelText" xml:space="preserve">
+    <value>Initial stock</value>
+  </data>
+  <data name="ProductDialogStockQuantityPlaceholderText" xml:space="preserve">
+    <value>Starting quantity...</value>
+  </data>
+  <data name="ProductDialogResetButtonText" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="ProductDialogApplyButtonText" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="ProductFilterDialogTitleText" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="ProductFilterDialogProductTypeLabelText" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ProductFilterDialogPriceRangeLabelText" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="ProductFilterDialogPriceFromPlaceholderText" xml:space="preserve">
+    <value>Lowest...</value>
+  </data>
+  <data name="ProductFilterDialogPriceToPlaceholderText" xml:space="preserve">
+    <value>Highest...</value>
+  </data>
+  <data name="ProductFilterDialogAllOptionsText" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="ProductFilterDialogResetButtonText" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="ProductFilterDialogApplyButtonText" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="ProductFilterDialogInvalidRangeText" xml:space="preserve">
+    <value>Please enter a valid filter range.</value>
+  </data>
+  <data name="ConfirmDeleteProductTitle" xml:space="preserve">
+    <value>Delete product?</value>
+  </data>
+  <data name="ConfirmDeleteProductMessage" xml:space="preserve">
+    <value>This product will be removed from the list. This action cannot be undone.</value>
+  </data>
+  <data name="ConfirmDeleteProductButton" xml:space="preserve">
+    <value>Delete product</value>
+  </data>
+  <data name="ConfirmAddProductTitle" xml:space="preserve">
+    <value>Add product?</value>
+  </data>
+  <data name="ConfirmAddProductMessage" xml:space="preserve">
+    <value>Are you sure you want to add this product?</value>
+  </data>
+  <data name="ConfirmAddProductButton" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ConfirmEditProductTitle" xml:space="preserve">
+    <value>Save product changes?</value>
+  </data>
+  <data name="ConfirmEditProductMessage" xml:space="preserve">
+    <value>Are you sure you want to save changes for this product?</value>
+  </data>
+  <data name="ConfirmEditProductButton" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ProductCardControlStockLabel" xml:space="preserve">
+    <value>Stock</value>
+  </data>
+  <data name="ProductCardControlPriceLabel" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="ProductTypeFoodText" xml:space="preserve">
+    <value>Food</value>
+  </data>
+  <data name="ProductTypeDrinkText" xml:space="preserve">
+    <value>Drink</value>
+  </data>
+  <data name="TransactionManagementPageSearchPlaceholderText" xml:space="preserve">
+    <value>Search transactions...</value>
+  </data>
+  <data name="TransactionManagementPageFilterButton" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="TransactionManagementPagePageInfoFormat" xml:space="preserve">
+    <value>Showing {0} to {1} of {2} • Page {3} of {4}</value>
+  </data>
+  <data name="TransactionManagementPageNoTransactionsText" xml:space="preserve">
+    <value>No transactions match the current filters.</value>
+  </data>
+  <data name="TransactionCardCodeLabelText" xml:space="preserve">
+    <value>Code:</value>
+  </data>
+  <data name="TransactionCardMemberIdLabelText" xml:space="preserve">
+    <value>ID:</value>
+  </data>
+  <data name="TransactionFilterDialogTitleText" xml:space="preserve">
+    <value>Transaction filters</value>
+  </data>
+  <data name="TransactionFilterPaymentMethodLabelText" xml:space="preserve">
+    <value>Payment method</value>
+  </data>
+  <data name="TransactionFilterAmountRangeLabelText" xml:space="preserve">
+    <value>Amount range</value>
+  </data>
+  <data name="TransactionFilterAmountMinPlaceholderText" xml:space="preserve">
+    <value>Lowest...</value>
+  </data>
+  <data name="TransactionFilterAmountMaxPlaceholderText" xml:space="preserve">
+    <value>Highest...</value>
+  </data>
+  <data name="TransactionFilterDateRangeLabelText" xml:space="preserve">
+    <value>Date range</value>
+  </data>
+  <data name="TransactionFilterDateFromPlaceholderText" xml:space="preserve">
+    <value>From...</value>
+  </data>
+  <data name="TransactionFilterDateToPlaceholderText" xml:space="preserve">
+    <value>To...</value>
+  </data>
+  <data name="TransactionFilterAllOptionsText" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="TransactionFilterResetButtonText" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="TransactionFilterApplyButtonText" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="TransactionFilterCloseTooltipText" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="TransactionFilterInvalidRangeText" xml:space="preserve">
+    <value>Please enter a valid amount range.</value>
+  </data>
+  <data name="TransactionDetailDialogTitleFormat" xml:space="preserve">
+    <value>Transaction {0}</value>
+  </data>
+  <data name="TransactionDetailServiceHeaderText" xml:space="preserve">
+    <value>Service details</value>
+  </data>
+  <data name="TransactionDetailAmountHeaderText" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="TransactionDetailDepositRefundText" xml:space="preserve">
+    <value>Deposit refund:</value>
+  </data>
+  <data name="TransactionDetailDiscountText" xml:space="preserve">
+    <value>Discount:</value>
+  </data>
+  <data name="TransactionDetailTotalLabelText" xml:space="preserve">
+    <value>TOTAL</value>
+  </data>
+  <data name="TransactionDetailCloseTooltipText" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="TransactionDetailHourSuffix" xml:space="preserve">
+    <value>hours</value>
+  </data>
+  <data name="TransactionDetailQuantityPrefix" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="MembershipPackageDialogTitleText" xml:space="preserve">
+    <value>Membership Packages</value>
+  </data>
+  <data name="MembershipPackageDialogAddButtonText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="MembershipPackageDialogNamePlaceholderText" xml:space="preserve">
+    <value>Package name...</value>
+  </data>
+  <data name="MembershipPackageDialogMinSpentPlaceholderText" xml:space="preserve">
+    <value>Minimum spend...</value>
+  </data>
+  <data name="MembershipPackageDialogDiscountPlaceholderText" xml:space="preserve">
+    <value>Discount %...</value>
+  </data>
+  <data name="MembershipPackageDialogMinSpentLabelText" xml:space="preserve">
+    <value>Min spend</value>
+  </data>
+  <data name="MembershipPackageDialogDiscountLabelText" xml:space="preserve">
+    <value>Discount</value>
+  </data>
+  <data name="MembershipPackageDialogInvalidInputText" xml:space="preserve">
+    <value>Please enter valid package information.</value>
+  </data>
+  <data name="ConfirmDeleteMembershipPackageTitle" xml:space="preserve">
+    <value>Delete membership package?</value>
+  </data>
+  <data name="ConfirmDeleteMembershipPackageMessage" xml:space="preserve">
+    <value>This package will be removed and member progress will be recalculated.</value>
+  </data>
+  <data name="ConfirmDeleteMembershipPackageButton" xml:space="preserve">
+    <value>Delete package</value>
+  </data>
+  <data name="MemberDialogCreateTitleText" xml:space="preserve">
+    <value>Add member</value>
+  </data>
+  <data name="MemberDialogEditTitleText" xml:space="preserve">
+    <value>Edit member</value>
+  </data>
+  <data name="MemberDialogNameLabelText" xml:space="preserve">
+    <value>Member name</value>
+  </data>
+  <data name="MemberDialogNamePlaceholderText" xml:space="preserve">
+    <value>Enter member name...</value>
+  </data>
+  <data name="MemberDialogPhoneNumberLabelText" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+  <data name="MemberDialogPhoneNumberPlaceholderText" xml:space="preserve">
+    <value>Enter phone number...</value>
+  </data>
+  <data name="MemberDialogTotalSpentLabelText" xml:space="preserve">
+    <value>Total spent</value>
+  </data>
+  <data name="MemberDialogTotalSpentPlaceholderText" xml:space="preserve">
+    <value>Enter total spent...</value>
+  </data>
+  <data name="MemberDialogMembershipPreviewLabelText" xml:space="preserve">
+    <value>Current package</value>
+  </data>
+  <data name="MemberDialogProgressPreviewLabelText" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="MemberDialogNoMembershipPreviewText" xml:space="preserve">
+    <value>No package</value>
+  </data>
+  <data name="MemberDialogProgressPreviewFormat" xml:space="preserve">
+    <value>{0}% to the next package</value>
+  </data>
+  <data name="MemberDialogResetButtonText" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="MemberDialogApplyButtonText" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="MemberDialogInvalidInputText" xml:space="preserve">
+    <value>Please enter a valid name, phone number, and total spent.</value>
+  </data>
+  <data name="ConfirmAddMemberTitle" xml:space="preserve">
+    <value>Add member?</value>
+  </data>
+  <data name="ConfirmAddMemberMessage" xml:space="preserve">
+    <value>Are you sure you want to add this member?</value>
+  </data>
+  <data name="ConfirmAddMemberButton" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ConfirmEditMemberTitle" xml:space="preserve">
+    <value>Save member changes?</value>
+  </data>
+  <data name="ConfirmEditMemberMessage" xml:space="preserve">
+    <value>Are you sure you want to save changes for this member?</value>
+  </data>
+  <data name="ConfirmEditMemberButton" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="MemberFilterDialogTitleText" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="MemberFilterDialogMembershipRankLabelText" xml:space="preserve">
+    <value>Membership package</value>
+  </data>
+  <data name="MemberFilterDialogTotalSpentRangeLabelText" xml:space="preserve">
+    <value>Total spent</value>
+  </data>
+  <data name="MemberFilterDialogTotalSpentFromPlaceholderText" xml:space="preserve">
+    <value>Lowest...</value>
+  </data>
+  <data name="MemberFilterDialogTotalSpentToPlaceholderText" xml:space="preserve">
+    <value>Highest...</value>
+  </data>
+  <data name="MemberFilterDialogAllOptionsText" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="MemberFilterDialogResetButtonText" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="MemberFilterDialogApplyButtonText" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="MemberFilterDialogInvalidRangeText" xml:space="preserve">
+    <value>Please enter a valid filter range.</value>
+  </data>
+  <data name="MemberManagementPageAddMemberButton" xml:space="preserve">
+    <value>Add member</value>
+  </data>
+  <data name="MemberManagementPageManageMembershipPackagesButton" xml:space="preserve">
+    <value>Manage packages</value>
+  </data>
+  <data name="MemberManagementPageFilterButton" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="MemberManagementPageSearchPlaceholderText" xml:space="preserve">
+    <value>Search members...</value>
+  </data>
+  <data name="MemberManagementPageSortFieldComboBox.PlaceholderText" xml:space="preserve">
+    <value>Sort by</value>
+  </data>
+  <data name="MemberManagementPageSortDirectionComboBox.PlaceholderText" xml:space="preserve">
+    <value>Direction</value>
+  </data>
+  <data name="MemberManagementPageNoMembersText" xml:space="preserve">
+    <value>No members match the current filters.</value>
+  </data>
+  <data name="MemberManagementPageSortFieldNameOption" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="MemberManagementPageSortFieldSpentOption" xml:space="preserve">
+    <value>Total spent</value>
+  </data>
+  <data name="MemberManagementPageSortFieldPackageOption" xml:space="preserve">
+    <value>Package</value>
+  </data>
+  <data name="MemberManagementPageSortFieldProgressOption" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="MemberManagementPageSortDirectionAscendingOption" xml:space="preserve">
+    <value>Ascending</value>
+  </data>
+  <data name="MemberManagementPageSortDirectionDescendingOption" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+  <data name="MemberManagementPagePageInfoFormat" xml:space="preserve">
+    <value>Showing {0} to {1} of {2} • Page {3} of {4}</value>
+  </data>
+  <data name="MemberCreatedSuccessTitle" xml:space="preserve">
+    <value>Member created</value>
+  </data>
+  <data name="MemberCreatedSuccessMessage" xml:space="preserve">
+    <value>{0} has been added successfully.</value>
+  </data>
+  <data name="MemberUpdatedSuccessTitle" xml:space="preserve">
+    <value>Member updated</value>
+  </data>
+  <data name="MemberUpdatedSuccessMessage" xml:space="preserve">
+    <value>{0} has been updated successfully.</value>
+  </data>
+  <data name="MemberDeletedSuccessTitle" xml:space="preserve">
+    <value>Member deleted</value>
+  </data>
+  <data name="MemberDeletedSuccessMessage" xml:space="preserve">
+    <value>{0} has been removed from the list.</value>
+  </data>
+  <data name="ConfirmDeleteMemberTitle" xml:space="preserve">
+    <value>Delete member?</value>
+  </data>
+  <data name="ConfirmDeleteMemberMessage" xml:space="preserve">
+    <value>This member will be removed from the list. This action cannot be undone.</value>
+  </data>
+  <data name="ConfirmDeleteMemberButton" xml:space="preserve">
+    <value>Delete member</value>
+  </data>
+  <data name="MemberCardTotalSpentLabelText" xml:space="preserve">
+    <value>Total spent</value>
+  </data>
+  <data name="MemberCardIdLabelText" xml:space="preserve">
+    <value>ID:</value>
   </data>
 </root>

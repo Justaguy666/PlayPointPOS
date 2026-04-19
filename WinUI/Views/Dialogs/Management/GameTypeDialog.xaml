@@ -38,7 +38,8 @@
 
             <PathIcon Grid.Column="0"
                       Style="{StaticResource DialogHeaderIconStyle}"
-                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" 
+					  VerticalAlignment="Center" />
             <TextBlock Grid.Column="1"
                        Style="{StaticResource DialogHeaderTitleTextStyle}"
                        Text="{x:Bind ViewModel.Title, Mode=OneWay}" />

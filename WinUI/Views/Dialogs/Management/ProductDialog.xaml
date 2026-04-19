@@ -1,14 +1,169 @@
-<?xml version="1.0" encoding="utf-8"?>
-<UserControl
+<ContentDialog
     x:Class="WinUI.Views.Dialogs.Management.ProductDialog"
+    x:Name="RootDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:WinUI.Views.Dialogs.Management"
+    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:vm="using:WinUI.ViewModels.Dialogs.Management"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=vm:ProductDialogViewModel, IsDesignTimeCreatable=False}"
+    Style="{StaticResource StandardFormDialogStyle}"
     mc:Ignorable="d">
 
-    <Grid>
+    <ContentDialog.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/FormInputStateResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentDialog.Resources>
 
+    <Grid x:Name="RootGrid"
+          Style="{StaticResource DialogFormRootGridStyle}"
+          MaxWidth="620">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Style="{StaticResource DialogHeaderContainerStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <PathIcon Grid.Column="0"
+                      Style="{StaticResource DialogHeaderIconStyle}"
+                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+            <TextBlock Grid.Column="1"
+                       Style="{StaticResource DialogHeaderTitleTextStyle}"
+                       Text="{x:Bind ViewModel.Title, Mode=OneWay}" />
+            <Button Grid.Column="2"
+                    Style="{StaticResource DialogCloseButtonStyle}"
+                    Command="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
+                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
+                <Button.Resources>
+                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
+                </Button.Resources>
+                <PathIcon Width="14"
+                          Height="14"
+                          Data="{x:Bind CloseIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
+                          Foreground="{StaticResource BlackBrush}" />
+            </Button>
+        </Grid>
+
+        <controls:DividerControl Grid.Row="1"
+                                 Style="{StaticResource DialogHeaderDividerStyle}" />
+
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
+                      VerticalScrollMode="Enabled"
+                      Margin="0,0,-16,0"
+                      Padding="0,0,16,20">
+            <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.NameLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <TextBox PlaceholderText="{x:Bind ViewModel.NamePlaceholderText, Mode=OneWay}"
+                             Style="{StaticResource DialogFormTextBoxStyle}"
+                             Text="{x:Bind ViewModel.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.ProductTypeLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <ComboBox MinHeight="48"
+                              ItemsSource="{x:Bind ViewModel.ProductTypeOptions, Mode=OneWay}"
+                              DisplayMemberPath="DisplayName"
+                              SelectedValuePath="Value"
+                              SelectedValue="{x:Bind ViewModel.SelectedProductTypeValue, Mode=TwoWay}"
+                              HorizontalAlignment="Stretch" />
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.PriceLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <TextBox PlaceholderText="{x:Bind ViewModel.PricePlaceholderText, Mode=OneWay}"
+                             Style="{StaticResource DialogFormTextBoxStyle}"
+                             Text="{x:Bind ViewModel.PriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.ImageUriLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+
+                    <Border Height="160"
+                            CornerRadius="16"
+                            Background="{StaticResource AntiqueWhiteBrush}"
+                            BorderBrush="{StaticResource LighterGrayBrush}"
+                            BorderThickness="1">
+                        <Image Source="{x:Bind ViewModel.ImagePreviewSource, Mode=OneWay}"
+                               Stretch="UniformToFill" />
+                    </Border>
+
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Grid.Column="0"
+                                 PlaceholderText="{x:Bind ViewModel.ImageUriPlaceholderText, Mode=OneWay}"
+                                 Style="{StaticResource DialogFormTextBoxStyle}"
+                                 IsReadOnly="True"
+                                 Text="{x:Bind ViewModel.ImageUriText, Mode=OneWay}" />
+
+                        <Button Grid.Column="1"
+                                Style="{StaticResource DialogSecondaryFooterButtonStyle}"
+                                Click="HandleBrowseImageClick">
+                            <Button.Resources>
+                                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
+                            </Button.Resources>
+                            <TextBlock Text="{x:Bind ViewModel.BrowseImageButtonText, Mode=OneWay}" />
+                        </Button>
+                    </Grid>
+                </StackPanel>
+
+                <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+                           Visibility="{x:Bind ViewModel.HasError, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
+                           Foreground="{StaticResource ErrorRedBrush}"
+                           FontSize="{StaticResource FontSizeSmall}"
+                           FontWeight="SemiBold"
+                           TextWrapping="Wrap" />
+
+                <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0"
+                            Style="{StaticResource DialogSecondaryFooterButtonStyle}"
+                            Command="{x:Bind ViewModel.ResetCommand, Mode=OneWay}">
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <TextBlock Text="{x:Bind ViewModel.ResetButtonText, Mode=OneWay}" />
+                    </Button>
+
+                    <Button Grid.Column="2"
+                            Style="{StaticResource DialogPrimaryFooterButtonStyle}"
+                            Command="{x:Bind ViewModel.SubmitCommand, Mode=OneWay}"
+                            IsEnabled="{x:Bind ViewModel.CanSubmit, Mode=OneWay}">
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <TextBlock Text="{x:Bind ViewModel.SubmitButtonText, Mode=OneWay}" />
+                    </Button>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
-</UserControl>
+</ContentDialog>

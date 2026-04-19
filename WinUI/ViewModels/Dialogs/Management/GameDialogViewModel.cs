@@ -18,6 +18,7 @@ namespace WinUI.ViewModels.Dialogs.Management;
 
 public partial class GameDialogViewModel : UpsertDialogViewModelBase
 {
+    private const string DefaultImageUri = "ms-appx:///Assets/Mock.png";
     private const string DifficultyEasyValue = "easy";
     private const string DifficultyMediumValue = "medium";
     private const string DifficultyHardValue = "hard";
@@ -75,6 +76,15 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
     public partial string HourlyPricePlaceholderText { get; set; } = string.Empty;
 
     [ObservableProperty]
+    public partial string ImageUriLabelText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string ImageUriPlaceholderText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string BrowseImageButtonText { get; set; } = string.Empty;
+
+    [ObservableProperty]
     public partial string StockQuantityLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
@@ -112,6 +122,11 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanSubmit))]
+    [NotifyPropertyChangedFor(nameof(ImagePreviewSource))]
+    public partial string ImageUriText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanSubmit))]
     public partial string StockQuantityText { get; set; } = "1";
 
     [ObservableProperty]
@@ -130,7 +145,12 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
 
     public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
 
+    public string ImagePreviewSource => string.IsNullOrWhiteSpace(ImageUriText)
+        ? DefaultImageUri
+        : ImageUriText;
+
     public bool CanSubmit => TryGetParsedFormValues(
+        out _,
         out _,
         out _,
         out _,
@@ -158,6 +178,9 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
         MaxPlayersPlaceholderText = LocalizationService.GetString("GameDialogMaxPlayersPlaceholderText");
         HourlyPriceLabelText = LocalizationService.GetString("GameDialogHourlyPriceLabelText");
         HourlyPricePlaceholderText = LocalizationService.GetString("GameDialogHourlyPricePlaceholderText");
+        ImageUriLabelText = LocalizationService.GetString("GameDialogImageUriLabelText");
+        ImageUriPlaceholderText = LocalizationService.GetString("GameDialogImageUriPlaceholderText");
+        BrowseImageButtonText = LocalizationService.GetString("BrowseImageButtonText");
         StockQuantityLabelText = LocalizationService.GetString("GameDialogStockQuantityLabelText");
         StockQuantityPlaceholderText = LocalizationService.GetString("GameDialogStockQuantityPlaceholderText");
         ResetButtonText = LocalizationService.GetString("GameDialogResetButtonText");
@@ -274,6 +297,8 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
 
     partial void OnHourlyPriceTextChanged(string value) => NotifyFormStateChanged();
 
+    partial void OnImageUriTextChanged(string value) => NotifyFormStateChanged();
+
     partial void OnStockQuantityTextChanged(string value) => NotifyFormStateChanged();
 
     private void RefreshSelectionOptions()
@@ -332,6 +357,7 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
         HourlyPriceText = model.HourlyPrice > 0m
             ? model.HourlyPrice.ToString("0.##", LocalizationService.Culture)
             : string.Empty;
+        ImageUriText = NormalizeEditableImageUri(model.ImageUri);
         StockQuantityText = Math.Max(0, model.StockQuantity).ToString(LocalizationService.Culture);
         NotifyFormStateChanged();
     }
@@ -357,7 +383,7 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
             MaxPlayers = 4,
             StockQuantity = 1,
             BorrowedQuantity = 0,
-            ImageUri = "ms-appx:///Assets/Mock.png",
+            ImageUri = DefaultImageUri,
         };
     }
 
@@ -382,6 +408,7 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
                 out int minPlayers,
                 out int maxPlayers,
                 out decimal hourlyPrice,
+                out string imageUri,
                 out int stockQuantity))
         {
             return false;
@@ -393,8 +420,8 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
         model.MinPlayers = minPlayers;
         model.MaxPlayers = maxPlayers;
         model.HourlyPrice = hourlyPrice;
+        model.ImageUri = imageUri;
         model.StockQuantity = stockQuantity;
-        model.ImageUri = string.IsNullOrWhiteSpace(model.ImageUri) ? "ms-appx:///Assets/Mock.png" : model.ImageUri;
 
         return true;
     }
@@ -406,11 +433,13 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
         out int minPlayers,
         out int maxPlayers,
         out decimal hourlyPrice,
+        out string imageUri,
         out int stockQuantity)
     {
         trimmedName = GameName?.Trim() ?? string.Empty;
         gameType = ResolveSelectedGameType();
         difficulty = ResolveSelectedDifficulty();
+        imageUri = string.IsNullOrWhiteSpace(ImageUriText) ? DefaultImageUri : ImageUriText.Trim();
 
         if (string.IsNullOrWhiteSpace(trimmedName)
             || string.IsNullOrWhiteSpace(SelectedGameTypeName)
@@ -441,6 +470,14 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
             && maxPlayers > 0
             && hourlyPrice > 0m
             && stockQuantity >= 0;
+    }
+
+    private static string NormalizeEditableImageUri(string? imageUri)
+    {
+        return string.IsNullOrWhiteSpace(imageUri)
+               || string.Equals(imageUri, DefaultImageUri, StringComparison.OrdinalIgnoreCase)
+            ? string.Empty
+            : imageUri;
     }
 
     private GameType ResolveSelectedGameType()

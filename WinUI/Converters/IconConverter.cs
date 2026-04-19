@@ -130,6 +130,7 @@ public partial class IconConverter : IValueConverter
         IconKind.Info => "ic_fluent_book_information",
         IconKind.More => "ic_fluent_more_circle",
         IconKind.Folder => "ic_fluent_folder_multiple",
+        IconKind.Wallet => "ic_fluent_wallet",
         _ => "ic_fluent_question_circle_circle",
     };
 

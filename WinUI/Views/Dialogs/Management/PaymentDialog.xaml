@@ -200,6 +200,19 @@
                                Style="{StaticResource PaymentDialogTotalValueTextStyle}" />
                 </Grid>
             </Border>
+
+            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                <TextBlock Text="{Binding PaymentMethodLabelText}"
+                           Style="{StaticResource DialogFormLabelTextStyle}" />
+                <ComboBox MinHeight="48"
+                          ItemsSource="{Binding PaymentMethodOptions}"
+                          DisplayMemberPath="DisplayName"
+                          SelectedValuePath="Value"
+                          SelectedValue="{Binding SelectedPaymentMethodValue, Mode=TwoWay}"
+                          HorizontalAlignment="Stretch" />
+            </StackPanel>
         </StackPanel>
         </ScrollViewer>
 

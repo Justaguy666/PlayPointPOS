@@ -22,23 +22,46 @@
                     Spacing="12"
                     VerticalAlignment="Center">
 
-            <StackPanel Orientation="Horizontal"
-                        Spacing="4"
-                        VerticalAlignment="Center">
-                <PathIcon
-                    Width="24"
-                    Height="24"
-                    Data="{Binding IconState, Converter={StaticResource IconConverter}}"
-                    Foreground="{StaticResource PrimaryOrangeBrush}"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center" />
+            <Grid VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{Binding Title}"
-                           FontWeight="Bold" 
-                           FontSize="{StaticResource FontSizeMedium}"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource PrimaryOrangeBrush}" />
-            </StackPanel>
+                <StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            Spacing="4"
+                            VerticalAlignment="Center">
+                    <PathIcon
+                        Width="24"
+                        Height="24"
+                        Data="{Binding IconState, Converter={StaticResource IconConverter}}"
+                        Foreground="{StaticResource PrimaryOrangeBrush}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+
+                    <TextBlock Text="{Binding Title}"
+                               FontWeight="Bold"
+                               FontSize="{StaticResource FontSizeMedium}"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource PrimaryOrangeBrush}" />
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        Style="{StaticResource GameCardActionButtonSmallStyle}"
+                        Command="{Binding EditGoalsCommand}"
+                        ToolTipService.ToolTip="{Binding EditTooltipText}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right">
+                    <Button.Resources>
+                        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
+                    </Button.Resources>
+                    <PathIcon Width="16"
+                              Height="16"
+                              Data="{Binding EditIconState, Converter={StaticResource IconConverter}}"
+                              Foreground="{StaticResource WhiteBrush}" />
+                </Button>
+            </Grid>
 
             <controls:DividerControl DividerBrush="{StaticResource LighterGrayBrush}" />
             

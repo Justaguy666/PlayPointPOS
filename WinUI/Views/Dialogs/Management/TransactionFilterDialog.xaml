@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentDialog
+    x:Class="WinUI.Views.Dialogs.Management.TransactionFilterDialog"
+    x:Name="RootDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:viewmodels="using:WinUI.ViewModels.Dialogs.Management"
+    xmlns:models="using:WinUI.UIModels"
+    d:DataContext="{d:DesignInstance Type=viewmodels:TransactionFilterDialogViewModel, IsDesignTimeCreatable=False}"
+    Style="{StaticResource StandardFormDialogStyle}"
+    mc:Ignorable="d">
+
+    <ContentDialog.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/FormInputStateResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentDialog.Resources>
+
+    <Grid Style="{StaticResource DialogFormRootGridStyle}"
+          MaxWidth="620">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Style="{StaticResource DialogHeaderContainerStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <PathIcon Grid.Column="0"
+                      Style="{StaticResource DialogHeaderIconStyle}"
+                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+            <TextBlock Grid.Column="1"
+                       Style="{StaticResource DialogHeaderTitleTextStyle}"
+                       Text="{Binding Title}" />
+            <Button Grid.Column="2"
+                    Style="{StaticResource DialogCloseButtonStyle}"
+                    Command="{Binding CloseCommand}"
+                    ToolTipService.ToolTip="{Binding CloseTooltipText}">
+                <Button.Resources>
+                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
+                </Button.Resources>
+                <PathIcon Width="14"
+                          Height="14"
+                          Foreground="{StaticResource BlackBrush}"
+                          Data="{x:Bind CloseIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+            </Button>
+        </Grid>
+
+        <controls:DividerControl Grid.Row="1"
+                                 Style="{StaticResource DialogHeaderDividerStyle}" />
+
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
+                      VerticalScrollMode="Enabled"
+                      Margin="0,0,-16,0"
+                      Padding="0,0,16,20">
+            <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{Binding PaymentMethodLabelText}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <ComboBox MinHeight="48"
+                              ItemsSource="{Binding PaymentMethodOptions}"
+                              SelectedValue="{Binding SelectedPaymentMethod, Mode=TwoWay}"
+                              SelectedValuePath="Value"
+                              DisplayMemberPath="DisplayName"
+                              HorizontalAlignment="Stretch" />
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{Binding AmountRangeLabelText}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding AmountMinText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 PlaceholderText="{Binding AmountMinPlaceholderText}"
+                                 Style="{StaticResource DialogFormTextBoxStyle}"
+                                 InputScope="Number" />
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding AmountMaxText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 PlaceholderText="{Binding AmountMaxPlaceholderText}"
+                                 Style="{StaticResource DialogFormTextBoxStyle}"
+                                 InputScope="Number" />
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{Binding DateRangeLabelText}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                                x:Name="DateFromFieldButton"
+                                Style="{StaticResource DialogPickerButtonStyle}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center">
+                            <Button.Flyout>
+                                <DatePickerFlyout Date="{x:Bind ViewModel.DateFromFlyoutDate, Mode=OneWay}"
+                                                  DatePicked="HandleDateFromPicked"
+                                                  MaxYear="{x:Bind ViewModel.DateFlyoutMaxYear, Mode=OneWay}"
+                                                  MinYear="{x:Bind ViewModel.DateFlyoutMinYear, Mode=OneWay}"
+                                                  Opened="HandleFlyoutOpened" />
+                            </Button.Flyout>
+                            <Button.Resources>
+                                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogInputButtonStateResources.xaml" />
+                            </Button.Resources>
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0"
+                                           Text="{x:Bind ViewModel.DateFromDisplayText, Mode=OneWay}"
+                                           Style="{StaticResource DialogFieldValueTextStyle}"
+                                           Visibility="{x:Bind ViewModel.HasDateFrom, Mode=OneWay, Converter={StaticResource BoolToVisible}}" />
+                                <TextBlock Grid.Column="0"
+                                           Text="{x:Bind ViewModel.DateFromPlaceholderText, Mode=OneWay}"
+                                           Style="{StaticResource DialogFieldPlaceholderTextStyle}"
+                                           Visibility="{x:Bind ViewModel.HasDateFrom, Mode=OneWay, Converter={StaticResource BoolToInvisible}}" />
+                                <PathIcon Grid.Column="1"
+                                          Style="{StaticResource DialogFieldIconStyle}"
+                                          Data="{x:Bind CalendarIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+                            </Grid>
+                        </Button>
+
+                        <Button Grid.Column="1"
+                                x:Name="DateToFieldButton"
+                                Style="{StaticResource DialogPickerButtonStyle}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center">
+                            <Button.Flyout>
+                                <DatePickerFlyout Date="{x:Bind ViewModel.DateToFlyoutDate, Mode=OneWay}"
+                                                  DatePicked="HandleDateToPicked"
+                                                  MaxYear="{x:Bind ViewModel.DateFlyoutMaxYear, Mode=OneWay}"
+                                                  MinYear="{x:Bind ViewModel.DateFlyoutMinYear, Mode=OneWay}"
+                                                  Opened="HandleFlyoutOpened" />
+                            </Button.Flyout>
+                            <Button.Resources>
+                                <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogInputButtonStateResources.xaml" />
+                            </Button.Resources>
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0"
+                                           Text="{x:Bind ViewModel.DateToDisplayText, Mode=OneWay}"
+                                           Style="{StaticResource DialogFieldValueTextStyle}"
+                                           Visibility="{x:Bind ViewModel.HasDateTo, Mode=OneWay, Converter={StaticResource BoolToVisible}}" />
+                                <TextBlock Grid.Column="0"
+                                           Text="{x:Bind ViewModel.DateToPlaceholderText, Mode=OneWay}"
+                                           Style="{StaticResource DialogFieldPlaceholderTextStyle}"
+                                           Visibility="{x:Bind ViewModel.HasDateTo, Mode=OneWay, Converter={StaticResource BoolToInvisible}}" />
+                                <PathIcon Grid.Column="1"
+                                          Style="{StaticResource DialogFieldIconStyle}"
+                                          Data="{x:Bind CalendarIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+                            </Grid>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+
+                <TextBlock Text="{Binding ErrorMessage}"
+                           Visibility="{Binding HasError, Converter={StaticResource BoolToVisible}}"
+                           Foreground="{StaticResource ErrorRedBrush}"
+                           FontSize="{StaticResource FontSizeSmall}"
+                           FontWeight="SemiBold"
+                           TextWrapping="Wrap" />
+
+                <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
+
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0"
+                            Style="{StaticResource DialogSecondaryFooterButtonStyle}"
+                            Command="{Binding ResetCommand}">
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <TextBlock Text="{Binding ResetButtonText}" />
+                    </Button>
+
+                    <Button Grid.Column="2"
+                            Style="{StaticResource DialogPrimaryFooterButtonStyle}"
+                            Command="{Binding ApplyCommand}">
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <TextBlock Text="{Binding ApplyButtonText}" />
+                    </Button>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</ContentDialog>

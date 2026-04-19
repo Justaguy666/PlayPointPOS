@@ -12,30 +12,6 @@ using WinUI.ViewModels;
 
 namespace WinUI.ViewModels.Dialogs.Management;
 
-public sealed class AreaFilterCriteria
-{
-    public PlayAreaStatus? Status { get; init; }
-
-    public TimeSpan? StartTimeFrom { get; init; }
-
-    public TimeSpan? StartTimeTo { get; init; }
-
-    public int? CapacityMin { get; init; }
-
-    public int? CapacityMax { get; init; }
-
-    public decimal? HourlyPriceMin { get; init; }
-
-    public decimal? HourlyPriceMax { get; init; }
-}
-
-public sealed class AreaFilterDialogRequest
-{
-    public AreaFilterCriteria? InitialCriteria { get; init; }
-
-    public Func<AreaFilterCriteria, Task>? OnSubmittedAsync { get; init; }
-}
-
 public partial class AreaFilterViewModel : LocalizedViewModelBase
 {
     private Func<AreaFilterCriteria, Task>? _onSubmittedAsync;
