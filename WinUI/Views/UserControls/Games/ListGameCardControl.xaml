@@ -40,7 +40,7 @@
                         VerticalAlignment="Center"
                         Spacing="10">
                 <TextBlock Text="{Binding Name}"
-                           Style="{StaticResource GameListNameTextStyle}"
+                           Style="{StaticResource ListCardNameTextStyle}"
                            FontSize="{StaticResource FontSizeLarge}"
                            MaxLines="1" />
 
@@ -55,7 +55,7 @@
                                 Spacing="4"
                                 VerticalAlignment="Center">
                         <TextBlock Text="{Binding PlayerCountLabelText}"
-                                   Style="{StaticResource GameListMetaLabelTextStyle}" />
+                                   Style="{StaticResource ListCardMetaLabelTextStyle}" />
                         <StackPanel Orientation="Horizontal"
                                     Spacing="6">
                             <PathIcon Width="18"
@@ -63,9 +63,9 @@
                                       Foreground="{StaticResource SecondaryGrayBrush}"
                                       Data="{Binding PlayersIconState, Converter={StaticResource IconConverter}}" />
                             <TextBlock Text="{Binding PlayerRangeText}"
-                                       Style="{StaticResource GameListMetaValueTextStyle}" />
+                                       Style="{StaticResource ListCardMetaValueTextStyle}" />
                             <TextBlock Text="{Binding PlayersSuffixText}"
-                                       Style="{StaticResource GameListMetaLabelTextStyle}"
+                                       Style="{StaticResource ListCardMetaLabelTextStyle}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
                     </StackPanel>
@@ -74,16 +74,16 @@
                                 Spacing="4"
                                 VerticalAlignment="Center">
                         <TextBlock Text="{Binding HourlyPriceLabelText}"
-                                   Style="{StaticResource GameListMetaLabelTextStyle}" />
+                                   Style="{StaticResource ListCardMetaLabelTextStyle}" />
                         <TextBlock Text="{Binding HourlyPriceText}"
-                                   Style="{StaticResource GameListPriceTextStyle}" />
+                                   Style="{StaticResource ListCardAccentValueTextStyle}" />
                     </StackPanel>
 
                     <StackPanel Grid.Column="2"
                                 Spacing="4"
                                 VerticalAlignment="Center">
                         <TextBlock Text="{Binding StockLabelText}"
-                                   Style="{StaticResource GameListMetaLabelTextStyle}" />
+                                   Style="{StaticResource ListCardMetaLabelTextStyle}" />
                         <StackPanel Orientation="Horizontal"
                                     Spacing="8">
                             <Button Style="{StaticResource GameCardStockButtonStyle}"
@@ -98,7 +98,7 @@
                             </Button>
 
                             <TextBlock Text="{Binding StockSummaryText}"
-                                       Style="{StaticResource GameListMetaValueTextStyle}"
+                                       Style="{StaticResource ListCardMetaValueTextStyle}"
                                        Foreground="{StaticResource OrangeFocusBrush}"
                                        VerticalAlignment="Center" />
 
@@ -128,7 +128,7 @@
                             Padding="12,6">
                         <TextBlock Text="{Binding TypeDisplayName}"
                                    Foreground="{Binding TypeBadgeForeground}"
-                                   Style="{StaticResource GameCardBadgeTextStyle}" />
+                                   Style="{StaticResource CardBadgeTextStyle}" />
                     </Border>
 
                     <Border Background="{Binding DifficultyBadgeBackground}"
@@ -136,14 +136,14 @@
                             Padding="12,6">
                         <TextBlock Text="{Binding DifficultyDisplayText}"
                                    Foreground="{Binding DifficultyBadgeForeground}"
-                                   Style="{StaticResource GameCardBadgeTextStyle}" />
+                                   Style="{StaticResource CardBadgeTextStyle}" />
                     </Border>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             Spacing="8">
-                    <Button Style="{StaticResource GameCardActionButtonStyle}"
+                    <Button Style="{StaticResource CardActionButtonStyle}"
                             Command="{Binding EditCommand}">
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
@@ -154,7 +154,7 @@
                                   Data="{Binding EditIconState, Converter={StaticResource IconConverter}}" />
                     </Button>
 
-                    <Button Style="{StaticResource GameCardDangerButtonStyle}"
+                    <Button Style="{StaticResource CardDangerButtonStyle}"
                             Command="{Binding DeleteCommand}">
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DangerActionButtonStateResources.xaml" />

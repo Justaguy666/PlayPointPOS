@@ -40,7 +40,7 @@
                         VerticalAlignment="Center"
                         Spacing="10">
                 <TextBlock Text="{Binding Name}"
-                           Style="{StaticResource GameListNameTextStyle}"
+                           Style="{StaticResource ListCardNameTextStyle}"
                            FontSize="{StaticResource FontSizeLarge}"
                            MaxLines="1" />
 
@@ -53,9 +53,9 @@
                                 Spacing="4"
                                 VerticalAlignment="Center">
                         <TextBlock Text="{Binding PriceLabelText}"
-                                   Style="{StaticResource GameListMetaLabelTextStyle}" />
+                                   Style="{StaticResource ListCardMetaLabelTextStyle}" />
                         <TextBlock Text="{Binding PriceText}"
-                                   Style="{StaticResource GameListPriceTextStyle}" />
+                                   Style="{StaticResource ListCardAccentValueTextStyle}" />
                     </StackPanel>
                 </Grid>
             </StackPanel>
@@ -70,13 +70,13 @@
                         HorizontalAlignment="Right">
                     <TextBlock Text="{Binding TypeDisplayName}"
                                Foreground="{Binding TypeBadgeForeground}"
-                               Style="{StaticResource GameCardBadgeTextStyle}" />
+                               Style="{StaticResource CardBadgeTextStyle}" />
                 </Border>
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             Spacing="8">
-                    <Button Style="{StaticResource GameCardActionButtonStyle}"
+                    <Button Style="{StaticResource CardActionButtonStyle}"
                             Command="{Binding EditCommand}">
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
@@ -87,7 +87,7 @@
                                   Data="{Binding EditIconState, Converter={StaticResource IconConverter}}" />
                     </Button>
 
-                    <Button Style="{StaticResource GameCardDangerButtonStyle}"
+                    <Button Style="{StaticResource CardDangerButtonStyle}"
                             Command="{Binding DeleteCommand}">
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DangerActionButtonStateResources.xaml" />

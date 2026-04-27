@@ -48,7 +48,7 @@
                 </StackPanel>
 
                 <Button Grid.Column="1"
-                        Style="{StaticResource GameCardActionButtonSmallStyle}"
+                        Style="{StaticResource CardActionButtonSmallStyle}"
                         Command="{Binding EditGoalsCommand}"
                         ToolTipService.ToolTip="{Binding EditTooltipText}"
                         VerticalAlignment="Center"

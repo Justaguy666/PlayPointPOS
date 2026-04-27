@@ -4,26 +4,26 @@
 
     <Style x:Key="MemberCardNameTextStyle"
            TargetType="TextBlock"
-           BasedOn="{StaticResource GameListNameTextStyle}">
+           BasedOn="{StaticResource ListCardNameTextStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeExtraExtraLarge}" />
         <Setter Property="MaxLines" Value="2" />
     </Style>
 
     <Style x:Key="MemberCardMetaLabelTextStyle"
            TargetType="TextBlock"
-           BasedOn="{StaticResource GameListMetaLabelTextStyle}">
+           BasedOn="{StaticResource ListCardMetaLabelTextStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}" />
     </Style>
 
     <Style x:Key="MemberCardMetaValueTextStyle"
            TargetType="TextBlock"
-           BasedOn="{StaticResource GameListMetaValueTextStyle}">
+           BasedOn="{StaticResource ListCardMetaValueTextStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
     </Style>
 
     <Style x:Key="MemberCardSpentTextStyle"
            TargetType="TextBlock"
-           BasedOn="{StaticResource GameListPriceTextStyle}">
+           BasedOn="{StaticResource ListCardAccentValueTextStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeExtraExtraLarge}" />
     </Style>
 
@@ -36,7 +36,7 @@
 
     <Style x:Key="MemberCardBadgeTextStyle"
            TargetType="TextBlock"
-           BasedOn="{StaticResource GameCardBadgeTextStyle}">
+           BasedOn="{StaticResource CardBadgeTextStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>

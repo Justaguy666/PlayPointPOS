@@ -4,35 +4,15 @@
 
     <Style x:Key="GameCardActionButtonStyle"
            TargetType="Button"
-           BasedOn="{StaticResource PrimaryActionButtonStyle}">
-        <Setter Property="Width" Value="36" />
-        <Setter Property="Height" Value="36" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="CornerRadius" Value="9" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Background" Value="{StaticResource WarningAmberBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource WarningAmberBrush}" />
-    </Style>
+           BasedOn="{StaticResource CardActionButtonStyle}" />
 
     <Style x:Key="GameCardActionButtonSmallStyle"
            TargetType="Button"
-           BasedOn="{StaticResource GameCardActionButtonStyle}">
-        <Setter Property="Width" Value="30" />
-        <Setter Property="Height" Value="30" />
-        <Setter Property="CornerRadius" Value="8" />
-    </Style>
+           BasedOn="{StaticResource CardActionButtonSmallStyle}" />
 
     <Style x:Key="GameCardDangerButtonStyle"
            TargetType="Button"
-           BasedOn="{StaticResource DangerActionButtonStyle}">
-        <Setter Property="Width" Value="36" />
-        <Setter Property="Height" Value="36" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="CornerRadius" Value="9" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-    </Style>
+           BasedOn="{StaticResource CardDangerButtonStyle}" />
 
     <Style x:Key="GameCardStockButtonStyle"
            TargetType="Button"
@@ -48,41 +28,22 @@
     </Style>
 
     <Style x:Key="GameListNameTextStyle"
-           TargetType="TextBlock">
-        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraExtraLarge}" />
-        <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
-        <Setter Property="TextWrapping" Value="WrapWholeWords" />
-        <Setter Property="MaxLines" Value="2" />
-    </Style>
+           TargetType="TextBlock"
+           BasedOn="{StaticResource ListCardNameTextStyle}" />
 
     <Style x:Key="GameListMetaLabelTextStyle"
-           TargetType="TextBlock">
-        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}" />
-        <Setter Property="Foreground" Value="{StaticResource SecondaryGrayBrush}" />
-        <Setter Property="TextWrapping" Value="NoWrap" />
-    </Style>
+           TargetType="TextBlock"
+           BasedOn="{StaticResource ListCardMetaLabelTextStyle}" />
 
     <Style x:Key="GameListMetaValueTextStyle"
-           TargetType="TextBlock">
-        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
-        <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
-        <Setter Property="TextWrapping" Value="NoWrap" />
-    </Style>
+           TargetType="TextBlock"
+           BasedOn="{StaticResource ListCardMetaValueTextStyle}" />
 
     <Style x:Key="GameListPriceTextStyle"
            TargetType="TextBlock"
-           BasedOn="{StaticResource GameListMetaValueTextStyle}">
-        <Setter Property="Foreground" Value="{StaticResource PrimaryOrangeBrush}" />
-        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraExtraLarge}" />
-        <Setter Property="FontWeight" Value="Bold" />
-    </Style>
+           BasedOn="{StaticResource ListCardAccentValueTextStyle}" />
 
     <Style x:Key="GameCardBadgeTextStyle"
-           TargetType="TextBlock">
-        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}" />
-        <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="TextWrapping" Value="NoWrap" />
-    </Style>
+           TargetType="TextBlock"
+           BasedOn="{StaticResource CardBadgeTextStyle}" />
 </ResourceDictionary>

@@ -47,14 +47,14 @@
                             HorizontalAlignment="Left">
                         <TextBlock Text="{Binding TypeDisplayName}"
                                    Foreground="{Binding TypeBadgeForeground}"
-                                   Style="{StaticResource GameCardBadgeTextStyle}" />
+                                   Style="{StaticResource CardBadgeTextStyle}" />
                     </Border>
 
                     <StackPanel Grid.Column="1"
                                 Orientation="Horizontal"
                                 VerticalAlignment="Center"
                                 Spacing="6">
-                        <Button Style="{StaticResource GameCardActionButtonStyle}"
+                        <Button Style="{StaticResource CardActionButtonStyle}"
                                 Command="{Binding EditCommand}">
                             <Button.Resources>
                                 <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
@@ -65,7 +65,7 @@
                                       Data="{Binding EditIconState, Converter={StaticResource IconConverter}}" />
                         </Button>
 
-                        <Button Style="{StaticResource GameCardDangerButtonStyle}"
+                        <Button Style="{StaticResource CardDangerButtonStyle}"
                                 Command="{Binding DeleteCommand}">
                             <Button.Resources>
                                 <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DangerActionButtonStateResources.xaml" />
@@ -121,7 +121,7 @@
                             HorizontalAlignment="Right">
                         <TextBlock Text="{Binding DifficultyDisplayText}"
                                    Foreground="{Binding DifficultyBadgeForeground}"
-                                   Style="{StaticResource GameCardBadgeTextStyle}" />
+                                   Style="{StaticResource CardBadgeTextStyle}" />
                     </Border>
                 </Grid>
 

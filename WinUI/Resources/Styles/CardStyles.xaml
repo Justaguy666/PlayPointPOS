@@ -11,11 +11,82 @@
         <Setter Property="CornerRadius" Value="12" />
     </Style>
 
+    <Style x:Key="CardActionButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource PrimaryActionButtonStyle}">
+        <Setter Property="Width" Value="36" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="9" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="{StaticResource WarningAmberBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource WarningAmberBrush}" />
+    </Style>
+
+    <Style x:Key="CardActionButtonSmallStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource CardActionButtonStyle}">
+        <Setter Property="Width" Value="30" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="CornerRadius" Value="8" />
+    </Style>
+
+    <Style x:Key="CardDangerButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource DangerActionButtonStyle}">
+        <Setter Property="Width" Value="36" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="9" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
     <Style x:Key="CardTitleTextStyle"
            TargetType="TextBlock">
         <Setter Property="FontSize" Value="{StaticResource SubtitleTextBlockFontSize}" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+    </Style>
+
+    <Style x:Key="ListCardNameTextStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="TextWrapping" Value="WrapWholeWords" />
+        <Setter Property="MaxLines" Value="2" />
+    </Style>
+
+    <Style x:Key="ListCardMetaLabelTextStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}" />
+        <Setter Property="Foreground" Value="{StaticResource SecondaryGrayBrush}" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+    </Style>
+
+    <Style x:Key="ListCardMetaValueTextStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{StaticResource BlackBrush}" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+    </Style>
+
+    <Style x:Key="ListCardAccentValueTextStyle"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource ListCardMetaValueTextStyle}">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryOrangeBrush}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeExtraExtraLarge}" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style x:Key="CardBadgeTextStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
     </Style>
 
     <Style x:Key="FieldLabelTextStyle"

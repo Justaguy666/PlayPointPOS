@@ -129,17 +129,7 @@
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
                         <Button.Resources>
-                            <ResourceDictionary>
-                                <StaticResource x:Key="ButtonBackground" ResourceKey="TransparentBrush" />
-                                <StaticResource x:Key="ButtonForeground" ResourceKey="TransparentBrush" />
-                                <StaticResource x:Key="ButtonBorderBrush" ResourceKey="TransparentBrush" />
-                                <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="TransparentBrush" />
-                                <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="TransparentBrush" />
-                                <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="TransparentBrush" />
-                                <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="TransparentBrush" />
-                                <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="TransparentBrush" />
-                                <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="TransparentBrush" />
-                            </ResourceDictionary>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/TransparentButtonStateResources.xaml" />
                         </Button.Resources>
                     </Button>
                 </Grid>

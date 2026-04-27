@@ -207,7 +207,7 @@
                                                     Orientation="Horizontal"
                                                     Spacing="8"
                                                     VerticalAlignment="Center">
-                                            <Button Style="{StaticResource GameCardActionButtonStyle}"
+                                            <Button Style="{StaticResource CardActionButtonStyle}"
                                                     Command="{x:Bind BeginEditCommand}"
                                                     ToolTipService.ToolTip="Edit">
                                                 <Button.Resources>
@@ -219,7 +219,7 @@
                                                           Foreground="{StaticResource WhiteBrush}" />
                                             </Button>
 
-                                            <Button Style="{StaticResource GameCardDangerButtonStyle}"
+                                            <Button Style="{StaticResource CardDangerButtonStyle}"
                                                     Command="{x:Bind DeleteCommand}">
                                                 <Button.Resources>
                                                     <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DangerActionButtonStateResources.xaml" />
