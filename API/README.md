@@ -1,9 +1,16 @@
-# 🌐 API Layer
+# PlayPointPOS API
 
-> Dự án **GraphQL API** xây dựng trên **ASP.NET Core**, đóng vai trò là cổng giao tiếp giữa client (WinUI) và các tầng nghiệp vụ bên dưới.
+Express + JavaScript backend for PlayPointPOS.
 
-## Trách nhiệm
+## Scripts
 
-## Công nghệ
+```bash
+npm run dev
+npm start
+```
 
-## Cấu trúc
+The health endpoint is available at:
+
+```text
+GET /health
+```

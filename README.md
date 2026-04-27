@@ -58,9 +58,9 @@ Dưới đây là cấu trúc thư mục chính của dự án PlayPointPOS:
 
 ```text
 PlayPointPOS/
-├── API/                # Dự án GraphQL API (ASP.NET Core), xử lý request từ WinUI
-│   ├── Program.cs
-│   ├── appsettings.json
+├── API/                # Backend Express + JavaScript, cung cấp HTTP API cho WinUI
+│   ├── package.json
+│   ├── src/
 │   └── ...
 ├── Application/        # Thư mục chứa các service, logic nghiệp vụ, chỉ phụ thuộc Domain
 │   └── ...
