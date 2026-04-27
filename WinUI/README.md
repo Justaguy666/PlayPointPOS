@@ -1,6 +1,6 @@
 # 🖥️ WinUI Layer
 
-> Tầng **Presentation** là ứng dụng desktop xây dựng trên **WinUI 3**, giao tiếp với backend thông qua GraphQL API.
+> Tầng **Presentation** là ứng dụng desktop xây dựng trên **WinUI 3**, giao tiếp với backend thông qua HTTP API.
 
 ## Trách nhiệm
 
@@ -37,7 +37,7 @@ WinUI/
 
 ├── Services/                     # Tầng service xử lý logic, giao tiếp bên ngoài hoặc UI abstraction
 │   ├── Dialog/                   # Hiển thị dialog (alert, confirm, custom dialog) thông qua service
-│   ├── GraphQL/                  # Gọi API GraphQL (query, mutation, client setup)
+│   ├── Api/                      # Gọi HTTP API (client setup, request/response DTO)
 │   ├── Implementations/          # Cài đặt cụ thể của các service (class thực thi)
 │   ├── Interfaces/               # Interface của service (phục vụ DI, test, loose coupling)
 │   └── Navigation/               # Điều hướng giữa các Page/View (INavigationService, routing)
