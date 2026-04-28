@@ -43,6 +43,8 @@ public sealed partial class MainWindow : Window
 
         UpdateLocalizedText();
         _localizationService.LanguageChanged += HandleLanguageChanged;
+        ViewModel.UpdateNavigationLayout(AppWindow.Size.Width);
+        SizeChanged += HandleWindowSizeChanged;
 
         ConfigureTitleBar();
 
@@ -60,8 +62,14 @@ public sealed partial class MainWindow : Window
         this.Closed += (s, e) =>
         {
             _localizationService.LanguageChanged -= HandleLanguageChanged;
+            SizeChanged -= HandleWindowSizeChanged;
             Environment.Exit(0);
         };
+    }
+
+    private void HandleWindowSizeChanged(object sender, WindowSizeChangedEventArgs args)
+    {
+        ViewModel.UpdateNavigationLayout(args.Size.Width);
     }
 
     private void HandleLanguageChanged()

@@ -277,7 +277,7 @@
         <value>Create account</value>
     </data>
   <data name="LoginDialogErrorText" xml:space="preserve">
-        <value>Invalid Email or password</value>
+        <value>Invalid email or password.</value>
     </data>
   <data name="LoginSuccessTitle" xml:space="preserve">
         <value>Login successful</value>
@@ -301,16 +301,16 @@
 		<value>Password...</value>
 	</data>
   <data name="RegisterDialogConfirmPasswordLabelText" xml:space="preserve">
-		<value>Confirm Password</value>
+		<value>Confirm password</value>
 	</data>
   <data name="RegisterDialogConfirmPasswordPlaceholderText" xml:space="preserve">
-		<value>Confirm Password...</value>
+		<value>Confirm password...</value>
 	</data>
   <data name="RegisterDialogOTPLabelText" xml:space="preserve">
 		<value>OTP</value>
 	</data>
   <data name="RegisterDialogOTPPlaceholderText" xml:space="preserve">
-		<value>OTP Code...</value>
+		<value>OTP code...</value>
 	</data>
   <data name="RegisterDialogResetButtonText" xml:space="preserve">
         <value>Reset</value>
@@ -322,10 +322,10 @@
         <value>Please enter a valid email address.</value>
     </data>
   <data name="RegisterDialogErrorText">
-    <value>Registration failed. Please check your inputs and try again!</value>
+    <value>Registration failed. Please check your information and try again.</value>
   </data>
   <data name="RegisterDialogPasswordMismatchText" xml:space="preserve">
-		<value>Confirm password doesn't match!</value>
+		<value>The confirmation password does not match.</value>
 	</data>
   <data name="RegisterSuccessTitle" xml:space="preserve">
         <value>Register successful</value>
@@ -358,10 +358,13 @@
         <value>Members</value>
     </data>
   <data name="NavHistoryLabel" xml:space="preserve">
-        <value>Transaction</value>
+        <value>Transactions</value>
   </data>
   <data name="NavSettingsLabel" xml:space="preserve">
         <value>Settings</value>
+    </data>
+  <data name="NavigationToggleSidebarToolTip" xml:space="preserve">
+        <value>Collapse or expand navigation</value>
     </data>
   <data name="TodayRevenueStatCardTitle" xml:space="preserve">
     <value>Today's revenue</value>
@@ -412,31 +415,31 @@
     <value>vs yesterday</value>
   </data>
   <data name="TrendingListTitle" xml:space="preserve">
-    <value>Trendings</value>
+    <value>Trending now</value>
   </data>
   <data name="TrendingListGameLabel" xml:space="preserve">
     <value>Game</value>
   </data>
   <data name="TrendingListGameName" xml:space="preserve">
-    <value>Ma s�i</value>
+    <value>Werewolf</value>
   </data>
   <data name="TrendingListFoodLabel" xml:space="preserve">
     <value>Food</value>
   </data>
   <data name="TrendingListFoodName" xml:space="preserve">
-    <value>M? cay</value>
+    <value>Spicy noodles</value>
   </data>
   <data name="TrendingListDrinkLabel" xml:space="preserve">
     <value>Drink</value>
   </data>
   <data name="TrendingListDrinkName" xml:space="preserve">
-    <value>B?c x?u</value>
+    <value>Bac xiu coffee</value>
   </data>
   <data name="QuickStatsTitle" xml:space="preserve">
     <value>Quick Stats</value>
   </data>
   <data name="QuickStatsAverageHoursPerAreaLabel" xml:space="preserve">
-    <value>Avg hour per area</value>
+    <value>Avg hours per area</value>
   </data>
   <data name="QuickStatsAverageRevenuePerInvoiceLabel" xml:space="preserve">
     <value>Avg revenue per bill</value>
@@ -724,7 +727,7 @@
     <value>Area Management</value>
   </data>
   <data name="AreaManagementPageAddAreaButton" xml:space="preserve">
-    <value>Add new</value>
+    <value>Add area</value>
   </data>
   <data name="AreaManagementPageAllAreasFilter" xml:space="preserve">
     <value>All</value>
@@ -778,7 +781,7 @@
     <value>In use</value>
   </data>
   <data name="AreaFilterDialogTitleText" xml:space="preserve">
-    <value>Filter Areas</value>
+    <value>Filter areas</value>
   </data>
   <data name="AreaFilterDialogStatusLabelText" xml:space="preserve">
     <value>Status</value>
@@ -868,7 +871,7 @@
 		<value>Cancel</value>
 	</data>
   <data name="ReservationInfoTitleText" xml:space="preserve">
-		<value>Reservation Information</value>
+		<value>Reservation information</value>
 	</data>
   <data name="ReservationCustomerNameLabelText" xml:space="preserve">
 		<value>Customer name:</value>
@@ -892,7 +895,7 @@
 		<value>Reserve</value>
 	</data>
   <data name="ReservationDialogEditTitleText" xml:space="preserve">
-		<value>Edit Reservation</value>
+		<value>Edit reservation</value>
 	</data>
   <data name="ReservationDialogNameLabelText" xml:space="preserve">
 		<value>Customer name</value>
@@ -964,13 +967,13 @@
 		<value>Guest count cannot exceed capacity {0}.</value>
 	</data>
   <data name="GameServiceInfoFormat" xml:space="preserve">
-		<value>Rented at: {0}</value>
+		<value>Borrowed at: {0}</value>
 	</data>
   <data name="PaidButtonText" xml:space="preserve">
-		<value>Paid</value>
+		<value>Pay</value>
 	</data>
   <data name="EndSessionButtonText" xml:space="preserve">
-		<value>Close</value>
+		<value>End session</value>
 	</data>
   <data name="ReturnButtonText" xml:space="preserve">
 		<value>Return</value>
@@ -1024,7 +1027,7 @@
 		<value>Adding food and drinks to an active session is not available yet.</value>
 	</data>
   <data name="ProductServicesTotalPriceLabelText" xml:space="preserve">
-		<value>Food total:</value>
+		<value>Food/drink total:</value>
 	</data>
   <data name="CurrentTotalPriceLabelText" xml:space="preserve">
 		<value>GRAND TOTAL</value>
@@ -1213,10 +1216,10 @@
     <value>{0} games</value>
   </data>
   <data name="GameManagementPagePageInfoFormat" xml:space="preserve">
-    <value>Showing {0} to {1} of {2} � Page {3} of {4}</value>
+    <value>Showing {0} to {1} of {2} • Page {3} of {4}</value>
   </data>
   <data name="GameManagementPageNoGamesText" xml:space="preserve">
-    <value>No games match the current search and sorting state.</value>
+    <value>No games match the current search, filters, or sorting.</value>
   </data>
   <data name="GameManagementPageSortFieldNameOption" xml:space="preserve">
     <value>Name</value>
@@ -1267,13 +1270,13 @@
     <value>Difficulty:</value>
   </data>
   <data name="GridGameCardControlPriceLabel" xml:space="preserve">
-    <value>Price / Hour:</value>
+    <value>Price/hour:</value>
   </data>
   <data name="ListGameCardControlPlayersLabel" xml:space="preserve">
     <value>Players</value>
   </data>
   <data name="ListGameCardControlPriceLabel" xml:space="preserve">
-    <value>Price / Hour</value>
+    <value>Price/hour</value>
   </data>
   <data name="ListGameCardControlStockLabel" xml:space="preserve">
     <value>Stock:</value>
@@ -1354,7 +1357,7 @@
     <value>Acquisition cost...</value>
   </data>
   <data name="GameDialogHourlyPriceLabelText" xml:space="preserve">
-    <value>Price / Hour</value>
+    <value>Price/hour</value>
   </data>
   <data name="GameDialogHourlyPricePlaceholderText" xml:space="preserve">
     <value>Hourly price...</value>
@@ -1393,7 +1396,7 @@
     <value>Player count...</value>
   </data>
   <data name="GameFilterDialogHourlyPriceRangeLabelText" xml:space="preserve">
-    <value>Price</value>
+    <value>Hourly rate</value>
   </data>
   <data name="GameFilterDialogHourlyPriceFromPlaceholderText" xml:space="preserve">
     <value>Lowest...</value>

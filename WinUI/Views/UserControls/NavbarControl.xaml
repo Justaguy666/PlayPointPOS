@@ -23,7 +23,6 @@
     </UserControl.Resources>
 
     <Grid x:Name="NavbarGrid" Background="{StaticResource WhiteBrush}" Height="64" SizeChanged="NavbarGrid_SizeChanged">
-
         <ItemsRepeater x:Name="NavRepeater"
                        ItemsSource="{Binding NavigationItems}"
                        HorizontalAlignment="Stretch">

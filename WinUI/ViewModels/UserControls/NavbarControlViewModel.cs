@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Application.Navigation;
 using Application.Navigation.Requests;
 using Application.Services;
@@ -13,8 +14,11 @@ namespace WinUI.ViewModels.UserControls;
 public partial class NavbarControlViewModel : LocalizedViewModelBase
 {
     private const double WideEnoughThreshold = 120.0;
+    private const double ExpandedSidebarWidthValue = 248.0;
+    private const double CollapsedSidebarWidthValue = 76.0;
 
     private readonly INavigationService _navigationService;
+    private readonly IDialogService _dialogService;
 
     public ObservableCollection<NavbarItemModel> NavigationItems { get; } = [];
 
@@ -24,13 +28,47 @@ public partial class NavbarControlViewModel : LocalizedViewModelBase
     [ObservableProperty]
     public partial bool IsWideEnough { get; set; } = true;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SidebarWidth))]
+    public partial bool IsSidebarExpanded { get; set; } = true;
+
+    [ObservableProperty]
+    public partial string LogoutButtonText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string ChangePasswordButtonText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string ToggleSidebarToolTipText { get; set; } = string.Empty;
+
+    public double SidebarWidth => IsSidebarExpanded ? ExpandedSidebarWidthValue : CollapsedSidebarWidthValue;
+
+    public IconState ToggleSidebarIconState { get; } = new() { Kind = IconKind.List, Size = 20 };
+
+    public IconState ChangePasswordIconState { get; } = new() { Kind = IconKind.Password, Size = 20 };
+
+    public IconState LogoutIconState { get; } = new() { Kind = IconKind.Logout, Size = 20 };
+
     public IRelayCommand<NavbarItemModel> NavigateCommand { get; }
 
-    public NavbarControlViewModel(INavigationService navigationService, ILocalizationService localizationService)
+    public IRelayCommand ToggleSidebarCommand { get; }
+
+    public IAsyncRelayCommand LogoutCommand { get; }
+
+    public IAsyncRelayCommand ChangePasswordCommand { get; }
+
+    public NavbarControlViewModel(
+        INavigationService navigationService,
+        IDialogService dialogService,
+        ILocalizationService localizationService)
         : base(localizationService)
     {
         _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+        _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         NavigateCommand = new RelayCommand<NavbarItemModel>(Navigate);
+        ToggleSidebarCommand = new RelayCommand(ToggleSidebar);
+        LogoutCommand = new AsyncRelayCommand(OnLogout);
+        ChangePasswordCommand = new AsyncRelayCommand(OnChangePassword);
 
         InitializeNavigationItems();
         RefreshLocalizedText();
@@ -42,6 +80,10 @@ public partial class NavbarControlViewModel : LocalizedViewModelBase
         {
             navItem.Label = LocalizationService.GetString(navItem.LabelResourceKey);
         }
+
+        LogoutButtonText = LocalizationService.GetString("SettingsPageLogoutButton");
+        ChangePasswordButtonText = LocalizationService.GetString("SettingsPageChangePasswordButton");
+        ToggleSidebarToolTipText = LocalizationService.GetString("NavigationToggleSidebarToolTip");
     }
 
     public void SelectNavigationItem(Type? requestType)
@@ -94,5 +136,30 @@ public partial class NavbarControlViewModel : LocalizedViewModelBase
         SelectNavigationItem(item.RequestType);
         var request = (INavigationRequest)Activator.CreateInstance(item.RequestType)!;
         _navigationService.Navigate(request);
+    }
+
+    private void ToggleSidebar()
+    {
+        IsSidebarExpanded = !IsSidebarExpanded;
+    }
+
+    private async Task OnLogout()
+    {
+        bool isConfirmed = await _dialogService.ShowConfirmationAsync(
+            titleKey: "ConfirmLogoutTitle",
+            messageKey: "ConfirmLogoutMessage",
+            confirmButtonTextKey: "ConfirmLogoutButton",
+            cancelButtonTextKey: "CancelButtonText"
+        );
+
+        if (isConfirmed)
+        {
+            _navigationService.Navigate(new NavigateToStarting());
+        }
+    }
+
+    private async Task OnChangePassword()
+    {
+        await _dialogService.ShowDialogAsync("Otp");
     }
 }

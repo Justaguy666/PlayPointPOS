@@ -5,11 +5,19 @@ namespace WinUI.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
+    private const double CompactNavigationBreakpoint = 920.0;
     private const decimal HeaderTodayRevenueAmount = 1_005_000m;
     private readonly ILocalizationService _localizationService;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsSidebarVisible))]
+    [NotifyPropertyChangedFor(nameof(IsCompactNavigationVisible))]
     public partial bool IsNavigationVisible { get; set; } = true;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsSidebarVisible))]
+    [NotifyPropertyChangedFor(nameof(IsCompactNavigationVisible))]
+    public partial bool IsCompactNavigationMode { get; set; }
 
     [ObservableProperty]
     public partial string TodayRevenue { get; set; } = string.Empty;
@@ -29,6 +37,10 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial string ReservedAreasLabelText { get; set; } = string.Empty;
 
+    public bool IsSidebarVisible => IsNavigationVisible && !IsCompactNavigationMode;
+
+    public bool IsCompactNavigationVisible => IsNavigationVisible && IsCompactNavigationMode;
+
     public MainViewModel(ILocalizationService localizationService)
     {
         _localizationService = localizationService;
@@ -36,6 +48,14 @@ public partial class MainViewModel : ObservableObject
         _localizationService.CurrencyChanged += UpdateHeaderMetrics;
 
         UpdateHeaderTexts();
+    }
+
+    public void UpdateNavigationLayout(double windowWidth)
+    {
+        if (double.IsNaN(windowWidth) || windowWidth <= 0)
+            return;
+
+        IsCompactNavigationMode = windowWidth < CompactNavigationBreakpoint;
     }
 
     private void UpdateHeaderTexts()

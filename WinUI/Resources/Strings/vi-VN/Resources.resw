@@ -277,7 +277,7 @@
     <value>Tạo tài khoản</value>
   </data>
   <data name="LoginDialogErrorText" xml:space="preserve">
-    <value>Tên đăng nhập hoặc mật khẩu không đúng</value>
+    <value>Email hoặc mật khẩu không đúng.</value>
   </data>
   <data name="LoginSuccessTitle" xml:space="preserve">
     <value>Đăng nhập thành công</value>
@@ -363,6 +363,9 @@
   <data name="NavSettingsLabel" xml:space="preserve">
     <value>Cài đặt</value>
   </data>
+  <data name="NavigationToggleSidebarToolTip" xml:space="preserve">
+    <value>Thu gọn/mở rộng điều hướng</value>
+  </data>
   <data name="TodayRevenueStatCardTitle" xml:space="preserve">
     <value>Doanh thu hôm nay</value>
   </data>
@@ -400,7 +403,7 @@
     <value>so với hôm qua</value>
   </data>
   <data name="TodayProductStatCardTitle" xml:space="preserve">
-    <value>Đồ ăn/uống</value>
+    <value>Món ăn &amp; thức uống</value>
   </data>
   <data name="TodayProductStatCardValueLabel" xml:space="preserve">
     <value>5.680.000 đ</value>
@@ -424,10 +427,10 @@
     <value>Món ăn</value>
   </data>
   <data name="TrendingListFoodName" xml:space="preserve">
-    <value>Mỳ cay</value>
+    <value>Mì cay</value>
   </data>
   <data name="TrendingListDrinkLabel" xml:space="preserve">
-    <value>Đồ uống</value>
+    <value>Thức uống</value>
   </data>
   <data name="TrendingListDrinkName" xml:space="preserve">
     <value>Bạc xỉu</value>
@@ -436,7 +439,7 @@
     <value>Thống kê nhanh</value>
   </data>
   <data name="QuickStatsAverageHoursPerAreaLabel" xml:space="preserve">
-    <value>Trung bình giờ mỗi khu vực</value>
+    <value>Giờ trung bình/khu vực</value>
   </data>
   <data name="QuickStatsAverageRevenuePerInvoiceLabel" xml:space="preserve">
     <value>Trung bình doanh thu/hóa đơn</value>
@@ -724,7 +727,7 @@
     <value>Quản lý khu vực</value>
   </data>
   <data name="AreaManagementPageAddAreaButton" xml:space="preserve">
-    <value>Thêm mới</value>
+    <value>Thêm khu vực</value>
   </data>
   <data name="AreaManagementPageAllAreasFilter" xml:space="preserve">
     <value>Tất cả</value>
@@ -769,10 +772,10 @@
     <value>Đã xóa {0} thành công.</value>
   </data>
   <data name="AreaManagementAvailableStatusText" xml:space="preserve">
-    <value>Khả dụng</value>
+    <value>Còn trống</value>
   </data>
   <data name="AreaManagementReservedStatusText" xml:space="preserve">
-    <value>Đặt chỗ</value>
+    <value>Đã đặt</value>
   </data>
   <data name="AreaManagementRentedStatusText" xml:space="preserve">
     <value>Đang sử dụng</value>
@@ -828,6 +831,9 @@
   <data name="AreaFilterDialogInvalidRangeText" xml:space="preserve">
     <value>Vui lòng nhập khoảng lọc hợp lệ.</value>
   </data>
+  <data name="AreaManagementRentedTotalAmountFormat" xml:space="preserve">
+    <value>{0}</value>
+  </data>
   <data name="AreaManagementCapacityFormat" xml:space="preserve">
     <value>{0} khách</value>
   </data>
@@ -856,7 +862,7 @@
 		<value>Đặt chỗ</value>
 	</data>
   <data name="CheckInButtonText" xml:space="preserve">
-		<value>Đã đến</value>
+		<value>Nhận khách</value>
 	</data>
   <data name="EditReservationButtonText" xml:space="preserve">
 		<value>Sửa</value>
@@ -966,6 +972,9 @@
   <data name="PaidButtonText" xml:space="preserve">
 		<value>Thanh toán</value>
 	</data>
+  <data name="EndSessionButtonText" xml:space="preserve">
+    <value>Kết thúc</value>
+  </data>
   <data name="ReturnButtonText" xml:space="preserve">
 		<value>Trả</value>
 	</data>
@@ -977,9 +986,6 @@
 	</data>
   <data name="ServiceActionPlaceholderText" xml:space="preserve">
 		<value>Thao tác</value>
-	</data>
-  <data name="EndSessionButtonText" xml:space="preserve">
-		<value>Đóng</value>
 	</data>
   <data name="DetailedRentedCardCapacityFormat" xml:space="preserve">
 		<value>{0}/{1} người</value>
@@ -1012,17 +1018,17 @@
 		<value>Tổng tiền game:</value>
 	</data>
   <data name="ProductServicesTitleText" xml:space="preserve">
-		<value>Đồ ăn &amp; nước</value>
-	</data>
+    <value>Món ăn &amp; thức uống</value>
+  </data>
   <data name="AddProductButtonText" xml:space="preserve">
 		<value>Thêm</value>
 	</data>
   <data name="AreaSessionAddProductUnavailableMessage" xml:space="preserve">
-		<value>Chưa hỗ trợ thêm đồ ăn và nước vào phiên đang hoạt động.</value>
-	</data>
+    <value>Chưa hỗ trợ thêm món ăn và thức uống vào phiên đang hoạt động.</value>
+  </data>
   <data name="ProductServicesTotalPriceLabelText" xml:space="preserve">
-		<value>Tổng tiền đồ ăn:</value>
-	</data>
+    <value>Tổng tiền món:</value>
+  </data>
   <data name="CurrentTotalPriceLabelText" xml:space="preserve">
 		<value>TỔNG CỘNG</value>
 	</data>
@@ -1054,14 +1060,14 @@
 		<value>Phòng</value>
 	</data>
   <data name="AreaDialogMaxCapacityLabelText" xml:space="preserve">
-		<value>Số người tối đa</value>
-	</data>
+    <value>Sức chứa tối đa</value>
+  </data>
   <data name="AreaDialogHourlyPriceLabelText" xml:space="preserve">
-		<value>Giá thuê / Giờ</value>
-	</data>
+    <value>Giá thuê/giờ</value>
+  </data>
   <data name="AreaDialogHourlyPricePlaceholderText" xml:space="preserve">
-		<value>Giá thuê / giờ...</value>
-	</data>
+    <value>Giá thuê/giờ...</value>
+  </data>
   <data name="AreaDialogResetButtonText" xml:space="preserve">
 		<value>Đặt lại</value>
 	</data>
@@ -1120,19 +1126,19 @@
 		<value>Đổi mật khẩu?</value>
 	</data>
   <data name="ConfirmChangePasswordMessage" xml:space="preserve">
-		<value>Bạn có muốn xác nhận đổi mật khẩu?</value>
+		<value>Bạn cần xác thực danh tính trước khi đổi mật khẩu. Tiếp tục?</value>
 	</data>
   <data name="ConfirmChangePasswordButton" xml:space="preserve">
 		<value>Tiếp tục</value>
 	</data>
   <data name="ConfirmCheckInTitle" xml:space="preserve">
-		<value>Xác nhận check-in?</value>
+		<value>Nhận khách đặt chỗ?</value>
 	</data>
   <data name="ConfirmCheckInMessage" xml:space="preserve">
-		<value>Bạn có chắc muốn check-in đặt chỗ này ngay bây giờ?</value>
+		<value>Bạn có chắc muốn nhận khách cho đặt chỗ này ngay bây giờ?</value>
 	</data>
   <data name="ConfirmCheckInButton" xml:space="preserve">
-		<value>Check-in</value>
+		<value>Nhận khách</value>
 	</data>
   <data name="ConfirmCancelReservationTitle" xml:space="preserve">
 		<value>Hủy đặt chỗ?</value>
@@ -1153,8 +1159,8 @@
 		<value>Tiền giờ:</value>
 	</data>
   <data name="PaymentDialogProductFeeLabelText" xml:space="preserve">
-		<value>Tiền đồ ăn/uống:</value>
-	</data>
+    <value>Tiền món ăn/thức uống:</value>
+  </data>
   <data name="PaymentDialogGameFeeLabelText" xml:space="preserve">
 		<value>Tiền game:</value>
 	</data>
@@ -1183,28 +1189,28 @@
 		<value>Xác nhận thanh toán?</value>
 	</data>
   <data name="ConfirmPaymentMessage" xml:space="preserve">
-		<value>Sau khi thanh toán, khu vực sẽ trở về trạng thái khả dụng. Tiếp tục?</value>
-	</data>
+    <value>Sau khi thanh toán, khu vực sẽ trở về trạng thái còn trống. Tiếp tục?</value>
+  </data>
   <data name="ConfirmPaymentButton" xml:space="preserve">
 		<value>Thanh toán</value>
 	</data>
   <data name="GameAddNewGameLabel" xml:space="preserve">
-		<value>Thêm mới</value>
-	</data>
+    <value>Thêm game</value>
+  </data>
   <data name="GameAddNewCategoryLabel" xml:space="preserve">
-		<value>Thêm danh mục</value>
-	</data>
+    <value>Thêm danh mục game</value>
+  </data>
   <data name="GameAddComboBoxPlaceholder" xml:space="preserve">
 		<value>Thêm mới</value>
 	</data>
   <data name="SearchPlaceholderText" xml:space="preserve">
-		<value>Tìm kiếm trò chơi...</value>
-	</data>
+    <value>Tìm kiếm game...</value>
+  </data>
   <data name="GameManagementPageFilterButton" xml:space="preserve">
     <value>Bộ lọc</value>
   </data>
   <data name="GameManagementPageManageGameTypesButton" xml:space="preserve">
-    <value>Danh mục</value>
+    <value>Danh mục game</value>
   </data>
   <data name="GameManagementPageItemsCountFormat" xml:space="preserve">
     <value>{0} game</value>
@@ -1213,7 +1219,7 @@
     <value>Hiển thị {0} đến {1} trên {2} • Trang {3} trên {4}</value>
   </data>
   <data name="GameManagementPageNoGamesText" xml:space="preserve">
-    <value>Không tìm thấy game phù hợp với bộ lọc hiện tại.</value>
+    <value>Không tìm thấy game phù hợp với tìm kiếm hoặc bộ lọc hiện tại.</value>
   </data>
   <data name="GameManagementPageSortFieldNameOption" xml:space="preserve">
     <value>Tên</value>
@@ -1264,13 +1270,13 @@
     <value>Độ khó:</value>
   </data>
   <data name="GridGameCardControlPriceLabel" xml:space="preserve">
-    <value>Giá thuê / Giờ:</value>
+    <value>Giá thuê/giờ:</value>
   </data>
   <data name="ListGameCardControlPlayersLabel" xml:space="preserve">
     <value>Số người chơi</value>
   </data>
   <data name="ListGameCardControlPriceLabel" xml:space="preserve">
-    <value>Giá thuê / Giờ</value>
+    <value>Giá thuê/giờ</value>
   </data>
   <data name="ListGameCardControlStockLabel" xml:space="preserve">
     <value>Tồn kho:</value>
@@ -1282,7 +1288,7 @@
     <value>Tính năng quản lý danh mục game sẽ được bổ sung ở bước tiếp theo.</value>
   </data>
   <data name="GameTypeDialogTitleText" xml:space="preserve">
-    <value>Quản lý danh mục</value>
+    <value>Quản lý danh mục game</value>
   </data>
   <data name="GameTypeDialogAddButtonText" xml:space="preserve">
     <value>Thêm</value>
@@ -1351,7 +1357,7 @@
     <value>Giá nhập kho...</value>
   </data>
   <data name="GameDialogHourlyPriceLabelText" xml:space="preserve">
-    <value>Giá thuê / Giờ</value>
+    <value>Giá thuê/giờ</value>
   </data>
   <data name="GameDialogHourlyPricePlaceholderText" xml:space="preserve">
     <value>Giá thuê...</value>
@@ -1363,7 +1369,7 @@
     <value>Chưa chọn ảnh</value>
   </data>
   <data name="GameDialogStockQuantityLabelText" xml:space="preserve">
-    <value>Số lượng khởi tạo</value>
+    <value>Tồn kho ban đầu</value>
   </data>
   <data name="GameDialogStockQuantityPlaceholderText" xml:space="preserve">
     <value>Số lượng ban đầu...</value>
@@ -1390,7 +1396,7 @@
     <value>Số người chơi...</value>
   </data>
   <data name="GameFilterDialogHourlyPriceRangeLabelText" xml:space="preserve">
-    <value>Giá</value>
+    <value>Giá thuê/giờ</value>
   </data>
   <data name="GameFilterDialogHourlyPriceFromPlaceholderText" xml:space="preserve">
     <value>Thấp nhất...</value>
@@ -1438,10 +1444,10 @@
     <value>Lưu</value>
   </data>
   <data name="GridGameCardControlStockLabel" xml:space="preserve">
-    <value>Kho</value>
+    <value>Tồn kho</value>
   </data>
   <data name="ProductManagementPageAddProductButton" xml:space="preserve">
-    <value>Thêm mới</value>
+    <value>Thêm sản phẩm</value>
   </data>
   <data name="ProductManagementPageSearchPlaceholderText" xml:space="preserve">
     <value>Tìm kiếm món ăn và thức uống...</value>
@@ -1516,7 +1522,7 @@
     <value>Giá bán</value>
   </data>
   <data name="ProductDialogPricePlaceholderText" xml:space="preserve">
-    <value>Giá sản phẩm...</value>
+    <value>Giá bán...</value>
   </data>
   <data name="ProductDialogImageUriLabelText" xml:space="preserve">
     <value>Ảnh</value>
@@ -1528,7 +1534,7 @@
     <value>Chọn ảnh</value>
   </data>
   <data name="ProductDialogStockQuantityLabelText" xml:space="preserve">
-    <value>Số lượng khởi tạo</value>
+    <value>Tồn kho ban đầu</value>
   </data>
   <data name="ProductDialogStockQuantityPlaceholderText" xml:space="preserve">
     <value>Số lượng ban đầu...</value>
@@ -1594,7 +1600,7 @@
     <value>Lưu</value>
   </data>
   <data name="ProductCardControlStockLabel" xml:space="preserve">
-    <value>Kho</value>
+    <value>Tồn kho</value>
   </data>
   <data name="ProductCardControlPriceLabel" xml:space="preserve">
     <value>Giá</value>
@@ -1705,7 +1711,7 @@
     <value>Giảm giá %...</value>
   </data>
   <data name="MembershipPackageDialogMinSpentLabelText" xml:space="preserve">
-    <value>Mốc chi tiêu</value>
+    <value>Chi tiêu tối thiểu</value>
   </data>
   <data name="MembershipPackageDialogDiscountLabelText" xml:space="preserve">
     <value>Giảm giá</value>
@@ -1813,13 +1819,13 @@
     <value>Vui lòng nhập khoảng lọc hợp lệ.</value>
   </data>
   <data name="MemberManagementPageAddMemberButton" xml:space="preserve">
-    <value>Thêm mới</value>
+    <value>Thêm thành viên</value>
   </data>
   <data name="MemberManagementPageManageMembershipPackagesButton" xml:space="preserve">
     <value>Quản lý gói</value>
   </data>
   <data name="MemberManagementPageFilterButton" xml:space="preserve">
-    <value>Bộ Lọc</value>
+    <value>Bộ lọc</value>
   </data>
   <data name="MemberManagementPageSearchPlaceholderText" xml:space="preserve">
     <value>Tìm kiếm thành viên...</value>

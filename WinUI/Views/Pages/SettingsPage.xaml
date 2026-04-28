@@ -35,33 +35,33 @@
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right"
-                            Spacing="12">
-                    <Button Command="{x:Bind ViewModel.ChangePasswordCommand, Mode=OneWay}"
+                            Spacing="12"
+                            Visibility="{x:Bind ViewModel.IsCompactAccountActionsVisible, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
+                    <Button Command="{x:Bind ViewModel.AccountNavigationViewModel.ChangePasswordCommand, Mode=OneWay}"
                             Style="{StaticResource SecondaryActionButtonStyle}"
                             Padding="24,10"
                             Background="{StaticResource WhiteBrush}">
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
                         </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.ChangePasswordButtonText, Mode=OneWay}" />
+                        <TextBlock Text="{x:Bind ViewModel.AccountNavigationViewModel.ChangePasswordButtonText, Mode=OneWay}" />
                     </Button>
 
-                    <Button Command="{x:Bind ViewModel.LogoutCommand, Mode=OneWay}"
+                    <Button Command="{x:Bind ViewModel.AccountNavigationViewModel.LogoutCommand, Mode=OneWay}"
                             Style="{StaticResource DangerActionButtonStyle}"
-                            Padding="24,10"
-                            >
+                            Padding="24,10">
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DangerHoverButtonStateResources.xaml" />
                         </Button.Resources>
                         <StackPanel Orientation="Horizontal" Spacing="4">
-                            <PathIcon 
-                                Width="20"
-                                Height="20"
-                                Data="{x:Bind ViewModel.LogoutIconState, Converter={StaticResource IconConverter}, Mode=OneWay}"
-                                Foreground="{StaticResource WhiteBrush}" 
-                                VerticalAlignment="Center" />
+                            <PathIcon Width="20"
+                                      Height="20"
+                                      Data="{x:Bind ViewModel.AccountNavigationViewModel.LogoutIconState, Converter={StaticResource IconConverter}, Mode=OneWay}"
+                                      Foreground="{StaticResource WhiteBrush}"
+                                      VerticalAlignment="Center" />
 
-                            <TextBlock Text="{x:Bind ViewModel.LogoutButtonText, Mode=OneWay}" VerticalAlignment="Center" />
+                            <TextBlock Text="{x:Bind ViewModel.AccountNavigationViewModel.LogoutButtonText, Mode=OneWay}"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </StackPanel>

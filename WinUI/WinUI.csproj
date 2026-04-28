@@ -205,6 +205,9 @@
     <Page Update="Views\UserControls\HeaderControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Update="Views\UserControls\SidebarControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\UserControls\NavbarControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

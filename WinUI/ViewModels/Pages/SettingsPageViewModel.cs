@@ -1,69 +1,50 @@
 using System;
-using System.Threading.Tasks;
-using Application.Navigation;
-using Application.Navigation.Requests;
+using System.ComponentModel;
 using Application.Services;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using WinUI.ViewModels;
-using WinUI.UIModels;
-using WinUI.UIModels.Enums;
+using WinUI.ViewModels.UserControls;
 using WinUI.ViewModels.UserControls.Settings;
 
 namespace WinUI.ViewModels.Pages;
 
 public partial class SettingsPageViewModel : LocalizedViewModelBase
 {
-    private readonly IDialogService _dialogService;
-    private readonly INavigationService _navigationService;
+    private readonly MainViewModel _mainViewModel;
     private readonly IDisposable[] _ownedViewModels;
     private bool _isDisposed;
 
-    [ObservableProperty]
-    public partial string LogoutButtonText { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    public partial string ChangePasswordButtonText { get; set; } = string.Empty;
-
-    public IconState LogoutIconState { get; } = new() { Kind = IconKind.Logout, Size = 24 };
-
     public SettingsPageViewModel(
         ILocalizationService localizationService,
-        IDialogService dialogService,
-        INavigationService navigationService,
+        MainViewModel mainViewModel,
+        NavbarControlViewModel accountNavigationViewModel,
         ShopInformationCardControlViewModel shopInformationCardViewModel,
         GeneralSettingsCardControlViewModel generalSettingsCardViewModel)
         : base(localizationService)
     {
-        _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-        _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+        _mainViewModel = mainViewModel ?? throw new ArgumentNullException(nameof(mainViewModel));
+        AccountNavigationViewModel = accountNavigationViewModel ?? throw new ArgumentNullException(nameof(accountNavigationViewModel));
         ShopInformationCardViewModel = shopInformationCardViewModel ?? throw new ArgumentNullException(nameof(shopInformationCardViewModel));
         GeneralSettingsCardViewModel = generalSettingsCardViewModel ?? throw new ArgumentNullException(nameof(generalSettingsCardViewModel));
+
+        _mainViewModel.PropertyChanged += HandleMainViewModelPropertyChanged;
 
         _ownedViewModels =
         [
             ShopInformationCardViewModel,
             GeneralSettingsCardViewModel,
         ];
-
-        LogoutCommand = new AsyncRelayCommand(OnLogout);
-        ChangePasswordCommand = new AsyncRelayCommand(OnChangePassword);
-
-        RefreshLocalizedText();
     }
 
     public ShopInformationCardControlViewModel ShopInformationCardViewModel { get; }
 
     public GeneralSettingsCardControlViewModel GeneralSettingsCardViewModel { get; }
 
-    public IAsyncRelayCommand LogoutCommand { get; }
+    public NavbarControlViewModel AccountNavigationViewModel { get; }
 
-    public IAsyncRelayCommand ChangePasswordCommand { get; }
+    public bool IsCompactAccountActionsVisible => _mainViewModel.IsCompactNavigationVisible;
 
     protected override void RefreshLocalizedText()
     {
-        LogoutButtonText = LocalizationService.GetString("SettingsPageLogoutButton");
-        ChangePasswordButtonText = LocalizationService.GetString("SettingsPageChangePasswordButton");
     }
 
     public new void Dispose()
@@ -72,6 +53,7 @@ public partial class SettingsPageViewModel : LocalizedViewModelBase
             return;
 
         _isDisposed = true;
+        _mainViewModel.PropertyChanged -= HandleMainViewModelPropertyChanged;
 
         foreach (var viewModel in _ownedViewModels)
         {
@@ -81,23 +63,13 @@ public partial class SettingsPageViewModel : LocalizedViewModelBase
         base.Dispose();
     }
 
-    private async Task OnLogout()
+    private void HandleMainViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        bool isConfirmed = await _dialogService.ShowConfirmationAsync(
-            titleKey: "ConfirmLogoutTitle",
-            messageKey: "ConfirmLogoutMessage",
-            confirmButtonTextKey: "ConfirmLogoutButton",
-            cancelButtonTextKey: "CancelButtonText"
-        );
-
-        if (isConfirmed)
+        if (e.PropertyName is nameof(MainViewModel.IsCompactNavigationVisible)
+            or nameof(MainViewModel.IsCompactNavigationMode)
+            or nameof(MainViewModel.IsNavigationVisible))
         {
-            _navigationService.Navigate(new NavigateToStarting());
+            OnPropertyChanged(nameof(IsCompactAccountActionsVisible));
         }
-    }
-
-    private async Task OnChangePassword()
-    {
-        await _dialogService.ShowDialogAsync("Otp");
     }
 }

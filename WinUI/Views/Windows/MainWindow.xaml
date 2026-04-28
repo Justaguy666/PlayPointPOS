@@ -11,6 +11,11 @@
     mc:Ignorable="d">
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
             <RowDefinition Height="Auto" />
@@ -18,19 +23,19 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Border Grid.RowSpan="4">
+        <Border Grid.RowSpan="4" Grid.ColumnSpan="2">
             <Border.Background>
                 <StaticResource ResourceKey="PrimaryGradientBrush" />
             </Border.Background>
         </Border>
 
-        <Border x:Name="PatternHost" Grid.RowSpan="4">
+        <Border x:Name="PatternHost" Grid.RowSpan="4" Grid.ColumnSpan="2">
             <Border.Background>
                 <StaticResource ResourceKey="PatternBrush" />
             </Border.Background>
         </Border>
 
-        <Grid x:Name="TitleBarDragRegion" Grid.Row="0">
+        <Grid x:Name="TitleBarDragRegion" Grid.Row="0" Grid.ColumnSpan="2">
             <Grid.Background>
                 <Binding Path="ViewModel.IsNavigationVisible" ElementName="WindowRoot" Converter="{StaticResource BoolToGradientBrushConverter}" />
             </Grid.Background>
@@ -38,21 +43,31 @@
 
         <controls:HeaderControl 
             Grid.Row="1" 
+            Grid.ColumnSpan="2"
             DataContext="{x:Bind ViewModel, Mode=OneWay}"
             Visibility="{x:Bind GetVisibility(ViewModel.IsNavigationVisible), Mode=OneWay}" 
             />
 
         <controls:NavbarControl
             Grid.Row="2" 
+            Grid.ColumnSpan="2"
             DataContext="{x:Bind NavbarViewModel, Mode=OneWay}"
-            Visibility="{x:Bind GetVisibility(ViewModel.IsNavigationVisible), Mode=OneWay}" 
+            Visibility="{x:Bind GetVisibility(ViewModel.IsCompactNavigationVisible), Mode=OneWay}"
             />
 
-        <Frame Grid.Row="3" x:Name="MainFrame" />
+        <controls:SidebarControl
+            Grid.Row="2"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            DataContext="{x:Bind NavbarViewModel, Mode=OneWay}"
+            Visibility="{x:Bind GetVisibility(ViewModel.IsSidebarVisible), Mode=OneWay}" />
+
+        <Frame Grid.Row="3" Grid.Column="1" x:Name="MainFrame" />
 
         <controls:NotificationControl x:Name="NotificationToast"
                  DataContext="{x:Bind NotificationViewModel, Mode=OneWay}"
                  Grid.Row="3"
+                 Grid.Column="1"
                  HorizontalAlignment="Right"
                  VerticalAlignment="Bottom"
                  Margin="0,0,24,24"
