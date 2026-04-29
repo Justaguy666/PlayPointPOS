@@ -69,24 +69,13 @@ public sealed partial class TransactionManagementPage : Page
     private void ApplyResponsiveLayout()
     {
         bool isCompact = ResponsiveBreakpoints.IsCompact(ActualWidth);
-        bool isToolbarCompact = ActualWidth < ResponsiveBreakpoints.WideMinWidth;
         double horizontalPadding = isCompact
             ? ResponsiveBreakpoints.CompactPageHorizontalPadding
             : ResponsiveBreakpoints.PageHorizontalPadding;
 
-        ToolbarGrid.Padding = isCompact
-            ? new Thickness(horizontalPadding, 14, horizontalPadding, 14)
-            : new Thickness(horizontalPadding, 20, horizontalPadding, 20);
-        ContentGrid.Padding = new Thickness(horizontalPadding, 20, horizontalPadding, 24);
+        ContentPanel.Padding = new Thickness(horizontalPadding, 20, horizontalPadding, 24);
 
-        FilterButtonText.Visibility = isToolbarCompact ? Visibility.Collapsed : Visibility.Visible;
-        FilterButton.MinWidth = isToolbarCompact ? 48 : 108;
-        FilterButton.Padding = isToolbarCompact ? new Thickness(0) : new Thickness(14, 0, 14, 0);
-        SearchBox.Margin = isCompact
-            ? new Thickness(0, 0, 12, 0)
-            : new Thickness(0, 0, 20, 0);
-
-        PageInfoBorder.HorizontalAlignment = isCompact
+        PageInfoChip.HorizontalAlignment = isCompact
             ? HorizontalAlignment.Stretch
             : HorizontalAlignment.Right;
     }

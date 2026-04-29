@@ -7,6 +7,7 @@ public sealed partial class SearchControl : UserControl
     public SearchControl()
     {
         InitializeComponent();
+        IconPath = new WinUI.UIModels.IconState { Kind = IconKind, Size = 24, IsEnabled = true };
     }
 
     private void SearchTextBox_GotFocus(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)

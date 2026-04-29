@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:management="using:WinUI.Views.UserControls.Management"
     xmlns:txnControls="using:WinUI.Views.UserControls.Transactions"
     xmlns:txnViewModels="using:WinUI.ViewModels.UserControls.Transactions"
     xmlns:vm="using:WinUI.ViewModels.Pages"
@@ -14,68 +15,25 @@
     d:DataContext="{d:DesignInstance Type=vm:TransactionManagementPageViewModel, IsDesignTimeCreatable=False}"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource WhiteBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <management:ManagementPageShell>
+        <management:ManagementPageShell.ToolbarContent>
+            <management:ManagementToolbar SearchText="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
+                                          PlaceholderText="{x:Bind ViewModel.SearchPlaceholderText, Mode=OneWay}"
+                                          IconKind="{x:Bind ViewModel.SearchIconKind, Mode=OneWay}"
+                                          ClearCommand="{x:Bind ViewModel.ClearSearchCommand, Mode=OneWay}">
+                <management:ManagementToolbar.ActionsContent>
+                    <StackPanel x:Name="ToolbarActionsPanel"
+                                Orientation="Horizontal">
+                        <management:ManagementToolbarButton WideMinWidth="108"
+                                                            IconState="{x:Bind ViewModel.FilterIconState, Mode=OneWay}"
+                                                            Text="{x:Bind ViewModel.FilterButtonText, Mode=OneWay}"
+                                                            Command="{x:Bind ViewModel.FilterCommand, Mode=OneWay}" />
+                    </StackPanel>
+                </management:ManagementToolbar.ActionsContent>
+            </management:ManagementToolbar>
+        </management:ManagementPageShell.ToolbarContent>
 
-        <!-- Header: Search + Filter -->
-        <Grid x:Name="ToolbarGrid"
-              Grid.Row="0"
-              Padding="24,20"
-              Background="{StaticResource WhiteBrush}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <controls:SearchControl x:Name="SearchBox"
-                                    Grid.Column="0"
-                                    Margin="0,0,20,0"
-                                    SearchText="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
-                                    PlaceholderText="{x:Bind ViewModel.SearchPlaceholderText, Mode=OneWay}"
-                                    IconKind="{x:Bind ViewModel.SearchIconKind, Mode=OneWay}"
-                                    ClearCommand="{x:Bind ViewModel.ClearSearchCommand, Mode=OneWay}" />
-
-            <Button x:Name="FilterButton"
-                    Grid.Column="1"
-                    Height="48"
-                    MinWidth="108"
-                    Style="{StaticResource SecondaryActionButtonStyle}"
-                    Padding="14,0"
-                    CornerRadius="8"
-                    Background="{StaticResource WhiteBrush}"
-                    BorderBrush="{StaticResource LightGrayBrush}"
-                    BorderThickness="1"
-                    Foreground="{StaticResource BlackBrush}"
-                    Command="{x:Bind ViewModel.FilterCommand, Mode=OneWay}">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
-                </Button.Resources>
-                <StackPanel Orientation="Horizontal"
-                            Spacing="6">
-                    <PathIcon Width="18"
-                              Height="18"
-                              Data="{x:Bind ViewModel.FilterIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-                    <TextBlock x:Name="FilterButtonText"
-                               Text="{x:Bind ViewModel.FilterButtonText, Mode=OneWay}"
-                               TextTrimming="CharacterEllipsis"
-                               MaxLines="1"
-                               FontSize="{StaticResource FontSizeSmall}"
-                               VerticalAlignment="Center" />
-                </StackPanel>
-            </Button>
-        </Grid>
-
-        <!-- Content Area -->
-        <Grid Grid.Row="1"
-              Grid.RowSpan="2">
-            <Rectangle Fill="{StaticResource PrimaryGradientBrush}" />
-            <Rectangle Fill="{StaticResource PatternBrush}"
-                       Opacity="0.1" />
-
+        <management:ManagementPageShell.BodyContent>
             <ScrollViewer x:Name="TransactionsScrollViewer"
                           Padding="0"
                           HorizontalScrollMode="Disabled"
@@ -83,41 +41,17 @@
                           VerticalScrollBarVisibility="Auto"
                           Loaded="HandleTransactionsScrollViewerLoaded"
                           SizeChanged="HandleTransactionsScrollViewerSizeChanged">
-                <Grid x:Name="ContentGrid"
-                      Padding="24,20,24,24"
-                      HorizontalAlignment="Stretch">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                <StackPanel x:Name="ContentPanel"
+                            Padding="24,20,24,24"
+                            Spacing="20">
+                    <management:PageInfoChip x:Name="PageInfoChip"
+                                             Text="{x:Bind ViewModel.PageInfoText, Mode=OneWay}"
+                                             HorizontalAlignment="Right" />
 
-                    <!-- Page Info -->
-                    <Grid Grid.Row="0">
-                        <Border x:Name="PageInfoBorder"
-                                Background="{StaticResource WhiteBrush}"
-                                BorderBrush="{StaticResource LighterGrayBrush}"
-                                BorderThickness="1"
-                                CornerRadius="14"
-                                Padding="18,10"
-                                HorizontalAlignment="Right">
-                            <TextBlock x:Name="PageInfoText"
-                                       Text="{x:Bind ViewModel.PageInfoText, Mode=OneWay}"
-                                       Foreground="{StaticResource PrimaryOrangeBrush}"
-                                       FontSize="{StaticResource FontSizeSmall}"
-                                       FontWeight="SemiBold"
-                                       TextTrimming="CharacterEllipsis"
-                                       MaxLines="1" />
-                        </Border>
-                    </Grid>
-
-                    <!-- Transaction Cards (2-column grid) -->
-                    <Grid Grid.Row="1"
-                          Margin="0,20,0,0"
-                          HorizontalAlignment="Stretch">
+                    <Grid HorizontalAlignment="Stretch">
                         <Grid Visibility="{x:Bind ViewModel.HasTransactions, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
                               HorizontalAlignment="Stretch">
-                                <ItemsRepeater HorizontalAlignment="Stretch"
+                            <ItemsRepeater HorizontalAlignment="Stretch"
                                            ItemsSource="{x:Bind ViewModel.PagedTransactionCards, Mode=OneWay}">
                                 <ItemsRepeater.Layout>
                                     <UniformGridLayout MaximumRowsOrColumns="{x:Bind ViewModel.TransactionCardsMaximumRowsOrColumns, Mode=OneWay}"
@@ -136,37 +70,16 @@
                             </ItemsRepeater>
                         </Grid>
 
-                        <!-- Empty State -->
-                        <Border Visibility="{x:Bind ViewModel.HasTransactions, Mode=OneWay, Converter={StaticResource BoolToInvisible}}"
-                                Background="{StaticResource WhiteBrush}"
-                                BorderBrush="{StaticResource LighterGrayBrush}"
-                                BorderThickness="1"
-                                CornerRadius="24"
-                                Padding="48">
-                            <StackPanel HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Spacing="16">
-                                <PathIcon Width="52"
-                                          Height="52"
-                                          Foreground="{StaticResource PrimaryOrangeBrush}"
-                                          Data="{x:Bind ViewModel.NoTransactionsIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-                                <TextBlock Text="{x:Bind ViewModel.NoTransactionsText, Mode=OneWay}"
-                                           Foreground="{StaticResource BlackBrush}"
-                                           FontSize="{StaticResource FontSizeExtraExtraLarge}"
-                                           FontWeight="SemiBold"
-                                           TextAlignment="Center"
-                                           TextWrapping="WrapWholeWords" />
-                            </StackPanel>
-                        </Border>
+                        <management:EmptyStateControl Visibility="{x:Bind ViewModel.HasTransactions, Mode=OneWay, Converter={StaticResource BoolToInvisible}}"
+                                                      IconState="{x:Bind ViewModel.NoTransactionsIconState, Mode=OneWay}"
+                                                      Text="{x:Bind ViewModel.NoTransactionsText, Mode=OneWay}" />
                     </Grid>
 
-                    <!-- Pagination -->
-                    <controls:PaginationControl Grid.Row="2"
-                                                DataContext="{x:Bind ViewModel.PaginationViewModel, Mode=OneWay}"
+                    <controls:PaginationControl DataContext="{x:Bind ViewModel.PaginationViewModel, Mode=OneWay}"
                                                 HorizontalAlignment="Center"
                                                 Margin="0,16,0,0" />
-                </Grid>
+                </StackPanel>
             </ScrollViewer>
-        </Grid>
-    </Grid>
+        </management:ManagementPageShell.BodyContent>
+    </management:ManagementPageShell>
 </Page>

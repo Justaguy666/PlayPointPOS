@@ -17,12 +17,14 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0"
+        <StackPanel x:Name="NavigationPanel"
+                    Grid.Row="0"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal"
                     Spacing="12"
                     VerticalAlignment="Center">
-            <Button Style="{StaticResource PaginationNavigationButtonStyle}"
+            <Button x:Name="FirstPageButton"
+                    Style="{StaticResource PaginationNavigationButtonStyle}"
                     Command="{Binding GoToFirstPageCommand}">
                 <Button.Resources>
                     <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PaginationNavigationButtonStateResources.xaml" />
@@ -30,7 +32,8 @@
                 <TextBlock Text="&lt;&lt;" />
             </Button>
 
-            <Button Style="{StaticResource PaginationNavigationButtonStyle}"
+            <Button x:Name="PreviousPageButton"
+                    Style="{StaticResource PaginationNavigationButtonStyle}"
                     Command="{Binding GoToPreviousPageCommand}">
                 <Button.Resources>
                     <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PaginationNavigationButtonStateResources.xaml" />
@@ -38,7 +41,8 @@
                 <TextBlock Text="&lt;" />
             </Button>
 
-            <ItemsControl ItemsSource="{Binding PageButtons}">
+            <ItemsControl x:Name="PageButtonsControl"
+                          ItemsSource="{Binding PageButtons}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"
@@ -64,7 +68,8 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <Button Style="{StaticResource PaginationNavigationButtonStyle}"
+            <Button x:Name="NextPageButton"
+                    Style="{StaticResource PaginationNavigationButtonStyle}"
                     Command="{Binding GoToNextPageCommand}">
                 <Button.Resources>
                     <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PaginationNavigationButtonStateResources.xaml" />
@@ -72,7 +77,8 @@
                 <TextBlock Text="&gt;" />
             </Button>
 
-            <Button Style="{StaticResource PaginationNavigationButtonStyle}"
+            <Button x:Name="LastPageButton"
+                    Style="{StaticResource PaginationNavigationButtonStyle}"
                     Command="{Binding GoToLastPageCommand}">
                 <Button.Resources>
                     <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PaginationNavigationButtonStateResources.xaml" />
@@ -80,7 +86,8 @@
                 <TextBlock Text="&gt;&gt;" />
             </Button>
 
-            <Button Style="{StaticResource PaginationJumpButtonStyle}"
+            <Button x:Name="JumpToPageButton"
+                    Style="{StaticResource PaginationJumpButtonStyle}"
                     Command="{Binding OpenJumpToPageCommand}">
                 <Button.Resources>
                     <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
@@ -88,7 +95,10 @@
                 <StackPanel Orientation="Horizontal"
                             Spacing="12">
                     <PathIcon Data="{Binding JumpToPageIconState, Converter={StaticResource IconConverter}, Mode=OneWay}" />
-                    <TextBlock Text="{Binding JumpToPageButtonText}" />
+                    <TextBlock x:Name="JumpToPageButtonText"
+                               Text="{Binding JumpToPageButtonText}"
+                               TextTrimming="CharacterEllipsis"
+                               MaxLines="1" />
                 </StackPanel>
             </Button>
         </StackPanel>

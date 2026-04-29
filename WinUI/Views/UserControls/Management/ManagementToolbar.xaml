@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="WinUI.Views.UserControls.Management.ManagementToolbar"
+    x:Name="RootControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid x:Name="RootGrid"
+          Background="{StaticResource WhiteBrush}"
+          ColumnSpacing="12"
+          RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <ContentPresenter x:Name="LeadingPresenter"
+                          Grid.Row="0"
+                          Grid.Column="0"
+                          Content="{Binding LeadingContent, ElementName=RootControl}"
+                          VerticalAlignment="Center" />
+
+        <controls:SearchControl x:Name="SearchBox"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                HorizontalAlignment="Stretch"
+                                SearchText="{Binding SearchText, ElementName=RootControl, Mode=TwoWay}"
+                                PlaceholderText="{Binding PlaceholderText, ElementName=RootControl}"
+                                IconKind="{Binding IconKind, ElementName=RootControl}"
+                                ClearCommand="{Binding ClearCommand, ElementName=RootControl}" />
+
+        <ContentPresenter x:Name="ActionsPresenter"
+                          Grid.Row="0"
+                          Grid.Column="2"
+                          Content="{Binding ActionsContent, ElementName=RootControl}"
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Center" />
+    </Grid>
+</UserControl>

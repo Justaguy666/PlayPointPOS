@@ -9,176 +9,88 @@
     xmlns:controls="using:WinUI.Views.UserControls"
     xmlns:games="using:WinUI.Views.UserControls.Games"
     xmlns:gameViewModels="using:WinUI.ViewModels.UserControls.Games"
+    xmlns:management="using:WinUI.Views.UserControls.Management"
     xmlns:vm="using:WinUI.ViewModels.Pages"
     KeyboardAcceleratorPlacementMode="Hidden"
     d:DataContext="{d:DesignInstance Type=vm:GameManagementPageViewModel, IsDesignTimeCreatable=False}"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource WhiteBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <management:ManagementPageShell>
+        <management:ManagementPageShell.ToolbarContent>
+            <management:ManagementToolbar SearchText="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
+                                          PlaceholderText="{x:Bind ViewModel.SearchPlaceholderText, Mode=OneWay}"
+                                          IconKind="{x:Bind ViewModel.SearchIconKind, Mode=OneWay}"
+                                          ClearCommand="{x:Bind ViewModel.ClearSearchCommand, Mode=OneWay}">
+                <management:ManagementToolbar.LeadingContent>
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="10">
+                        <Button x:Name="GridViewButton"
+                                Width="48"
+                                Height="48"
+                                Style="{StaticResource SecondaryActionButtonStyle}"
+                                Padding="0"
+                                CornerRadius="8"
+                                Background="{x:Bind ViewModel.GridButtonBackgroundBrush, Mode=OneWay}"
+                                BorderBrush="{StaticResource LighterGrayBrush}"
+                                BorderThickness="1"
+                                Command="{x:Bind ViewModel.ToggleGridViewCommand, Mode=OneWay}">
+                            <Button.Resources>
+                                <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{x:Bind ViewModel.GridButtonBackgroundHoverColor, Mode=OneWay}" />
+                                <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{x:Bind ViewModel.GridButtonForegroundHoverColor, Mode=OneWay}" />
+                                <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{StaticResource LighterGray}" />
+                            </Button.Resources>
+                            <PathIcon Width="24"
+                                      Height="24"
+                                      Foreground="{x:Bind ViewModel.GridButtonForegroundBrush, Mode=OneWay}"
+                                      Data="{x:Bind ViewModel.GridIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+                        </Button>
 
-        <Grid x:Name="ToolbarGrid"
-              Grid.Row="0"
-              Padding="24,20"
-              Background="{StaticResource WhiteBrush}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+                        <Button x:Name="ListViewButton"
+                                Width="48"
+                                Height="48"
+                                Style="{StaticResource SecondaryActionButtonStyle}"
+                                Padding="0"
+                                CornerRadius="8"
+                                Background="{x:Bind ViewModel.ListButtonBackgroundBrush, Mode=OneWay}"
+                                BorderBrush="{StaticResource LighterGrayBrush}"
+                                BorderThickness="1"
+                                Command="{x:Bind ViewModel.ToggleListViewCommand, Mode=OneWay}">
+                            <Button.Resources>
+                                <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{x:Bind ViewModel.ListButtonBackgroundHoverColor, Mode=OneWay}" />
+                                <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{x:Bind ViewModel.ListButtonForegroundHoverColor, Mode=OneWay}" />
+                                <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{StaticResource LighterGray}" />
+                            </Button.Resources>
+                            <PathIcon Width="24"
+                                      Height="24"
+                                      Foreground="{x:Bind ViewModel.ListButtonForegroundBrush, Mode=OneWay}"
+                                      Data="{x:Bind ViewModel.ListIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+                        </Button>
+                    </StackPanel>
+                </management:ManagementToolbar.LeadingContent>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+                <management:ManagementToolbar.ActionsContent>
+                    <StackPanel x:Name="ToolbarActionsPanel"
+                                Orientation="Horizontal"
+                                Spacing="10">
+                        <management:ManagementToolbarButton WideMinWidth="120"
+                                                            IconSize="20"
+                                                            IconState="{x:Bind ManageTypesIconState, Mode=OneWay}"
+                                                            Text="{x:Bind ViewModel.ManageGameTypesButtonText, Mode=OneWay}"
+                                                            Command="{x:Bind ViewModel.ManageGameTypesCommand, Mode=OneWay}" />
+                        <management:ManagementToolbarButton WideMinWidth="108"
+                                                            IconState="{x:Bind ViewModel.FilterIconState, Mode=OneWay}"
+                                                            Text="{x:Bind ViewModel.FilterButtonText, Mode=OneWay}"
+                                                            Command="{x:Bind ViewModel.FilterCommand, Mode=OneWay}" />
+                        <management:ManagementToolbarButton IsPrimary="True"
+                                                            IconState="{x:Bind ViewModel.AddIconState, Mode=OneWay}"
+                                                            Text="{x:Bind ViewModel.AddGameButtonText, Mode=OneWay}"
+                                                            Command="{x:Bind ViewModel.AddGameCommand, Mode=OneWay}" />
+                    </StackPanel>
+                </management:ManagementToolbar.ActionsContent>
+            </management:ManagementToolbar>
+        </management:ManagementPageShell.ToolbarContent>
 
-            <Button x:Name="GridViewButton"
-                    Grid.Column="0"
-                    Width="48"
-                    Height="48"
-                    Style="{StaticResource SecondaryActionButtonStyle}"
-                    Padding="0"
-                    CornerRadius="8"
-                    Background="{x:Bind ViewModel.GridButtonBackgroundBrush, Mode=OneWay}"
-                    BorderBrush="{StaticResource LighterGrayBrush}"
-                    BorderThickness="1"
-                    Command="{x:Bind ViewModel.ToggleGridViewCommand, Mode=OneWay}">
-                <Button.Resources>
-                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{x:Bind ViewModel.GridButtonBackgroundHoverColor, Mode=OneWay}" />
-                    <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{x:Bind ViewModel.GridButtonForegroundHoverColor, Mode=OneWay}" />
-                    <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{StaticResource LighterGray}" />
-                </Button.Resources>
-                <PathIcon Width="24"
-                          Height="24"
-                          Foreground="{x:Bind ViewModel.GridButtonForegroundBrush, Mode=OneWay}"
-                          Data="{x:Bind ViewModel.GridIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-            </Button>
-
-            <Button x:Name="ListViewButton"
-                    Grid.Column="1"
-                    Width="48"
-                    Height="48"
-                    Margin="10,0,0,0"
-                    Style="{StaticResource SecondaryActionButtonStyle}"
-                    Padding="0"
-                    CornerRadius="8"
-                    Background="{x:Bind ViewModel.ListButtonBackgroundBrush, Mode=OneWay}"
-                    BorderBrush="{StaticResource LighterGrayBrush}"
-                    BorderThickness="1"
-                    Command="{x:Bind ViewModel.ToggleListViewCommand, Mode=OneWay}">
-                <Button.Resources>
-                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{x:Bind ViewModel.ListButtonBackgroundHoverColor, Mode=OneWay}" />
-                    <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{x:Bind ViewModel.ListButtonForegroundHoverColor, Mode=OneWay}" />
-                    <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{StaticResource LighterGray}" />
-                </Button.Resources>
-                <PathIcon Width="24"
-                          Height="24"
-                          Foreground="{x:Bind ViewModel.ListButtonForegroundBrush, Mode=OneWay}"
-                          Data="{x:Bind ViewModel.ListIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-            </Button>
-
-            <controls:SearchControl x:Name="SearchBox"
-                                    Grid.Column="2"
-                                    Margin="20,0"
-                                    SearchText="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
-                                    PlaceholderText="{x:Bind ViewModel.SearchPlaceholderText, Mode=OneWay}"
-                                    IconKind="{x:Bind ViewModel.SearchIconKind, Mode=OneWay}"
-                                    ClearCommand="{x:Bind ViewModel.ClearSearchCommand, Mode=OneWay}" />
-
-            <Button x:Name="ManageTypesButton"
-                    Grid.Column="3"
-                    Height="48"
-                    MinWidth="120"
-                    Margin="0,0,10,0"
-                    Style="{StaticResource SecondaryActionButtonStyle}"
-                    Padding="14,0"
-                    CornerRadius="8"
-                    Command="{x:Bind ViewModel.ManageGameTypesCommand, Mode=OneWay}">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
-                </Button.Resources>
-                <StackPanel Orientation="Horizontal"
-                            Spacing="6">
-                    <PathIcon Width="20"
-                              Height="20"
-                              Data="{x:Bind ManageTypesIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-                    <TextBlock x:Name="ManageTypesButtonText"
-                               Text="{x:Bind ViewModel.ManageGameTypesButtonText, Mode=OneWay}"
-                               TextTrimming="CharacterEllipsis"
-                               MaxLines="1"
-                               FontSize="{StaticResource FontSizeSmall}"
-                               VerticalAlignment="Center" />
-                </StackPanel>
-            </Button>
-
-            <Button x:Name="FilterButton"
-                    Grid.Column="4"
-                    Height="48"
-                    MinWidth="108"
-                    Margin="0,0,10,0"
-                    Style="{StaticResource SecondaryActionButtonStyle}"
-                    Padding="14,0"
-                    CornerRadius="8"
-                    Background="{StaticResource WhiteBrush}"
-                    BorderBrush="{StaticResource LightGrayBrush}"
-                    BorderThickness="1"
-                    Foreground="{StaticResource BlackBrush}"
-                    Command="{x:Bind ViewModel.FilterCommand, Mode=OneWay}">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
-                </Button.Resources>
-                <StackPanel Orientation="Horizontal"
-                            Spacing="6">
-                    <PathIcon Width="18"
-                              Height="18"
-                              Data="{x:Bind ViewModel.FilterIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-                    <TextBlock x:Name="FilterButtonText"
-                               Text="{x:Bind ViewModel.FilterButtonText, Mode=OneWay}"
-                               TextTrimming="CharacterEllipsis"
-                               MaxLines="1"
-                               FontSize="{StaticResource FontSizeSmall}"
-                               VerticalAlignment="Center" />
-                </StackPanel>
-            </Button>
-
-            <Button x:Name="AddButton"
-                    Grid.Column="5"
-                    Height="48"
-                    Style="{StaticResource PrimaryActionButtonStyle}"
-                    Command="{x:Bind ViewModel.AddGameCommand, Mode=OneWay}"
-                    Padding="14,0"
-                    CornerRadius="8">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
-                </Button.Resources>
-                <StackPanel Orientation="Horizontal"
-                            Spacing="6">
-                    <PathIcon Width="18"
-                              Height="18"
-                              Data="{x:Bind ViewModel.AddIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-                    <TextBlock x:Name="AddButtonText"
-                               Text="{x:Bind ViewModel.AddGameButtonText, Mode=OneWay}"
-                               TextTrimming="CharacterEllipsis"
-                               MaxLines="1"
-                               FontWeight="SemiBold"
-                               FontSize="{StaticResource FontSizeSmall}"
-                               VerticalAlignment="Center" />
-                </StackPanel>
-            </Button>
-        </Grid>
-
-        <Grid Grid.Row="1" Grid.RowSpan="2">
-            <Rectangle Fill="{StaticResource PrimaryGradientBrush}" />
-            <Rectangle Fill="{StaticResource PatternBrush}"
-                       Opacity="0.1" />
-
+        <management:ManagementPageShell.BodyContent>
             <ScrollViewer x:Name="GamesScrollViewer"
                           Padding="0"
                           HorizontalScrollMode="Disabled"
@@ -189,58 +101,14 @@
                 <StackPanel x:Name="ContentPanel"
                             Padding="24,20,24,24"
                             Spacing="20">
-                    <Grid x:Name="SortBarGrid"
-                          ColumnSpacing="14"
-                          RowSpacing="14">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel x:Name="SortControlsPanel"
-                                    Grid.Column="0"
-                                    Orientation="Horizontal"
-                                    HorizontalAlignment="Left"
-                                    Spacing="16">
-                            <ComboBox Width="152"
-                                      Height="44"
-                                      ItemsSource="{x:Bind ViewModel.SortFieldOptions, Mode=OneWay}"
-                                      DisplayMemberPath="DisplayName"
-                                      SelectedValuePath="Value"
-                                      SelectedValue="{x:Bind ViewModel.SelectedSortField, Mode=TwoWay}"
-                                      PlaceholderText="{x:Bind ViewModel.SortFieldPlaceholderText, Mode=OneWay}" />
-
-                            <ComboBox Width="152"
-                                      Height="44"
-                                      ItemsSource="{x:Bind ViewModel.SortDirectionOptions, Mode=OneWay}"
-                                      DisplayMemberPath="DisplayName"
-                                      SelectedValuePath="Value"
-                                      SelectedValue="{x:Bind ViewModel.SelectedSortDirection, Mode=TwoWay}"
-                                      PlaceholderText="{x:Bind ViewModel.SortDirectionPlaceholderText, Mode=OneWay}" />
-                        </StackPanel>
-
-                        <Border x:Name="PageInfoBorder"
-                                Grid.Column="1"
-                                Background="{StaticResource WhiteBrush}"
-                                BorderBrush="{StaticResource LighterGrayBrush}"
-                                BorderThickness="1"
-                                CornerRadius="14"
-                                Padding="18,10"
-                                HorizontalAlignment="Right">
-                            <TextBlock x:Name="PageInfoText"
-                                       Text="{x:Bind ViewModel.PageInfoText, Mode=OneWay}"
-                                       Foreground="{StaticResource PrimaryOrangeBrush}"
-                                       FontSize="{StaticResource FontSizeSmall}"
-                                       FontWeight="SemiBold"
-                                       TextTrimming="CharacterEllipsis"
-                                       MaxLines="1" />
-                        </Border>
-                    </Grid>
+                    <management:ManagementSortBar ComboBoxWidth="152"
+                                                  SortFieldItemsSource="{x:Bind ViewModel.SortFieldOptions, Mode=OneWay}"
+                                                  SelectedSortField="{x:Bind ViewModel.SelectedSortField, Mode=TwoWay}"
+                                                  SortDirectionItemsSource="{x:Bind ViewModel.SortDirectionOptions, Mode=OneWay}"
+                                                  SelectedSortDirection="{x:Bind ViewModel.SelectedSortDirection, Mode=TwoWay}"
+                                                  SortFieldPlaceholderText="{x:Bind ViewModel.SortFieldPlaceholderText, Mode=OneWay}"
+                                                  SortDirectionPlaceholderText="{x:Bind ViewModel.SortDirectionPlaceholderText, Mode=OneWay}"
+                                                  PageInfoText="{x:Bind ViewModel.PageInfoText, Mode=OneWay}" />
 
                     <Grid>
                         <Grid Visibility="{x:Bind ViewModel.HasGames, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
@@ -278,27 +146,9 @@
                             </Grid>
                         </Grid>
 
-                        <Border Visibility="{x:Bind ViewModel.HasGames, Mode=OneWay, Converter={StaticResource BoolToInvisible}}"
-                                Background="{StaticResource WhiteBrush}"
-                                BorderBrush="{StaticResource LighterGrayBrush}"
-                                BorderThickness="1"
-                                CornerRadius="24"
-                                Padding="48">
-                            <StackPanel HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Spacing="16">
-                                <PathIcon Width="52"
-                                          Height="52"
-                                          Foreground="{StaticResource PrimaryOrangeBrush}"
-                                          Data="{x:Bind ViewModel.NoGamesIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-                                <TextBlock Text="{x:Bind ViewModel.NoGamesText, Mode=OneWay}"
-                                           Foreground="{StaticResource BlackBrush}"
-                                           FontSize="{StaticResource FontSizeExtraExtraLarge}"
-                                           FontWeight="SemiBold"
-                                           TextAlignment="Center"
-                                           TextWrapping="WrapWholeWords" />
-                            </StackPanel>
-                        </Border>
+                        <management:EmptyStateControl Visibility="{x:Bind ViewModel.HasGames, Mode=OneWay, Converter={StaticResource BoolToInvisible}}"
+                                                      IconState="{x:Bind ViewModel.NoGamesIconState, Mode=OneWay}"
+                                                      Text="{x:Bind ViewModel.NoGamesText, Mode=OneWay}" />
                     </Grid>
 
                     <controls:PaginationControl DataContext="{x:Bind ViewModel.PaginationViewModel, Mode=OneWay}"
@@ -306,6 +156,6 @@
                                                 Margin="0,16,0,0" />
                 </StackPanel>
             </ScrollViewer>
-        </Grid>
-    </Grid>
+        </management:ManagementPageShell.BodyContent>
+    </management:ManagementPageShell>
 </Page>

@@ -163,6 +163,24 @@
     <Page Update="Views\UserControls\PaginationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Update="Views\UserControls\Management\EmptyStateControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Management\ManagementPageShell.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Management\ManagementSortBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Management\ManagementToolbar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Management\ManagementToolbarButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Management\PageInfoChip.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\Dialogs\ConfirmationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

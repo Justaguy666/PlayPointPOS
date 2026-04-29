@@ -63,7 +63,7 @@
                       VerticalScrollBarVisibility="Auto"
                       VerticalScrollMode="Enabled"
                       Margin="0"
-                      Padding="0,0,20,20"
+                      Padding="0,0,28,20"
                       MaxHeight="520">
             <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
                 <panels:ResponsiveFormPanel ColumnSpacing="12"

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="WinUI.Views.UserControls.Management.ManagementToolbarButton"
+    x:Name="RootControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Button x:Name="ActionButton"
+            Height="48"
+            Command="{Binding Command, ElementName=RootControl}"
+            CornerRadius="8"
+            ToolTipService.ToolTip="{Binding Text, ElementName=RootControl}">
+        <StackPanel Orientation="Horizontal"
+                    Spacing="6">
+            <PathIcon x:Name="Icon"
+                      Data="{Binding IconState, ElementName=RootControl, Converter={StaticResource IconConverter}}" />
+            <TextBlock x:Name="LabelText"
+                       Text="{Binding Text, ElementName=RootControl}"
+                       TextTrimming="CharacterEllipsis"
+                       MaxLines="1"
+                       FontSize="{StaticResource FontSizeSmall}"
+                       VerticalAlignment="Center" />
+        </StackPanel>
+    </Button>
+</UserControl>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="WinUI.Views.UserControls.Management.ManagementSortBar"
+    x:Name="RootControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:management="using:WinUI.Views.UserControls.Management"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid x:Name="RootGrid"
+          ColumnSpacing="14"
+          RowSpacing="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel x:Name="SortControlsPanel"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Left"
+                    Spacing="16"
+                    Visibility="{Binding ShowSortControls, ElementName=RootControl, Converter={StaticResource BoolToVisible}}">
+            <ComboBox x:Name="SortFieldComboBox"
+                      Width="{Binding ComboBoxWidth, ElementName=RootControl}"
+                      Height="44"
+                      ItemsSource="{Binding SortFieldItemsSource, ElementName=RootControl}"
+                      DisplayMemberPath="DisplayName"
+                      SelectedValuePath="Value"
+                      SelectedValue="{Binding SelectedSortField, ElementName=RootControl, Mode=TwoWay}"
+                      PlaceholderText="{Binding SortFieldPlaceholderText, ElementName=RootControl}" />
+
+            <ComboBox x:Name="SortDirectionComboBox"
+                      Width="{Binding ComboBoxWidth, ElementName=RootControl}"
+                      Height="44"
+                      ItemsSource="{Binding SortDirectionItemsSource, ElementName=RootControl}"
+                      DisplayMemberPath="DisplayName"
+                      SelectedValuePath="Value"
+                      SelectedValue="{Binding SelectedSortDirection, ElementName=RootControl, Mode=TwoWay}"
+                      PlaceholderText="{Binding SortDirectionPlaceholderText, ElementName=RootControl}" />
+        </StackPanel>
+
+        <management:PageInfoChip x:Name="PageInfo"
+                                 Grid.Row="0"
+                                 Grid.Column="1"
+                                 Text="{Binding PageInfoText, ElementName=RootControl}"
+                                 HorizontalAlignment="Right" />
+    </Grid>
+</UserControl>
