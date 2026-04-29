@@ -21,9 +21,15 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0"
+        <Grid x:Name="ToolbarGrid"
+              Grid.Row="0"
               Padding="24,20"
               Background="{StaticResource WhiteBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
@@ -33,7 +39,8 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0"
+            <Button x:Name="GridViewButton"
+                    Grid.Column="0"
                     Width="48"
                     Height="48"
                     Style="{StaticResource SecondaryActionButtonStyle}"
@@ -54,7 +61,8 @@
                           Data="{x:Bind ViewModel.GridIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
             </Button>
 
-            <Button Grid.Column="1"
+            <Button x:Name="ListViewButton"
+                    Grid.Column="1"
                     Width="48"
                     Height="48"
                     Margin="10,0,0,0"
@@ -76,14 +84,16 @@
                           Data="{x:Bind ViewModel.ListIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
             </Button>
 
-            <controls:SearchControl Grid.Column="2"
+            <controls:SearchControl x:Name="SearchBox"
+                                    Grid.Column="2"
                                     Margin="20,0"
                                     SearchText="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
                                     PlaceholderText="{x:Bind ViewModel.SearchPlaceholderText, Mode=OneWay}"
                                     IconKind="{x:Bind ViewModel.SearchIconKind, Mode=OneWay}"
                                     ClearCommand="{x:Bind ViewModel.ClearSearchCommand, Mode=OneWay}" />
 
-            <Button Grid.Column="3"
+            <Button x:Name="ManageTypesButton"
+                    Grid.Column="3"
                     Height="48"
                     MinWidth="120"
                     Margin="0,0,10,0"
@@ -99,13 +109,17 @@
                     <PathIcon Width="20"
                               Height="20"
                               Data="{x:Bind ManageTypesIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-                    <TextBlock Text="{x:Bind ViewModel.ManageGameTypesButtonText, Mode=OneWay}"
+                    <TextBlock x:Name="ManageTypesButtonText"
+                               Text="{x:Bind ViewModel.ManageGameTypesButtonText, Mode=OneWay}"
+                               TextTrimming="CharacterEllipsis"
+                               MaxLines="1"
                                FontSize="{StaticResource FontSizeSmall}"
                                VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
 
-            <Button Grid.Column="4"
+            <Button x:Name="FilterButton"
+                    Grid.Column="4"
                     Height="48"
                     MinWidth="108"
                     Margin="0,0,10,0"
@@ -125,13 +139,17 @@
                     <PathIcon Width="18"
                               Height="18"
                               Data="{x:Bind ViewModel.FilterIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-                    <TextBlock Text="{x:Bind ViewModel.FilterButtonText, Mode=OneWay}"
+                    <TextBlock x:Name="FilterButtonText"
+                               Text="{x:Bind ViewModel.FilterButtonText, Mode=OneWay}"
+                               TextTrimming="CharacterEllipsis"
+                               MaxLines="1"
                                FontSize="{StaticResource FontSizeSmall}"
                                VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
 
-            <Button Grid.Column="5"
+            <Button x:Name="AddButton"
+                    Grid.Column="5"
                     Height="48"
                     Style="{StaticResource PrimaryActionButtonStyle}"
                     Command="{x:Bind ViewModel.AddGameCommand, Mode=OneWay}"
@@ -145,7 +163,10 @@
                     <PathIcon Width="18"
                               Height="18"
                               Data="{x:Bind ViewModel.AddIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-                    <TextBlock Text="{x:Bind ViewModel.AddGameButtonText, Mode=OneWay}"
+                    <TextBlock x:Name="AddButtonText"
+                               Text="{x:Bind ViewModel.AddGameButtonText, Mode=OneWay}"
+                               TextTrimming="CharacterEllipsis"
+                               MaxLines="1"
                                FontWeight="SemiBold"
                                FontSize="{StaticResource FontSizeSmall}"
                                VerticalAlignment="Center" />
@@ -165,16 +186,24 @@
                           VerticalScrollBarVisibility="Auto"
                           Loaded="HandleGamesScrollViewerLoaded"
                           SizeChanged="HandleGamesScrollViewerSizeChanged">
-                <StackPanel Padding="24,20,24,24"
+                <StackPanel x:Name="ContentPanel"
+                            Padding="24,20,24,24"
                             Spacing="20">
-                    <Grid ColumnSpacing="14"
+                    <Grid x:Name="SortBarGrid"
+                          ColumnSpacing="14"
                           RowSpacing="14">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0"
+                        <StackPanel x:Name="SortControlsPanel"
+                                    Grid.Column="0"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Left"
                                     Spacing="16">
@@ -195,17 +224,21 @@
                                       PlaceholderText="{x:Bind ViewModel.SortDirectionPlaceholderText, Mode=OneWay}" />
                         </StackPanel>
 
-                        <Border Grid.Column="1"
+                        <Border x:Name="PageInfoBorder"
+                                Grid.Column="1"
                                 Background="{StaticResource WhiteBrush}"
                                 BorderBrush="{StaticResource LighterGrayBrush}"
                                 BorderThickness="1"
                                 CornerRadius="14"
                                 Padding="18,10"
                                 HorizontalAlignment="Right">
-                            <TextBlock Text="{x:Bind ViewModel.PageInfoText, Mode=OneWay}"
+                            <TextBlock x:Name="PageInfoText"
+                                       Text="{x:Bind ViewModel.PageInfoText, Mode=OneWay}"
                                        Foreground="{StaticResource PrimaryOrangeBrush}"
                                        FontSize="{StaticResource FontSizeSmall}"
-                                       FontWeight="SemiBold" />
+                                       FontWeight="SemiBold"
+                                       TextTrimming="CharacterEllipsis"
+                                       MaxLines="1" />
                         </Border>
                     </Grid>
 
@@ -262,7 +295,8 @@
                                            Foreground="{StaticResource BlackBrush}"
                                            FontSize="{StaticResource FontSizeExtraExtraLarge}"
                                            FontWeight="SemiBold"
-                                           TextAlignment="Center" />
+                                           TextAlignment="Center"
+                                           TextWrapping="WrapWholeWords" />
                             </StackPanel>
                         </Border>
                     </Grid>

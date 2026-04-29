@@ -78,7 +78,8 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="{StaticResource WhiteBrush}">
+    <Grid x:Name="RootGrid"
+          Background="{StaticResource WhiteBrush}">
         <FlyoutBase.AttachedFlyout>
             <Flyout x:Name="AreaCardActionsFlyout"
                     FlyoutPresenterStyle="{StaticResource AppContextActionFlyoutPresenterStyle}">
@@ -126,12 +127,19 @@
             </Flyout>
         </FlyoutBase.AttachedFlyout>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="0" />
+        </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4.3*" />
             <ColumnDefinition Width="5.7*" />
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="0"
+        <Border x:Name="ListPane"
+                Grid.Row="0"
+                Grid.Column="0"
                 Background="{StaticResource WhiteBrush}">
             <Grid>
                 <Grid.RowDefinitions>
@@ -140,7 +148,8 @@
                 </Grid.RowDefinitions>
 
                 <!-- Header -->
-                <Border Grid.Row="0"
+                <Border x:Name="HeaderPane"
+                        Grid.Row="0"
                         Background="{StaticResource WhiteBrush}"
                         BorderBrush="{StaticResource LighterGrayBrush}"
                         BorderThickness="0,0,1,1"
@@ -157,15 +166,17 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock
+                            <TextBlock x:Name="ListHeaderTextBlock"
                                    Grid.Column="0"
                                    Text="{Binding ListHeaderText}"
                                    Foreground="{StaticResource BlackBrush}"
                                    FontSize="{StaticResource FontSizeExtraExtraExtraLarge}"
                                    FontWeight="Bold" 
+                                   TextTrimming="CharacterEllipsis"
+                                   MaxLines="1"
                                    HorizontalAlignment="Left"/>
 
-                            <Button
+                            <Button x:Name="AddButton"
                                 Grid.Column="1"
                                 Style="{StaticResource PrimaryActionButtonStyle}"
                                 Command="{Binding AddAreaCommand}"
@@ -173,20 +184,30 @@
                                 <StackPanel Orientation="Horizontal"
                                         Spacing="8">
                                     <PathIcon Data="{Binding AddIconState, Converter={StaticResource IconConverter}, Mode=OneWay}" />
-                                    <TextBlock Text="{Binding AddAreaButtonText}" />
+                                    <TextBlock x:Name="AddButtonText"
+                                               Text="{Binding AddAreaButtonText}"
+                                               TextTrimming="CharacterEllipsis"
+                                               MaxLines="1" />
                                 </StackPanel>
                             </Button>
                         </Grid>
 
                         <!-- Filter by Area Type -->
-                        <Grid VerticalAlignment="Center">
+                        <Grid x:Name="AreaFilterBarGrid"
+                              VerticalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Border Grid.Column="0"
+                            <Border x:Name="TypeFilterHost"
+                                    Grid.Column="0"
                                     Background="{StaticResource WhiteBrush}"
                                     BorderBrush="{StaticResource LightGrayBrush}"
                                     BorderThickness="1"
@@ -219,8 +240,11 @@
                                                     CornerRadius="7"
                                                     Opacity="0"
                                                     IsHitTestVisible="False" />
-                                            <TextBlock Text="{Binding AllAreasFilterText, Mode=OneWay}"
+                                            <TextBlock x:Name="AllAreasFilterTextBlock"
+                                                       Text="{Binding AllAreasFilterText, Mode=OneWay}"
                                                        Foreground="{Binding AllAreasFilterForegroundBrush, Mode=OneWay}"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       MaxLines="1"
                                                        Margin="18,10" />
                                         </Grid>
                                     </Button>
@@ -250,7 +274,10 @@
                                                         Margin="18,10">
                                                 <PathIcon Data="{Binding TableFilterIconState, Converter={StaticResource IconConverter}, Mode=OneWay}"
                                                           Foreground="{Binding TableFilterForegroundBrush, Mode=OneWay}" />
-                                                <TextBlock Text="{Binding TableFilterText, Mode=OneWay}"
+                                                <TextBlock x:Name="TableFilterTextBlock"
+                                                           Text="{Binding TableFilterText, Mode=OneWay}"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           MaxLines="1"
                                                            Foreground="{Binding TableFilterForegroundBrush, Mode=OneWay}" />
                                             </StackPanel>
                                         </Grid>
@@ -281,7 +308,10 @@
                                                         Margin="18,10">
                                                 <PathIcon Data="{Binding RoomFilterIconState, Converter={StaticResource IconConverter}, Mode=OneWay}"
                                                           Foreground="{Binding RoomFilterForegroundBrush, Mode=OneWay}" />
-                                                <TextBlock Text="{Binding RoomFilterText, Mode=OneWay}"
+                                                <TextBlock x:Name="RoomFilterTextBlock"
+                                                           Text="{Binding RoomFilterText, Mode=OneWay}"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           MaxLines="1"
                                                            Foreground="{Binding RoomFilterForegroundBrush, Mode=OneWay}" />
                                             </StackPanel>
                                         </Grid>
@@ -289,7 +319,7 @@
                                 </Grid>
                             </Border>
 
-                            <Button 
+                            <Button x:Name="AdvancedFilterButton"
                                 Grid.Column="2"
                                 Style="{StaticResource SecondaryActionButtonStyle}"
                                 Padding="10"
@@ -301,7 +331,10 @@
                                 <StackPanel Orientation="Horizontal"
                                         Spacing="8">
                                     <PathIcon Data="{Binding FilterIconState, Converter={StaticResource IconConverter}, Mode=OneWay}" />
-                                    <TextBlock Text="{Binding FilterAreaButtonText}" />
+                                    <TextBlock x:Name="AdvancedFilterButtonText"
+                                               Text="{Binding FilterAreaButtonText}"
+                                               TextTrimming="CharacterEllipsis"
+                                               MaxLines="1" />
                                 </StackPanel>
                             </Button>
                         </Grid>
@@ -356,7 +389,9 @@
         </Border>
 
         <!-- Placeholder for when no area is selected -->
-        <Border Grid.Column="1"
+        <Border x:Name="EmptyDetailPane"
+                Grid.Row="0"
+                Grid.Column="1"
                 Background="{StaticResource VeryLightGrayBrush}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -371,12 +406,16 @@
                 <TextBlock Text="{Binding NoAreasText, Mode=OneWay}" 
                            Foreground="{StaticResource DarkGrayBrush}" 
                            FontSize="{StaticResource FontSizeExtraExtraLarge}" 
-                           FontWeight="SemiBold" />
+                           FontWeight="SemiBold"
+                           TextAlignment="Center"
+                           TextWrapping="WrapWholeWords" />
             </StackPanel>
         </Border>
 
         <!-- Detailed Area Card -->
-        <Border Grid.Column="1"
+        <Border x:Name="DetailPane"
+                Grid.Row="0"
+                Grid.Column="1"
                 Background="{StaticResource VeryLightGrayBrush}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"

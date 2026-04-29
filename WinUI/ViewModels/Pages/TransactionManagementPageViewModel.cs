@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
 using WinUI.Services.Factories;
+using WinUI.Services.Layout;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
 using WinUI.UIModels.Management;
@@ -28,11 +29,11 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
     private const double TransactionCardOuterHeight = 136;
     private const double TransactionCardsColumnSpacing = 14;
     private const int PreferredGridTransactionsPerRow = 2;
-    private const double LayoutPrecisionEpsilon = 0.5;
 
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
     private readonly ITransactionFilterService _transactionFilterService;
+    private readonly IResponsiveLayoutService _responsiveLayoutService;
     private readonly TransactionCardControlViewModelFactory _cardControlViewModelFactory;
     private readonly List<TransactionModel> _allTransactions;
     private readonly Dictionary<TransactionModel, TransactionCardControlViewModel> _cardViewModelsByTransaction;
@@ -112,6 +113,7 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
         INotificationService notificationService,
         ITransactionCatalogService transactionCatalogService,
         ITransactionFilterService transactionFilterService,
+        IResponsiveLayoutService responsiveLayoutService,
         TransactionModelFactory transactionModelFactory,
         TransactionCardControlViewModelFactory cardControlViewModelFactory,
         PaginationControlViewModel paginationViewModel)
@@ -120,6 +122,7 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         _transactionFilterService = transactionFilterService ?? throw new ArgumentNullException(nameof(transactionFilterService));
+        _responsiveLayoutService = responsiveLayoutService ?? throw new ArgumentNullException(nameof(responsiveLayoutService));
         _cardControlViewModelFactory = cardControlViewModelFactory ?? throw new ArgumentNullException(nameof(cardControlViewModelFactory));
         PaginationViewModel = paginationViewModel ?? throw new ArgumentNullException(nameof(paginationViewModel));
         ArgumentNullException.ThrowIfNull(transactionCatalogService);
@@ -142,9 +145,7 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
             .GetTransactions()
             .Select(transactionModelFactory.Create)
             .ToList();
-        _cardViewModelsByTransaction = _allTransactions.ToDictionary(
-            transaction => transaction,
-            CreateCardViewModel);
+        _cardViewModelsByTransaction = [];
 
         RefreshLocalizedText();
         _isInitialized = true;
@@ -194,12 +195,18 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
             return;
         }
 
-        int columns = CalculateTransactionCardsColumnCount(availableWidth);
-        double totalSpacing = TransactionCardsColumnSpacing * (columns - 1);
+        CardGridLayout layout = _responsiveLayoutService.CalculateCardGrid(
+            availableWidth,
+            TransactionCardOuterWidth,
+            TransactionCardOuterHeight,
+            TransactionCardsColumnSpacing,
+            PreferredGridTransactionsPerRow,
+            PageSize,
+            PageSize);
 
-        TransactionCardsMaximumRowsOrColumns = columns;
-        TransactionCardsMinItemWidth = Math.Floor((availableWidth - totalSpacing + LayoutPrecisionEpsilon) / columns);
-        TransactionCardsMinItemHeight = TransactionCardOuterHeight;
+        TransactionCardsMaximumRowsOrColumns = layout.Columns;
+        TransactionCardsMinItemWidth = layout.ItemWidth;
+        TransactionCardsMinItemHeight = layout.ItemHeight;
     }
 
     private void HandlePaginationPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -346,10 +353,7 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
         int startIndex = Math.Max(0, (_pagination.CurrentPage - 1) * _pagination.PageSize);
         foreach (TransactionModel transaction in _filteredTransactions.Skip(startIndex).Take(_pagination.PageSize))
         {
-            if (_cardViewModelsByTransaction.TryGetValue(transaction, out TransactionCardControlViewModel? cardViewModel))
-            {
-                PagedTransactionCards.Add(cardViewModel);
-            }
+            PagedTransactionCards.Add(GetOrCreateCardViewModel(transaction));
         }
 
         OnPropertyChanged(nameof(HasTransactions));
@@ -381,14 +385,14 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
             HandleTogglePaymentMethodAsync);
     }
 
-    private static int CalculateTransactionCardsColumnCount(double availableWidth)
+    private TransactionCardControlViewModel GetOrCreateCardViewModel(TransactionModel transaction)
     {
-        if (availableWidth < TransactionCardOuterWidth)
+        if (!_cardViewModelsByTransaction.TryGetValue(transaction, out TransactionCardControlViewModel? viewModel))
         {
-            return 1;
+            viewModel = CreateCardViewModel(transaction);
+            _cardViewModelsByTransaction[transaction] = viewModel;
         }
 
-        int maxPossibleColumns = (int)((availableWidth + TransactionCardsColumnSpacing) / (TransactionCardOuterWidth + TransactionCardsColumnSpacing));
-        return Math.Max(1, Math.Min(PreferredGridTransactionsPerRow, maxPossibleColumns));
+        return viewModel;
     }
 }

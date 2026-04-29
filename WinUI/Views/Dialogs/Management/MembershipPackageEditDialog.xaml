@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:panels="using:WinUI.Views.Panels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Style="{StaticResource StandardFormDialogStyle}"
@@ -59,25 +60,18 @@
         <ScrollViewer Grid.Row="2"
                       VerticalScrollBarVisibility="Auto"
                       VerticalScrollMode="Enabled"
-                      Margin="0,0,-16,0"
-                      Padding="0,0,16,20">
+                      Margin="0"
+                      Padding="0,0,20,20">
             <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
-                <Grid ColumnSpacing="12"
-                      RowSpacing="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
+                <panels:ResponsiveFormPanel ColumnSpacing="12"
+                                            RowSpacing="10"
+                                            MinColumnWidth="180">
                     <TextBox Grid.Column="0"
                              Grid.Row="0"
                              MinWidth="160"
                              Style="{StaticResource DialogFormTextBoxStyle}"
                              PlaceholderText="{x:Bind ViewModel.NamePlaceholderText, Mode=OneWay}"
+                             ToolTipService.ToolTip="{x:Bind ViewModel.NamePlaceholderText, Mode=OneWay}"
                              Text="{x:Bind ViewModel.EditName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBox Grid.Column="1"
@@ -85,6 +79,7 @@
                              MinWidth="160"
                              Style="{StaticResource DialogFormTextBoxStyle}"
                              PlaceholderText="{x:Bind ViewModel.MinSpentPlaceholderText, Mode=OneWay}"
+                             ToolTipService.ToolTip="{x:Bind ViewModel.MinSpentPlaceholderText, Mode=OneWay}"
                              Text="{x:Bind ViewModel.EditMinSpentText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBox Grid.Column="0"
@@ -92,6 +87,7 @@
                              MinWidth="160"
                              Style="{StaticResource DialogFormTextBoxStyle}"
                              PlaceholderText="{x:Bind ViewModel.DiscountPlaceholderText, Mode=OneWay}"
+                             ToolTipService.ToolTip="{x:Bind ViewModel.DiscountPlaceholderText, Mode=OneWay}"
                              Text="{x:Bind ViewModel.EditDiscountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Button Grid.Row="1"
@@ -111,9 +107,10 @@
                                     VerticalAlignment="Center">
                             <PathIcon Width="16"
                                       Height="16"
-                                      Data="{x:Bind ViewModel.PaintIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
-                                      Foreground="{x:Bind ViewModel.EditColorBrush, Mode=OneWay}" />
-                            <TextBlock Text="{x:Bind ViewModel.ColorButtonText, Mode=OneWay}" />
+                                            Data="{x:Bind ViewModel.PaintIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
+                                            Foreground="{x:Bind ViewModel.EditColorBrush, Mode=OneWay}" />
+                            <TextBlock Text="{x:Bind ViewModel.ColorButtonText, Mode=OneWay}"
+                                       TextTrimming="CharacterEllipsis" />
                         </StackPanel>
                         <Button.Flyout>
                             <Flyout Placement="BottomEdgeAlignedLeft">
@@ -132,7 +129,7 @@
                             </Flyout>
                         </Button.Flyout>
                     </Button>
-                </Grid>
+                </panels:ResponsiveFormPanel>
 
                 <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
                            Visibility="{x:Bind ViewModel.HasError, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
@@ -152,21 +149,25 @@
 
                     <Button Grid.Column="0"
                             Style="{StaticResource DialogSecondaryFooterButtonStyle}"
-                            Command="{x:Bind ViewModel.CancelCommand, Mode=OneWay}">
+                            Command="{x:Bind ViewModel.CancelCommand, Mode=OneWay}"
+                            ToolTipService.ToolTip="{x:Bind ViewModel.CancelButtonText, Mode=OneWay}">
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
                         </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.CancelButtonText, Mode=OneWay}" />
+                        <TextBlock Text="{x:Bind ViewModel.CancelButtonText, Mode=OneWay}"
+                                   TextTrimming="CharacterEllipsis" />
                     </Button>
 
                     <Button Grid.Column="2"
                             Style="{StaticResource DialogPrimaryFooterButtonStyle}"
                             Command="{x:Bind ViewModel.SaveCommand, Mode=OneWay}"
-                            IsEnabled="{x:Bind ViewModel.CanSave, Mode=OneWay}">
+                            IsEnabled="{x:Bind ViewModel.CanSave, Mode=OneWay}"
+                            ToolTipService.ToolTip="{x:Bind ViewModel.SaveButtonText, Mode=OneWay}">
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
                         </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.SaveButtonText, Mode=OneWay}" />
+                        <TextBlock Text="{x:Bind ViewModel.SaveButtonText, Mode=OneWay}"
+                                   TextTrimming="CharacterEllipsis" />
                     </Button>
                 </Grid>
             </StackPanel>

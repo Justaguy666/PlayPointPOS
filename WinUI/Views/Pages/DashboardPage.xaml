@@ -11,10 +11,12 @@
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Auto">
-        <Grid RowSpacing="12" ColumnSpacing="12" Padding="24,36"
+        <Grid x:Name="RootGrid"
+              RowSpacing="12" ColumnSpacing="12" Padding="24,36"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -25,8 +27,11 @@
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Row="0" Grid.Column="0" RowSpacing="12" ColumnSpacing="12">
+            <Grid x:Name="StatsGrid"
+                  Grid.Row="0" Grid.Column="0" RowSpacing="12" ColumnSpacing="12">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
@@ -36,28 +41,34 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <controls:StatCardControl Grid.Column="0"
+                <controls:StatCardControl x:Name="RevenueStatCard"
+                                          Grid.Column="0"
                                           Grid.Row="0"
                                           DataContext="{x:Bind ViewModel.TodayRevenueStatCardViewModel, Mode=OneWay}" />
 
-                <controls:StatCardControl Grid.Column="0"
+                <controls:StatCardControl x:Name="GameSessionStatCard"
+                                          Grid.Column="0"
                                           Grid.Row="1"
                                           DataContext="{x:Bind ViewModel.TodayGameSessionStatCardViewModel, Mode=OneWay}" />
 
-                <controls:StatCardControl Grid.Column="1"
+                <controls:StatCardControl x:Name="CustomerStatCard"
+                                          Grid.Column="1"
                                           Grid.Row="0"
                                           DataContext="{x:Bind ViewModel.TodayCustomerStatCardViewModel, Mode=OneWay}" />
 
-                <controls:StatCardControl Grid.Column="1"
+                <controls:StatCardControl x:Name="ProductStatCard"
+                                          Grid.Column="1"
                                           Grid.Row="1"
                                           DataContext="{x:Bind ViewModel.TodayProductStatCardViewModel, Mode=OneWay}" />
             </Grid>
 
-            <controls:RevenueChartControl Grid.Row="1"
+            <controls:RevenueChartControl x:Name="RevenueChart"
+                                          Grid.Row="1"
                                           Grid.Column="0"
                                           DataContext="{x:Bind ViewModel.RevenueChartViewModel, Mode=OneWay}" />
 
-            <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Spacing="12">
+            <StackPanel x:Name="SidePanel"
+                        Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Spacing="12">
                 <controls:TrendingListControl DataContext="{x:Bind ViewModel.TrendingListViewModel, Mode=OneWay}"
                                               x:Uid="TrendingListControl" />
 
@@ -66,20 +77,30 @@
                 <controls:GoalProgressControl DataContext="{x:Bind ViewModel.GoalProgressViewModel, Mode=OneWay}" />
             </StackPanel>
 
-            <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ColumnSpacing="12">
+            <Grid x:Name="PopularGrid"
+                  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ColumnSpacing="12" RowSpacing="12">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <controls:PopularCardControl Grid.Column="0"
+                <controls:PopularCardControl x:Name="TopGamesCard"
+                                             Grid.Column="0"
                                              DataContext="{x:Bind ViewModel.TopGamesCardViewModel, Mode=OneWay}" />
 
-                <controls:PopularCardControl Grid.Column="1"
+                <controls:PopularCardControl x:Name="TopFoodsCard"
+                                             Grid.Column="1"
                                              DataContext="{x:Bind ViewModel.TopFoodsCardViewModel, Mode=OneWay}" />
 
-                <controls:PopularCardControl Grid.Column="2"
+                <controls:PopularCardControl x:Name="TopDrinksCard"
+                                             Grid.Column="2"
                                              DataContext="{x:Bind ViewModel.TopDrinksCardViewModel, Mode=OneWay}" />
             </Grid>
         </Grid>

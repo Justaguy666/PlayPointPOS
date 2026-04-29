@@ -40,11 +40,15 @@
                     <TextBlock Text="{Binding TransactionCodeLabelText}"
                                FontSize="{StaticResource FontSizeTiny}"
                                Foreground="{StaticResource SecondaryGrayBrush}"
+                               TextTrimming="CharacterEllipsis"
+                               MaxLines="1"
                                VerticalAlignment="Center" />
                     <TextBlock Text="{Binding TransactionCode}"
                                FontSize="{StaticResource FontSizeSmall}"
                                FontWeight="SemiBold"
                                Foreground="{StaticResource DarkSlateGrayBrush}"
+                               TextTrimming="CharacterEllipsis"
+                               MaxLines="1"
                                VerticalAlignment="Center" />
                 </StackPanel>
 
@@ -146,6 +150,8 @@
                     <TextBlock Text="{Binding DateText}"
                                FontSize="{StaticResource FontSizeTiny}"
                                Foreground="{StaticResource SecondaryGrayBrush}"
+                               TextTrimming="CharacterEllipsis"
+                               MaxLines="1"
                                VerticalAlignment="Center" />
                 </StackPanel>
 
@@ -161,6 +167,8 @@
                     <TextBlock Text="{Binding TimeText}"
                                FontSize="{StaticResource FontSizeTiny}"
                                Foreground="{StaticResource SecondaryGrayBrush}"
+                               TextTrimming="CharacterEllipsis"
+                               MaxLines="1"
                                VerticalAlignment="Center" />
                 </StackPanel>
             </Grid>

@@ -26,6 +26,7 @@ using Microsoft.UI.Xaml.Controls;
 using Windows.ApplicationModel;
 using WinUI.Services;
 using WinUI.Services.Factories;
+using WinUI.Services.Layout;
 using WinUI.ViewModels.Dialogs;
 using WinUI.Views.Dialogs;
 
@@ -98,6 +99,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddSingleton<INotificationService>(sp => sp.GetRequiredService<Infrastructure.Services.Notification.ToastNotificationService>());
 
                     services.AddSingleton<IPasswordHasher, Infrastructure.Services.PasswordHasher>();
+                    services.AddSingleton<IResponsiveLayoutService, ResponsiveLayoutService>();
 
                     services.AddSingleton<Func<string, object?, ContentDialog?>>(provider => (dialogKey, parameter) =>
                     {

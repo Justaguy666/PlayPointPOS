@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:panels="using:WinUI.Views.Panels"
     xmlns:vm="using:WinUI.ViewModels.Dialogs.Management"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -61,26 +62,18 @@
         <ScrollViewer Grid.Row="2"
                       VerticalScrollBarVisibility="Auto"
                       VerticalScrollMode="Enabled"
-                      Margin="0,0,-16,0"
-                      Padding="0,0,16,20"
+                      Margin="0"
+                      Padding="0,0,20,20"
                       MaxHeight="520">
             <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
-                <Grid ColumnSpacing="12"
-                      RowSpacing="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
+                <panels:ResponsiveFormPanel ColumnSpacing="12"
+                                            RowSpacing="10"
+                                            MinColumnWidth="180">
                     <TextBox Grid.Column="0"
                              Grid.Row="0"
                              MinWidth="160"
                              PlaceholderText="{x:Bind ViewModel.NamePlaceholderText, Mode=OneWay}"
+                             ToolTipService.ToolTip="{x:Bind ViewModel.NamePlaceholderText, Mode=OneWay}"
                              Style="{StaticResource DialogFormTextBoxStyle}"
                              Text="{x:Bind ViewModel.NewMembershipRankName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -88,6 +81,7 @@
                              Grid.Row="0"
                              MinWidth="160"
                              PlaceholderText="{x:Bind ViewModel.MinSpentPlaceholderText, Mode=OneWay}"
+                             ToolTipService.ToolTip="{x:Bind ViewModel.MinSpentPlaceholderText, Mode=OneWay}"
                              Style="{StaticResource DialogFormTextBoxStyle}"
                              Text="{x:Bind ViewModel.NewMinSpentText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -95,6 +89,7 @@
                              Grid.Row="1"
                              MinWidth="160"
                              PlaceholderText="{x:Bind ViewModel.DiscountPlaceholderText, Mode=OneWay}"
+                             ToolTipService.ToolTip="{x:Bind ViewModel.DiscountPlaceholderText, Mode=OneWay}"
                              Style="{StaticResource DialogFormTextBoxStyle}"
                              Text="{x:Bind ViewModel.NewDiscountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -117,7 +112,8 @@
                                       Height="16"
                                       Data="{x:Bind ViewModel.PaintIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
                                       Foreground="{x:Bind ViewModel.NewMembershipRankBrush, Mode=OneWay}" />
-                            <TextBlock Text="{x:Bind ViewModel.ColorButtonText, Mode=OneWay}" />
+                            <TextBlock Text="{x:Bind ViewModel.ColorButtonText, Mode=OneWay}"
+                                       TextTrimming="CharacterEllipsis" />
                         </StackPanel>
                         <Button.Flyout>
                             <Flyout Placement="BottomEdgeAlignedLeft">
@@ -140,6 +136,7 @@
                     <Button Grid.Row="2"
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
+                            panels:ResponsiveFormPanel.IsFullWidth="True"
                             Style="{StaticResource PrimaryActionButtonStyle}"
                             Command="{x:Bind ViewModel.AddMembershipRankCommand, Mode=OneWay}"
                             IsEnabled="{x:Bind ViewModel.CanAddMembershipRank, Mode=OneWay}"
@@ -147,13 +144,15 @@
                             MinWidth="0"
                             Padding="18,0"
                             HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            ToolTipService.ToolTip="{x:Bind ViewModel.AddButtonText, Mode=OneWay}">
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
                         </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.AddButtonText, Mode=OneWay}" />
+                        <TextBlock Text="{x:Bind ViewModel.AddButtonText, Mode=OneWay}"
+                                   TextTrimming="CharacterEllipsis" />
                     </Button>
-                </Grid>
+                </panels:ResponsiveFormPanel>
 
                 <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
                            Visibility="{x:Bind ViewModel.HasError, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
@@ -188,19 +187,25 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <StackPanel Grid.Column="0"
-                                                   Grid.Row="0"
-                                                   Orientation="Horizontal"
-                                                   Spacing="8"
-                                                   VerticalAlignment="Center">
+                                        <Grid Grid.Column="0"
+                                              Grid.Row="0"
+                                              ColumnSpacing="8"
+                                              VerticalAlignment="Center">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
                                             <TextBlock Text="{x:Bind Name, Mode=OneWay}"
                                                        Style="{StaticResource MemberCardNameTextStyle}"
+                                                       TextTrimming="CharacterEllipsis"
                                                        MaxLines="1" />
-                                            <Ellipse Width="12"
+                                            <Ellipse Grid.Column="1"
+                                                     Width="12"
                                                      Height="12"
                                                      VerticalAlignment="Center"
                                                      Fill="{x:Bind RankColorBrush, Mode=OneWay}" />
-                                        </StackPanel>
+                                        </Grid>
 
                                         <StackPanel Grid.Column="1"
                                                     Grid.Row="0"
@@ -220,7 +225,8 @@
                                             </Button>
 
                                             <Button Style="{StaticResource CardDangerButtonStyle}"
-                                                    Command="{x:Bind DeleteCommand}">
+                                                    Command="{x:Bind DeleteCommand}"
+                                                    ToolTipService.ToolTip="{x:Bind DeleteTooltipText, Mode=OneWay}">
                                                 <Button.Resources>
                                                     <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DangerActionButtonStateResources.xaml" />
                                                 </Button.Resources>
@@ -245,18 +251,26 @@
                                                         Grid.Column="0"
                                                         Spacing="2">
                                                 <TextBlock Text="{x:Bind MinSpentLabelText, Mode=OneWay}"
-                                                           Style="{StaticResource MemberCardMetaLabelTextStyle}" />
+                                                           Style="{StaticResource MemberCardMetaLabelTextStyle}"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           MaxLines="1" />
                                                 <TextBlock Text="{x:Bind MinSpentText, Mode=OneWay}"
-                                                           Style="{StaticResource MemberCardMetaValueTextStyle}" />
+                                                           Style="{StaticResource MemberCardMetaValueTextStyle}"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           MaxLines="1" />
                                             </StackPanel>
 
                                             <StackPanel Orientation="Vertical"
                                                         Grid.Column="1"
                                                         Spacing="2">
                                                 <TextBlock Text="{x:Bind DiscountLabelText, Mode=OneWay}"
-                                                           Style="{StaticResource MemberCardMetaLabelTextStyle}" />
+                                                           Style="{StaticResource MemberCardMetaLabelTextStyle}"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           MaxLines="1" />
                                                 <TextBlock Text="{x:Bind DiscountText, Mode=OneWay}"
-                                                           Style="{StaticResource MemberCardMetaValueTextStyle}" />
+                                                           Style="{StaticResource MemberCardMetaValueTextStyle}"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           MaxLines="1" />
                                             </StackPanel>
                                         </Grid>
                                     </Grid>
@@ -275,18 +289,21 @@
 
                                     <TextBox Grid.Column="0"
                                              Text="{x:Bind EditName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             ToolTipService.ToolTip="{x:Bind Name, Mode=OneWay}"
                                              Style="{StaticResource DialogFormTextBoxStyle}" />
                                     <TextBox Grid.Column="1"
                                              Text="{x:Bind EditMinSpentText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             ToolTipService.ToolTip="{x:Bind MinSpentLabelText, Mode=OneWay}"
                                              Style="{StaticResource DialogFormTextBoxStyle}" />
                                     <TextBox Grid.Column="2"
                                              Text="{x:Bind EditDiscountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             ToolTipService.ToolTip="{x:Bind DiscountLabelText, Mode=OneWay}"
                                              Style="{StaticResource DialogFormTextBoxStyle}" />
 
                                     <Button Grid.Column="3"
                                             Style="{StaticResource DialogSecondaryFooterButtonStyle}"
                                             Height="48"
-                                            MinWidth="160"
+                                            MinWidth="0"
                                             Padding="12,0"
                                             ToolTipService.ToolTip="{x:Bind ColorButtonText, Mode=OneWay}">
                                         <Button.Resources>
@@ -300,7 +317,8 @@
                                                       Height="16"
                                                       Data="{x:Bind PaintIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
                                                       Foreground="{x:Bind EditColorBrush, Mode=OneWay}" />
-                                            <TextBlock Text="{x:Bind ColorButtonText, Mode=OneWay}" />
+                                            <TextBlock Text="{x:Bind ColorButtonText, Mode=OneWay}"
+                                                       TextTrimming="CharacterEllipsis" />
                                         </StackPanel>
                                         <Button.Flyout>
                                             <Flyout Placement="BottomEdgeAlignedLeft">
@@ -323,8 +341,10 @@
                                     <Button Grid.Column="4"
                                             Style="{StaticResource PrimaryActionButtonStyle}"
                                             Command="{x:Bind CommitEditCommand}"
+                                            MinWidth="48"
                                             Height="48"
-                                            Padding="16,0">
+                                            Padding="0"
+                                            ToolTipService.ToolTip="{x:Bind SaveTooltipText, Mode=OneWay}">
                                         <TextBlock Text="✓"
                                                    FontSize="{StaticResource FontSizeLarge}"
                                                    FontWeight="SemiBold" />
@@ -333,8 +353,10 @@
                                     <Button Grid.Column="5"
                                             Style="{StaticResource SecondaryActionButtonStyle}"
                                             Command="{x:Bind CancelEditCommand}"
+                                            MinWidth="48"
                                             Height="48"
-                                            Padding="16,0">
+                                            Padding="0"
+                                            ToolTipService.ToolTip="{x:Bind CancelTooltipText, Mode=OneWay}">
                                         <TextBlock Text="✕"
                                                    FontSize="{StaticResource FontSizeLarge}"
                                                    FontWeight="SemiBold" />

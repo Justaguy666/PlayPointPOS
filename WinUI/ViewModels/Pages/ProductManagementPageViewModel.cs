@@ -15,6 +15,7 @@ using Microsoft.UI.Xaml.Media;
 using Windows.UI;
 using WinUI.Resources;
 using WinUI.Services.Factories;
+using WinUI.Services.Layout;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
 using WinUI.UIModels.Management;
@@ -37,11 +38,13 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
     private const double ProductCardOuterHeight = 340;
     private const double ProductCardsColumnSpacing = 16;
     private const int PreferredGridProductsPerRow = 5;
-    private const double LayoutPrecisionEpsilon = 0.5;
+    private const int GridRowsPerPage = 3;
+    private const int CompactGridPageSize = 10;
 
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
     private readonly IProductFilterService _productFilterService;
+    private readonly IResponsiveLayoutService _responsiveLayoutService;
     private readonly ProductModelFactory _productModelFactory;
     private readonly ProductCardControlViewModelFactory _productCardControlViewModelFactory;
     private readonly Brush _selectedBackgroundBrush;
@@ -205,6 +208,7 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
         INotificationService notificationService,
         IProductCatalogService productCatalogService,
         IProductFilterService productFilterService,
+        IResponsiveLayoutService responsiveLayoutService,
         ProductModelFactory productModelFactory,
         ProductCardControlViewModelFactory productCardControlViewModelFactory,
         PaginationControlViewModel paginationViewModel)
@@ -213,6 +217,7 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         _productFilterService = productFilterService ?? throw new ArgumentNullException(nameof(productFilterService));
+        _responsiveLayoutService = responsiveLayoutService ?? throw new ArgumentNullException(nameof(responsiveLayoutService));
         _productModelFactory = productModelFactory ?? throw new ArgumentNullException(nameof(productModelFactory));
         _productCardControlViewModelFactory = productCardControlViewModelFactory ?? throw new ArgumentNullException(nameof(productCardControlViewModelFactory));
         PaginationViewModel = paginationViewModel ?? throw new ArgumentNullException(nameof(paginationViewModel));
@@ -251,12 +256,8 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
             .GetProducts()
             .Select(_productModelFactory.Create)
             .ToList();
-        _gridCardViewModelsByProduct = _allProducts.ToDictionary(
-            product => product,
-            CreateGridCardViewModel);
-        _listCardViewModelsByProduct = _allProducts.ToDictionary(
-            product => product,
-            CreateListCardViewModel);
+        _gridCardViewModelsByProduct = [];
+        _listCardViewModelsByProduct = [];
 
         RefreshLocalizedText();
         _isInitialized = true;
@@ -336,17 +337,22 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
             return;
         }
 
-        int columns = CalculateGridProductsColumnCount(availableWidth);
-        double totalSpacing = ProductCardsColumnSpacing * (columns - 1);
+        CardGridLayout layout = _responsiveLayoutService.CalculateCardGrid(
+            availableWidth,
+            ProductCardOuterWidth,
+            ProductCardOuterHeight,
+            ProductCardsColumnSpacing,
+            PreferredGridProductsPerRow,
+            GridRowsPerPage,
+            CompactGridPageSize);
 
-        GridProductsMaximumRowsOrColumns = columns;
-        GridProductsMinItemWidth = Math.Floor((availableWidth - totalSpacing + LayoutPrecisionEpsilon) / columns);
-        GridProductsMinItemHeight = ProductCardOuterHeight;
+        GridProductsMaximumRowsOrColumns = layout.Columns;
+        GridProductsMinItemWidth = layout.ItemWidth;
+        GridProductsMinItemHeight = layout.ItemHeight;
 
         if (IsGridView)
         {
-            int newPageSize = columns >= 3 ? columns * 3 : 10;
-            SetPageSize(newPageSize);
+            SetPageSize(layout.PageSize);
         }
     }
 
@@ -397,8 +403,10 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
         ListButtonBackgroundHoverColor = AppColors.VeryLightGray;
         ListButtonForegroundHoverColor = AppColors.Black;
 
-        int columns = GridProductsMaximumRowsOrColumns;
-        SetPageSize(columns >= 3 ? columns * 3 : 10);
+        SetPageSize(GridProductsMaximumRowsOrColumns >= 3
+            ? GridProductsMaximumRowsOrColumns * GridRowsPerPage
+            : CompactGridPageSize);
+        RefreshPagedProducts();
     }
 
     private void ExecuteToggleListView()
@@ -423,6 +431,7 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
         ListButtonForegroundHoverColor = AppColors.White;
 
         SetPageSize(ListPageSize);
+        RefreshPagedProducts();
     }
 
     private async Task OpenFilterDialogAsync()
@@ -622,14 +631,13 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
         int startIndex = Math.Max(0, (_pagination.CurrentPage - 1) * _pagination.PageSize);
         foreach (ProductModel product in _filteredProducts.Skip(startIndex).Take(_pagination.PageSize))
         {
-            if (_gridCardViewModelsByProduct.TryGetValue(product, out GridProductCardControlViewModel? gridViewModel))
+            if (IsGridView)
             {
-                PagedGridProductCards.Add(gridViewModel);
+                PagedGridProductCards.Add(GetOrCreateGridCardViewModel(product));
             }
-
-            if (_listCardViewModelsByProduct.TryGetValue(product, out ListProductCardControlViewModel? listViewModel))
+            else
             {
-                PagedListProductCards.Add(listViewModel);
+                PagedListProductCards.Add(GetOrCreateListCardViewModel(product));
             }
         }
 
@@ -709,8 +717,14 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
 
     private void AddCardViewModelsForProduct(ProductModel product)
     {
-        _gridCardViewModelsByProduct[product] = CreateGridCardViewModel(product);
-        _listCardViewModelsByProduct[product] = CreateListCardViewModel(product);
+        if (IsGridView)
+        {
+            _gridCardViewModelsByProduct[product] = CreateGridCardViewModel(product);
+        }
+        else
+        {
+            _listCardViewModelsByProduct[product] = CreateListCardViewModel(product);
+        }
     }
 
     private void RemoveCardViewModelsForProduct(ProductModel product)
@@ -758,14 +772,25 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
         }
     }
 
-    private static int CalculateGridProductsColumnCount(double availableWidth)
+    private GridProductCardControlViewModel GetOrCreateGridCardViewModel(ProductModel product)
     {
-        if (availableWidth < ProductCardOuterWidth)
+        if (!_gridCardViewModelsByProduct.TryGetValue(product, out GridProductCardControlViewModel? viewModel))
         {
-            return 1;
+            viewModel = CreateGridCardViewModel(product);
+            _gridCardViewModelsByProduct[product] = viewModel;
         }
 
-        int maxPossibleColumns = (int)((availableWidth + ProductCardsColumnSpacing) / (ProductCardOuterWidth + ProductCardsColumnSpacing));
-        return Math.Max(1, Math.Min(PreferredGridProductsPerRow, maxPossibleColumns));
+        return viewModel;
+    }
+
+    private ListProductCardControlViewModel GetOrCreateListCardViewModel(ProductModel product)
+    {
+        if (!_listCardViewModelsByProduct.TryGetValue(product, out ListProductCardControlViewModel? viewModel))
+        {
+            viewModel = CreateListCardViewModel(product);
+            _listCardViewModelsByProduct[product] = viewModel;
+        }
+
+        return viewModel;
     }
 }

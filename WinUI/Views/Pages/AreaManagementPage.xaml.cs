@@ -3,6 +3,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
+using WinUI.Helpers;
+using WinUI.Services.Layout;
 using WinUI.ViewModels.AreaManagement.SummarizedAreaCards;
 using WinUI.ViewModels.Pages;
 
@@ -10,9 +12,6 @@ namespace WinUI.Views.Pages;
 
 public sealed partial class AreaManagementPage : Page
 {
-    private const double AreaCardsLeftPadding = 10;
-    private const double AreaCardsRightPadding = 28;
-
     public AreaManagementPageViewModel ViewModel { get; }
 
     public AreaManagementPage(AreaManagementPageViewModel viewModel)
@@ -21,13 +20,28 @@ public sealed partial class AreaManagementPage : Page
         DataContext = ViewModel;
         InitializeComponent();
 
+        SizeChanged += HandleSizeChanged;
+        Loaded += HandleLoaded;
         Unloaded += HandleUnloaded;
+        ApplyResponsiveLayout();
     }
 
     private void HandleUnloaded(object sender, RoutedEventArgs e)
     {
+        SizeChanged -= HandleSizeChanged;
+        Loaded -= HandleLoaded;
         Unloaded -= HandleUnloaded;
         ViewModel.Dispose();
+    }
+
+    private void HandleLoaded(object sender, RoutedEventArgs e)
+    {
+        ToolTipHelper.ApplyMissingToolTips(this);
+    }
+
+    private void HandleSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        ApplyResponsiveLayout();
     }
 
     private void HandleAreaCardsScrollViewerLoaded(object sender, RoutedEventArgs e)
@@ -138,13 +152,66 @@ public sealed partial class AreaManagementPage : Page
 
     private void UpdateAreaCardsLayout()
     {
-        var availableWidth = AreaCardsScrollViewer.ActualWidth - AreaCardsLeftPadding - AreaCardsRightPadding;
+        Thickness padding = AreaCardsScrollViewer.Padding;
+        var availableWidth = AreaCardsScrollViewer.ActualWidth - padding.Left - padding.Right;
         if (availableWidth <= 0)
         {
             return;
         }
 
         ViewModel.UpdateAreaCardsLayout(availableWidth);
+    }
+
+    private void ApplyResponsiveLayout()
+    {
+        bool isCompact = ResponsiveBreakpoints.IsCompact(ActualWidth);
+        bool isHeaderCompact = ActualWidth < ResponsiveBreakpoints.WideMinWidth;
+
+        RootGrid.ColumnDefinitions[0].Width = isCompact
+            ? new GridLength(1, GridUnitType.Star)
+            : new GridLength(4.3, GridUnitType.Star);
+        RootGrid.ColumnDefinitions[1].Width = isCompact
+            ? new GridLength(0)
+            : new GridLength(5.7, GridUnitType.Star);
+        RootGrid.RowDefinitions[0].Height = new GridLength(1, GridUnitType.Star);
+        RootGrid.RowDefinitions[1].Height = isCompact
+            ? new GridLength(1, GridUnitType.Star)
+            : new GridLength(0);
+
+        Grid.SetRow(ListPane, 0);
+        Grid.SetColumn(ListPane, 0);
+        Grid.SetRow(EmptyDetailPane, isCompact ? 1 : 0);
+        Grid.SetColumn(EmptyDetailPane, isCompact ? 0 : 1);
+        Grid.SetRow(DetailPane, isCompact ? 1 : 0);
+        Grid.SetColumn(DetailPane, isCompact ? 0 : 1);
+
+        HeaderPane.Padding = isCompact ? new Thickness(16) : new Thickness(20);
+        AreaCardsScrollViewer.Padding = isCompact
+            ? new Thickness(ResponsiveBreakpoints.CompactPageHorizontalPadding, 16, ResponsiveBreakpoints.CompactPageHorizontalPadding, 16)
+            : new Thickness(10, 20, 28, 20);
+
+        ApplyHeaderLayout(isHeaderCompact);
+        UpdateAreaCardsLayout();
+    }
+
+    private void ApplyHeaderLayout(bool isCompact)
+    {
+        Grid.SetRow(TypeFilterHost, 0);
+        Grid.SetColumn(TypeFilterHost, 0);
+        Grid.SetColumnSpan(TypeFilterHost, isCompact ? 3 : 1);
+        TypeFilterHost.Margin = isCompact ? new Thickness(0, 0, 0, 8) : new Thickness(0);
+
+        Grid.SetRow(AdvancedFilterButton, isCompact ? 1 : 0);
+        Grid.SetColumn(AdvancedFilterButton, isCompact ? 0 : 2);
+        AdvancedFilterButton.HorizontalAlignment = isCompact ? HorizontalAlignment.Left : HorizontalAlignment.Right;
+        AdvancedFilterButton.Padding = isCompact ? new Thickness(10) : new Thickness(10);
+        AdvancedFilterButton.MinWidth = isCompact ? 44 : 0;
+
+        AddButtonText.Visibility = isCompact ? Visibility.Collapsed : Visibility.Visible;
+        AdvancedFilterButtonText.Visibility = isCompact ? Visibility.Collapsed : Visibility.Visible;
+        TableFilterTextBlock.Visibility = isCompact ? Visibility.Collapsed : Visibility.Visible;
+        RoomFilterTextBlock.Visibility = isCompact ? Visibility.Collapsed : Visibility.Visible;
+        AllAreasFilterTextBlock.MaxWidth = isCompact ? 96 : double.PositiveInfinity;
     }
 
     private static Border? TryGetAreaFilterHoverOverlay(Grid contentGrid)

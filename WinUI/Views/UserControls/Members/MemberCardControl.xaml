@@ -37,11 +37,15 @@
                             VerticalAlignment="Center"
                             Spacing="16">
                     <TextBlock Text="{Binding FullName}"
-                               Style="{StaticResource MemberCardNameTextStyle}" />
+                               Style="{StaticResource MemberCardNameTextStyle}"
+                               TextTrimming="CharacterEllipsis"
+                               MaxLines="1" />
 
                     <StackPanel Spacing="10">
                         <TextBlock Text="{Binding CodeText}"
-                                   Style="{StaticResource MemberCardMetaLabelTextStyle}" />
+                                   Style="{StaticResource MemberCardMetaLabelTextStyle}"
+                                   TextTrimming="CharacterEllipsis"
+                                   MaxLines="1" />
 
                         <StackPanel Orientation="Horizontal"
                                     Spacing="10">
@@ -52,6 +56,8 @@
                                       VerticalAlignment="Center" />
                             <TextBlock Text="{Binding PhoneNumber}"
                                        Style="{StaticResource MemberCardMetaValueTextStyle}"
+                                       TextTrimming="CharacterEllipsis"
+                                       MaxLines="1"
                                        VerticalAlignment="Center" />
                         </StackPanel>
                     </StackPanel>
@@ -63,9 +69,13 @@
                             Spacing="12">
                     <StackPanel Spacing="6">
                         <TextBlock Text="{Binding TotalSpentLabelText}"
-                                   Style="{StaticResource MemberCardMetaLabelTextStyle}" />
+                                   Style="{StaticResource MemberCardMetaLabelTextStyle}"
+                                   TextTrimming="CharacterEllipsis"
+                                   MaxLines="1" />
                         <TextBlock Text="{Binding TotalSpentText}"
-                                   Style="{StaticResource MemberCardSpentTextStyle}" />
+                                   Style="{StaticResource MemberCardSpentTextStyle}"
+                                   TextTrimming="CharacterEllipsis"
+                                   MaxLines="1" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal"
@@ -102,6 +112,8 @@
                     <TextBlock Text="{Binding ProgressPercentageText}"
                                Style="{StaticResource MemberCardProgressTextStyle}"
                                Foreground="{Binding ProgressForegroundBrush}"
+                               TextTrimming="CharacterEllipsis"
+                               MaxLines="1"
                                HorizontalAlignment="Right" />
 
                     <Border Background="{Binding PackageBadgeBackground}"
@@ -110,6 +122,8 @@
                             HorizontalAlignment="Right">
                         <TextBlock Text="{Binding MembershipRankName}"
                                    Style="{StaticResource MemberCardBadgeTextStyle}"
+                                   TextTrimming="CharacterEllipsis"
+                                   MaxLines="1"
                                    Foreground="{Binding PackageBadgeForeground}" />
                     </Border>
                 </StackPanel>

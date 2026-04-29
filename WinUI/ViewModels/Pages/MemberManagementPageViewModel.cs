@@ -166,7 +166,7 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
             .ToList();
         RefreshMembershipStates();
 
-        _cardViewModelsByMember = _allMembers.ToDictionary(member => member, CreateCardViewModel);
+        _cardViewModelsByMember = [];
 
         RefreshLocalizedText();
         _isInitialized = true;
@@ -384,7 +384,6 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
         if (!_allMembers.Contains(member))
         {
             _allMembers.Insert(0, member);
-            AddCardViewModelForMember(member);
         }
 
         ApplyFiltersAndSorting(resetToFirstPage: true);
@@ -491,10 +490,7 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
         int startIndex = Math.Max(0, (_pagination.CurrentPage - 1) * _pagination.PageSize);
         foreach (MemberModel member in _filteredMembers.Skip(startIndex).Take(_pagination.PageSize))
         {
-            if (_cardViewModelsByMember.TryGetValue(member, out MemberCardControlViewModel? viewModel))
-            {
-                PagedMemberCards.Add(viewModel);
-            }
+            PagedMemberCards.Add(GetOrCreateCardViewModel(member));
         }
 
         OnPropertyChanged(nameof(HasMembers));
@@ -564,9 +560,15 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
             HandleDeleteMemberAsync);
     }
 
-    private void AddCardViewModelForMember(MemberModel member)
+    private MemberCardControlViewModel GetOrCreateCardViewModel(MemberModel member)
     {
-        _cardViewModelsByMember[member] = CreateCardViewModel(member);
+        if (!_cardViewModelsByMember.TryGetValue(member, out MemberCardControlViewModel? viewModel))
+        {
+            viewModel = CreateCardViewModel(member);
+            _cardViewModelsByMember[member] = viewModel;
+        }
+
+        return viewModel;
     }
 
     private void RemoveCardViewModelForMember(MemberModel member)

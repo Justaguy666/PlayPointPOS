@@ -9,48 +9,65 @@
     xmlns:controls="using:WinUI.Views.UserControls"
     mc:Ignorable="d">
 
-    <Grid>
+    <Grid x:Name="RootGrid"
+          Padding="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <StackPanel
+            x:Name="HeroPanel"
             Grid.Row="0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Spacing="20">
 
-            <controls:LogoControl Width="450" Height="250" />
+            <controls:LogoControl x:Name="Logo"
+                                  Width="450"
+                                  Height="250" />
 
             <TextBlock
+                x:Name="WelcomeText"
                 Text="{x:Bind ViewModel.WelcomeText}"
                 FontSize="{StaticResource FontSizeExtraExtraExtraLarge}"
                 FontWeight="Light"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
+                VerticalAlignment="Center"
+                TextAlignment="Center"
+                TextWrapping="WrapWholeWords"
+                TextTrimming="CharacterEllipsis" />
 
-            <controls:MenuControl Margin="0,20" DataContext="{x:Bind ViewModel}" />
+            <controls:MenuControl x:Name="Menu"
+                                  Margin="0,20"
+                                  DataContext="{x:Bind ViewModel}" />
         </StackPanel>
 
         <StackPanel
+            x:Name="FooterPanel"
             Grid.Row="1"
             HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
             Margin="0,0,0,16">
             <TextBlock
+                x:Name="AppVersionText"
                 Text="{x:Bind ViewModel.AppVersionText}"
                 FontSize="{StaticResource FontSizeSmall}"
                 FontWeight="Normal"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
+                VerticalAlignment="Center"
+                TextTrimming="CharacterEllipsis" />
 
             <TextBlock
+                x:Name="CopyrightText"
                 Text="{x:Bind ViewModel.CopyrightText}"
                 FontSize="{StaticResource FontSizeMedium}"
                 FontWeight="Medium"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
+                VerticalAlignment="Center"
+                TextAlignment="Center"
+                TextWrapping="WrapWholeWords"
+                TextTrimming="CharacterEllipsis" />
         </StackPanel>
     </Grid>
 </Page>

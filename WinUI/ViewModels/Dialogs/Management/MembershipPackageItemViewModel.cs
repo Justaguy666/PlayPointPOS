@@ -77,6 +77,15 @@ public partial class MembershipPackageItemViewModel : ObservableObject
     [ObservableProperty]
     public partial string EditTooltipText { get; set; } = string.Empty;
 
+    [ObservableProperty]
+    public partial string DeleteTooltipText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string SaveTooltipText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string CancelTooltipText { get; set; } = string.Empty;
+
     private Color _editColor;
     public Color EditColor
     {
@@ -125,6 +134,9 @@ public partial class MembershipPackageItemViewModel : ObservableObject
         DiscountLabelText = localizationService.GetString("MembershipPackageDialogDiscountLabelText");
         ColorButtonText = localizationService.GetString("MembershipPackageDialogColorButtonText");
         EditTooltipText = localizationService.GetString("EditButtonText");
+        DeleteTooltipText = localizationService.GetString("ConfirmDeleteMembershipPackageButton");
+        SaveTooltipText = localizationService.GetString("MemberFilterDialogApplyButtonText");
+        CancelTooltipText = localizationService.GetString("CancelButtonText");
         RefreshDisplay(localizationService);
     }
 

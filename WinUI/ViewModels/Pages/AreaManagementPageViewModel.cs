@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
 using Microsoft.UI.Xaml.Media;
 using WinUI.Resources;
+using WinUI.Services.Layout;
 using WinUI.Services.Factories;
 using WinUI.UIModels;
 using WinUI.UIModels.Management;
@@ -28,11 +29,11 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
     private const double MinimumTwoColumnWidth = 420;
     private const double AreaCardOuterHeight = 168;
     private const double AreaCardsColumnSpacing = 8;
-    private const double LayoutPrecisionEpsilon = 0.01;
 
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
     private readonly IAreaFilterService _areaFilterService;
+    private readonly IResponsiveLayoutService _responsiveLayoutService;
     private readonly AreaManagementCardViewModelFactory _areaCardViewModelFactory;
     private readonly Brush _selectedFilterBackgroundBrush;
     private readonly Brush _selectedFilterForegroundBrush;
@@ -164,6 +165,7 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         INotificationService notificationService,
         IAreaCatalogService areaCatalogService,
         IAreaFilterService areaFilterService,
+        IResponsiveLayoutService responsiveLayoutService,
         AreaModelFactory areaModelFactory,
         AreaManagementCardViewModelFactory areaCardViewModelFactory)
         : base(localizationService)
@@ -171,6 +173,7 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         _areaFilterService = areaFilterService ?? throw new ArgumentNullException(nameof(areaFilterService));
+        _responsiveLayoutService = responsiveLayoutService ?? throw new ArgumentNullException(nameof(responsiveLayoutService));
         _areaCardViewModelFactory = areaCardViewModelFactory ?? throw new ArgumentNullException(nameof(areaCardViewModelFactory));
         ArgumentNullException.ThrowIfNull(areaCatalogService);
         ArgumentNullException.ThrowIfNull(areaModelFactory);
@@ -409,11 +412,17 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
             return;
         }
 
-        int columns = CalculateAreaCardColumnCount(availableWidth);
-        double totalSpacing = AreaCardsColumnSpacing * (columns - 1);
+        CardGridLayout layout = _responsiveLayoutService.CalculateCardGrid(
+            availableWidth,
+            MinimumSingleColumnWidth,
+            AreaCardOuterHeight,
+            AreaCardsColumnSpacing,
+            PreferredAreaCardsPerRow,
+            wideRows: 1,
+            compactPageSize: 1);
 
-        AreaCardsMaximumRowsOrColumns = columns;
-        AreaCardsMinItemWidth = Math.Floor((availableWidth - totalSpacing + LayoutPrecisionEpsilon) / columns);
+        AreaCardsMaximumRowsOrColumns = layout.Columns;
+        AreaCardsMinItemWidth = layout.ItemWidth;
         AreaCardsMinItemHeight = AreaCardOuterHeight;
     }
 
@@ -498,21 +507,6 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
             Size = 24,
             IsSelected = isSelected,
         };
-    }
-
-    private static int CalculateAreaCardColumnCount(double availableWidth)
-    {
-        if (availableWidth < MinimumSingleColumnWidth)
-        {
-            return 1;
-        }
-
-        if (availableWidth < MinimumTwoColumnWidth)
-        {
-            return 2;
-        }
-
-        return PreferredAreaCardsPerRow;
     }
 
     private void ReplaceDetailedAreaCardViewModel(object? detailedAreaCardViewModel)

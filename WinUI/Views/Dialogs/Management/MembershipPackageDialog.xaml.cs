@@ -2,6 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using System;
+using WinUI.Helpers;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
 using WinUI.ViewModels.Dialogs.Management;
@@ -39,7 +40,13 @@ public sealed partial class MembershipPackageDialog : ContentDialog
         ViewModel.CloseRequested += HandleCloseRequested;
         ViewModel.DialogHideRequested += HandleDialogHideRequested;
         ViewModel.DialogShowRequested += HandleDialogShowRequested;
+        Loaded += HandleLoaded;
         Closed += HandleClosed;
+    }
+
+    private void HandleLoaded(object sender, RoutedEventArgs e)
+    {
+        ToolTipHelper.ApplyMissingToolTips(this);
     }
 
     private void HandleDialogHideRequested()
@@ -84,6 +91,7 @@ public sealed partial class MembershipPackageDialog : ContentDialog
 
         _isCleanedUp = true;
         _isTemporarilyHiddenForConfirmation = false;
+        Loaded -= HandleLoaded;
         Closed -= HandleClosed;
         ViewModel.CloseRequested -= HandleCloseRequested;
         ViewModel.DialogHideRequested -= HandleDialogHideRequested;

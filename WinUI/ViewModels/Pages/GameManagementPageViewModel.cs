@@ -16,6 +16,7 @@ using Microsoft.UI.Xaml.Media;
 using Windows.UI;
 using WinUI.Resources;
 using WinUI.Services.Factories;
+using WinUI.Services.Layout;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
 using WinUI.UIModels.Management;
@@ -40,11 +41,13 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
     private const double GameCardOuterHeight = 460;
     private const double GameCardsColumnSpacing = 16;
     private const int PreferredGridGamesPerRow = 5;
-    private const double LayoutPrecisionEpsilon = 0.5;
+    private const int GridRowsPerPage = 3;
+    private const int CompactGridPageSize = 10;
 
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
     private readonly IGameFilterService _gameFilterService;
+    private readonly IResponsiveLayoutService _responsiveLayoutService;
     private readonly GameModelFactory _gameModelFactory;
     private readonly GameCardControlViewModelFactory _gameCardControlViewModelFactory;
     private readonly Brush _selectedBackgroundBrush;
@@ -218,6 +221,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
         IGameCatalogService gameCatalogService,
         IGameTypeCatalogService gameTypeCatalogService,
         IGameFilterService gameFilterService,
+        IResponsiveLayoutService responsiveLayoutService,
         GameModelFactory gameModelFactory,
         GameCardControlViewModelFactory gameCardControlViewModelFactory,
         PaginationControlViewModel paginationViewModel)
@@ -226,6 +230,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         _gameFilterService = gameFilterService ?? throw new ArgumentNullException(nameof(gameFilterService));
+        _responsiveLayoutService = responsiveLayoutService ?? throw new ArgumentNullException(nameof(responsiveLayoutService));
         _gameModelFactory = gameModelFactory ?? throw new ArgumentNullException(nameof(gameModelFactory));
         _gameCardControlViewModelFactory = gameCardControlViewModelFactory ?? throw new ArgumentNullException(nameof(gameCardControlViewModelFactory));
         PaginationViewModel = paginationViewModel ?? throw new ArgumentNullException(nameof(paginationViewModel));
@@ -269,12 +274,8 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
             .GetGames()
             .Select(_gameModelFactory.Create)
             .ToList();
-        _gridCardViewModelsByGame = _allGames.ToDictionary(
-            game => game,
-            CreateGridCardViewModel);
-        _listCardViewModelsByGame = _allGames.ToDictionary(
-            game => game,
-            CreateListCardViewModel);
+        _gridCardViewModelsByGame = [];
+        _listCardViewModelsByGame = [];
 
         RefreshLocalizedText();
         _isInitialized = true;
@@ -355,17 +356,22 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
             return;
         }
 
-        int columns = CalculateGridGamesColumnCount(availableWidth);
-        double totalSpacing = GameCardsColumnSpacing * (columns - 1);
+        CardGridLayout layout = _responsiveLayoutService.CalculateCardGrid(
+            availableWidth,
+            GameCardOuterWidth,
+            GameCardOuterHeight,
+            GameCardsColumnSpacing,
+            PreferredGridGamesPerRow,
+            GridRowsPerPage,
+            CompactGridPageSize);
 
-        GridGamesMaximumRowsOrColumns = columns;
-        GridGamesMinItemWidth = Math.Floor((availableWidth - totalSpacing + LayoutPrecisionEpsilon) / columns);
-        GridGamesMinItemHeight = GameCardOuterHeight;
+        GridGamesMaximumRowsOrColumns = layout.Columns;
+        GridGamesMinItemWidth = layout.ItemWidth;
+        GridGamesMinItemHeight = layout.ItemHeight;
 
         if (IsGridView)
         {
-            int newPageSize = columns >= 3 ? columns * 3 : 10;
-            SetPageSize(newPageSize);
+            SetPageSize(layout.PageSize);
         }
     }
 
@@ -416,8 +422,10 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
         ListButtonBackgroundHoverColor = AppColors.VeryLightGray;
         ListButtonForegroundHoverColor = AppColors.Black;
 
-        int columns = GridGamesMaximumRowsOrColumns;
-        SetPageSize(columns >= 3 ? columns * 3 : 10);
+        SetPageSize(GridGamesMaximumRowsOrColumns >= 3
+            ? GridGamesMaximumRowsOrColumns * GridRowsPerPage
+            : CompactGridPageSize);
+        RefreshPagedGames();
     }
 
     private void ExecuteToggleListView()
@@ -442,6 +450,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
         ListButtonForegroundHoverColor = AppColors.White;
 
         SetPageSize(ListPageSize);
+        RefreshPagedGames();
     }
 
     private async Task OpenFilterDialogAsync()
@@ -693,14 +702,13 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
         int startIndex = Math.Max(0, (_pagination.CurrentPage - 1) * _pagination.PageSize);
         foreach (GameModel game in _filteredGames.Skip(startIndex).Take(_pagination.PageSize))
         {
-            if (_gridCardViewModelsByGame.TryGetValue(game, out GridGameCardControlViewModel? gridViewModel))
+            if (IsGridView)
             {
-                PagedGridGameCards.Add(gridViewModel);
+                PagedGridGameCards.Add(GetOrCreateGridCardViewModel(game));
             }
-
-            if (_listCardViewModelsByGame.TryGetValue(game, out ListGameCardControlViewModel? listViewModel))
+            else
             {
-                PagedListGameCards.Add(listViewModel);
+                PagedListGameCards.Add(GetOrCreateListCardViewModel(game));
             }
         }
 
@@ -786,8 +794,14 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     private void AddCardViewModelsForGame(GameModel game)
     {
-        _gridCardViewModelsByGame[game] = CreateGridCardViewModel(game);
-        _listCardViewModelsByGame[game] = CreateListCardViewModel(game);
+        if (IsGridView)
+        {
+            _gridCardViewModelsByGame[game] = CreateGridCardViewModel(game);
+        }
+        else
+        {
+            _listCardViewModelsByGame[game] = CreateListCardViewModel(game);
+        }
     }
 
     private void RemoveCardViewModelsForGame(GameModel game)
@@ -830,14 +844,25 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
         }
     }
 
-    private static int CalculateGridGamesColumnCount(double availableWidth)
+    private GridGameCardControlViewModel GetOrCreateGridCardViewModel(GameModel game)
     {
-        if (availableWidth < GameCardOuterWidth)
+        if (!_gridCardViewModelsByGame.TryGetValue(game, out GridGameCardControlViewModel? viewModel))
         {
-            return 1;
+            viewModel = CreateGridCardViewModel(game);
+            _gridCardViewModelsByGame[game] = viewModel;
         }
 
-        int maxPossibleColumns = (int)((availableWidth + GameCardsColumnSpacing) / (GameCardOuterWidth + GameCardsColumnSpacing));
-        return Math.Max(1, Math.Min(PreferredGridGamesPerRow, maxPossibleColumns));
+        return viewModel;
+    }
+
+    private ListGameCardControlViewModel GetOrCreateListCardViewModel(GameModel game)
+    {
+        if (!_listCardViewModelsByGame.TryGetValue(game, out ListGameCardControlViewModel? viewModel))
+        {
+            viewModel = CreateListCardViewModel(game);
+            _listCardViewModelsByGame[game] = viewModel;
+        }
+
+        return viewModel;
     }
 }
