@@ -27,6 +27,17 @@ public partial class ConfigViewModel : LocalizedViewModelBase
     public partial string ServerAddress { get; set; }
 
     [ObservableProperty]
+    public partial string PortLabelText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string PortPlaceholderText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [NotifyPropertyChangedFor(nameof(CanSaveExecute))]
+    public partial string Port { get; set; }
+
+    [ObservableProperty]
     public partial string ApiKeyLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
@@ -78,6 +89,7 @@ public partial class ConfigViewModel : LocalizedViewModelBase
         _configService = configService;
 
         ServerAddress = _configService.ServerAddress;
+        Port = _configService.Port.ToString();
         ApiKey = _configService.ApiKey;
         RememberMe = _configService.RememberMe;
 
@@ -89,6 +101,8 @@ public partial class ConfigViewModel : LocalizedViewModelBase
         TitleText = LocalizationService.GetString("ConfigDialogTitleText");
         ServerAddressLabelText = LocalizationService.GetString("ConfigDialogServerAddressLabelText");
         ServerAddressPlaceholderText = LocalizationService.GetString("ConfigDialogServerAddressPlaceholderText");
+        PortLabelText = LocalizationService.GetString("ConfigDialogPortLabelText");
+        PortPlaceholderText = LocalizationService.GetString("ConfigDialogPortPlaceholderText");
         ApiKeyLabelText = LocalizationService.GetString("ConfigDialogApiKeyLabelText");
         ApiKeyPlaceholderText = LocalizationService.GetString("ConfigDialogApiKeyPlaceholderText");
         RememberMeLabelText = LocalizationService.GetString("ConfigDialogRememberMeLabelText");
@@ -102,7 +116,10 @@ public partial class ConfigViewModel : LocalizedViewModelBase
         IsSaving = true;
         try
         {
-            await _configService.SaveAsync(ServerAddress, ApiKey, RememberMe);
+            if (!TryGetPort(out int port))
+                return;
+
+            await _configService.SaveAsync(ServerAddress, port, ApiKey, RememberMe);
 
             Confirmed = true;
             CloseRequestedInternal?.Invoke();
@@ -127,7 +144,12 @@ public partial class ConfigViewModel : LocalizedViewModelBase
     private bool CanSave() =>
         !IsSaving &&
         !string.IsNullOrWhiteSpace(ServerAddress) &&
+        TryGetPort(out _) &&
         !string.IsNullOrWhiteSpace(ApiKey);
 
     private bool CanClose() => !IsSaving;
+
+    private bool TryGetPort(out int port) =>
+        int.TryParse(Port, out port) &&
+        port is >= 1 and <= 65535;
 }

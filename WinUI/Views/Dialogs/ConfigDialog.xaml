@@ -66,6 +66,18 @@
                          Style="{StaticResource DialogFormTextBoxStyle}" />
             </StackPanel>
 
+            <!-- Port -->
+            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                <TextBlock Text="{x:Bind ViewModel.PortLabelText, Mode=OneWay}" 
+                           Style="{StaticResource DialogFormLabelTextStyle}"/>
+                <TextBox x:Name="PortBox"
+                         PlaceholderText="{x:Bind ViewModel.PortPlaceholderText, Mode=OneWay}"
+                         Text="{x:Bind ViewModel.Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         InputScope="Number"
+                         MaxLength="5"
+                         Style="{StaticResource DialogFormTextBoxStyle}" />
+            </StackPanel>
+
             <!-- API Key -->
             <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
                 <TextBlock Text="{x:Bind ViewModel.ApiKeyLabelText, Mode=OneWay}" 
