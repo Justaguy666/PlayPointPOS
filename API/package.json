@@ -1,24 +1,38 @@
 {
-  "name": "playpointpos-api",
-  "version": "1.0.0",
-  "private": true,
+  "name": "API",
   "type": "module",
-  "main": "src/server.js",
+  "packageManager": "yarn@4.9.2",
   "scripts": {
-    "check": "node --check src/server.js && node --check src/app.js && node --check src/config/env.js && node --check src/routes/health.routes.js && node --check src/middleware/not-found.js && node --check src/middleware/error-handler.js",
-    "dev": "node --watch src/server.js",
-    "start": "node src/server.js",
-    "test": "npm run check"
+    "tscinit": "tsc --init",
+    "server": "node --import tsx/esm src/index.ts",
+    "build": "npx rimraf dist && tsc",
+    "watch": "tsc -w",
+    "migration:generate": "node --import tsx/esm ./node_modules/typeorm/cli.js migration:generate src/app/migrations/Migration -d src/config/database.ts",
+    "migration:run": "node --import tsx/esm ./node_modules/typeorm/cli.js migration:run -d src/config/database.ts",
+    "migration:revert": "node --import tsx/esm ./node_modules/typeorm/cli.js migration:revert -d src/config/database.ts"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "Express API backend for PlayPointPOS",
   "dependencies": {
+    "@apollo/server": "^4",
+    "argon2": "^0.44.0",
+    "class-validator": "^0.15.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "helmet": "^8.1.0",
-    "morgan": "^1.10.1",
-    "zod": "^4.3.6"
+    "graphql": "^16.13.2",
+    "graphql-scalars": "^1.25.0",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.20.0",
+    "reflect-metadata": "^0.2.2",
+    "type-graphql": "2.0.0-rc.3",
+    "typeorm": "^0.3.28"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^25.6.0",
+    "nodemon": "^3.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
   }
 }
