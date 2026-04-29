@@ -38,11 +38,11 @@
                             Spacing="4"
                             VerticalAlignment="Center">
                     <TextBlock Text="{Binding TransactionCodeLabelText}"
-                               FontSize="11"
+                               FontSize="{StaticResource FontSizeTiny}"
                                Foreground="{StaticResource SecondaryGrayBrush}"
                                VerticalAlignment="Center" />
                     <TextBlock Text="{Binding TransactionCode}"
-                               FontSize="14"
+                               FontSize="{StaticResource FontSizeSmall}"
                                FontWeight="SemiBold"
                                Foreground="{StaticResource DarkSlateGrayBrush}"
                                VerticalAlignment="Center" />
@@ -60,7 +60,7 @@
                         HorizontalAlignment="Right">
                     <FontIcon Glyph="&#xE712;"
                               FontFamily="Segoe Fluent Icons"
-                              FontSize="16"
+                              FontSize="{StaticResource FontSizeMedium}"
                               Foreground="{StaticResource DarkSlateGrayBrush}" />
                 </Button>
             </Grid>
@@ -89,7 +89,7 @@
                 <TextBlock Grid.Row="1"
                            Grid.Column="0"
                            Text="{Binding MemberIdText}"
-                           FontSize="12"
+                           FontSize="{StaticResource FontSizeExtraSmall}"
                            Foreground="{StaticResource SecondaryGrayBrush}"
                            TextTrimming="CharacterEllipsis"
                            VerticalAlignment="Top" />
@@ -97,7 +97,7 @@
                 <TextBlock Grid.Row="0"
                            Grid.Column="1"
                            Text="{Binding TotalAmountText}"
-                           FontSize="18"
+                           FontSize="{StaticResource FontSizeLarge}"
                            FontWeight="Bold"
                            Foreground="{StaticResource OrangeFocusBrush}"
                            TextTrimming="CharacterEllipsis"
@@ -112,7 +112,7 @@
                             Background="{Binding PaymentBadgeBackground}"
                             CornerRadius="7">
                         <TextBlock Text="{Binding PaymentMethodText}"
-                                   FontSize="11"
+                                   FontSize="{StaticResource FontSizeTiny}"
                                    FontWeight="SemiBold"
                                    Foreground="{Binding PaymentBadgeForeground}"
                                    TextAlignment="Center"
@@ -144,7 +144,7 @@
                               Foreground="{StaticResource SecondaryGrayBrush}"
                               Data="{Binding CalendarIconState, Converter={StaticResource IconConverter}}" />
                     <TextBlock Text="{Binding DateText}"
-                               FontSize="11"
+                               FontSize="{StaticResource FontSizeTiny}"
                                Foreground="{StaticResource SecondaryGrayBrush}"
                                VerticalAlignment="Center" />
                 </StackPanel>
@@ -159,7 +159,7 @@
                               Foreground="{StaticResource SecondaryGrayBrush}"
                               Data="{Binding ClockIconState, Converter={StaticResource IconConverter}}" />
                     <TextBlock Text="{Binding TimeText}"
-                               FontSize="11"
+                               FontSize="{StaticResource FontSizeTiny}"
                                Foreground="{StaticResource SecondaryGrayBrush}"
                                VerticalAlignment="Center" />
                 </StackPanel>

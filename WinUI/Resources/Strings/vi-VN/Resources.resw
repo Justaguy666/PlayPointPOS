@@ -1722,6 +1722,9 @@
   <data name="MembershipPackageDialogDiscountLabelText" xml:space="preserve">
     <value>Giảm giá</value>
   </data>
+  <data name="MembershipPackageDialogColorButtonText" xml:space="preserve">
+    <value>Màu gói</value>
+  </data>
   <data name="MembershipPackageDialogInvalidInputText" xml:space="preserve">
     <value>Vui lòng nhập thông tin gói hợp lệ.</value>
   </data>
@@ -1898,5 +1901,8 @@
   </data>
   <data name="MemberCardIdLabelText" xml:space="preserve">
     <value>ID:</value>
+  </data>
+  <data name="TransactionWalkInCustomerName" xml:space="preserve">
+    <value>Khách vãng lai</value>
   </data>
 </root>

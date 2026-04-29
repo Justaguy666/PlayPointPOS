@@ -93,6 +93,9 @@ public partial class MembershipPackageDialogViewModel : LocalizedViewModelBase
     [ObservableProperty]
     public partial string DiscountLabelText { get; set; } = string.Empty;
 
+    [ObservableProperty]
+    public partial string ColorButtonText { get; set; } = string.Empty;
+
     public ObservableCollection<MembershipPackageItemViewModel> MembershipRanks { get; } = [];
 
     public event Action? CloseRequested;
@@ -123,6 +126,7 @@ public partial class MembershipPackageDialogViewModel : LocalizedViewModelBase
         DiscountPlaceholderText = LocalizationService.GetString("MembershipPackageDialogDiscountPlaceholderText");
         MinSpentLabelText = LocalizationService.GetString("MembershipPackageDialogMinSpentLabelText");
         DiscountLabelText = LocalizationService.GetString("MembershipPackageDialogDiscountLabelText");
+        ColorButtonText = LocalizationService.GetString("MembershipPackageDialogColorButtonText");
 
         foreach (MembershipPackageItemViewModel item in MembershipRanks)
         {

@@ -19,7 +19,7 @@
                             <VisualStateGroup x:Name="CombinedStates">
                                 <VisualState x:Name="UncheckedNormal">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBorderUnchecked}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource LightGray}" Duration="0"/>
                                         <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource TransparentColor}" Duration="0"/>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CheckGlyph" Storyboard.TargetProperty="Visibility">
                                             <DiscreteObjectKeyFrame KeyTime="0">
@@ -72,7 +72,7 @@
                                 <VisualState x:Name="CheckedNormal">
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrange}" Duration="0"/>
-                                        <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundChecked}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrange}" Duration="0"/>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CheckGlyph" Storyboard.TargetProperty="Visibility">
                                             <DiscreteObjectKeyFrame KeyTime="0">
                                                 <DiscreteObjectKeyFrame.Value>
@@ -85,7 +85,7 @@
                                 <VisualState x:Name="CheckedPointerOver">
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDark}" Duration="0"/>
-                                        <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundCheckedDark}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDark}" Duration="0"/>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CheckGlyph" Storyboard.TargetProperty="Visibility">
                                             <DiscreteObjectKeyFrame KeyTime="0">
                                                 <DiscreteObjectKeyFrame.Value>
@@ -98,7 +98,7 @@
                                 <VisualState x:Name="CheckedPressed">
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDarker}" Duration="0"/>
-                                        <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundCheckedDarker}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDarker}" Duration="0"/>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CheckGlyph" Storyboard.TargetProperty="Visibility">
                                             <DiscreteObjectKeyFrame KeyTime="0">
                                                 <DiscreteObjectKeyFrame.Value>
@@ -111,7 +111,7 @@
                                 <VisualState x:Name="CheckedDisabled">
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeLight}" Duration="0"/>
-                                        <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundDisabled}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeLight}" Duration="0"/>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CheckGlyph" Storyboard.TargetProperty="Visibility">
                                             <DiscreteObjectKeyFrame KeyTime="0">
                                                 <DiscreteObjectKeyFrame.Value>
@@ -123,7 +123,7 @@
                                 </VisualState>
                                 <VisualState x:Name="IndeterminateNormal">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBorderUnchecked}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="CheckboxBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource LightGray}" Duration="0"/>
                                         <ColorAnimation Storyboard.TargetName="CheckboxBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource TransparentColor}" Duration="0"/>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CheckGlyph" Storyboard.TargetProperty="Visibility">
                                             <DiscreteObjectKeyFrame KeyTime="0">
@@ -182,14 +182,14 @@
                                 Width="20"
                                 Height="20">
                             <Border.BorderBrush>
-                                <SolidColorBrush x:Name="CheckboxBorderBrush" Color="{StaticResource CheckboxBorderUnchecked}"/>
+                                <SolidColorBrush x:Name="CheckboxBorderBrush" Color="{StaticResource LightGray}"/>
                             </Border.BorderBrush>
                             <Border.Background>
                                 <SolidColorBrush x:Name="CheckboxBackgroundBrush" Color="{StaticResource TransparentColor}"/>
                             </Border.Background>
                             <FontIcon x:Name="CheckGlyph"
                                       FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                      FontSize="12"
+                                      FontSize="{StaticResource FontSizeExtraSmall}"
                                       Foreground="{StaticResource WhiteBrush}"
                                       Glyph="&#xE73E;"
                                       Visibility="Collapsed"
@@ -230,9 +230,9 @@
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Normal">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="UncheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBorderUnchecked}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="UncheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource LightGray}" Duration="0"/>
                                         <ColorAnimation Storyboard.TargetName="CheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrange}" Duration="0"/>
-                                        <ColorAnimation Storyboard.TargetName="InnerDotBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundChecked}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="InnerDotBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrange}" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="HoverBackground" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="PressedBackground" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
                                     </Storyboard>
@@ -241,7 +241,7 @@
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetName="UncheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrange}" Duration="0"/>
                                         <ColorAnimation Storyboard.TargetName="CheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDark}" Duration="0"/>
-                                        <ColorAnimation Storyboard.TargetName="InnerDotBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundCheckedDark}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="InnerDotBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDark}" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="HoverBackground" Storyboard.TargetProperty="Opacity" To="1" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="PressedBackground" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
                                     </Storyboard>
@@ -250,7 +250,7 @@
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetName="UncheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDark}" Duration="0"/>
                                         <ColorAnimation Storyboard.TargetName="CheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDarker}" Duration="0"/>
-                                        <ColorAnimation Storyboard.TargetName="InnerDotBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundCheckedDarker}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="InnerDotBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeDarker}" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="HoverBackground" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="PressedBackground" Storyboard.TargetProperty="Opacity" To="1" Duration="0"/>
                                     </Storyboard>
@@ -259,7 +259,7 @@
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetName="UncheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource LightGray}" Duration="0"/>
                                         <ColorAnimation Storyboard.TargetName="CheckedBorderBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeLight}" Duration="0"/>
-                                        <ColorAnimation Storyboard.TargetName="InnerDotBrush" Storyboard.TargetProperty="Color" To="{StaticResource CheckboxBackgroundDisabled}" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="InnerDotBrush" Storyboard.TargetProperty="Color" To="{StaticResource PrimaryOrangeLight}" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="HoverBackground" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="PressedBackground" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
                                     </Storyboard>
@@ -308,7 +308,7 @@
                                     BorderThickness="2"
                                     CornerRadius="9999">
                                 <Border.BorderBrush>
-                                    <SolidColorBrush x:Name="UncheckedBorderBrush" Color="{StaticResource CheckboxBorderUnchecked}"/>
+                                    <SolidColorBrush x:Name="UncheckedBorderBrush" Color="{StaticResource LightGray}"/>
                                 </Border.BorderBrush>
                             </Border>
 
@@ -325,7 +325,7 @@
                                          HorizontalAlignment="Center"
                                          VerticalAlignment="Center">
                                     <Ellipse.Fill>
-                                        <SolidColorBrush x:Name="InnerDotBrush" Color="{StaticResource CheckboxBackgroundChecked}"/>
+                                        <SolidColorBrush x:Name="InnerDotBrush" Color="{StaticResource PrimaryOrange}"/>
                                     </Ellipse.Fill>
                                 </Ellipse>
                             </Border>

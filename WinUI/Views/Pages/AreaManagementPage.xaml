@@ -26,10 +26,6 @@
 
     <Page.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="ms-appx:///Resources/Styles/ScrollBarStyles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-
             <DataTemplate x:Key="SummarizedAvailableCardTemplate"
                           x:DataType="summarizedViewModels:SummarizedAvailableCardViewModel">
                 <summarizedViews:SummarizedAvailableCard

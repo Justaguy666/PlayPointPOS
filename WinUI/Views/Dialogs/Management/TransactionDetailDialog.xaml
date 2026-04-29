@@ -67,13 +67,13 @@
 
                     <TextBlock Grid.Column="0"
                                Text="{Binding ServiceDetailHeaderText}"
-                               FontSize="12"
+                               FontSize="{StaticResource FontSizeExtraSmall}"
                                FontWeight="SemiBold"
                                Foreground="{StaticResource SecondaryGrayBrush}"
                                CharacterSpacing="60" />
                     <TextBlock Grid.Column="1"
                                Text="{Binding AmountHeaderText}"
-                               FontSize="12"
+                               FontSize="{StaticResource FontSizeExtraSmall}"
                                FontWeight="SemiBold"
                                Foreground="{StaticResource SecondaryGrayBrush}"
                                CharacterSpacing="60" />
@@ -98,18 +98,18 @@
                                 <StackPanel Grid.Column="0"
                                             Spacing="2">
                                     <TextBlock Text="{x:Bind Name}"
-                                               FontSize="14"
+                                               FontSize="{StaticResource FontSizeSmall}"
                                                FontWeight="SemiBold"
                                                Foreground="{StaticResource DarkSlateGrayBrush}" />
                                     <TextBlock Text="{x:Bind Description}"
-                                               FontSize="12"
+                                               FontSize="{StaticResource FontSizeExtraSmall}"
                                                Foreground="{StaticResource SecondaryGrayBrush}"
                                                FontStyle="Italic" />
                                 </StackPanel>
 
                                 <TextBlock Grid.Column="1"
                                            Text="{x:Bind AmountText}"
-                                           FontSize="14"
+                                           FontSize="{StaticResource FontSizeSmall}"
                                            Foreground="{StaticResource DarkSlateGrayBrush}"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Right" />
@@ -127,11 +127,11 @@
 
                     <TextBlock Grid.Column="0"
                                Text="{Binding DepositRefundText}"
-                               FontSize="14"
+                               FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{StaticResource DarkSlateGrayBrush}" />
                     <TextBlock Grid.Column="1"
                                Text="{Binding DepositRefundAmountText}"
-                               FontSize="14"
+                               FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{StaticResource DarkSlateGrayBrush}"
                                HorizontalAlignment="Right" />
                 </Grid>
@@ -145,11 +145,11 @@
 
                     <TextBlock Grid.Column="0"
                                Text="{Binding DiscountText}"
-                               FontSize="14"
+                               FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{StaticResource DarkSlateGrayBrush}" />
                     <TextBlock Grid.Column="1"
                                Text="{Binding DiscountAmountText}"
-                               FontSize="14"
+                               FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{StaticResource DarkSlateGrayBrush}"
                                HorizontalAlignment="Right" />
                 </Grid>
@@ -166,12 +166,12 @@
 
                     <TextBlock Grid.Column="0"
                                Text="{Binding TotalLabelText}"
-                               FontSize="16"
+                               FontSize="{StaticResource FontSizeMedium}"
                                FontWeight="Bold"
                                Foreground="{StaticResource DarkSlateGrayBrush}" />
                     <TextBlock Grid.Column="1"
                                Text="{Binding TotalAmountText}"
-                               FontSize="18"
+                               FontSize="{StaticResource FontSizeLarge}"
                                FontWeight="Bold"
                                Foreground="{StaticResource OrangeFocusBrush}"
                                HorizontalAlignment="Right" />

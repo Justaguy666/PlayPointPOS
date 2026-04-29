@@ -47,7 +47,7 @@
                                     Spacing="10">
                             <FontIcon Glyph="&#xE717;"
                                       FontFamily="Segoe Fluent Icons"
-                                      FontSize="18"
+                                      FontSize="{StaticResource FontSizeLarge}"
                                       Foreground="{StaticResource SecondaryGrayBrush}"
                                       VerticalAlignment="Center" />
                             <TextBlock Text="{Binding PhoneNumber}"
@@ -77,7 +77,7 @@
                             </Button.Resources>
                             <FontIcon Glyph="&#xE70F;"
                                       FontFamily="Segoe Fluent Icons"
-                                      FontSize="14"
+                                      FontSize="{StaticResource FontSizeSmall}"
                                       Foreground="{StaticResource WhiteBrush}" />
                         </Button>
 
@@ -88,7 +88,7 @@
                             </Button.Resources>
                             <FontIcon Glyph="&#xE74D;"
                                       FontFamily="Segoe Fluent Icons"
-                                      FontSize="14"
+                                      FontSize="{StaticResource FontSizeSmall}"
                                       Foreground="{StaticResource WhiteBrush}" />
                         </Button>
                     </StackPanel>

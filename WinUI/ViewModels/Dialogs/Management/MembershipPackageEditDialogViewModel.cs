@@ -19,6 +19,7 @@ public class MembershipPackageEditDialogViewModel : LocalizedViewModelBase
     private string _namePlaceholderText = string.Empty;
     private string _minSpentPlaceholderText = string.Empty;
     private string _discountPlaceholderText = string.Empty;
+    private string _colorButtonText = string.Empty;
     private string _saveButtonText = "Lưu";
     private string _cancelButtonText = "Hủy";
     private string _closeTooltipText = string.Empty;
@@ -71,6 +72,12 @@ public class MembershipPackageEditDialogViewModel : LocalizedViewModelBase
     {
         get => _discountPlaceholderText;
         set => SetProperty(ref _discountPlaceholderText, value);
+    }
+
+    public string ColorButtonText
+    {
+        get => _colorButtonText;
+        set => SetProperty(ref _colorButtonText, value);
     }
 
     public string SaveButtonText
@@ -189,6 +196,7 @@ public class MembershipPackageEditDialogViewModel : LocalizedViewModelBase
         NamePlaceholderText = LocalizationService.GetString("MembershipPackageDialogNamePlaceholderText");
         MinSpentPlaceholderText = LocalizationService.GetString("MembershipPackageDialogMinSpentPlaceholderText");
         DiscountPlaceholderText = LocalizationService.GetString("MembershipPackageDialogDiscountPlaceholderText");
+        ColorButtonText = LocalizationService.GetString("MembershipPackageDialogColorButtonText");
         CloseTooltipText = LocalizationService.GetString("CloseTooltipText");
 
         string applyText = LocalizationService.GetString("MemberFilterDialogApplyButtonText");

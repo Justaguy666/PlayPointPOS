@@ -1,3 +1,4 @@
+using Application.Services;
 using Domain.Entities;
 using System;
 
@@ -5,6 +6,8 @@ namespace WinUI.Services.Factories;
 
 public sealed class TransactionModelFactory
 {
+    private readonly ILocalizationService _localizationService;
+
     private static readonly string[] CustomerNames =
     [
         "Nguyễn Văn A",
@@ -13,6 +16,11 @@ public sealed class TransactionModelFactory
         "Phạm Minh D",
         "Võ Thanh E",
     ];
+
+    public TransactionModelFactory(ILocalizationService localizationService)
+    {
+        _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
+    }
 
     public UIModels.Management.TransactionModel Create(Transaction transaction)
     {
@@ -34,11 +42,11 @@ public sealed class TransactionModelFactory
         };
     }
 
-    private static string ResolveCustomerName(string? memberId)
+    private string ResolveCustomerName(string? memberId)
     {
         if (string.IsNullOrWhiteSpace(memberId))
         {
-            return "Khách vãng lai";
+            return _localizationService.GetString("TransactionWalkInCustomerName");
         }
 
         int index = Math.Abs(memberId.GetHashCode()) % CustomerNames.Length;

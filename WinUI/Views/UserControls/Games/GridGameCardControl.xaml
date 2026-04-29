@@ -179,7 +179,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="{Binding HourlyPriceLabelText}"
-                               Foreground="{StaticResource SecondaryGray}"
+                               Foreground="{StaticResource SecondaryGrayBrush}"
                                FontSize="{StaticResource FontSizeSmall}"
                                VerticalAlignment="Center" />
 

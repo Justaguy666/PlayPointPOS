@@ -52,7 +52,7 @@
                 </Button.Resources>
                 <FontIcon Glyph="&#xE711;"
                           FontFamily="Segoe Fluent Icons"
-                          FontSize="14"
+                          FontSize="{StaticResource FontSizeSmall}"
                           Foreground="{StaticResource BlackBrush}" />
             </Button>
         </Grid>
@@ -138,7 +138,7 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center">
                                             <TextBlock Text="×"
-                                                       FontSize="14"
+                                                       FontSize="{StaticResource FontSizeSmall}"
                                                        FontWeight="SemiBold"
                                                        Foreground="{StaticResource BlackBrush}"
                                                        HorizontalAlignment="Center"

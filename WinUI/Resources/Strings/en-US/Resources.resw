@@ -1722,6 +1722,9 @@
   <data name="MembershipPackageDialogDiscountLabelText" xml:space="preserve">
     <value>Discount</value>
   </data>
+  <data name="MembershipPackageDialogColorButtonText" xml:space="preserve">
+    <value>Package color</value>
+  </data>
   <data name="MembershipPackageDialogInvalidInputText" xml:space="preserve">
     <value>Please enter valid package information.</value>
   </data>
@@ -1898,5 +1901,8 @@
   </data>
   <data name="MemberCardIdLabelText" xml:space="preserve">
     <value>ID:</value>
+  </data>
+  <data name="TransactionWalkInCustomerName" xml:space="preserve">
+    <value>Walk-in customer</value>
   </data>
 </root>

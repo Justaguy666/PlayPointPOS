@@ -85,7 +85,7 @@
                             <FontIcon Grid.Column="1"
                                       Margin="8,0,0,0"
                                       Glyph="&#xE70D;"
-                                      FontSize="10"
+                                      FontSize="{StaticResource FontSizeExtraExtraSmall}"
                                       Foreground="{StaticResource BlackBrush}"
                                       VerticalAlignment="Center" />
                         </Grid>

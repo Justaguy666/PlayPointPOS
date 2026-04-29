@@ -48,7 +48,7 @@
                 </Button.Resources>
                 <FontIcon Glyph="&#xE711;"
                           FontFamily="Segoe Fluent Icons"
-                          FontSize="14"
+                          FontSize="{StaticResource FontSizeSmall}"
                           Foreground="{StaticResource DarkGrayBrush}" />
             </Button>
         </Grid>
@@ -101,7 +101,7 @@
                             MinWidth="160"
                             Padding="12,0"
                             HorizontalAlignment="Stretch"
-                            ToolTipService.ToolTip="Màu gói">
+                            ToolTipService.ToolTip="{x:Bind ViewModel.ColorButtonText, Mode=OneWay}">
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
                         </Button.Resources>
@@ -113,7 +113,7 @@
                                       Height="16"
                                       Data="{x:Bind ViewModel.PaintIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
                                       Foreground="{x:Bind ViewModel.EditColorBrush, Mode=OneWay}" />
-                            <TextBlock Text="Màu gói" />
+                            <TextBlock Text="{x:Bind ViewModel.ColorButtonText, Mode=OneWay}" />
                         </StackPanel>
                         <Button.Flyout>
                             <Flyout Placement="BottomEdgeAlignedLeft">

@@ -609,7 +609,7 @@
                                   Margin="0,10,10,10"
                                   Foreground="{TemplateBinding Foreground}"
                                   FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                  FontSize="12"
+                                  FontSize="{StaticResource FontSizeExtraSmall}"
                                   Glyph="&#xE0E5;"
                                   HorizontalAlignment="Right"
                                   VerticalAlignment="Center"

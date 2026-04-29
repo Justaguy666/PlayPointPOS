@@ -7,6 +7,7 @@
     <!-- Font Sizes -->
     <x:Double x:Key="FontSizeExtraExtraExtraSmall">8</x:Double>
     <x:Double x:Key="FontSizeExtraExtraSmall">10</x:Double>
+    <x:Double x:Key="FontSizeTiny">11</x:Double>
     <x:Double x:Key="FontSizeExtraSmall">12</x:Double>
     <x:Double x:Key="FontSizeSmall">14</x:Double>
     <x:Double x:Key="FontSizeMedium">16</x:Double>

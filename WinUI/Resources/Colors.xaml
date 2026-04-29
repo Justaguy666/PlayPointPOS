@@ -9,7 +9,6 @@
     <color:Color x:Key="PrimaryOrangeDark">#E55A1F</color:Color>
     <color:Color x:Key="PrimaryOrangeDarker">#CC4D1A</color:Color>
     <color:Color x:Key="PrimaryOrangeLight">#FFB499</color:Color>
-    <color:Color x:Key="PrimaryOrangeLighter">#FFB499</color:Color>
     <color:Color x:Key="OrangeFocus">#FF7A30</color:Color>
     <color:Color x:Key="OrangeLightVariant">#FF8C61</color:Color>
     <color:Color x:Key="OrangePeachLight">#FFF8F0</color:Color>
@@ -28,7 +27,6 @@
     <color:Color x:Key="DarkGray">#555555</color:Color>
     <color:Color x:Key="SecondaryGray">#A0AEC0</color:Color>
     <color:Color x:Key="TitleBarColor">#2D3748</color:Color>
-    <color:Color x:Key="TitleBarButtonColor">#2D3748</color:Color>
     <color:Color x:Key="TitleBarButtonHover">#222D3748</color:Color>
     <color:Color x:Key="TitleBarButtonPressed">#442D3748</color:Color>
 
@@ -59,7 +57,6 @@
     <color:Color x:Key="DashboardChartInactiveBar">#FFA282</color:Color>
     <color:Color x:Key="DashboardChartCalloutBackground">#F9E8E0</color:Color>
     <color:Color x:Key="SummarizedAreaBorder">#E5E5E5</color:Color>
-    <color:Color x:Key="SelectedSummarizedAreaBorder">#E5E5E5</color:Color>
     <color:Color x:Key="SummarizedAvailableAreaBackground">#F7FAFC</color:Color>
     <color:Color x:Key="SummarizedReservedAreaBackground">#E6F7FF</color:Color>
     <color:Color x:Key="SummarizedRentedAreaBackground">#FFF4E6</color:Color>
@@ -68,26 +65,10 @@
     <color:Color x:Key="SummarizedReservedAreaStatus">#4299E1</color:Color>
     <color:Color x:Key="SummarizedRentedAreaStatus">#48BB78</color:Color>
     <color:Color x:Key="DangerButtonBackground">#F87171</color:Color>
-    <color:Color x:Key="DangerButtonBackgroundHover">#DC2626</color:Color>
-
-    <!-- Gradient Stop Colors -->
-    <color:Color x:Key="GradientStop1">#FF6B35</color:Color>
-    <color:Color x:Key="GradientStop2">#FFE5D9</color:Color>
     
     <!-- Checkbox States -->
-    <color:Color x:Key="CheckboxBorderUnchecked">#D8D8D8</color:Color>
     <color:Color x:Key="CheckboxBackgroundUncheckedHover">#FFF8F5F2</color:Color>
     <color:Color x:Key="CheckboxBackgroundUncheckedPressed">#FFF0EBE6</color:Color>
-    <color:Color x:Key="CheckboxBackgroundChecked">#FF6B35</color:Color>
-    <color:Color x:Key="CheckboxBackgroundCheckedDark">#E55A1F</color:Color>
-    <color:Color x:Key="CheckboxBackgroundCheckedDarker">#CC4D1A</color:Color>
-    <color:Color x:Key="CheckboxBackgroundDisabled">#FFB499</color:Color>
-    
-    <!-- ScrollBar Colors -->
-    <color:Color x:Key="ScrollBarBackground">#E5E5E5</color:Color>
-    <color:Color x:Key="ScrollBarThumbBackground">#FF6B35</color:Color>
-    <color:Color x:Key="ScrollBarThumbHoverBackground">#FF8C4A</color:Color>
-    <color:Color x:Key="ScrollBarThumbPressedBackground">#FF7A30</color:Color>
 
     <!-- Solid Color Brushes - Backgrounds -->
     <SolidColorBrush x:Key="TransparentBrush" Color="{StaticResource TransparentColor}" />
@@ -118,7 +99,7 @@
     <SolidColorBrush x:Key="MediumGrayBrush" Color="{StaticResource MediumGray}" />
     <SolidColorBrush x:Key="MediumDarkGrayBrush" Color="{StaticResource MediumDarkGray}" />
     <SolidColorBrush x:Key="LighterGrayBrush" Color="{StaticResource LighterGray}" />
-    <SolidColorBrush x:Key="DarkGrayBrush" Color="{StaticResource SecondaryGray}" />
+    <SolidColorBrush x:Key="DarkGrayBrush" Color="{StaticResource DarkGray}" />
     <SolidColorBrush x:Key="SecondaryGrayBrush" Color="{StaticResource SecondaryGray}" />
     <SolidColorBrush x:Key="TextBoxBorderBrush" Color="{StaticResource LightGray}" />
     <SolidColorBrush x:Key="TextBoxBackgroundBrush" Color="{StaticResource VeryLightGray}" />
@@ -151,7 +132,6 @@
     <SolidColorBrush x:Key="DashboardChartRangeBorderBrush" Color="{StaticResource DashboardChartRangeBorder}" />
     <SolidColorBrush x:Key="DashboardChartInactiveBarBrush" Color="{StaticResource DashboardChartInactiveBar}" />
     <SolidColorBrush x:Key="SummarizedAreaBorderBrush" Color="{StaticResource SummarizedAreaBorder}" />
-    <SolidColorBrush x:Key="SelectedSummarizedAreaBorderBrush" Color="{StaticResource SelectedSummarizedAreaBorder}" />
     <SolidColorBrush x:Key="SummarizedAvailableAreaBackgroundBrush" Color="{StaticResource SummarizedAvailableAreaBackground}" />
     <SolidColorBrush x:Key="SummarizedReservedAreaBackgroundBrush" Color="{StaticResource SummarizedReservedAreaBackground}" />
     <SolidColorBrush x:Key="SummarizedRentedAreaBackgroundBrush" Color="{StaticResource SummarizedRentedAreaBackground}" />
@@ -161,17 +141,17 @@
     <SolidColorBrush x:Key="SummarizedRentedAreaStatusBrush" Color="{StaticResource SummarizedRentedAreaStatus}" />
     <SolidColorBrush x:Key="DashboardChartCalloutBackgroundBrush" Color="{StaticResource DashboardChartCalloutBackground}" />
     <SolidColorBrush x:Key="DangerButtonBackgroundBrush" Color="{StaticResource DangerButtonBackground}" />
-    <SolidColorBrush x:Key="DangerButtonBackgroundHoverBrush" Color="{StaticResource DangerButtonBackgroundHover}" />
+    <StaticResource x:Key="DangerButtonBackgroundHoverBrush" ResourceKey="ErrorRedBrush" />
 
     <!-- Gradient Brushes -->
     <LinearGradientBrush x:Key="PrimaryGradientBrush" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Color="#FF6B35" Offset="0.0" />
-        <GradientStop Color="#FFE5D9" Offset="1.0" />
+        <GradientStop Color="{StaticResource PrimaryOrange}" Offset="0.0" />
+        <GradientStop Color="{StaticResource DashboardStatCardRevenueBorder}" Offset="1.0" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="HeaderGradientBrush" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Color="#FF6B35" Offset="0.0" />
-        <GradientStop Color="#FF8C61" Offset="1.0" />
+        <GradientStop Color="{StaticResource PrimaryOrange}" Offset="0.0" />
+        <GradientStop Color="{StaticResource OrangeLightVariant}" Offset="1.0" />
     </LinearGradientBrush>
 
 </ResourceDictionary>
