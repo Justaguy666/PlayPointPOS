@@ -15,9 +15,9 @@ export class Shop extends BaseEntity {
     @Column({ type: "varchar", length: 255 })
     HashedPassword!: string;
 
-    @Field(() => String)
-    @Column({ type: "varchar", length: 255 })
-    Name!: string;
+    @Field(() => String, { nullable: true })
+    @Column({ type: "varchar", length: 255, nullable: true })
+    Name?: string;
 
     @Field(() => String, { nullable: true })
     @Column({ type: "text", nullable: true })

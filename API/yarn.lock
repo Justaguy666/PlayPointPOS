@@ -720,6 +720,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/nodemailer@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@types/nodemailer@npm:8.0.0"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/e5031df5d6557f4cdb9a0dbe1a96f3f54dc59c23d47477103fd42b5c9bc925ea1b4e51be560af5620b4d0c66fcfb015ce5ca8f914ed2f3a3086be6149d5932da
+  languageName: node
+  linkType: hard
+
 "@types/qs@npm:*":
   version: 6.15.0
   resolution: "@types/qs@npm:6.15.0"
@@ -806,6 +815,7 @@ __metadata:
     "@types/express": "npm:^5.0.6"
     "@types/jsonwebtoken": "npm:^9.0.10"
     "@types/node": "npm:^25.6.0"
+    "@types/nodemailer": "npm:^8.0.0"
     argon2: "npm:^0.44.0"
     class-validator: "npm:^0.15.1"
     cors: "npm:^2.8.6"
@@ -814,6 +824,7 @@ __metadata:
     graphql: "npm:^16.13.2"
     graphql-scalars: "npm:^1.25.0"
     jsonwebtoken: "npm:^9.0.3"
+    nodemailer: "npm:^8.0.7"
     nodemon: "npm:^3.1.14"
     pg: "npm:^8.20.0"
     reflect-metadata: "npm:^0.2.2"
@@ -2432,6 +2443,13 @@ __metadata:
   bin:
     node-gyp: bin/node-gyp.js
   checksum: 10c0/9d9032b405cbe42f72a105259d9eb679376470c102df4a2dbaa51e07d59bf741dcffb85897087ea9d8318b9cabb824a8978af51508ae142f0239ae1e6a3c2329
+  languageName: node
+  linkType: hard
+
+"nodemailer@npm:^8.0.7":
+  version: 8.0.7
+  resolution: "nodemailer@npm:8.0.7"
+  checksum: 10c0/f1580263ad7fba64a493c47c4d78f06679c0da9cc3becbe6b628311a16474c07286fc4e530006ea262537594ccc475dc569fd519275222fd01f99c315976aeac
   languageName: node
   linkType: hard
 

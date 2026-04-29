@@ -3,7 +3,7 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { buildSchema } from "type-graphql";
 import { AppDataSource } from "./config/database.js";
-import { ShopResolver } from "./app/resolvers/shop.resolver.js";
+import { ShopResolver } from "./app/resolvers/shop.js";
 import { env } from "./config/env.js";
 
 await AppDataSource.initialize();

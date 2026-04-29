@@ -14,4 +14,9 @@ export const env = {
     port: optional("PORT", "4000"),
     databaseUrl: required("DATABASE_URL"),
     jwtSecret: required("JWT_SECRET"),
+    smtpHost: required("SMTP_HOST"),
+    smtpPort: Number(optional("SMTP_PORT", "587")),
+    smtpUser: required("SMTP_USER"),
+    smtpPass: required("SMTP_PASS"),
+    smtpFrom: optional("SMTP_FROM", "noreply@playpointpos.com"),
 };
