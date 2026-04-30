@@ -27,7 +27,6 @@ public sealed class ProductManagementDialogCoordinator
     public Task OpenFilterAsync(ProductFilter initialCriteria, Func<ProductFilter, Task> onSubmittedAsync)
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.ProductFilter,
             new ProductFilterDialogRequest
             {
                 InitialCriteria = initialCriteria,
@@ -72,7 +71,6 @@ public sealed class ProductManagementDialogCoordinator
     private Task OpenUpsertAsync(UpsertDialogMode mode, ProductModel product, Func<ProductModel, Task> onSubmittedAsync)
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.Product,
             new ProductDialogRequest
             {
                 Mode = mode,

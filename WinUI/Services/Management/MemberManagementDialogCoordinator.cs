@@ -32,7 +32,6 @@ public sealed class MemberManagementDialogCoordinator
         Func<MemberFilter, Task> onSubmittedAsync)
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.MemberFilter,
             new MemberFilterDialogRequest
             {
                 AvailableMembershipRanks = availableMembershipRanks,
@@ -64,7 +63,6 @@ public sealed class MemberManagementDialogCoordinator
         Func<MembershipRank, Task> onMembershipRankUpdatedAsync)
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.MembershipPackage,
             new MembershipPackageDialogRequest
             {
                 MembershipRanks = membershipRanks,
@@ -105,7 +103,6 @@ public sealed class MemberManagementDialogCoordinator
         Func<MemberModel, Task> onSubmittedAsync)
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.Member,
             new MemberDialogRequest
             {
                 Mode = mode,

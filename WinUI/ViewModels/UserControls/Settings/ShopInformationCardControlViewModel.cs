@@ -139,7 +139,6 @@ public partial class ShopInformationCardControlViewModel : LocalizedViewModelBas
             if (HasEmailChanged())
             {
                 await _dialogService.ShowDialogAsync(
-                    DialogKey.Otp,
                     new OtpDialogRequest
                     {
                         Mode = OtpDialogMode.VerifyEmailChange,

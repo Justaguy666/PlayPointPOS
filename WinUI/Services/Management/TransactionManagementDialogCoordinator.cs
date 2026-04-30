@@ -19,7 +19,6 @@ public sealed class TransactionManagementDialogCoordinator
     public Task OpenFilterAsync(TransactionFilter initialCriteria, Func<TransactionFilter, Task> onSubmittedAsync)
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.TransactionFilter,
             new TransactionFilterDialogRequest
             {
                 InitialCriteria = initialCriteria,
@@ -30,7 +29,6 @@ public sealed class TransactionManagementDialogCoordinator
     public Task OpenDetailAsync(TransactionModel transaction)
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.TransactionDetail,
             new TransactionDetailDialogRequest { Model = transaction });
     }
 }

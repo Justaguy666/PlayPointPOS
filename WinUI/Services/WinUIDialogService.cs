@@ -50,6 +50,19 @@ public class WinUIDialogService : IDialogService
         }
     }
 
+    public async Task ShowDialogAsync<TRequest>(TRequest request)
+        where TRequest : notnull
+    {
+        if (_rootElement?.XamlRoot == null)
+        {
+            throw new InvalidOperationException("DialogService is not initialized with a valid root element.");
+        }
+
+        var dialog = _dialogFactory.Create(request);
+        dialog.XamlRoot = _rootElement.XamlRoot;
+        await dialog.ShowAsync();
+    }
+
     public async Task ShowErrorAsync(string message)
     {
         if (_rootElement?.XamlRoot == null)

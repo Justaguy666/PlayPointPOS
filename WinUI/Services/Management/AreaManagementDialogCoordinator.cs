@@ -26,7 +26,6 @@ public sealed class AreaManagementDialogCoordinator
     public Task OpenFilterAsync(AreaFilterCriteria initialCriteria, Func<AreaFilterCriteria, Task> onSubmittedAsync)
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.AreaFilter,
             new AreaFilterDialogRequest
             {
                 InitialCriteria = initialCriteria,
@@ -67,7 +66,6 @@ public sealed class AreaManagementDialogCoordinator
     private Task OpenUpsertAsync(UpsertDialogMode mode, AreaModel area, Func<AreaModel, Task> onSubmittedAsync)
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.Area,
             new AreaDialogRequest
             {
                 Mode = mode,

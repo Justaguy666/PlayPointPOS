@@ -157,7 +157,6 @@ public partial class RegisterViewModel : LocalizedViewModelBase
             CloseRequestedInternal?.Invoke();
             await Task.Yield();
             await _dialogService.ShowDialogAsync(
-                DialogKey.Otp,
                 new OtpDialogRequest
                 {
                     Mode = OtpDialogMode.VerifyRegistration,

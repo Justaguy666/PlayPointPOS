@@ -92,8 +92,41 @@ internal static class PlayPointServiceCollectionExtensions
 
         services.AddSingleton<IPasswordHasher, Infrastructure.Services.PasswordHasher>();
         services.AddSingleton<IResponsiveLayoutService, ResponsiveLayoutService>();
+        services.AddDialogBuilders();
         services.AddSingleton<IDialogFactory, DialogRegistry>();
         services.AddSingleton<IDialogService, WinUIDialogService>();
+    }
+
+    private static void AddDialogBuilders(this IServiceCollection services)
+    {
+        services.AddDialogBuilder<ConfigDialogBuilder>();
+        services.AddDialogBuilder<RegisterDialogBuilder>();
+        services.AddDialogBuilder<LoginDialogBuilder>();
+        services.AddDialogBuilder<ForgotPasswordDialogBuilder>();
+        services.AddDialogBuilder<OtpDialogBuilder>();
+        services.AddDialogBuilder<ReservationDialogBuilder>();
+        services.AddDialogBuilder<StartSessionDialogBuilder>();
+        services.AddDialogBuilder<AreaFilterDialogBuilder>();
+        services.AddDialogBuilder<PaymentDialogBuilder>();
+        services.AddDialogBuilder<AreaDialogBuilder>();
+        services.AddDialogBuilder<GameFilterDialogBuilder>();
+        services.AddDialogBuilder<GameTypeDialogBuilder>();
+        services.AddDialogBuilder<GameDialogBuilder>();
+        services.AddDialogBuilder<ProductFilterDialogBuilder>();
+        services.AddDialogBuilder<ProductDialogBuilder>();
+        services.AddDialogBuilder<MemberDialogBuilder>();
+        services.AddDialogBuilder<MemberFilterDialogBuilder>();
+        services.AddDialogBuilder<MembershipPackageDialogBuilder>();
+        services.AddDialogBuilder<MembershipPackageEditDialogBuilder>();
+        services.AddDialogBuilder<GoalKpiDialogBuilder>();
+        services.AddDialogBuilder<TransactionDetailDialogBuilder>();
+        services.AddDialogBuilder<TransactionFilterDialogBuilder>();
+    }
+
+    private static void AddDialogBuilder<TBuilder>(this IServiceCollection services)
+        where TBuilder : class, IDialogDefinition
+    {
+        services.AddSingleton<IDialogDefinition, TBuilder>();
     }
 
     private static void AddRepositories(this IServiceCollection services)

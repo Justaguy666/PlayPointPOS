@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using WinUI.UIModels;
 using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
+using WinUI.ViewModels.Dialogs;
 using WinUI.ViewModels.Dialogs.Management;
 
 namespace WinUI.ViewModels.AreaManagement.DetailedAreaCards;
@@ -64,13 +65,12 @@ public partial class DetailedAvailableCardViewModel : LocalizedViewModelBase, ID
 
     private Task OpenStartSessionDialogAsync()
     {
-        return _dialogService.ShowDialogAsync(DialogKey.StartSession, Model);
+        return _dialogService.ShowDialogAsync(new StartSessionDialogRequest { Model = Model });
     }
 
     private Task OpenReservationDialogAsync()
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.Reservation,
             new ReservationDialogRequest
             {
                 Mode = UpsertDialogMode.Add,

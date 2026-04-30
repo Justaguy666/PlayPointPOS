@@ -117,7 +117,6 @@ public partial class GoalProgressControlViewModel : LocalizedViewModelBase
     private Task EditGoalsAsync()
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.GoalKpi,
             new GoalKpiDialogRequest
             {
                 RevenueGoalValue = RevenueTargetGoalValue,

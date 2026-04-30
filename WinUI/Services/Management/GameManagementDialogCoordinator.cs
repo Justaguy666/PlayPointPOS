@@ -32,7 +32,6 @@ public sealed class GameManagementDialogCoordinator
         Func<BoardGameFilter, Task> onSubmittedAsync)
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.GameFilter,
             new GameFilterDialogRequest
             {
                 AvailableGameTypes = availableGameTypes,
@@ -64,7 +63,6 @@ public sealed class GameManagementDialogCoordinator
         Func<GameType, Task> onGameTypeUpdatedAsync)
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.GameType,
             new GameTypeDialogRequest
             {
                 GameTypes = gameTypes,
@@ -105,7 +103,6 @@ public sealed class GameManagementDialogCoordinator
         Func<GameModel, Task> onSubmittedAsync)
     {
         return _dialogService.ShowDialogAsync(
-            DialogKey.Game,
             new GameDialogRequest
             {
                 Mode = mode,

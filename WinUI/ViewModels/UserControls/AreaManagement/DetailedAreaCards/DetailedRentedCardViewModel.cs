@@ -12,6 +12,7 @@ using WinUI.UIModels;
 using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
 using Application.Services.Areas;
+using WinUI.ViewModels.Dialogs.Management;
 
 namespace WinUI.ViewModels.AreaManagement.DetailedAreaCards;
 
@@ -293,7 +294,7 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
 
     private Task OpenPaymentDialogAsync()
     {
-        return _dialogService.ShowDialogAsync(DialogKey.Payment, Model);
+        return _dialogService.ShowDialogAsync(new PaymentDialogRequest { Model = Model });
     }
 
     private Task AddGameAsync()

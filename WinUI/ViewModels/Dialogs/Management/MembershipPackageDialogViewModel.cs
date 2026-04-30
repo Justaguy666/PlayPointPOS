@@ -254,7 +254,6 @@ public partial class MembershipPackageDialogViewModel : LocalizedViewModelBase
         try
         {
             await _dialogService.ShowDialogAsync(
-                DialogKey.MembershipPackageEdit,
                 new MembershipPackageEditDialogRequest
                 {
                     Item = item,
