@@ -191,6 +191,9 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         EditSelectedAreaCommand = new AsyncRelayCommand(ExecuteEditSelectedAreaAsync, CanManageSelectedArea);
         DeleteSelectedAreaCommand = new AsyncRelayCommand(ExecuteDeleteSelectedAreaAsync, CanManageSelectedArea);
         SelectSummarizedAreaCardCommand = new RelayCommand<ISummarizedAreaCardViewModel?>(SelectSummarizedAreaCard);
+        OpenAreaCardContextMenuCommand = new RelayCommand<ISummarizedAreaCardViewModel?>(
+            OpenAreaCardContextMenu,
+            CanOpenAreaCardContextMenu);
 
         _allAreaModels = areaCatalogService
             .GetAreas()
@@ -234,6 +237,8 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
     public IAsyncRelayCommand DeleteSelectedAreaCommand { get; }
 
     public IRelayCommand<ISummarizedAreaCardViewModel?> SelectSummarizedAreaCardCommand { get; }
+
+    public IRelayCommand<ISummarizedAreaCardViewModel?> OpenAreaCardContextMenuCommand { get; }
 
     protected override void RefreshLocalizedText()
     {
@@ -351,6 +356,16 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         OnPropertyChanged(nameof(SelectedSummarizedAreaCardViewModel));
         ReplaceDetailedAreaCardViewModel(_areaCardViewModelFactory.CreateDetailed(selectedCardViewModel));
         NotifySelectedAreaCommandStateChanged();
+    }
+
+    private void OpenAreaCardContextMenu(ISummarizedAreaCardViewModel? selectedCardViewModel)
+    {
+        SelectSummarizedAreaCard(selectedCardViewModel);
+    }
+
+    private static bool CanOpenAreaCardContextMenu(ISummarizedAreaCardViewModel? areaCardViewModel)
+    {
+        return areaCardViewModel?.Status == PlayAreaStatus.Available;
     }
 
     public void UpdateAreaCardsLayout(double availableWidth)

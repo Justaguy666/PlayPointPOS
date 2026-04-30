@@ -24,6 +24,7 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
     private const string DifficultyHardValue = "hard";
 
     private readonly IDialogService _dialogService;
+    private readonly IFilePickerService _filePickerService;
     private readonly GameModelFactory _gameModelFactory;
     private IReadOnlyList<GameType> _availableGameTypes = [];
     private GameModel _targetModel = new();
@@ -39,11 +40,13 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
     public GameDialogViewModel(
         ILocalizationService localizationService,
         IDialogService dialogService,
+        IFilePickerService filePickerService,
         GameModelFactory gameModelFactory,
         UpsertDialogMode mode)
         : base(localizationService, mode)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _filePickerService = filePickerService ?? throw new ArgumentNullException(nameof(filePickerService));
         _gameModelFactory = gameModelFactory ?? throw new ArgumentNullException(nameof(gameModelFactory));
         ApplyModel(_initialModel);
     }
@@ -224,6 +227,23 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
         }
 
         DialogShowRequested?.Invoke();
+    }
+
+    [RelayCommand]
+    private async Task BrowseImageAsync()
+    {
+        try
+        {
+            string? imageUri = await _filePickerService.PickImageFileUriAsync();
+            if (!string.IsNullOrWhiteSpace(imageUri))
+            {
+                ImageUriText = imageUri;
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
     }
 
     [RelayCommand]

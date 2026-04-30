@@ -84,7 +84,7 @@
 
                         <Button Grid.Column="1"
                                 Style="{StaticResource DialogSecondaryFooterButtonStyle}"
-                                Click="HandleBrowseImageClick"
+                                Command="{x:Bind ViewModel.BrowseImageCommand, Mode=OneWay}"
                                 Padding="20,10">
                             <Button.Resources>
                                 <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />

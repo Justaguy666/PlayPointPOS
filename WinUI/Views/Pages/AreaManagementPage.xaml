@@ -11,6 +11,7 @@
     xmlns:summarizedViewModels="using:WinUI.ViewModels.AreaManagement.SummarizedAreaCards"
     xmlns:detailedViewModels="using:WinUI.ViewModels.AreaManagement.DetailedAreaCards"
     xmlns:selectors="using:WinUI.Selectors"
+    xmlns:behaviors="using:WinUI.Behaviors"
     xmlns:vm="using:WinUI.ViewModels.Pages"
     KeyboardAcceleratorPlacementMode="Hidden"
     d:DataContext="{d:DesignInstance Type=vm:AreaManagementPageViewModel, IsDesignTimeCreatable=False}"
@@ -90,7 +91,8 @@
 
                     <Button Style="{StaticResource AppContextActionButtonStyle}"
                             Command="{x:Bind ViewModel.EditSelectedAreaCommand, Mode=OneWay}"
-                            Click="HandleAreaContextActionClick">
+                            behaviors:InputCommandBehavior.HideAttachedFlyoutOnClick="True"
+                            behaviors:InputCommandBehavior.ClickFlyoutOwner="{Binding ElementName=RootGrid}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -108,7 +110,8 @@
 
                     <Button Style="{StaticResource AppContextActionButtonStyle}"
                             Command="{x:Bind ViewModel.DeleteSelectedAreaCommand, Mode=OneWay}"
-                            Click="HandleAreaContextActionClick">
+                            behaviors:InputCommandBehavior.HideAttachedFlyoutOnClick="True"
+                            behaviors:InputCommandBehavior.ClickFlyoutOwner="{Binding ElementName=RootGrid}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -373,8 +376,11 @@
                             <ItemsRepeater.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Background="{StaticResource TransparentBrush}"
-                                          Tapped="HandleAreaCardTapped"
-                                          RightTapped="HandleAreaCardRightTapped">
+                                          behaviors:InputCommandBehavior.CommandParameter="{Binding}"
+                                          behaviors:InputCommandBehavior.TappedCommand="{Binding DataContext.SelectSummarizedAreaCardCommand, ElementName=RootPage}"
+                                          behaviors:InputCommandBehavior.RightTappedCommand="{Binding DataContext.OpenAreaCardContextMenuCommand, ElementName=RootPage}"
+                                          behaviors:InputCommandBehavior.ShowAttachedFlyoutOnRightTapped="True"
+                                          behaviors:InputCommandBehavior.RightTappedFlyoutOwner="{Binding ElementName=RootGrid}">
                                         <ContentControl Content="{Binding}"
                                                         HorizontalContentAlignment="Stretch"
                                                         VerticalContentAlignment="Stretch"

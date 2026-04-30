@@ -1,11 +1,9 @@
 using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
 using WinUI.Helpers;
 using WinUI.Services.Layout;
-using WinUI.ViewModels.AreaManagement.SummarizedAreaCards;
 using WinUI.ViewModels.Pages;
 
 namespace WinUI.Views.Pages;
@@ -54,15 +52,6 @@ public sealed partial class AreaManagementPage : Page
         UpdateAreaCardsLayout();
     }
 
-    private void HandleAreaCardTapped(object sender, TappedRoutedEventArgs e)
-    {
-        if (sender is FrameworkElement element &&
-            element.DataContext is ISummarizedAreaCardViewModel clickedAreaCardViewModel)
-        {
-            ViewModel.SelectSummarizedAreaCardCommand.Execute(clickedAreaCardViewModel);
-        }
-    }
-
     private void EditSelectedArea_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {
         if (ViewModel.EditSelectedAreaCommand.CanExecute(null))
@@ -79,31 +68,6 @@ public sealed partial class AreaManagementPage : Page
             ViewModel.DeleteSelectedAreaCommand.Execute(null);
             args.Handled = true;
         }
-    }
-
-    private void HandleAreaCardRightTapped(object sender, RightTappedRoutedEventArgs e)
-    {
-        if (sender is not FrameworkElement areaCardElement ||
-            areaCardElement.DataContext is not ISummarizedAreaCardViewModel areaCardViewModel)
-        {
-            return;
-        }
-
-        if (areaCardViewModel.Status != Domain.Enums.PlayAreaStatus.Available)
-        {
-            return;
-        }
-
-        ViewModel.SelectSummarizedAreaCardCommand.Execute(areaCardViewModel);
-
-        AreaCardActionsFlyout.ShowAt(
-            areaCardElement,
-            new FlyoutShowOptions
-            {
-                Position = e.GetPosition(areaCardElement),
-            });
-
-        e.Handled = true;
     }
 
     private void HandleAreaFilterChipPointerEntered(object sender, PointerRoutedEventArgs e)
@@ -143,11 +107,6 @@ public sealed partial class AreaManagementPage : Page
         {
             hoverOverlay.Opacity = 0;
         }
-    }
-
-    private void HandleAreaContextActionClick(object sender, RoutedEventArgs e)
-    {
-        AreaCardActionsFlyout.Hide();
     }
 
     private void UpdateAreaCardsLayout()

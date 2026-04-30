@@ -210,10 +210,11 @@ public sealed class GameDialogBuilder : OptionalDialogBuilder<GameDialogRequest>
         var viewModel = new GameDialogViewModel(
             Resolve<ILocalizationService>(),
             Resolve<IDialogService>(),
+            Resolve<IFilePickerService>(),
             Resolve<GameModelFactory>(),
             request?.Mode ?? UpsertDialogMode.Add);
 
-        return new GameDialog(viewModel, request, Resolve<MainWindow>());
+        return new GameDialog(viewModel, request);
     }
 }
 
@@ -244,10 +245,11 @@ public sealed class ProductDialogBuilder : OptionalDialogBuilder<ProductDialogRe
         var viewModel = new ProductDialogViewModel(
             Resolve<ILocalizationService>(),
             Resolve<IDialogService>(),
+            Resolve<IFilePickerService>(),
             Resolve<ProductModelFactory>(),
             request?.Mode ?? UpsertDialogMode.Add);
 
-        return new ProductDialog(viewModel, request, Resolve<MainWindow>());
+        return new ProductDialog(viewModel, request);
     }
 }
 

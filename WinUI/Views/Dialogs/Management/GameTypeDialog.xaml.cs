@@ -1,7 +1,5 @@
 using System;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Input;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
 using WinUI.ViewModels.Dialogs.Management;
@@ -81,14 +79,5 @@ public sealed partial class GameTypeDialog : ContentDialog
         ViewModel.DialogHideRequested -= HandleDialogHideRequested;
         ViewModel.DialogShowRequested -= HandleDialogShowRequested;
         ViewModel.Dispose();
-    }
-
-    private void OnGameTypeDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
-    {
-        if (sender is FrameworkElement { DataContext: GameTypeItemViewModel item }
-            && item.BeginEditCommand.CanExecute(null))
-        {
-            item.BeginEditCommand.Execute(null);
-        }
     }
 }

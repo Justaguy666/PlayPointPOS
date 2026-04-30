@@ -64,6 +64,7 @@ internal static class PlayPointServiceCollectionExtensions
                 defaultPreferences.TimeZone));
         services.AddSingleton<IAppInfoService, WinUIAppInfoService>();
         services.AddSingleton<IApplicationLifetimeService, WinUIApplicationLifetimeService>();
+        services.AddSingleton<IFilePickerService, WinUIFilePickerService>();
         services.AddSingleton<IDateTimeService, Infrastructure.Services.DateTimeService>();
         services.AddSingleton<INavigationService, WinUINavigationService>();
 

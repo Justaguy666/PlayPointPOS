@@ -22,6 +22,7 @@ public partial class ProductDialogViewModel : UpsertDialogViewModelBase
     private const string ProductTypeDrinkValue = "drink";
 
     private readonly IDialogService _dialogService;
+    private readonly IFilePickerService _filePickerService;
     private readonly ProductModelFactory _productModelFactory;
     private ProductModel _targetModel = new();
     private ProductModel _initialModel = new();
@@ -36,11 +37,13 @@ public partial class ProductDialogViewModel : UpsertDialogViewModelBase
     public ProductDialogViewModel(
         ILocalizationService localizationService,
         IDialogService dialogService,
+        IFilePickerService filePickerService,
         ProductModelFactory productModelFactory,
         UpsertDialogMode mode)
         : base(localizationService, mode)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _filePickerService = filePickerService ?? throw new ArgumentNullException(nameof(filePickerService));
         _productModelFactory = productModelFactory ?? throw new ArgumentNullException(nameof(productModelFactory));
         ApplyModel(_initialModel);
     }
@@ -172,6 +175,23 @@ public partial class ProductDialogViewModel : UpsertDialogViewModelBase
         }
 
         DialogShowRequested?.Invoke();
+    }
+
+    [RelayCommand]
+    private async Task BrowseImageAsync()
+    {
+        try
+        {
+            string? imageUri = await _filePickerService.PickImageFileUriAsync();
+            if (!string.IsNullOrWhiteSpace(imageUri))
+            {
+                ImageUriText = imageUri;
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
     }
 
     [RelayCommand]

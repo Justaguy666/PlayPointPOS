@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:WinUI.Views.UserControls"
     xmlns:dialogControls="using:WinUI.Views.UserControls.Dialogs"
+    xmlns:behaviors="using:WinUI.Behaviors"
     xmlns:vm="using:WinUI.ViewModels.Dialogs.Management"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -66,7 +67,7 @@
                     </ItemsRepeater.Layout>
                     <ItemsRepeater.ItemTemplate>
                         <DataTemplate x:DataType="vm:GameTypeItemViewModel">
-                            <Grid DoubleTapped="OnGameTypeDoubleTapped"
+                            <Grid behaviors:InputCommandBehavior.DoubleTappedCommand="{x:Bind BeginEditCommand, Mode=OneWay}"
                                   HorizontalAlignment="Left"
                                   Background="Transparent">
                                 <Border Background="{StaticResource WhiteBrush}"

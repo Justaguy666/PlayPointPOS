@@ -1,6 +1,5 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Input;
 using System;
 using WinUI.Helpers;
 using WinUI.UIModels;
@@ -90,14 +89,5 @@ public sealed partial class MembershipPackageDialog : ContentDialog
         ViewModel.DialogHideRequested -= HandleDialogHideRequested;
         ViewModel.DialogShowRequested -= HandleDialogShowRequested;
         ViewModel.Dispose();
-    }
-
-    private void OnMembershipPackageDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
-    {
-        if (sender is FrameworkElement { DataContext: MembershipPackageItemViewModel item }
-            && item.BeginEditCommand.CanExecute(null))
-        {
-            item.BeginEditCommand.Execute(null);
-        }
     }
 }
