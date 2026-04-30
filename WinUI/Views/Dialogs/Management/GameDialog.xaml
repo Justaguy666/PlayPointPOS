@@ -120,7 +120,8 @@
 
                         <Button Grid.Column="1"
                                 Style="{StaticResource DialogSecondaryFooterButtonStyle}"
-                                Click="HandleBrowseImageClick">
+                                Click="HandleBrowseImageClick"
+                                Padding="20,10">
                             <Button.Resources>
                                 <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
                             </Button.Resources>
