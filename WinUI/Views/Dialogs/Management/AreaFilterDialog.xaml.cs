@@ -14,8 +14,6 @@ public sealed partial class AreaFilterDialog : ContentDialog
 
     public IconState HeaderIconState => ViewModel.Icon;
 
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
-
     public IconState ClockIconState { get; } = new() { Kind = IconKind.Clock, Size = 20, AlwaysFilled = true };
 
     public AreaFilterDialog(AreaFilterViewModel viewModel, AreaFilterDialogRequest? request)

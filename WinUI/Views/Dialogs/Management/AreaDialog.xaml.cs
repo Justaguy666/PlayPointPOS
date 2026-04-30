@@ -1,16 +1,12 @@
 using System;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
-using WinUI.Converters;
 using WinUI.UIModels;
-using WinUI.UIModels.Enums;
 using WinUI.ViewModels.Dialogs.Management;
 
 namespace WinUI.Views.Dialogs.Management;
 
 public sealed partial class AreaDialog : ContentDialog
 {
-    private static readonly IconConverter IconConverter = new();
     private bool _isTemporarilyHiddenForConfirmation;
     private bool _isCleanedUp;
 
@@ -18,16 +14,12 @@ public sealed partial class AreaDialog : ContentDialog
 
     public IconState HeaderIconState => ViewModel.Icon;
 
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
-
     public AreaDialog(AreaDialogViewModel viewModel, AreaDialogRequest? request)
     {
         ViewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
         ViewModel.Configure(request);
         DataContext = ViewModel;
         InitializeComponent();
-        HeaderIcon.Data = ConvertIcon(HeaderIconState);
-        CloseIcon.Data = ConvertIcon(CloseIconState);
 
         ViewModel.CloseRequested += HandleCloseRequested;
         ViewModel.DialogHideRequested += HandleDialogHideRequested;
@@ -82,10 +74,5 @@ public sealed partial class AreaDialog : ContentDialog
         ViewModel.DialogHideRequested -= HandleDialogHideRequested;
         ViewModel.DialogShowRequested -= HandleDialogShowRequested;
         ViewModel.Dispose();
-    }
-
-    private static Geometry? ConvertIcon(IconState iconState)
-    {
-        return IconConverter.Convert(iconState, typeof(Geometry), null, string.Empty) as Geometry;
     }
 }

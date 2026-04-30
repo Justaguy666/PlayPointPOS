@@ -14,8 +14,6 @@ public sealed partial class TransactionFilterDialog : ContentDialog
 
     public IconState HeaderIconState { get; } = new() { Kind = IconKind.Filter, Size = 20, AlwaysFilled = true };
 
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
-
     public IconState CalendarIconState { get; } = new() { Kind = IconKind.Calendar, Size = 20, AlwaysFilled = true };
 
     public TransactionFilterDialog(

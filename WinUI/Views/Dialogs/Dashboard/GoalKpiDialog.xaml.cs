@@ -1,7 +1,6 @@
 using System;
 using Microsoft.UI.Xaml.Controls;
 using WinUI.UIModels;
-using WinUI.UIModels.Enums;
 using WinUI.ViewModels.Dialogs.Dashboard;
 
 namespace WinUI.Views.Dialogs.Dashboard;
@@ -11,8 +10,6 @@ public sealed partial class GoalKpiDialog : ContentDialog
     public GoalKpiDialogViewModel ViewModel { get; }
 
     public IconState HeaderIconState => ViewModel.Icon;
-
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
 
     public GoalKpiDialog(GoalKpiDialogViewModel viewModel, GoalKpiDialogRequest? request)
     {

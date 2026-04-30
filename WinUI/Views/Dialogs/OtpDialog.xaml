@@ -3,7 +3,7 @@
     x:Name="RootDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:dialogControls="using:WinUI.Views.UserControls.Dialogs"
     xmlns:helpers="using:WinUI.Helpers"
     Style="{StaticResource StandardFormDialogStyle}">
 
@@ -11,121 +11,94 @@
         <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/FormInputStateResources.xaml" />
     </ContentDialog.Resources>
 
-    <Grid x:Name="RootGrid">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0"
-              Style="{StaticResource DialogHeaderContainerStyle}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <PathIcon Grid.Column="0"
-                      Style="{StaticResource DialogHeaderIconStyle}"
-                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
-                      />
-            <TextBlock Grid.Column="1"
-                       Style="{StaticResource DialogHeaderTitleTextStyle}"
-                       Text="{x:Bind ViewModel.TitleText, Mode=OneWay}"
-                       />
-            <Button Grid.Column="2"
-                    Style="{StaticResource DialogCloseButtonStyle}"
-                    Command="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
-                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
-                </Button.Resources>
-                <PathIcon Width="14"
-                          Height="14"
-                          Data="{x:Bind CloseIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
-                          Foreground="{StaticResource BlackBrush}"/>
-            </Button>
-        </Grid>
-
-        <controls:DividerControl Grid.Row="1"
-                                 Style="{StaticResource DialogHeaderDividerStyle}"/>
-
-        <StackPanel Grid.Row="2"
-                    Style="{StaticResource DialogFormContentPanelStyle}">
-            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                <TextBlock Text="{x:Bind ViewModel.OtpLabelText, Mode=OneWay}"
-                           Style="{StaticResource DialogFormLabelTextStyle}"/>
-                <TextBox x:Name="OtpCodeBox"
-                         PlaceholderText="{x:Bind ViewModel.OtpPlaceholderText, Mode=OneWay}"
-                         Text="{x:Bind ViewModel.OtpCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         MaxLength="6"
-                         Style="{StaticResource DialogFormTextBoxStyle}" />
-            </StackPanel>
-
-            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}"
-                        Visibility="{x:Bind ViewModel.ShowPasswordFields, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
-                <TextBlock Text="{x:Bind ViewModel.NewPasswordLabelText, Mode=OneWay}"
-                           Style="{StaticResource DialogFormLabelTextStyle}"/>
-                <PasswordBox x:Name="NewPasswordBox"
-                             PlaceholderText="{x:Bind ViewModel.NewPasswordPlaceholderText, Mode=OneWay}"
-                             helpers:PasswordBoxBindingHelper.BindPassword="True"
-                             helpers:PasswordBoxBindingHelper.BoundPassword="{Binding NewPassword, Mode=TwoWay}"
-                             Style="{StaticResource DialogFormPasswordBoxStyle}" />
-            </StackPanel>
-
-            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}"
-                        Visibility="{x:Bind ViewModel.ShowPasswordFields, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
-                <TextBlock Text="{x:Bind ViewModel.ConfirmPasswordLabelText, Mode=OneWay}"
-                           Style="{StaticResource DialogFormLabelTextStyle}"/>
-                <PasswordBox x:Name="ConfirmPasswordBox"
-                             PlaceholderText="{x:Bind ViewModel.ConfirmPasswordPlaceholderText, Mode=OneWay}"
-                             helpers:PasswordBoxBindingHelper.BindPassword="True"
-                             helpers:PasswordBoxBindingHelper.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay}"
-                             Style="{StaticResource DialogFormPasswordBoxStyle}" />
-            </StackPanel>
-
-            <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
-                       Visibility="{x:Bind ViewModel.HasError, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
-                       Foreground="{StaticResource ErrorRedBrush}"
-                       FontSize="{StaticResource FontSizeSmall}"
-                       FontWeight="SemiBold"/>
-
-            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}"/>
-
-            <Grid Margin="0,8,0,0" ColumnSpacing="16">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Grid.Column="0"
-                            Orientation="Horizontal"
-                            Spacing="10"
-                            VerticalAlignment="Center">
-                    <Button x:Name="ChangeEmailButton"
-                            Command="{x:Bind ViewModel.ChangeEmailCommand, Mode=OneWay}"
-                            Visibility="{x:Bind ViewModel.ShowChangeEmailButton, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
-                            Style="{StaticResource DialogCompactSecondaryButtonStyle}">
-                        <Button.Resources>
-                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
-                        </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.ChangeEmailButtonText, Mode=OneWay}"/>
-                    </Button>
+    <dialogControls:DialogShell Size="Standard"
+                                MaxBodyHeight="460"
+                                Title="{x:Bind ViewModel.TitleText, Mode=OneWay}"
+                                IconState="{x:Bind HeaderIconState, Mode=OneWay}"
+                                CloseCommand="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
+                                CloseTooltipText="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
+        <dialogControls:DialogShell.BodyContent>
+            <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.OtpLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <TextBox x:Name="OtpCodeBox"
+                             PlaceholderText="{x:Bind ViewModel.OtpPlaceholderText, Mode=OneWay}"
+                             ToolTipService.ToolTip="{x:Bind ViewModel.OtpPlaceholderText, Mode=OneWay}"
+                             Text="{x:Bind ViewModel.OtpCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             MaxLength="6"
+                             Style="{StaticResource DialogFormTextBoxStyle}" />
                 </StackPanel>
 
-                <StackPanel Grid.Column="1"
-                            Orientation="Horizontal"
-                            Spacing="10"
-                            VerticalAlignment="Center">
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}"
+                            Visibility="{x:Bind ViewModel.ShowPasswordFields, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
+                    <TextBlock Text="{x:Bind ViewModel.NewPasswordLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <PasswordBox x:Name="NewPasswordBox"
+                                 PlaceholderText="{x:Bind ViewModel.NewPasswordPlaceholderText, Mode=OneWay}"
+                                 ToolTipService.ToolTip="{x:Bind ViewModel.NewPasswordPlaceholderText, Mode=OneWay}"
+                                 helpers:PasswordBoxBindingHelper.BindPassword="True"
+                                 helpers:PasswordBoxBindingHelper.BoundPassword="{Binding NewPassword, Mode=TwoWay}"
+                                 Style="{StaticResource DialogFormPasswordBoxStyle}" />
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}"
+                            Visibility="{x:Bind ViewModel.ShowPasswordFields, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
+                    <TextBlock Text="{x:Bind ViewModel.ConfirmPasswordLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <PasswordBox x:Name="ConfirmPasswordBox"
+                                 PlaceholderText="{x:Bind ViewModel.ConfirmPasswordPlaceholderText, Mode=OneWay}"
+                                 ToolTipService.ToolTip="{x:Bind ViewModel.ConfirmPasswordPlaceholderText, Mode=OneWay}"
+                                 helpers:PasswordBoxBindingHelper.BindPassword="True"
+                                 helpers:PasswordBoxBindingHelper.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay}"
+                                 Style="{StaticResource DialogFormPasswordBoxStyle}" />
+                </StackPanel>
+
+                <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+                           Visibility="{x:Bind ViewModel.HasError, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
+                           Foreground="{StaticResource ErrorRedBrush}"
+                           FontSize="{StaticResource FontSizeSmall}"
+                           FontWeight="SemiBold"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+        </dialogControls:DialogShell.BodyContent>
+
+        <dialogControls:DialogShell.FooterContent>
+            <Grid ColumnSpacing="16"
+                  MinHeight="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="ChangeEmailButton"
+                        Grid.Column="0"
+                        Command="{x:Bind ViewModel.ChangeEmailCommand, Mode=OneWay}"
+                        Visibility="{x:Bind ViewModel.ShowChangeEmailButton, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
+                        Style="{StaticResource DialogCompactSecondaryButtonStyle}"
+                        HorizontalAlignment="Stretch"
+                        ToolTipService.ToolTip="{x:Bind ViewModel.ChangeEmailButtonText, Mode=OneWay}">
+                    <Button.Resources>
+                        <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
+                    </Button.Resources>
+                    <TextBlock Text="{x:Bind ViewModel.ChangeEmailButtonText, Mode=OneWay}"
+                               TextTrimming="CharacterEllipsis"
+                               MaxLines="1" />
+                </Button>
+
+                <Grid Grid.Column="1">
                     <Button x:Name="VerifyButton"
                             Command="{x:Bind ViewModel.VerifyCommand, Mode=OneWay}"
                             Visibility="{x:Bind ViewModel.IsNotWorking, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
-                            Style="{StaticResource DialogCompactPrimaryButtonStyle}">
+                            Style="{StaticResource DialogCompactPrimaryButtonStyle}"
+                            HorizontalAlignment="Stretch"
+                            ToolTipService.ToolTip="{x:Bind ViewModel.VerifyButtonText, Mode=OneWay}">
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
                         </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.VerifyButtonText, Mode=OneWay}"/>
+                        <TextBlock Text="{x:Bind ViewModel.VerifyButtonText, Mode=OneWay}"
+                                   TextTrimming="CharacterEllipsis"
+                                   MaxLines="1" />
                     </Button>
 
                     <ProgressRing Width="20"
@@ -133,9 +106,10 @@
                                   IsActive="{x:Bind ViewModel.IsWorking, Mode=OneWay}"
                                   Visibility="{x:Bind ViewModel.IsWorking, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
                                   Foreground="{StaticResource OrangeFocusBrush}"
-                                  VerticalAlignment="Center"/>
-                </StackPanel>
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center" />
+                </Grid>
             </Grid>
-        </StackPanel>
-    </Grid>
+        </dialogControls:DialogShell.FooterContent>
+    </dialogControls:DialogShell>
 </ContentDialog>

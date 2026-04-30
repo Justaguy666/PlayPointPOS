@@ -1,7 +1,6 @@
 using Microsoft.UI.Xaml.Controls;
 using System;
 using WinUI.UIModels;
-using WinUI.UIModels.Enums;
 using WinUI.ViewModels.Dialogs.Management;
 
 namespace WinUI.Views.Dialogs.Management;
@@ -11,8 +10,6 @@ public sealed partial class MemberFilterDialog : ContentDialog
     public MemberFilterViewModel ViewModel { get; }
 
     public IconState HeaderIconState => ViewModel.Icon;
-
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
 
     public MemberFilterDialog(MemberFilterViewModel viewModel, MemberFilterDialogRequest? request)
     {

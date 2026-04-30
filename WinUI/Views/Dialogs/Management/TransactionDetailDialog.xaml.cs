@@ -1,5 +1,6 @@
 using System;
-using Microsoft.UI.Xaml;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
@@ -13,23 +14,19 @@ public sealed partial class TransactionDetailDialog : ContentDialog
 
     public IconState HeaderIconState { get; } = new() { Kind = IconKind.History, Size = 20, AlwaysFilled = true };
 
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
+    public ICommand CloseCommand { get; }
 
     public TransactionDetailDialog(
         TransactionDetailDialogViewModel viewModel,
         TransactionDetailDialogRequest? request)
     {
         ViewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
+        CloseCommand = new RelayCommand(Hide);
         DataContext = ViewModel;
         InitializeComponent();
         ViewModel.Configure(request);
 
         Closed += HandleClosed;
-    }
-
-    private void HandleCloseButtonClick(object sender, RoutedEventArgs e)
-    {
-        Hide();
     }
 
     private void HandleClosed(ContentDialog sender, ContentDialogClosedEventArgs args)

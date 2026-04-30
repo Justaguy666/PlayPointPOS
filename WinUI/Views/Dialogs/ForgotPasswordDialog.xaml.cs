@@ -10,7 +10,6 @@ public sealed partial class ForgotPasswordDialog : ContentDialog
 {
     public ForgotPasswordViewModel ViewModel { get; }
     public IconState HeaderIconState { get; } = new() { Kind = IconKind.Forget, Size = 24 };
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
 
     public ForgotPasswordDialog(ForgotPasswordViewModel viewModel)
     {

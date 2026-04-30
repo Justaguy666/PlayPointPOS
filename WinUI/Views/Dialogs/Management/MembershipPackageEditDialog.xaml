@@ -3,7 +3,7 @@
     x:Name="RootDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:dialogControls="using:WinUI.Views.UserControls.Dialogs"
     xmlns:panels="using:WinUI.Views.Panels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -18,49 +18,13 @@
         </ResourceDictionary>
     </ContentDialog.Resources>
 
-    <Grid Style="{StaticResource DialogFormRootGridStyle}"
-          MaxWidth="620">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0"
-              Style="{StaticResource DialogHeaderContainerStyle}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <PathIcon Grid.Column="0"
-                      Style="{StaticResource DialogHeaderIconStyle}"
-                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-            <TextBlock Grid.Column="1"
-                       Style="{StaticResource DialogHeaderTitleTextStyle}"
-                       Text="{x:Bind ViewModel.TitleText, Mode=OneWay}" />
-            <Button Grid.Column="2"
-                    Style="{StaticResource DialogCloseButtonStyle}"
-                    Command="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
-                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
-                </Button.Resources>
-                <FontIcon Glyph="&#xE711;"
-                          FontFamily="Segoe Fluent Icons"
-                          FontSize="{StaticResource FontSizeSmall}"
-                          Foreground="{StaticResource DarkGrayBrush}" />
-            </Button>
-        </Grid>
-
-        <controls:DividerControl Grid.Row="1"
-                                 Style="{StaticResource DialogHeaderDividerStyle}" />
-
-        <ScrollViewer Grid.Row="2"
-                      VerticalScrollBarVisibility="Auto"
-                      VerticalScrollMode="Enabled"
-                      Margin="0">
+    <dialogControls:DialogShell Size="Standard"
+                                MaxBodyHeight="420"
+                                Title="{x:Bind ViewModel.TitleText, Mode=OneWay}"
+                                IconState="{x:Bind HeaderIconState, Mode=OneWay}"
+                                CloseCommand="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
+                                CloseTooltipText="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
+        <dialogControls:DialogShell.BodyContent>
             <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
                 <panels:ResponsiveFormPanel ColumnSpacing="12"
                                             RowSpacing="10"
@@ -106,10 +70,11 @@
                                     VerticalAlignment="Center">
                             <PathIcon Width="16"
                                       Height="16"
-                                            Data="{x:Bind ViewModel.PaintIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
-                                            Foreground="{x:Bind ViewModel.EditColorBrush, Mode=OneWay}" />
+                                      Data="{x:Bind ViewModel.PaintIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
+                                      Foreground="{x:Bind ViewModel.EditColorBrush, Mode=OneWay}" />
                             <TextBlock Text="{x:Bind ViewModel.ColorButtonText, Mode=OneWay}"
-                                       TextTrimming="CharacterEllipsis" />
+                                       TextTrimming="CharacterEllipsis"
+                                       MaxLines="1" />
                         </StackPanel>
                         <Button.Flyout>
                             <Flyout Placement="BottomEdgeAlignedLeft">
@@ -136,40 +101,15 @@
                            FontSize="{StaticResource FontSizeSmall}"
                            FontWeight="SemiBold"
                            TextWrapping="Wrap" />
-
-                <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
-
-                <Grid Margin="0,8,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="16" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Button Grid.Column="0"
-                            Style="{StaticResource DialogSecondaryFooterButtonStyle}"
-                            Command="{x:Bind ViewModel.CancelCommand, Mode=OneWay}"
-                            ToolTipService.ToolTip="{x:Bind ViewModel.CancelButtonText, Mode=OneWay}">
-                        <Button.Resources>
-                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
-                        </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.CancelButtonText, Mode=OneWay}"
-                                   TextTrimming="CharacterEllipsis" />
-                    </Button>
-
-                    <Button Grid.Column="2"
-                            Style="{StaticResource DialogPrimaryFooterButtonStyle}"
-                            Command="{x:Bind ViewModel.SaveCommand, Mode=OneWay}"
-                            IsEnabled="{x:Bind ViewModel.CanSave, Mode=OneWay}"
-                            ToolTipService.ToolTip="{x:Bind ViewModel.SaveButtonText, Mode=OneWay}">
-                        <Button.Resources>
-                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
-                        </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.SaveButtonText, Mode=OneWay}"
-                                   TextTrimming="CharacterEllipsis" />
-                    </Button>
-                </Grid>
             </StackPanel>
-        </ScrollViewer>
-    </Grid>
+        </dialogControls:DialogShell.BodyContent>
+
+        <dialogControls:DialogShell.FooterContent>
+            <dialogControls:DialogFooterActions SecondaryText="{x:Bind ViewModel.CancelButtonText, Mode=OneWay}"
+                                                 SecondaryCommand="{x:Bind ViewModel.CancelCommand, Mode=OneWay}"
+                                                 PrimaryText="{x:Bind ViewModel.SaveButtonText, Mode=OneWay}"
+                                                 PrimaryCommand="{x:Bind ViewModel.SaveCommand, Mode=OneWay}"
+                                                 IsPrimaryEnabled="{x:Bind ViewModel.CanSave, Mode=OneWay}" />
+        </dialogControls:DialogShell.FooterContent>
+    </dialogControls:DialogShell>
 </ContentDialog>

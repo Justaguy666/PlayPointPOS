@@ -11,7 +11,6 @@ public sealed partial class ConfigDialog : ContentDialog
 {
     public ConfigViewModel ViewModel { get; }
     public IconState HeaderIconState { get; } = new() { Kind = IconKind.Config, Size = 24 };
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
 
     public ConfigDialog(ConfigViewModel viewModel)
     {

@@ -4,14 +4,31 @@
     xmlns:controls="using:WinUI.Views.UserControls"
     xmlns:panels="using:WinUI.Views.Panels">
 
-    <Style x:Key="StandardFormDialogStyle"
+    <Style x:Key="BaseFormDialogStyle"
            TargetType="ContentDialog">
         <Setter Property="CornerRadius" Value="12" />
         <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
-        <Setter Property="Width" Value="1600" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="Padding" Value="20" />
+    </Style>
+
+    <Style x:Key="CompactFormDialogStyle"
+           TargetType="ContentDialog"
+           BasedOn="{StaticResource BaseFormDialogStyle}">
+        <Setter Property="Width" Value="900" />
+    </Style>
+
+    <Style x:Key="StandardFormDialogStyle"
+           TargetType="ContentDialog"
+           BasedOn="{StaticResource BaseFormDialogStyle}">
+        <Setter Property="Width" Value="1600" />
+    </Style>
+
+    <Style x:Key="WideFormDialogStyle"
+           TargetType="ContentDialog"
+           BasedOn="{StaticResource BaseFormDialogStyle}">
+        <Setter Property="Width" Value="1800" />
     </Style>
 
     <Style x:Key="DialogHeaderIconStyle"

@@ -4,7 +4,6 @@ using Microsoft.UI.Xaml.Controls;
 using Windows.Storage.Pickers;
 using WinRT.Interop;
 using WinUI.UIModels;
-using WinUI.UIModels.Enums;
 using WinUI.ViewModels.Dialogs.Management;
 
 namespace WinUI.Views.Dialogs.Management;
@@ -18,8 +17,6 @@ public sealed partial class GameDialog : ContentDialog
     public GameDialogViewModel ViewModel { get; }
 
     public IconState HeaderIconState => ViewModel.Icon;
-
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
 
     public GameDialog(GameDialogViewModel viewModel, GameDialogRequest? request, MainWindow mainWindow)
     {

@@ -11,7 +11,6 @@ public sealed partial class StartSessionDialog : ContentDialog
 {
     public StartSessionViewModel ViewModel { get; }
     public IconState HeaderIconState { get; } = new() { Kind = IconKind.Table, Size = 24 };
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
 
     public StartSessionDialog(StartSessionViewModel viewModel, AreaModel? model)
     {

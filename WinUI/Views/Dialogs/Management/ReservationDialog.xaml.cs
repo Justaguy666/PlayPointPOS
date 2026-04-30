@@ -17,8 +17,6 @@ public sealed partial class ReservationDialog : ContentDialog
 
     public IconState HeaderIconState => ViewModel.Icon;
 
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
-
     public IconState CalendarIconState { get; } = new() { Kind = IconKind.Calendar, Size = 20, AlwaysFilled = true };
 
     public IconState ClockIconState { get; } = new() { Kind = IconKind.Clock, Size = 20, AlwaysFilled = true };

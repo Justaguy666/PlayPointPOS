@@ -3,68 +3,32 @@
     x:Class="WinUI.Views.Dialogs.ConfirmationDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:dialogControls="using:WinUI.Views.UserControls.Dialogs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Style="{StaticResource StandardFormDialogStyle}"
+    Style="{StaticResource CompactFormDialogStyle}"
     mc:Ignorable="d">
 
-    <Grid x:Name="RootGrid" Style="{StaticResource DialogFormRootGridStyle}" MinWidth="360" MaxWidth="600">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <dialogControls:DialogShell Size="Compact"
+                                Title="{x:Bind ViewModel.TitleText, Mode=OneWay}"
+                                ShowCloseButton="False">
+        <dialogControls:DialogShell.BodyContent>
+            <StackPanel Style="{StaticResource DialogFormContentPanelStyle}"
+                        Margin="0,16,0,24">
+                <TextBlock Text="{x:Bind ViewModel.MessageText, Mode=OneWay}"
+                           TextWrapping="Wrap"
+                           FontSize="{StaticResource FontSizeMedium}"
+                           FontWeight="Medium"
+                           Foreground="{StaticResource DarkGrayBrush}" />
+            </StackPanel>
+        </dialogControls:DialogShell.BodyContent>
 
-        <!-- Header -->
-        <Grid Grid.Row="0" Style="{StaticResource DialogHeaderContainerStyle}">
-            <TextBlock Style="{StaticResource DialogHeaderTitleTextStyle}"
-                       Text="{x:Bind ViewModel.TitleText, Mode=OneWay}" />
-        </Grid>
-
-        <!-- Divider -->
-        <controls:DividerControl Grid.Row="1" Style="{StaticResource DialogHeaderDividerStyle}"/>
-
-        <!-- Content -->
-        <StackPanel Grid.Row="2" Style="{StaticResource DialogFormContentPanelStyle}" Margin="0,16,0,24">
-            <TextBlock Text="{x:Bind ViewModel.MessageText, Mode=OneWay}"
-                       TextWrapping="Wrap"
-                       FontSize="{StaticResource FontSizeMedium}"
-                       FontWeight="Medium"
-                       Foreground="{StaticResource DarkGrayBrush}"/>
-        </StackPanel>
-
-        <!-- Divider -->
-        <controls:DividerControl Grid.Row="3" Style="{StaticResource DialogSectionDividerStyle}"/>
-
-        <!-- Footer -->
-        <Grid Grid.Row="4" Margin="0,16,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="16"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0"
-                    Style="{StaticResource DialogSecondaryFooterButtonStyle}"
-                    Command="{x:Bind ViewModel.CancelCommand, Mode=OneWay}"
-                    Visibility="{x:Bind ViewModel.ShowCancelButton, Mode=OneWay, Converter={StaticResource BoolToVisible}}">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
-                </Button.Resources>
-                <TextBlock Text="{x:Bind ViewModel.CancelButtonText, Mode=OneWay}"/>
-            </Button>
-
-            <Button Grid.Column="2"
-                    Style="{StaticResource DialogPrimaryFooterButtonStyle}"
-                    Command="{x:Bind ViewModel.ConfirmCommand, Mode=OneWay}">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
-                </Button.Resources>
-                <TextBlock Text="{x:Bind ViewModel.ConfirmButtonText, Mode=OneWay}"/>
-            </Button>
-        </Grid>
-    </Grid>
+        <dialogControls:DialogShell.FooterContent>
+            <dialogControls:DialogFooterActions SecondaryText="{x:Bind ViewModel.CancelButtonText, Mode=OneWay}"
+                                                SecondaryCommand="{x:Bind ViewModel.CancelCommand, Mode=OneWay}"
+                                                ShowSecondaryButton="{x:Bind ViewModel.ShowCancelButton, Mode=OneWay}"
+                                                PrimaryText="{x:Bind ViewModel.ConfirmButtonText, Mode=OneWay}"
+                                                PrimaryCommand="{x:Bind ViewModel.ConfirmCommand, Mode=OneWay}" />
+        </dialogControls:DialogShell.FooterContent>
+    </dialogControls:DialogShell>
 </ContentDialog>

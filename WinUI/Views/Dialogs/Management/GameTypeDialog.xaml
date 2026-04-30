@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:dialogControls="using:WinUI.Views.UserControls.Dialogs"
     xmlns:vm="using:WinUI.ViewModels.Dialogs.Management"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -19,73 +20,37 @@
         </ResourceDictionary>
     </ContentDialog.Resources>
 
-    <Grid x:Name="RootGrid"
-          Style="{StaticResource DialogFormRootGridStyle}"
-          MaxWidth="620">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0"
-              Style="{StaticResource DialogHeaderContainerStyle}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <PathIcon Grid.Column="0"
-                      Style="{StaticResource DialogHeaderIconStyle}"
-                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" 
-					  VerticalAlignment="Center" />
-            <TextBlock Grid.Column="1"
-                       Style="{StaticResource DialogHeaderTitleTextStyle}"
-                       Text="{x:Bind ViewModel.Title, Mode=OneWay}" />
-            <Button Grid.Column="2"
-                    Style="{StaticResource DialogCloseButtonStyle}"
-                    Command="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
-                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
-                </Button.Resources>
-                <FontIcon Glyph="&#xE711;"
-                          FontFamily="Segoe Fluent Icons"
-                          FontSize="{StaticResource FontSizeSmall}"
-                          Foreground="{StaticResource BlackBrush}" />
-            </Button>
-        </Grid>
-
-        <controls:DividerControl Grid.Row="1"
-                                 Style="{StaticResource DialogHeaderDividerStyle}" />
-
-        <ScrollViewer Grid.Row="2"
-                      VerticalScrollBarVisibility="Auto"
-                      VerticalScrollMode="Enabled"
-                      Margin="0,0,-16,0"
-                      Padding="0,0,16,20"
-                      MaxHeight="400">
+    <dialogControls:DialogShell Size="Standard"
+                                MaxBodyHeight="400"
+                                Title="{x:Bind ViewModel.Title, Mode=OneWay}"
+                                IconState="{x:Bind HeaderIconState, Mode=OneWay}"
+                                CloseCommand="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
+                                CloseTooltipText="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
+        <dialogControls:DialogShell.BodyContent>
             <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
                 <Grid ColumnSpacing="8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    
+
                     <TextBox Grid.Column="0"
                              PlaceholderText="{x:Bind ViewModel.NamePlaceholderText, Mode=OneWay}"
+                             ToolTipService.ToolTip="{x:Bind ViewModel.NamePlaceholderText, Mode=OneWay}"
                              Style="{StaticResource DialogFormTextBoxStyle}"
                              Text="{x:Bind ViewModel.NewGameTypeName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                             
+
                     <Button Grid.Column="1"
                             Style="{StaticResource PrimaryActionButtonStyle}"
                             Command="{x:Bind ViewModel.AddGameTypeCommand, Mode=OneWay}"
-                            IsEnabled="{x:Bind ViewModel.CanAddGameType, Mode=OneWay}">
+                            IsEnabled="{x:Bind ViewModel.CanAddGameType, Mode=OneWay}"
+                            ToolTipService.ToolTip="{x:Bind ViewModel.AddButtonText, Mode=OneWay}">
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
                         </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.AddButtonText, Mode=OneWay}" />
+                        <TextBlock Text="{x:Bind ViewModel.AddButtonText, Mode=OneWay}"
+                                   TextTrimming="CharacterEllipsis"
+                                   MaxLines="1" />
                     </Button>
                 </Grid>
 
@@ -123,7 +88,9 @@
                                                    VerticalAlignment="Center"
                                                    FontWeight="SemiBold"
                                                    Foreground="{StaticResource BlackBrush}"
-                                                   TextTrimming="CharacterEllipsis" />
+                                                   TextTrimming="CharacterEllipsis"
+                                                   MaxLines="1"
+                                                   ToolTipService.ToolTip="{x:Bind Name, Mode=OneWay}" />
 
                                         <Button Grid.Column="1"
                                                 Command="{x:Bind DeleteCommand}"
@@ -136,7 +103,8 @@
                                                 Background="Transparent"
                                                 Foreground="{StaticResource BlackBrush}"
                                                 HorizontalAlignment="Center"
-                                                VerticalAlignment="Center">
+                                                VerticalAlignment="Center"
+                                                ToolTipService.ToolTip="Xóa">
                                             <TextBlock Text="×"
                                                        FontSize="{StaticResource FontSizeSmall}"
                                                        FontWeight="SemiBold"
@@ -158,6 +126,7 @@
 
                                     <TextBox Grid.Column="0"
                                              Text="{x:Bind EditName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             ToolTipService.ToolTip="{x:Bind EditName, Mode=OneWay}"
                                              Style="{StaticResource DialogFormTextBoxStyle}"
                                              MinHeight="40" />
 
@@ -165,7 +134,8 @@
                                             Style="{StaticResource PrimaryActionButtonStyle}"
                                             Command="{x:Bind CommitEditCommand}"
                                             Height="40"
-                                            Padding="12,0">
+                                            Padding="12,0"
+                                            ToolTipService.ToolTip="Lưu">
                                         <TextBlock Text="✓" />
                                     </Button>
 
@@ -173,7 +143,8 @@
                                             Style="{StaticResource SecondaryActionButtonStyle}"
                                             Command="{x:Bind CancelEditCommand}"
                                             Height="40"
-                                            Padding="12,0">
+                                            Padding="12,0"
+                                            ToolTipService.ToolTip="Hủy">
                                         <TextBlock Text="✕" />
                                     </Button>
                                 </Grid>
@@ -182,6 +153,6 @@
                     </ItemsRepeater.ItemTemplate>
                 </ItemsRepeater>
             </StackPanel>
-        </ScrollViewer>
-    </Grid>
+        </dialogControls:DialogShell.BodyContent>
+    </dialogControls:DialogShell>
 </ContentDialog>

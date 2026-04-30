@@ -10,7 +10,6 @@ public sealed partial class OtpDialog : ContentDialog
 {
     public OtpViewModel ViewModel { get; }
     public IconState HeaderIconState { get; } = new() { Kind = IconKind.Password, Size = 24 };
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
 
     public OtpDialog(OtpViewModel viewModel)
     {

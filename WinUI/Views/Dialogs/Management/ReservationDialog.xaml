@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:dialogControls="using:WinUI.Views.UserControls.Dialogs"
     xmlns:entities="using:Domain.Entities"
     xmlns:vm="using:WinUI.ViewModels.Dialogs.Management"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -33,49 +34,13 @@
         </ResourceDictionary>
     </ContentDialog.Resources>
 
-    <Grid Style="{StaticResource DialogTwoColumnRootGridStyle}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0"
-              Style="{StaticResource DialogHeaderContainerStyle}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <PathIcon Grid.Column="0"
-                      Style="{StaticResource DialogHeaderIconStyle}"
-                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-            <TextBlock Grid.Column="1"
-                       Style="{StaticResource DialogHeaderTitleTextStyle}"
-                       Text="{x:Bind ViewModel.Title, Mode=OneWay}" />
-            <Button Grid.Column="2"
-                    Style="{StaticResource DialogCloseButtonStyle}"
-                    Command="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
-                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
-                </Button.Resources>
-                <PathIcon Width="14"
-                          Height="14"
-                          Data="{x:Bind CloseIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
-                          Foreground="{StaticResource BlackBrush}" />
-            </Button>
-        </Grid>
-
-        <controls:DividerControl Grid.Row="1"
-                                 Style="{StaticResource DialogHeaderDividerStyle}" />
-
-        <ScrollViewer Grid.Row="2"
-                      VerticalScrollBarVisibility="Auto"
-                      VerticalScrollMode="Enabled"
-                      Margin="0,0,-16,0"
-                      Padding="0,0,16,20">
+    <dialogControls:DialogShell Size="Standard"
+                                MaxBodyHeight="520"
+                                Title="{x:Bind ViewModel.Title, Mode=OneWay}"
+                                IconState="{x:Bind HeaderIconState, Mode=OneWay}"
+                                CloseCommand="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
+                                CloseTooltipText="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
+        <dialogControls:DialogShell.BodyContent>
         <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
             <CheckBox Content="{x:Bind ViewModel.MemberToggleText, Mode=OneWay}"
                       IsChecked="{x:Bind ViewModel.IsMember, Mode=TwoWay}"
@@ -255,18 +220,14 @@
                 </StackPanel>
             </Grid>
 
-            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
-
-            <Button Style="{StaticResource DialogPrimaryFooterButtonStyle}"
-                    Command="{x:Bind ViewModel.SubmitCommand, Mode=OneWay}"
-                    IsEnabled="{x:Bind ViewModel.CanSubmit, Mode=OneWay}"
-                    Margin="0,8,0,0">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
-                </Button.Resources>
-                <TextBlock Text="{x:Bind ViewModel.SubmitButtonText, Mode=OneWay}" />
-            </Button>
         </StackPanel>
-        </ScrollViewer>
-    </Grid>
+        </dialogControls:DialogShell.BodyContent>
+
+        <dialogControls:DialogShell.FooterContent>
+            <dialogControls:DialogFooterActions ShowSecondaryButton="False"
+                                                 PrimaryText="{x:Bind ViewModel.SubmitButtonText, Mode=OneWay}"
+                                                 PrimaryCommand="{x:Bind ViewModel.SubmitCommand, Mode=OneWay}"
+                                                 IsPrimaryEnabled="{x:Bind ViewModel.CanSubmit, Mode=OneWay}" />
+        </dialogControls:DialogShell.FooterContent>
+    </dialogControls:DialogShell>
 </ContentDialog>

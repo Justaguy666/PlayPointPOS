@@ -16,8 +16,6 @@ public sealed partial class PaymentDialog : ContentDialog
 
     public IconState HeaderIconState => ViewModel.Icon;
 
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
-
     public PaymentDialog(PaymentViewModel viewModel, AreaModel? model)
     {
         ViewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));

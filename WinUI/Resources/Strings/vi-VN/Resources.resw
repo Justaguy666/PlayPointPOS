@@ -1537,7 +1537,7 @@
     <value>Chưa chọn ảnh</value>
   </data>
   <data name="BrowseImageButtonText" xml:space="preserve">
-    <value>Chọn ảnh</value>
+    <value>Duyệt</value>
   </data>
   <data name="ProductDialogStockQuantityLabelText" xml:space="preserve">
     <value>Tồn kho ban đầu</value>

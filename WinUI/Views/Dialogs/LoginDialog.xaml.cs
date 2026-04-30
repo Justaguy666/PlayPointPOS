@@ -10,7 +10,6 @@ public sealed partial class LoginDialog : ContentDialog
 {
     public LoginViewModel ViewModel { get; }
     public IconState HeaderIconState { get; } = new() { Kind = IconKind.Login, Size = 24 };
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
 
     public LoginDialog(LoginViewModel viewModel)
     {

@@ -10,7 +10,6 @@ public sealed partial class RegisterDialog : ContentDialog
 {
     public RegisterViewModel ViewModel { get; }
     public IconState HeaderIconState { get; } = new() { Kind = IconKind.Register, Size = 24 };
-    public IconState CloseIconState { get; } = new() { Kind = IconKind.Close, Size = 16 };
 
     public RegisterDialog(RegisterViewModel viewModel)
     {

@@ -163,6 +163,12 @@
     <Page Update="Views\UserControls\PaginationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Update="Views\UserControls\Dialogs\DialogFooterActions.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\UserControls\Dialogs\DialogShell.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\UserControls\Management\EmptyStateControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

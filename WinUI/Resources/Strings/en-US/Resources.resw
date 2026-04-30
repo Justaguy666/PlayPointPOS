@@ -1537,7 +1537,7 @@
     <value>No image selected</value>
   </data>
   <data name="BrowseImageButtonText" xml:space="preserve">
-    <value>Browse image</value>
+    <value>Browse</value>
   </data>
   <data name="ProductDialogStockQuantityLabelText" xml:space="preserve">
     <value>Initial stock</value>

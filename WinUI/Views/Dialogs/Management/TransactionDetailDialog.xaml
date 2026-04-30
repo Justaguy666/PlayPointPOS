@@ -6,57 +6,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:dialogControls="using:WinUI.Views.UserControls.Dialogs"
     xmlns:viewmodels="using:WinUI.ViewModels.Dialogs.Management"
     d:DataContext="{d:DesignInstance Type=viewmodels:TransactionDetailDialogViewModel, IsDesignTimeCreatable=False}"
     Style="{StaticResource StandardFormDialogStyle}"
     mc:Ignorable="d">
 
-    <Grid Style="{StaticResource DialogFormRootGridStyle}"
-          MinWidth="480"
-          MaxWidth="620">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0"
-              Style="{StaticResource DialogHeaderContainerStyle}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <PathIcon Grid.Column="0"
-                      Style="{StaticResource DialogHeaderIconStyle}"
-                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-            <TextBlock Grid.Column="1"
-                       Style="{StaticResource DialogHeaderTitleTextStyle}"
-                       Text="{Binding Title}" />
-            <Button Grid.Column="2"
-                    Style="{StaticResource DialogCloseButtonStyle}"
-                    Click="HandleCloseButtonClick"
-                    ToolTipService.ToolTip="{Binding CloseTooltipText}">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
-                </Button.Resources>
-                <PathIcon Width="14"
-                          Height="14"
-                          Foreground="{StaticResource BlackBrush}"
-                          Data="{x:Bind CloseIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-            </Button>
-        </Grid>
-
-        <controls:DividerControl Grid.Row="1"
-                                 Style="{StaticResource DialogHeaderDividerStyle}" />
-
-        <ScrollViewer Grid.Row="2"
-                      VerticalScrollBarVisibility="Auto"
-                      VerticalScrollMode="Enabled"
-                      Margin="0,0,-16,0"
-                      Padding="0,0,16,16">
+    <dialogControls:DialogShell Size="Standard"
+                                MaxBodyHeight="520"
+                                Title="{x:Bind ViewModel.Title, Mode=OneWay}"
+                                IconState="{x:Bind HeaderIconState, Mode=OneWay}"
+                                CloseCommand="{x:Bind CloseCommand, Mode=OneWay}"
+                                CloseTooltipText="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
+        <dialogControls:DialogShell.BodyContent>
             <StackPanel Spacing="0"
                         Margin="0,20,0,0">
                 <Grid Margin="0,0,0,8">
@@ -100,11 +62,17 @@
                                     <TextBlock Text="{x:Bind Name}"
                                                FontSize="{StaticResource FontSizeSmall}"
                                                FontWeight="SemiBold"
-                                               Foreground="{StaticResource DarkSlateGrayBrush}" />
+                                               Foreground="{StaticResource DarkSlateGrayBrush}"
+                                               TextTrimming="CharacterEllipsis"
+                                               MaxLines="1"
+                                               ToolTipService.ToolTip="{x:Bind Name}" />
                                     <TextBlock Text="{x:Bind Description}"
                                                FontSize="{StaticResource FontSizeExtraSmall}"
                                                Foreground="{StaticResource SecondaryGrayBrush}"
-                                               FontStyle="Italic" />
+                                               FontStyle="Italic"
+                                               TextTrimming="CharacterEllipsis"
+                                               MaxLines="1"
+                                               ToolTipService.ToolTip="{x:Bind Description}" />
                                 </StackPanel>
 
                                 <TextBlock Grid.Column="1"
@@ -177,6 +145,6 @@
                                HorizontalAlignment="Right" />
                 </Grid>
             </StackPanel>
-        </ScrollViewer>
-    </Grid>
+        </dialogControls:DialogShell.BodyContent>
+    </dialogControls:DialogShell>
 </ContentDialog>

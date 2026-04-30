@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="WinUI.Views.UserControls.Dialogs.DialogShell"
+    x:Name="RootControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid x:Name="RootGrid"
+          Style="{StaticResource DialogFormRootGridStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Style="{StaticResource DialogHeaderContainerStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <PathIcon x:Name="HeaderIcon"
+                      Grid.Column="0"
+                      Style="{StaticResource DialogHeaderIconStyle}"
+                      Data="{Binding IconState, ElementName=RootControl, Converter={StaticResource IconConverter}}" />
+            <TextBlock Grid.Column="1"
+                       Style="{StaticResource DialogHeaderTitleTextStyle}"
+                       Text="{Binding Title, ElementName=RootControl}"
+                       ToolTipService.ToolTip="{Binding Title, ElementName=RootControl}" />
+            <Button x:Name="CloseButton"
+                    Grid.Column="2"
+                    Style="{StaticResource DialogCloseButtonStyle}"
+                    Command="{Binding CloseCommand, ElementName=RootControl}"
+                    ToolTipService.ToolTip="{Binding CloseTooltipText, ElementName=RootControl}">
+                <Button.Resources>
+                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
+                </Button.Resources>
+                <PathIcon Width="14"
+                          Height="14"
+                          Foreground="{StaticResource BlackBrush}"
+                          Data="{Binding CloseIconState, ElementName=RootControl, Converter={StaticResource IconConverter}}" />
+            </Button>
+        </Grid>
+
+        <controls:DividerControl Grid.Row="1"
+                                 Style="{StaticResource DialogHeaderDividerStyle}" />
+
+        <ScrollViewer x:Name="BodyScrollViewer"
+                      Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
+                      VerticalScrollMode="Enabled"
+                      HorizontalScrollBarVisibility="Disabled"
+                      HorizontalScrollMode="Disabled"
+                      HorizontalContentAlignment="Stretch"
+                      Padding="0,0,0,20">
+            <Grid x:Name="BodyContainer"
+                  HorizontalAlignment="Stretch">
+                <ContentPresenter Content="{Binding BodyContent, ElementName=RootControl}" />
+            </Grid>
+        </ScrollViewer>
+
+        <controls:DividerControl x:Name="FooterDivider"
+                                 Grid.Row="3"
+                                 Style="{StaticResource DialogSectionDividerStyle}" />
+
+        <ContentPresenter x:Name="FooterPresenter"
+                          Grid.Row="4"
+                          Margin="0,16,0,0"
+                          Content="{Binding FooterContent, ElementName=RootControl}" />
+    </Grid>
+</UserControl>

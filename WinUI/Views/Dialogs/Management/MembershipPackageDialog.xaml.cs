@@ -23,13 +23,6 @@ public sealed partial class MembershipPackageDialog : ContentDialog
         AlwaysFilled = true,
     };
 
-    public IconState CloseIconState { get; } = new()
-    {
-        Kind = IconKind.Close,
-        Size = 10,
-        AlwaysFilled = false,
-    };
-
     public MembershipPackageDialog(MembershipPackageDialogViewModel viewModel, MembershipPackageDialogRequest request)
     {
         ViewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));

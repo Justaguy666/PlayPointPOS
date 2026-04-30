@@ -6,9 +6,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:dialogControls="using:WinUI.Views.UserControls.Dialogs"
     xmlns:viewmodels="using:WinUI.ViewModels.Dialogs.Management"
-    xmlns:models="using:WinUI.UIModels"
     d:DataContext="{d:DesignInstance Type=viewmodels:TransactionFilterDialogViewModel, IsDesignTimeCreatable=False}"
     Style="{StaticResource StandardFormDialogStyle}"
     mc:Ignorable="d">
@@ -21,64 +20,28 @@
         </ResourceDictionary>
     </ContentDialog.Resources>
 
-    <Grid Style="{StaticResource DialogFormRootGridStyle}"
-          MaxWidth="620">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0"
-              Style="{StaticResource DialogHeaderContainerStyle}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <PathIcon Grid.Column="0"
-                      Style="{StaticResource DialogHeaderIconStyle}"
-                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-            <TextBlock Grid.Column="1"
-                       Style="{StaticResource DialogHeaderTitleTextStyle}"
-                       Text="{Binding Title}" />
-            <Button Grid.Column="2"
-                    Style="{StaticResource DialogCloseButtonStyle}"
-                    Command="{Binding CloseCommand}"
-                    ToolTipService.ToolTip="{Binding CloseTooltipText}">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
-                </Button.Resources>
-                <PathIcon Width="14"
-                          Height="14"
-                          Foreground="{StaticResource BlackBrush}"
-                          Data="{x:Bind CloseIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
-            </Button>
-        </Grid>
-
-        <controls:DividerControl Grid.Row="1"
-                                 Style="{StaticResource DialogHeaderDividerStyle}" />
-
-        <ScrollViewer Grid.Row="2"
-                      VerticalScrollBarVisibility="Auto"
-                      VerticalScrollMode="Enabled"
-                      Margin="0,0,-16,0"
-                      Padding="0,0,16,20">
+    <dialogControls:DialogShell Size="Standard"
+                                MaxBodyHeight="520"
+                                Title="{x:Bind ViewModel.Title, Mode=OneWay}"
+                                IconState="{x:Bind HeaderIconState, Mode=OneWay}"
+                                CloseCommand="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
+                                CloseTooltipText="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
+        <dialogControls:DialogShell.BodyContent>
             <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
                 <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                    <TextBlock Text="{Binding PaymentMethodLabelText}"
+                    <TextBlock Text="{x:Bind ViewModel.PaymentMethodLabelText, Mode=OneWay}"
                                Style="{StaticResource DialogFormLabelTextStyle}" />
                     <ComboBox MinHeight="48"
-                              ItemsSource="{Binding PaymentMethodOptions}"
-                              SelectedValue="{Binding SelectedPaymentMethod, Mode=TwoWay}"
+                              ItemsSource="{x:Bind ViewModel.PaymentMethodOptions, Mode=OneWay}"
+                              SelectedValue="{x:Bind ViewModel.SelectedPaymentMethod, Mode=TwoWay}"
                               SelectedValuePath="Value"
                               DisplayMemberPath="DisplayName"
-                              HorizontalAlignment="Stretch" />
+                              HorizontalAlignment="Stretch"
+                              ToolTipService.ToolTip="{x:Bind ViewModel.PaymentMethodLabelText, Mode=OneWay}" />
                 </StackPanel>
 
                 <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                    <TextBlock Text="{Binding AmountRangeLabelText}"
+                    <TextBlock Text="{x:Bind ViewModel.AmountRangeLabelText, Mode=OneWay}"
                                Style="{StaticResource DialogFormLabelTextStyle}" />
                     <Grid ColumnSpacing="12">
                         <Grid.ColumnDefinitions>
@@ -87,20 +50,22 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBox Grid.Column="0"
-                                 Text="{Binding AmountMinText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 PlaceholderText="{Binding AmountMinPlaceholderText}"
+                                 Text="{x:Bind ViewModel.AmountMinText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 PlaceholderText="{x:Bind ViewModel.AmountMinPlaceholderText, Mode=OneWay}"
+                                 ToolTipService.ToolTip="{x:Bind ViewModel.AmountMinPlaceholderText, Mode=OneWay}"
                                  Style="{StaticResource DialogFormTextBoxStyle}"
                                  InputScope="Number" />
                         <TextBox Grid.Column="1"
-                                 Text="{Binding AmountMaxText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 PlaceholderText="{Binding AmountMaxPlaceholderText}"
+                                 Text="{x:Bind ViewModel.AmountMaxText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 PlaceholderText="{x:Bind ViewModel.AmountMaxPlaceholderText, Mode=OneWay}"
+                                 ToolTipService.ToolTip="{x:Bind ViewModel.AmountMaxPlaceholderText, Mode=OneWay}"
                                  Style="{StaticResource DialogFormTextBoxStyle}"
                                  InputScope="Number" />
                     </Grid>
                 </StackPanel>
 
                 <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                    <TextBlock Text="{Binding DateRangeLabelText}"
+                    <TextBlock Text="{x:Bind ViewModel.DateRangeLabelText, Mode=OneWay}"
                                Style="{StaticResource DialogFormLabelTextStyle}" />
                     <Grid ColumnSpacing="12">
                         <Grid.ColumnDefinitions>
@@ -108,11 +73,12 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="0"
-                                x:Name="DateFromFieldButton"
+                        <Button x:Name="DateFromFieldButton"
+                                Grid.Column="0"
                                 Style="{StaticResource DialogPickerButtonStyle}"
                                 HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center">
+                                VerticalAlignment="Center"
+                                ToolTipService.ToolTip="{x:Bind ViewModel.DateFromDisplayText, Mode=OneWay}">
                             <Button.Flyout>
                                 <DatePickerFlyout Date="{x:Bind ViewModel.DateFromFlyoutDate, Mode=OneWay}"
                                                   DatePicked="HandleDateFromPicked"
@@ -143,11 +109,12 @@
                             </Grid>
                         </Button>
 
-                        <Button Grid.Column="1"
-                                x:Name="DateToFieldButton"
+                        <Button x:Name="DateToFieldButton"
+                                Grid.Column="1"
                                 Style="{StaticResource DialogPickerButtonStyle}"
                                 HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center">
+                                VerticalAlignment="Center"
+                                ToolTipService.ToolTip="{x:Bind ViewModel.DateToDisplayText, Mode=OneWay}">
                             <Button.Flyout>
                                 <DatePickerFlyout Date="{x:Bind ViewModel.DateToFlyoutDate, Mode=OneWay}"
                                                   DatePicked="HandleDateToPicked"
@@ -180,41 +147,20 @@
                     </Grid>
                 </StackPanel>
 
-                <TextBlock Text="{Binding ErrorMessage}"
-                           Visibility="{Binding HasError, Converter={StaticResource BoolToVisible}}"
+                <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+                           Visibility="{x:Bind ViewModel.HasError, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
                            Foreground="{StaticResource ErrorRedBrush}"
                            FontSize="{StaticResource FontSizeSmall}"
                            FontWeight="SemiBold"
                            TextWrapping="Wrap" />
-
-                <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}" />
-
-                <Grid Margin="0,8,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="16" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Button Grid.Column="0"
-                            Style="{StaticResource DialogSecondaryFooterButtonStyle}"
-                            Command="{Binding ResetCommand}">
-                        <Button.Resources>
-                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
-                        </Button.Resources>
-                        <TextBlock Text="{Binding ResetButtonText}" />
-                    </Button>
-
-                    <Button Grid.Column="2"
-                            Style="{StaticResource DialogPrimaryFooterButtonStyle}"
-                            Command="{Binding ApplyCommand}">
-                        <Button.Resources>
-                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
-                        </Button.Resources>
-                        <TextBlock Text="{Binding ApplyButtonText}" />
-                    </Button>
-                </Grid>
             </StackPanel>
-        </ScrollViewer>
-    </Grid>
+        </dialogControls:DialogShell.BodyContent>
+
+        <dialogControls:DialogShell.FooterContent>
+            <dialogControls:DialogFooterActions SecondaryText="{x:Bind ViewModel.ResetButtonText, Mode=OneWay}"
+                                                 SecondaryCommand="{x:Bind ViewModel.ResetCommand, Mode=OneWay}"
+                                                 PrimaryText="{x:Bind ViewModel.ApplyButtonText, Mode=OneWay}"
+                                                 PrimaryCommand="{x:Bind ViewModel.ApplyCommand, Mode=OneWay}" />
+        </dialogControls:DialogShell.FooterContent>
+    </dialogControls:DialogShell>
 </ContentDialog>

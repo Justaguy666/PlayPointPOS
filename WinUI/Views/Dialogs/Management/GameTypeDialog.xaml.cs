@@ -22,13 +22,6 @@ public sealed partial class GameTypeDialog : ContentDialog
         AlwaysFilled = false,
     };
 
-    public IconState CloseIconState { get; } = new()
-    {
-        Kind = IconKind.Close,
-        Size = 10,
-        AlwaysFilled = false,
-    };
-
     public GameTypeDialog(GameTypeDialogViewModel viewModel)
     {
         ViewModel = viewModel;

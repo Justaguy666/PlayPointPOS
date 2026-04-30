@@ -3,100 +3,61 @@
     x:Name="RootDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:WinUI.Views.UserControls"
+    xmlns:dialogControls="using:WinUI.Views.UserControls.Dialogs"
     Style="{StaticResource StandardFormDialogStyle}">
 
     <ContentDialog.Resources>
         <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/FormInputStateResources.xaml" />
     </ContentDialog.Resources>
-    
-    <Grid x:Name="RootGrid"
-          Style="{StaticResource DialogFormRootGridStyle}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Grid Grid.Row="0"
-              Style="{StaticResource DialogHeaderContainerStyle}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <PathIcon Grid.Column="0"
-                      Style="{StaticResource DialogHeaderIconStyle}"
-                      Data="{x:Bind HeaderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
-                      />
-            <TextBlock Grid.Column="1"
-                       Style="{StaticResource DialogHeaderTitleTextStyle}"
-                       Text="{x:Bind ViewModel.TitleText, Mode=OneWay}"
-                       />
-            <Button Grid.Column="2"
-                    Style="{StaticResource DialogCloseButtonStyle}"
-                    Command="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
-                    ToolTipService.ToolTip="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
-                <Button.Resources>
-                    <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/DialogCloseButtonStateResources.xaml" />
-                </Button.Resources>
-                <PathIcon Width="14"
-                          Height="14"
-                          Data="{x:Bind CloseIconState, Mode=OneWay, Converter={StaticResource IconConverter}}"
-                          Foreground="{StaticResource BlackBrush}"/>
-            </Button>
-        </Grid>
+    <dialogControls:DialogShell Size="Standard"
+                                Title="{x:Bind ViewModel.TitleText, Mode=OneWay}"
+                                IconState="{x:Bind HeaderIconState, Mode=OneWay}"
+                                CloseCommand="{x:Bind ViewModel.CloseCommand, Mode=OneWay}"
+                                CloseTooltipText="{x:Bind ViewModel.CloseTooltipText, Mode=OneWay}">
+        <dialogControls:DialogShell.BodyContent>
+            <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.ServerAddressLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <TextBox x:Name="ServerAddressBox"
+                             PlaceholderText="{x:Bind ViewModel.ServerAddressPlaceholderText, Mode=OneWay}"
+                             ToolTipService.ToolTip="{x:Bind ViewModel.ServerAddressPlaceholderText, Mode=OneWay}"
+                             Text="{x:Bind ViewModel.ServerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource DialogFormTextBoxStyle}" />
+                </StackPanel>
 
-        <!-- Divider -->
-        <controls:DividerControl Grid.Row="1"
-                                 Style="{StaticResource DialogHeaderDividerStyle}"/>
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.PortLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <TextBox x:Name="PortBox"
+                             PlaceholderText="{x:Bind ViewModel.PortPlaceholderText, Mode=OneWay}"
+                             ToolTipService.ToolTip="{x:Bind ViewModel.PortPlaceholderText, Mode=OneWay}"
+                             Text="{x:Bind ViewModel.Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             InputScope="Number"
+                             MaxLength="5"
+                             Style="{StaticResource DialogFormTextBoxStyle}" />
+                </StackPanel>
 
-        <!-- Content -->
-        <StackPanel Grid.Row="2"
-                    Style="{StaticResource DialogFormContentPanelStyle}">
-            <!-- Server Address -->
-            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                <TextBlock Text="{x:Bind ViewModel.ServerAddressLabelText, Mode=OneWay}" 
-                           Style="{StaticResource DialogFormLabelTextStyle}"/>
-                <TextBox x:Name="ServerAddressBox"
-                         PlaceholderText="{x:Bind ViewModel.ServerAddressPlaceholderText, Mode=OneWay}"
-                         Text="{x:Bind ViewModel.ServerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource DialogFormTextBoxStyle}" />
+                <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
+                    <TextBlock Text="{x:Bind ViewModel.ApiKeyLabelText, Mode=OneWay}"
+                               Style="{StaticResource DialogFormLabelTextStyle}" />
+                    <PasswordBox x:Name="ApiKeyBox"
+                                 PlaceholderText="{x:Bind ViewModel.ApiKeyPlaceholderText, Mode=OneWay}"
+                                 ToolTipService.ToolTip="{x:Bind ViewModel.ApiKeyPlaceholderText, Mode=OneWay}"
+                                 PasswordChanged="ApiKeyBox_PasswordChanged"
+                                 Style="{StaticResource DialogFormPasswordBoxStyle}" />
+                </StackPanel>
             </StackPanel>
+        </dialogControls:DialogShell.BodyContent>
 
-            <!-- Port -->
-            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                <TextBlock Text="{x:Bind ViewModel.PortLabelText, Mode=OneWay}" 
-                           Style="{StaticResource DialogFormLabelTextStyle}"/>
-                <TextBox x:Name="PortBox"
-                         PlaceholderText="{x:Bind ViewModel.PortPlaceholderText, Mode=OneWay}"
-                         Text="{x:Bind ViewModel.Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         InputScope="Number"
-                         MaxLength="5"
-                         Style="{StaticResource DialogFormTextBoxStyle}" />
-            </StackPanel>
-
-            <!-- API Key -->
-            <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                <TextBlock Text="{x:Bind ViewModel.ApiKeyLabelText, Mode=OneWay}" 
-                           Style="{StaticResource DialogFormLabelTextStyle}"/>
-                <PasswordBox x:Name="ApiKeyBox"
-                             PlaceholderText="{x:Bind ViewModel.ApiKeyPlaceholderText, Mode=OneWay}"
-                             PasswordChanged="ApiKeyBox_PasswordChanged"
-                             Style="{StaticResource DialogFormPasswordBoxStyle}" />
-            </StackPanel>
-
-            <!-- Divider -->
-            <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}"/>
-
-            <!-- Footer -->
-            <Grid Margin="0,8,0,0">
+        <dialogControls:DialogShell.FooterContent>
+            <Grid ColumnSpacing="16">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+
                 <CheckBox Grid.Column="0"
                           IsChecked="{x:Bind ViewModel.RememberMe, Mode=TwoWay}"
                           VerticalAlignment="Center"
@@ -105,30 +66,36 @@
                                FontSize="{StaticResource FontSizeSmall}"
                                FontWeight="Thin"
                                Foreground="{StaticResource DarkGrayBrush}"
-                               TextWrapping="NoWrap"
-                               VerticalAlignment="Center"/>
+                               TextTrimming="CharacterEllipsis"
+                               MaxLines="1"
+                               VerticalAlignment="Center"
+                               ToolTipService.ToolTip="{x:Bind ViewModel.RememberMeLabelText, Mode=OneWay}" />
                 </CheckBox>
-                <StackPanel Grid.Column="1"
-                            Orientation="Horizontal"
-                            Spacing="10"
-                            VerticalAlignment="Center">
+
+                <Grid Grid.Column="1"
+                      MinWidth="120"
+                      VerticalAlignment="Center">
                     <Button x:Name="SaveButton"
                             Command="{x:Bind ViewModel.SaveCommand, Mode=OneWay}"
                             Visibility="{x:Bind ViewModel.IsNotSaving, Mode=OneWay}"
-                            Style="{StaticResource DialogCompactPrimaryButtonStyle}">
+                            Style="{StaticResource DialogCompactPrimaryButtonStyle}"
+                            ToolTipService.ToolTip="{x:Bind ViewModel.SaveButtonText, Mode=OneWay}">
                         <Button.Resources>
                             <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
                         </Button.Resources>
-                        <TextBlock Text="{x:Bind ViewModel.SaveButtonText, Mode=OneWay}"/>
+                        <TextBlock Text="{x:Bind ViewModel.SaveButtonText, Mode=OneWay}"
+                                   TextTrimming="CharacterEllipsis"
+                                   MaxLines="1" />
                     </Button>
                     <ProgressRing Width="20"
                                   Height="20"
                                   IsActive="{x:Bind ViewModel.IsSaving, Mode=OneWay}"
                                   Visibility="{x:Bind ViewModel.IsSaving, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
                                   Foreground="{StaticResource OrangeFocusBrush}"
-                                  VerticalAlignment="Center"/>
-                </StackPanel>
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center" />
+                </Grid>
             </Grid>
-        </StackPanel>
-    </Grid>
+        </dialogControls:DialogShell.FooterContent>
+    </dialogControls:DialogShell>
 </ContentDialog>
