@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Members;
 using Application.Services;
+using Application.Services.Members;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WinUI.Helpers.Validations;
@@ -18,6 +19,7 @@ namespace WinUI.ViewModels.Dialogs.Management;
 public partial class MemberDialogViewModel : UpsertDialogViewModelBase
 {
     private readonly IDialogService _dialogService;
+    private readonly IMembershipRankManagementService _rankManagementService;
     private readonly MemberModelFactory _memberModelFactory;
     private IReadOnlyList<MembershipRank> _availableMembershipRanks = [];
     private MemberModel _targetModel = new();
@@ -32,11 +34,13 @@ public partial class MemberDialogViewModel : UpsertDialogViewModelBase
     public MemberDialogViewModel(
         ILocalizationService localizationService,
         IDialogService dialogService,
+        IMembershipRankManagementService rankManagementService,
         MemberModelFactory memberModelFactory,
         UpsertDialogMode mode)
         : base(localizationService, mode)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _rankManagementService = rankManagementService ?? throw new ArgumentNullException(nameof(rankManagementService));
         _memberModelFactory = memberModelFactory ?? throw new ArgumentNullException(nameof(memberModelFactory));
         ApplyModel(_initialModel);
     }
@@ -296,7 +300,7 @@ public partial class MemberDialogViewModel : UpsertDialogViewModelBase
 
     private MemberRankProgressSnapshot BuildPreview(decimal totalSpentAmount)
     {
-        return MemberRankProgressCalculator.Calculate(totalSpentAmount, _availableMembershipRanks);
+        return _rankManagementService.CalculateProgress(totalSpentAmount, _availableMembershipRanks);
     }
 
     private bool TryParseRequiredDecimal(string? text, out decimal value)

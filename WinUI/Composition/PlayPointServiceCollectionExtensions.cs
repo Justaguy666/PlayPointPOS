@@ -76,11 +76,13 @@ internal static class PlayPointServiceCollectionExtensions
         services.AddSingleton<IAreaFilterService, AreaFilterService>();
         services.AddSingleton<IAreaSessionService, AreaSessionService>();
         services.AddSingleton<IGameTypeCatalogService, Infrastructure.Services.Games.MockGameTypeCatalogService>();
+        services.AddSingleton<IGameTypeManagementService, GameTypeManagementService>();
         services.AddSingleton<IGameCatalogService, Infrastructure.Services.Games.MockGameCatalogService>();
         services.AddSingleton<IGameFilterService, GameFilterService>();
         services.AddSingleton<IProductCatalogService, Infrastructure.Services.Products.MockProductCatalogService>();
         services.AddSingleton<IProductFilterService, ProductFilterService>();
         services.AddSingleton<IMembershipRankCatalogService, MockMembershipRankCatalogService>();
+        services.AddSingleton<IMembershipRankManagementService, MembershipRankManagementService>();
         services.AddSingleton<IMemberLookupService, RepositoryMemberLookupService>();
         services.AddSingleton<IMemberCatalogService, MockMemberCatalogService>();
         services.AddSingleton<IMemberFilterService, MemberFilterService>();

@@ -1,15 +1,14 @@
-using Domain.Entities;
-
 namespace Application.Transactions;
 
 public sealed class TransactionFilterService : ITransactionFilterService
 {
-    public IReadOnlyList<Transaction> Apply(IEnumerable<Transaction> transactions, TransactionFilter filter)
+    public IReadOnlyList<TTransaction> Apply<TTransaction>(IEnumerable<TTransaction> transactions, TransactionFilter filter)
+        where TTransaction : ITransactionFilterable
     {
         ArgumentNullException.ThrowIfNull(transactions);
         ArgumentNullException.ThrowIfNull(filter);
 
-        IEnumerable<Transaction> result = transactions;
+        IEnumerable<TTransaction> result = transactions;
 
         if (filter.PaymentMethod.HasValue)
         {

@@ -323,14 +323,7 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
     {
         DateTime utcNow = DateTime.UtcNow;
 
-        if (Model.IsSessionPaused)
-        {
-            _areaSessionService.ResumeSession(Model, utcNow);
-        }
-        else
-        {
-            _areaSessionService.PauseSession(Model, utcNow);
-        }
+        _areaSessionService.ToggleSession(Model, utcNow);
 
         SyncTimerState();
         RefreshLocalizedText();

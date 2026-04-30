@@ -62,6 +62,7 @@ public sealed class AreaManagementCardViewModelFactory
                 _localizationService,
                 _localizationPreferencesService,
                 _dialogService,
+                _areaSessionService,
                 reservedCardViewModel.Model),
             SummarizedRentedCardViewModel rentedCardViewModel => new DetailedRentedCardViewModel(
                 _localizationService,

@@ -11,6 +11,7 @@ using WinUI.UIModels;
 using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
 using WinUI.ViewModels.Dialogs.Management;
+using Application.Services.Areas;
 
 namespace WinUI.ViewModels.AreaManagement.DetailedAreaCards;
 
@@ -18,6 +19,7 @@ public partial class DetailedReservedCardViewModel : LocalizedViewModelBase, IDe
 {
     private readonly ILocalizationPreferencesService _localizationPreferencesService;
     private readonly IDialogService _dialogService;
+    private readonly IAreaSessionService _areaSessionService;
     private readonly DispatcherTimer _timer;
     private bool _isDisposed;
 
@@ -47,11 +49,13 @@ public partial class DetailedReservedCardViewModel : LocalizedViewModelBase, IDe
         ILocalizationService localizationService,
         ILocalizationPreferencesService localizationPreferencesService,
         IDialogService dialogService,
+        IAreaSessionService areaSessionService,
         AreaModel model)
         : base(localizationService)
     {
         _localizationPreferencesService = localizationPreferencesService ?? throw new ArgumentNullException(nameof(localizationPreferencesService));
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _areaSessionService = areaSessionService ?? throw new ArgumentNullException(nameof(areaSessionService));
         Model = model ?? throw new ArgumentNullException(nameof(model));
         Model.PropertyChanged += HandleModelPropertyChanged;
 
@@ -141,10 +145,7 @@ public partial class DetailedReservedCardViewModel : LocalizedViewModelBase, IDe
 
     private bool CanCheckIn()
     {
-        if (Model.CheckInDateTime == null)
-            return false;
-
-        return DateTime.Now >= Model.CheckInDateTime.Value;
+        return _areaSessionService.CanCheckInReservation(Model, DateTime.Now);
     }
 
     private async Task ExecuteCheckInAsync()
@@ -161,15 +162,7 @@ public partial class DetailedReservedCardViewModel : LocalizedViewModelBase, IDe
             return;
         }
 
-        DateTime sessionStartedAtUtc = DateTime.UtcNow;
-
-        Model.StartTime = sessionStartedAtUtc;
-        Model.IsSessionPaused = false;
-        Model.SessionPausedAt = null;
-        Model.SessionPausedDuration = TimeSpan.Zero;
-        Model.TotalAmount = 0m;
-        Model.CheckInDateTime = null;
-        Model.Status = PlayAreaStatus.Rented;
+        _areaSessionService.CheckInReservation(Model, DateTime.UtcNow);
     }
 
     private Task ExecuteEditReservationAsync()
@@ -195,17 +188,7 @@ public partial class DetailedReservedCardViewModel : LocalizedViewModelBase, IDe
             return;
         }
 
-        Model.CustomerName = string.Empty;
-        Model.PhoneNumber = string.Empty;
-        Model.MemberId = null;
-        Model.CheckInDateTime = null;
-        Model.Capacity = 0;
-        Model.StartTime = null;
-        Model.IsSessionPaused = false;
-        Model.SessionPausedAt = null;
-        Model.SessionPausedDuration = TimeSpan.Zero;
-        Model.TotalAmount = 0m;
-        Model.Status = PlayAreaStatus.Available;
+        _areaSessionService.CancelReservation(Model);
     }
 
     public new void Dispose()

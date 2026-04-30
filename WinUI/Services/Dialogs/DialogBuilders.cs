@@ -99,6 +99,7 @@ public sealed class ReservationDialogBuilder : OptionalDialogBuilder<Reservation
             Resolve<ILocalizationPreferencesService>(),
             Resolve<IMemberLookupService>(),
             Resolve<IDialogService>(),
+            Resolve<Application.Services.Areas.IAreaSessionService>(),
             Resolve<AreaModelFactory>(),
             request.Mode);
 
@@ -267,6 +268,7 @@ public sealed class MemberDialogBuilder : OptionalDialogBuilder<MemberDialogRequ
         var viewModel = new MemberDialogViewModel(
             Resolve<ILocalizationService>(),
             Resolve<IDialogService>(),
+            Resolve<Application.Services.Members.IMembershipRankManagementService>(),
             Resolve<MemberModelFactory>(),
             request?.Mode ?? UpsertDialogMode.Add);
 

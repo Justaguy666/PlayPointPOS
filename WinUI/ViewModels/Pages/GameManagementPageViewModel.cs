@@ -44,6 +44,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     private readonly GameManagementDialogCoordinator _dialogs;
     private readonly IGameFilterService _gameFilterService;
+    private readonly IGameTypeManagementService _gameTypeManagementService;
     private readonly IResponsiveLayoutService _responsiveLayoutService;
     private readonly GameDraftFactory _draftFactory;
     private readonly GameCardControlViewModelFactory _cardFactory;
@@ -180,6 +181,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
         IGameCatalogService gameCatalogService,
         IGameTypeCatalogService gameTypeCatalogService,
         IGameFilterService gameFilterService,
+        IGameTypeManagementService gameTypeManagementService,
         IResponsiveLayoutService responsiveLayoutService,
         GameModelFactory gameModelFactory,
         GameDraftFactory draftFactory,
@@ -189,6 +191,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
     {
         _dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
         _gameFilterService = gameFilterService ?? throw new ArgumentNullException(nameof(gameFilterService));
+        _gameTypeManagementService = gameTypeManagementService ?? throw new ArgumentNullException(nameof(gameTypeManagementService));
         _responsiveLayoutService = responsiveLayoutService ?? throw new ArgumentNullException(nameof(responsiveLayoutService));
         _draftFactory = draftFactory ?? throw new ArgumentNullException(nameof(draftFactory));
         _cardFactory = cardFactory ?? throw new ArgumentNullException(nameof(cardFactory));
@@ -426,7 +429,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     private Task HandleGameTypeAddedAsync(GameType gameType)
     {
-        if (!_allGameTypes.Contains(gameType))
+        if (!_allGameTypes.Any(type => _gameTypeManagementService.IsSame(type, gameType)))
         {
             _allGameTypes.Add(gameType);
         }
@@ -436,8 +439,8 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     private Task HandleGameTypeDeletedAsync(GameType gameType)
     {
-        _allGameTypes.Remove(gameType);
-        if (IsSameGameType(_queryState.Filter.GameType, gameType))
+        _gameTypeManagementService.Delete(_allGameTypes, gameType);
+        if (_gameTypeManagementService.IsSame(_queryState.Filter.GameType, gameType))
         {
             _queryState.Filter = _queryState.Filter with { GameType = null };
             ApplyFiltersAndSorting(resetToFirstPage: true);
@@ -597,12 +600,5 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
     private void SyncSortState()
     {
         _queryState.Sort = new ManagementSortState(SelectedSortField, SelectedSortDirection);
-    }
-
-    private static bool IsSameGameType(GameType? left, GameType? right)
-    {
-        return left is not null
-            && right is not null
-            && string.Equals(left.Name, right.Name, StringComparison.OrdinalIgnoreCase);
     }
 }

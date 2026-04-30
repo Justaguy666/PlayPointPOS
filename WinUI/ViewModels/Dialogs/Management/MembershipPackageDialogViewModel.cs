@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Services;
+using Application.Services.Members;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Application.Members;
@@ -19,6 +20,8 @@ public partial class MembershipPackageDialogViewModel : LocalizedViewModelBase
     private const string DefaultRankColor = "#F09A44";
 
     private readonly IDialogService _dialogService;
+    private readonly IMembershipRankManagementService _rankManagementService;
+    private IList<MembershipRank> _membershipRanks = new List<MembershipRank>();
     private Func<MembershipRank, Task>? _onMembershipRankAddedAsync;
     private Func<MembershipRank, Task>? _onMembershipRankDeletedAsync;
     private Func<MembershipRank, Task>? _onMembershipRankUpdatedAsync;
@@ -109,10 +112,14 @@ public partial class MembershipPackageDialogViewModel : LocalizedViewModelBase
         && TryParseOptionalDecimal(NewMinSpentText, out _)
         && TryParseOptionalDecimal(NewDiscountText, out _);
 
-    public MembershipPackageDialogViewModel(ILocalizationService localizationService, IDialogService dialogService)
+    public MembershipPackageDialogViewModel(
+        ILocalizationService localizationService,
+        IDialogService dialogService,
+        IMembershipRankManagementService rankManagementService)
         : base(localizationService)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _rankManagementService = rankManagementService ?? throw new ArgumentNullException(nameof(rankManagementService));
         RefreshLocalizedText();
     }
 
@@ -141,13 +148,11 @@ public partial class MembershipPackageDialogViewModel : LocalizedViewModelBase
         _onMembershipRankAddedAsync = request.OnMembershipRankAddedAsync;
         _onMembershipRankDeletedAsync = request.OnMembershipRankDeletedAsync;
         _onMembershipRankUpdatedAsync = request.OnMembershipRankUpdatedAsync;
+        _membershipRanks = request.MembershipRanks;
         ErrorMessage = string.Empty;
 
-        MembershipRanks.Clear();
-        foreach (MembershipRank rank in request.MembershipRanks.OrderBy(rank => rank.MinSpentAmount).ThenBy(rank => rank.Priority))
-        {
-            MembershipRanks.Add(new MembershipPackageItemViewModel(rank, this, LocalizationService));
-        }
+        _rankManagementService.NormalizeRanks(_membershipRanks);
+        RefreshItems();
     }
 
     [RelayCommand]
@@ -168,21 +173,19 @@ public partial class MembershipPackageDialogViewModel : LocalizedViewModelBase
             return;
         }
 
-        var newRank = new MembershipRank
-        {
-            Name = trimmedName,
-            MinSpentAmount = minSpent,
-            DiscountRate = discountPercent / 100m,
-            Color = ToHexColor(NewMembershipRankColor),
-        };
+        MembershipRank newRank = _rankManagementService.AddRank(
+            _membershipRanks,
+            trimmedName,
+            minSpent,
+            discountPercent / 100m,
+            ToHexColor(NewMembershipRankColor));
 
         if (_onMembershipRankAddedAsync is not null)
         {
             await _onMembershipRankAddedAsync(newRank);
         }
 
-        MembershipRanks.Add(new MembershipPackageItemViewModel(newRank, this, LocalizationService));
-        ReorderItems();
+        RefreshItems();
 
         NewMembershipRankName = string.Empty;
         NewMinSpentText = string.Empty;
@@ -219,8 +222,8 @@ public partial class MembershipPackageDialogViewModel : LocalizedViewModelBase
             await _onMembershipRankDeletedAsync(item.MembershipRank);
         }
 
-        MembershipRanks.Remove(item);
-        ReorderItems();
+        _rankManagementService.DeleteRank(_membershipRanks, item.MembershipRank);
+        RefreshItems();
     }
 
     public async Task UpdateMembershipRankAsync(MembershipPackageItemViewModel item, string newName, string newMinSpentText, string newDiscountText, Color newColor)
@@ -232,12 +235,18 @@ public partial class MembershipPackageDialogViewModel : LocalizedViewModelBase
             return;
         }
 
-        item.MembershipRank.Name = newName.Trim();
-        item.MembershipRank.MinSpentAmount = newMinSpent;
-        item.MembershipRank.DiscountRate = newDiscountPercent / 100m;
-        item.MembershipRank.Color = ToHexColor(newColor);
-        item.RefreshDisplay();
-        ReorderItems();
+        if (!_rankManagementService.UpdateRank(
+                item.MembershipRank,
+                newName,
+                newMinSpent,
+                newDiscountPercent / 100m,
+                ToHexColor(newColor)))
+        {
+            return;
+        }
+
+        _rankManagementService.NormalizeRanks(_membershipRanks);
+        RefreshItems();
 
         if (_onMembershipRankUpdatedAsync is not null)
         {
@@ -269,62 +278,17 @@ public partial class MembershipPackageDialogViewModel : LocalizedViewModelBase
         }
     }
 
-    internal static string ResolveRankColor(string? rankName, int index)
+    private void RefreshItems()
     {
-        string normalizedRankName = rankName?.Trim() ?? string.Empty;
-
-        if (normalizedRankName.Equals("Diamond", StringComparison.OrdinalIgnoreCase))
-        {
-            return "#9B8BFF";
-        }
-
-        if (normalizedRankName.Equals("Platinum", StringComparison.OrdinalIgnoreCase))
-        {
-            return "#72C5E4";
-        }
-
-        if (normalizedRankName.Equals("Gold", StringComparison.OrdinalIgnoreCase))
-        {
-            return "#F9CC45";
-        }
-
-        if (normalizedRankName.Equals("Silver", StringComparison.OrdinalIgnoreCase))
-        {
-            return "#CBD3DF";
-        }
-
-        if (normalizedRankName.Equals("Bronze", StringComparison.OrdinalIgnoreCase))
-        {
-            return "#F09A44";
-        }
-
-        string[] palette =
-        [
-            "#F09A44",
-            "#CBD3DF",
-            "#F9CC45",
-            "#72C5E4",
-            "#9B8BFF",
-        ];
-
-        return palette[Math.Abs(index) % palette.Length];
-    }
-
-    private void ReorderItems()
-    {
-        List<MembershipPackageItemViewModel> orderedItems = MembershipRanks
-            .OrderBy(item => item.MembershipRank.MinSpentAmount)
-            .ThenBy(item => item.MembershipRank.Name, StringComparer.CurrentCultureIgnoreCase)
+        List<MembershipRank> orderedRanks = _membershipRanks
+            .OrderBy(rank => rank.MinSpentAmount)
+            .ThenBy(rank => rank.Priority)
             .ToList();
 
         MembershipRanks.Clear();
-
-        for (int index = 0; index < orderedItems.Count; index++)
+        foreach (MembershipRank rank in orderedRanks)
         {
-            MembershipPackageItemViewModel item = orderedItems[index];
-            item.MembershipRank.Priority = index + 1;
-            item.MembershipRank.IsDefault = index == 0;
-            MembershipRanks.Add(item);
+            MembershipRanks.Add(new MembershipPackageItemViewModel(rank, this, LocalizationService));
         }
     }
 

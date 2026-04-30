@@ -2,13 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Application.Members;
+using Application.Services.Members;
 using WinUI.UIModels.Management;
-using WinUI.ViewModels.Dialogs.Management;
 
 namespace WinUI.Services.Factories;
 
 public sealed class MemberDraftFactory
 {
+    private readonly IMembershipRankManagementService _rankManagementService;
+
+    public MemberDraftFactory(IMembershipRankManagementService rankManagementService)
+    {
+        _rankManagementService = rankManagementService ?? throw new ArgumentNullException(nameof(rankManagementService));
+    }
+
     public MemberModel Create(IEnumerable<MemberModel> existingMembers, IReadOnlyList<MembershipRank> ranks)
     {
         var member = new MemberModel
@@ -25,45 +32,17 @@ public sealed class MemberDraftFactory
 
     public void NormalizeRanks(IList<MembershipRank> ranks)
     {
-        var orderedRanks = ranks
-            .OrderBy(rank => rank.MinSpentAmount)
-            .ThenBy(rank => rank.Name, StringComparer.CurrentCultureIgnoreCase)
-            .ToList();
-
-        ranks.Clear();
-        for (int index = 0; index < orderedRanks.Count; index++)
-        {
-            MembershipRank rank = orderedRanks[index];
-            rank.Priority = index + 1;
-            rank.IsDefault = index == 0;
-            if (string.IsNullOrWhiteSpace(rank.Color))
-            {
-                rank.Color = MembershipPackageDialogViewModel.ResolveRankColor(rank.Name, index);
-            }
-
-            ranks.Add(rank);
-        }
+        _rankManagementService.NormalizeRanks(ranks);
     }
 
     public void ApplyMembershipState(MemberModel member, IReadOnlyList<MembershipRank> ranks)
     {
-        MemberRankProgressSnapshot snapshot = MemberRankProgressCalculator.Calculate(member.TotalSpentAmount, ranks);
-
-        member.MembershipRank = null;
-        member.MembershipRank = snapshot.CurrentRank;
-
-        member.NextMembershipRank = null;
-        member.NextMembershipRank = snapshot.NextRank;
-
-        member.ProgressPercentage = snapshot.ProgressPercentage;
+        _rankManagementService.ApplyMembershipState(member, ranks);
     }
 
     public void RefreshMembershipStates(IEnumerable<MemberModel> members, IReadOnlyList<MembershipRank> ranks)
     {
-        foreach (MemberModel member in members)
-        {
-            ApplyMembershipState(member, ranks);
-        }
+        _rankManagementService.RefreshMembershipStates(members, ranks);
     }
 
     private static string GenerateNextMemberCode(IEnumerable<MemberModel> existingMembers)

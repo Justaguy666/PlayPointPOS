@@ -5,7 +5,7 @@ using Domain.Enums;
 
 namespace WinUI.UIModels.Management;
 
-public sealed class AreaModel : ObservableObject, IAreaFilterable, IAreaSessionState
+public sealed class AreaModel : ObservableObject, IAreaFilterable, IAreaSessionState, IAreaCapacity
 {
     private string _areaName = string.Empty;
     private PlayAreaType _playAreaType = PlayAreaType.Table;

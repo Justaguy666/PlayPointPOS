@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace WinUI.UIModels.Management;
 
-public sealed partial class TransactionModel : ObservableObject
+public sealed partial class TransactionModel : ObservableObject, ITransactionFilterable
 {
     private string _code = string.Empty;
     private string? _memberId;

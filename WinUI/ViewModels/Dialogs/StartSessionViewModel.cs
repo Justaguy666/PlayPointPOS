@@ -1,12 +1,13 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Application.Areas;
 using Application.Members;
 using Application.Services;
+using Application.Services.Areas;
 using Application.Services.Members;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Domain.Enums;
 using WinUI.UIModels.Management;
 using WinUI.ViewModels;
 
@@ -15,15 +16,18 @@ namespace WinUI.ViewModels.Dialogs;
 public partial class StartSessionViewModel : LocalizedViewModelBase
 {
     private readonly IMemberLookupService _memberLookupService;
+    private readonly IAreaSessionService _areaSessionService;
     private AreaModel? _model;
     private event Action? CloseRequestedInternal;
 
     public StartSessionViewModel(
         ILocalizationService localizationService,
-        IMemberLookupService memberLookupService)
+        IMemberLookupService memberLookupService,
+        IAreaSessionService areaSessionService)
         : base(localizationService)
     {
         _memberLookupService = memberLookupService ?? throw new ArgumentNullException(nameof(memberLookupService));
+        _areaSessionService = areaSessionService ?? throw new ArgumentNullException(nameof(areaSessionService));
         Members = [];
         LoadMembers();
         RefreshLocalizedText();
@@ -105,7 +109,7 @@ public partial class StartSessionViewModel : LocalizedViewModelBase
         int initialCapacity = model?.Capacity > 0
             ? model.Capacity
             : 1;
-        CapacityText = ClampCapacity(initialCapacity).ToString(LocalizationService.Culture);
+        CapacityText = _areaSessionService.ClampCapacity(initialCapacity, model?.MaxCapacity ?? 0).ToString(LocalizationService.Culture);
         UpdateValidationState();
     }
 
@@ -142,17 +146,16 @@ public partial class StartSessionViewModel : LocalizedViewModelBase
             return Task.CompletedTask;
         }
 
-        _model.MemberId = IsMember ? SelectedMember?.Id : null;
-        _model.CustomerName = IsMember ? SelectedMember?.FullName ?? string.Empty : string.Empty;
-        _model.PhoneNumber = IsMember ? SelectedMember?.PhoneNumber ?? string.Empty : string.Empty;
-        _model.CheckInDateTime = null;
-        _model.Capacity = ParseCapacityOrDefault();
-        _model.StartTime = DateTime.UtcNow;
-        _model.IsSessionPaused = false;
-        _model.SessionPausedAt = null;
-        _model.SessionPausedDuration = TimeSpan.Zero;
-        _model.TotalAmount = 0m;
-        _model.Status = PlayAreaStatus.Rented;
+        _areaSessionService.StartSession(
+            _model,
+            new StartAreaSessionRequest
+            {
+                MemberId = IsMember ? SelectedMember?.Id : null,
+                CustomerName = IsMember ? SelectedMember?.FullName ?? string.Empty : string.Empty,
+                PhoneNumber = IsMember ? SelectedMember?.PhoneNumber ?? string.Empty : string.Empty,
+                Capacity = ParseCapacityOrDefault(),
+            },
+            DateTime.UtcNow);
 
         CloseRequestedInternal?.Invoke();
         return Task.CompletedTask;
@@ -180,13 +183,8 @@ public partial class StartSessionViewModel : LocalizedViewModelBase
     private int ParseCapacityOrDefault()
     {
         return int.TryParse(CapacityText?.Trim(), out int capacity) && capacity > 0
-            ? ClampCapacity(capacity)
+            ? _areaSessionService.ClampCapacity(capacity, _model?.MaxCapacity ?? 0)
             : 1;
-    }
-
-    private int ClampCapacity(int capacity)
-    {
-        return Math.Clamp(capacity, 1, GetCapacityUpperBound());
     }
 
     private int GetCapacityUpperBound()

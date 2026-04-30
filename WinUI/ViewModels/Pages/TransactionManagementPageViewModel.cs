@@ -30,6 +30,7 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
     private const int PreferredGridTransactionsPerRow = 2;
 
     private readonly TransactionManagementDialogCoordinator _dialogs;
+    private readonly ITransactionFilterService _transactionFilterService;
     private readonly IResponsiveLayoutService _responsiveLayoutService;
     private readonly TransactionCardControlViewModelFactory _cardFactory;
     private readonly ManagementQueryState<TransactionFilter, ManagementSortState> _queryState;
@@ -89,6 +90,7 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
         ILocalizationService localizationService,
         TransactionManagementDialogCoordinator dialogs,
         ITransactionCatalogService transactionCatalogService,
+        ITransactionFilterService transactionFilterService,
         IResponsiveLayoutService responsiveLayoutService,
         TransactionModelFactory transactionModelFactory,
         TransactionCardControlViewModelFactory cardFactory,
@@ -96,6 +98,7 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
         : base(localizationService)
     {
         _dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
+        _transactionFilterService = transactionFilterService ?? throw new ArgumentNullException(nameof(transactionFilterService));
         _responsiveLayoutService = responsiveLayoutService ?? throw new ArgumentNullException(nameof(responsiveLayoutService));
         _cardFactory = cardFactory ?? throw new ArgumentNullException(nameof(cardFactory));
         PaginationViewModel = paginationViewModel ?? throw new ArgumentNullException(nameof(paginationViewModel));
@@ -221,7 +224,7 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
 
     private IReadOnlyList<TransactionModel> QueryTransactions(IEnumerable<TransactionModel> source)
     {
-        IEnumerable<TransactionModel> transactions = ApplyTransactionFilter(source, _queryState.Filter);
+        IEnumerable<TransactionModel> transactions = _transactionFilterService.Apply(source, _queryState.Filter);
 
         if (!string.IsNullOrWhiteSpace(_queryState.SearchText))
         {
@@ -231,38 +234,6 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
         return transactions
             .OrderByDescending(transaction => transaction.CreatedAt)
             .ToList();
-    }
-
-    private static IEnumerable<TransactionModel> ApplyTransactionFilter(
-        IEnumerable<TransactionModel> source,
-        TransactionFilter filter)
-    {
-        if (filter.PaymentMethod.HasValue)
-        {
-            source = source.Where(transaction => transaction.PaymentMethod == filter.PaymentMethod.Value);
-        }
-
-        if (filter.AmountMin.HasValue)
-        {
-            source = source.Where(transaction => transaction.TotalAmount >= filter.AmountMin.Value);
-        }
-
-        if (filter.AmountMax.HasValue)
-        {
-            source = source.Where(transaction => transaction.TotalAmount <= filter.AmountMax.Value);
-        }
-
-        if (filter.DateFrom.HasValue)
-        {
-            source = source.Where(transaction => transaction.CreatedAt >= filter.DateFrom.Value);
-        }
-
-        if (filter.DateTo.HasValue)
-        {
-            source = source.Where(transaction => transaction.CreatedAt <= filter.DateTo.Value);
-        }
-
-        return source;
     }
 
     private bool MatchesSearch(TransactionModel transaction)

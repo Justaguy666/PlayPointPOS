@@ -31,6 +31,7 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
 
     private readonly MemberManagementDialogCoordinator _dialogs;
     private readonly IMemberFilterService _memberFilterService;
+    private readonly IMembershipRankManagementService _rankManagementService;
     private readonly MemberDraftFactory _draftFactory;
     private readonly MemberCardControlViewModelFactory _cardFactory;
     private readonly List<MemberModel> _allMembers;
@@ -115,6 +116,7 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
         IMemberCatalogService memberCatalogService,
         IMembershipRankCatalogService membershipRankCatalogService,
         IMemberFilterService memberFilterService,
+        IMembershipRankManagementService rankManagementService,
         MemberModelFactory memberModelFactory,
         MemberDraftFactory draftFactory,
         MemberCardControlViewModelFactory cardFactory,
@@ -123,6 +125,7 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
     {
         _dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
         _memberFilterService = memberFilterService ?? throw new ArgumentNullException(nameof(memberFilterService));
+        _rankManagementService = rankManagementService ?? throw new ArgumentNullException(nameof(rankManagementService));
         _draftFactory = draftFactory ?? throw new ArgumentNullException(nameof(draftFactory));
         _cardFactory = cardFactory ?? throw new ArgumentNullException(nameof(cardFactory));
         PaginationViewModel = paginationViewModel ?? throw new ArgumentNullException(nameof(paginationViewModel));
@@ -137,11 +140,11 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
             new ManagementSortState(SortFieldName, SortAscending));
 
         _allMembershipRanks = membershipRankCatalogService.GetMembershipRanks().ToList();
-        _draftFactory.NormalizeRanks(_allMembershipRanks);
+        _rankManagementService.NormalizeRanks(_allMembershipRanks);
         _allMembers = memberCatalogService.GetMembers()
             .Select(memberModelFactory.Create)
             .ToList();
-        _draftFactory.RefreshMembershipStates(_allMembers, _allMembershipRanks);
+        _rankManagementService.RefreshMembershipStates(_allMembers, _allMembershipRanks);
 
         _members = new ManagementCollectionController<MemberModel, MemberCardControlViewModel>(
             _allMembers,
@@ -268,7 +271,7 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
 
     private async Task HandleMemberCreatedAsync(MemberModel member)
     {
-        _draftFactory.ApplyMembershipState(member, _allMembershipRanks);
+        _rankManagementService.ApplyMembershipState(member, _allMembershipRanks);
         if (!_members.Contains(member))
         {
             _members.Insert(0, member);
@@ -280,7 +283,7 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
 
     private async Task HandleMemberUpdatedAsync(MemberModel member)
     {
-        _draftFactory.ApplyMembershipState(member, _allMembershipRanks);
+        _rankManagementService.ApplyMembershipState(member, _allMembershipRanks);
         ApplyFiltersAndSorting(resetToFirstPage: false);
         await _dialogs.NotifyUpdatedAsync(member);
     }
@@ -298,7 +301,7 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
 
     private Task HandleMembershipRankDeletedAsync(MembershipRank rank)
     {
-        _allMembershipRanks.Remove(rank);
+        _rankManagementService.DeleteRank(_allMembershipRanks, rank);
         RefreshMembershipRankState();
         return Task.CompletedTask;
     }
@@ -311,14 +314,14 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
 
     private void RefreshMembershipRankState()
     {
-        _draftFactory.NormalizeRanks(_allMembershipRanks);
+        _rankManagementService.NormalizeRanks(_allMembershipRanks);
         if (_queryState.Filter.MembershipRank is not null
             && !_allMembershipRanks.Any(rank => IsSameMembershipRank(rank, _queryState.Filter.MembershipRank)))
         {
             _queryState.Filter = _queryState.Filter with { MembershipRank = null };
         }
 
-        _draftFactory.RefreshMembershipStates(_allMembers, _allMembershipRanks);
+        _rankManagementService.RefreshMembershipStates(_allMembers, _allMembershipRanks);
         ApplyFiltersAndSorting(resetToFirstPage: false);
     }
 

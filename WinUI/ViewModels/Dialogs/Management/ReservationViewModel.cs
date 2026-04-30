@@ -3,8 +3,10 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Areas;
 using Application.Members;
 using Application.Services;
+using Application.Services.Areas;
 using Application.Services.Members;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -22,6 +24,7 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
     private readonly IMemberLookupService _memberLookupService;
     private readonly ILocalizationPreferencesService _localizationPreferencesService;
     private readonly IDialogService _dialogService;
+    private readonly IAreaSessionService _areaSessionService;
     private readonly AreaModelFactory _areaModelFactory;
     private AreaModel _targetModel = new();
     private Func<AreaModel, Task>? _onSubmittedAsync;
@@ -35,6 +38,7 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
         ILocalizationPreferencesService localizationPreferencesService,
         IMemberLookupService memberLookupService,
         IDialogService dialogService,
+        IAreaSessionService areaSessionService,
         AreaModelFactory areaModelFactory,
         UpsertDialogMode mode)
         : base(localizationService, mode)
@@ -42,6 +46,7 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
         _memberLookupService = memberLookupService ?? throw new ArgumentNullException(nameof(memberLookupService));
         _localizationPreferencesService = localizationPreferencesService ?? throw new ArgumentNullException(nameof(localizationPreferencesService));
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _areaSessionService = areaSessionService ?? throw new ArgumentNullException(nameof(areaSessionService));
         _areaModelFactory = areaModelFactory ?? throw new ArgumentNullException(nameof(areaModelFactory));
         Members = [];
         LoadMembers();
@@ -455,17 +460,16 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
             return false;
         }
 
-        model.CustomerName = trimmedCustomerName;
-        model.PhoneNumber = trimmedPhoneNumber;
-        model.MemberId = IsMember ? SelectedMember?.Id : null;
-        model.CheckInDateTime = reservationDateTime;
-        model.Capacity = capacity;
-        model.StartTime = null;
-        model.IsSessionPaused = false;
-        model.SessionPausedAt = null;
-        model.SessionPausedDuration = TimeSpan.Zero;
-        model.TotalAmount = 0m;
-        model.Status = PlayAreaStatus.Reserved;
+        _areaSessionService.Reserve(
+            model,
+            new AreaReservationRequest
+            {
+                CustomerName = trimmedCustomerName,
+                PhoneNumber = trimmedPhoneNumber,
+                MemberId = IsMember ? SelectedMember?.Id : null,
+                CheckInDateTime = reservationDateTime,
+                Capacity = capacity,
+            });
 
         return true;
     }
@@ -535,13 +539,13 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
     private int ParseReservationCapacityOrDefault()
     {
         return TryParseCapacity(ReservationCapacity, out int capacity) && capacity > 0
-            ? ClampCapacity(capacity)
+            ? _areaSessionService.ClampCapacity(capacity, GetCapacityUpperBound())
             : 1;
     }
 
     private int ClampCapacity(int capacity)
     {
-        return Math.Clamp(capacity, 1, GetCapacityUpperBound());
+        return _areaSessionService.ClampCapacity(capacity, GetCapacityUpperBound());
     }
 
     private int GetCapacityUpperBound()

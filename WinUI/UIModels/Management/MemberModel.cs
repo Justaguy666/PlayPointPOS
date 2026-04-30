@@ -4,7 +4,7 @@ using System;
 
 namespace WinUI.UIModels.Management;
 
-public sealed partial class MemberModel : ObservableObject, IMemberFilterable
+public sealed partial class MemberModel : ObservableObject, IMemberFilterable, IMemberRankProgressState
 {
     private string _code = string.Empty;
     private string _fullName = string.Empty;

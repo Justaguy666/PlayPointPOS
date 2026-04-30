@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Application.Areas;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -192,13 +193,7 @@ public partial class PaymentViewModel : LocalizedViewModelBase
             return;
         }
 
-        TimeSpan elapsedTime = _areaSessionService.GetSessionElapsedTime(_model, DateTime.UtcNow);
-        decimal areaFee = _areaSessionService.CalculateAreaSessionTotal(_model, elapsedTime);
-        decimal productFee = 0m;
-        decimal gameFee = 0m;
-        decimal deposit = 0m;
-        decimal discount = 0m;
-        decimal total = areaFee + productFee + gameFee - deposit - discount;
+        AreaPaymentSummary summary = _areaSessionService.CalculatePaymentSummary(_model, DateTime.UtcNow);
 
         AreaLabelText = string.Format(
             LocalizationService.Culture,
@@ -208,13 +203,13 @@ public partial class PaymentViewModel : LocalizedViewModelBase
                     ? "AreaDialogRoomTypeText"
                     : "AreaDialogTableTypeText"));
         AreaValueText = _model.AreaName;
-        DurationValueText = FormatElapsedTime(elapsedTime);
-        AreaFeeValueText = LocalizationService.FormatCurrency(areaFee);
-        ProductFeeValueText = LocalizationService.FormatCurrency(productFee);
-        GameFeeValueText = LocalizationService.FormatCurrency(gameFee);
-        DepositValueText = FormatAdjustment(deposit);
-        DiscountValueText = FormatAdjustment(discount);
-        TotalValueText = LocalizationService.FormatCurrency(total);
+        DurationValueText = FormatElapsedTime(summary.ElapsedTime);
+        AreaFeeValueText = LocalizationService.FormatCurrency(summary.AreaFee);
+        ProductFeeValueText = LocalizationService.FormatCurrency(summary.ProductFee);
+        GameFeeValueText = LocalizationService.FormatCurrency(summary.GameFee);
+        DepositValueText = FormatAdjustment(summary.Deposit);
+        DiscountValueText = FormatAdjustment(summary.Discount);
+        TotalValueText = LocalizationService.FormatCurrency(summary.Total);
     }
 
     private string FormatElapsedTime(TimeSpan elapsedTime)

@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Application.Services;
+using Application.Services.Games;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Application.Games;
@@ -11,6 +14,8 @@ namespace WinUI.ViewModels.Dialogs.Management;
 public partial class GameTypeDialogViewModel : LocalizedViewModelBase
 {
     private readonly IDialogService _dialogService;
+    private readonly IGameTypeManagementService _gameTypeManagementService;
+    private IList<GameType> _gameTypes = new List<GameType>();
     private Func<GameType, Task>? _onGameTypeAddedAsync;
     private Func<GameType, Task>? _onGameTypeDeletedAsync;
     private Func<GameType, Task>? _onGameTypeUpdatedAsync;
@@ -40,10 +45,14 @@ public partial class GameTypeDialogViewModel : LocalizedViewModelBase
 
     public bool CanAddGameType => !string.IsNullOrWhiteSpace(NewGameTypeName);
 
-    public GameTypeDialogViewModel(ILocalizationService localizationService, IDialogService dialogService)
+    public GameTypeDialogViewModel(
+        ILocalizationService localizationService,
+        IDialogService dialogService,
+        IGameTypeManagementService gameTypeManagementService)
         : base(localizationService)
     {
         _dialogService = dialogService;
+        _gameTypeManagementService = gameTypeManagementService ?? throw new ArgumentNullException(nameof(gameTypeManagementService));
         RefreshLocalizedText();
     }
 
@@ -60,13 +69,9 @@ public partial class GameTypeDialogViewModel : LocalizedViewModelBase
         _onGameTypeAddedAsync = request.OnGameTypeAddedAsync;
         _onGameTypeDeletedAsync = request.OnGameTypeDeletedAsync;
         _onGameTypeUpdatedAsync = request.OnGameTypeUpdatedAsync;
+        _gameTypes = request.GameTypes;
 
-        GameTypes.Clear();
-        foreach (var type in request.GameTypes)
-        {
-            var item = new GameTypeItemViewModel(type, this);
-            GameTypes.Add(item);
-        }
+        RefreshItems();
     }
 
     [RelayCommand]
@@ -83,14 +88,14 @@ public partial class GameTypeDialogViewModel : LocalizedViewModelBase
             return;
         }
 
-        var newType = new GameType { Name = NewGameTypeName };
+        GameType newType = _gameTypeManagementService.Add(_gameTypes, NewGameTypeName);
         
         if (_onGameTypeAddedAsync != null)
         {
             await _onGameTypeAddedAsync(newType);
         }
         
-        GameTypes.Insert(0, new GameTypeItemViewModel(newType, this));
+        RefreshItems();
         NewGameTypeName = string.Empty;
     }
 
@@ -118,21 +123,35 @@ public partial class GameTypeDialogViewModel : LocalizedViewModelBase
             {
                 await _onGameTypeDeletedAsync(item.GameType);
             }
-            GameTypes.Remove(item);
+
+            _gameTypeManagementService.Delete(_gameTypes, item.GameType);
+            RefreshItems();
         }
     }
 
     public async Task UpdateGameTypeAsync(GameTypeItemViewModel item, string newName)
     {
-        if (string.IsNullOrWhiteSpace(newName) || item.GameType.Name == newName)
+        if (!_gameTypeManagementService.Update(item.GameType, newName))
+        {
             return;
+        }
 
-        item.GameType.Name = newName;
-        item.Name = newName;
+        item.Name = item.GameType.Name;
 
         if (_onGameTypeUpdatedAsync != null)
         {
             await _onGameTypeUpdatedAsync(item.GameType);
+        }
+
+        RefreshItems();
+    }
+
+    private void RefreshItems()
+    {
+        GameTypes.Clear();
+        foreach (GameType type in _gameTypes.OrderBy(type => type.Name, StringComparer.CurrentCultureIgnoreCase))
+        {
+            GameTypes.Add(new GameTypeItemViewModel(type, this));
         }
     }
 }

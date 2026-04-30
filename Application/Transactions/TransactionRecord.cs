@@ -2,7 +2,7 @@ using Domain.Enums;
 
 namespace Application.Transactions;
 
-public sealed record TransactionRecord
+public sealed record TransactionRecord : ITransactionFilterable
 {
     public string Code { get; init; } = string.Empty;
 
