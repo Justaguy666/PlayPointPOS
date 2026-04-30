@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <UserControl
     x:Class="WinUI.Views.UserControls.LogoControl"
+    x:Name="RootControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:WinUI.Views.UserControls"
@@ -82,11 +83,13 @@
                                     VerticalAlignment="Center"
                                     Margin="8,0,0,0">
                             <TextBlock x:Name="BrandNameTextBlock"
+                                       Text="{Binding BrandNameText, ElementName=RootControl}"
                                        FontSize="{StaticResource FontSizeSmall}"
                                        FontWeight="Bold"
                                        Foreground="{StaticResource PrimaryOrangeBrush}" 
                                        HorizontalAlignment="Center" />
                             <TextBlock x:Name="BrandSubtitleTextBlock"
+                                       Text="{Binding BrandSubtitleText, ElementName=RootControl}"
                                        FontSize="{StaticResource FontSizeExtraExtraExtraSmall}"
                                        Foreground="{StaticResource DarkGrayBrush}" 
                                        HorizontalAlignment="Center" />

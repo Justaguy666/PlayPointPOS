@@ -1,5 +1,4 @@
-using Domain.Entities;
-using System.Collections.Generic;
+using Application.Games;
 
 namespace Application.Services.Games;
 

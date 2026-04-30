@@ -1,5 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using Domain.Entities;
+using Application.Transactions;
 using Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ public sealed partial class TransactionModel : ObservableObject
     private decimal _depositRefund;
     private decimal _totalAmount;
     private DateTime _createdAt;
-    private List<TransactionLine> _lines = [];
+    private List<TransactionLineRecord> _lines = [];
 
     public string Code
     {
@@ -73,7 +73,7 @@ public sealed partial class TransactionModel : ObservableObject
         set => SetProperty(ref _createdAt, value);
     }
 
-    public List<TransactionLine> Lines
+    public List<TransactionLineRecord> Lines
     {
         get => _lines;
         set => SetProperty(ref _lines, value);

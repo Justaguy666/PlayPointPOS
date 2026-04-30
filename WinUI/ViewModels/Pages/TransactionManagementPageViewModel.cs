@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Services;
@@ -13,10 +11,11 @@ using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
 using WinUI.Services.Factories;
 using WinUI.Services.Layout;
+using WinUI.Services.Management;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
 using WinUI.UIModels.Management;
-using WinUI.ViewModels.Dialogs.Management;
+using WinUI.ViewModels.Common;
 using WinUI.ViewModels.UserControls;
 using WinUI.ViewModels.UserControls.Transactions;
 
@@ -30,20 +29,11 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
     private const double TransactionCardsColumnSpacing = 14;
     private const int PreferredGridTransactionsPerRow = 2;
 
-    private readonly IDialogService _dialogService;
-    private readonly INotificationService _notificationService;
-    private readonly ITransactionFilterService _transactionFilterService;
+    private readonly TransactionManagementDialogCoordinator _dialogs;
     private readonly IResponsiveLayoutService _responsiveLayoutService;
-    private readonly TransactionCardControlViewModelFactory _cardControlViewModelFactory;
-    private readonly List<TransactionModel> _allTransactions;
-    private readonly Dictionary<TransactionModel, TransactionCardControlViewModel> _cardViewModelsByTransaction;
-    private readonly PaginationModel _pagination;
-    private IReadOnlyList<TransactionModel> _filteredTransactions = [];
-    private PaymentMethod? _activePaymentMethodFilter;
-    private decimal? _activeAmountMinFilter;
-    private decimal? _activeAmountMaxFilter;
-    private DateTime? _activeDateFromFilter;
-    private DateTime? _activeDateToFilter;
+    private readonly TransactionCardControlViewModelFactory _cardFactory;
+    private readonly ManagementQueryState<TransactionFilter, ManagementSortState> _queryState;
+    private readonly ManagementCollectionController<TransactionModel, TransactionCardControlViewModel> _transactions;
     private bool _isInitialized;
     private bool _isDisposed;
 
@@ -65,26 +55,14 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
     [ObservableProperty]
     public partial IconState FilterIconState { get; set; } = new() { Kind = IconKind.Filter, Size = 20, AlwaysFilled = false };
 
-    private int _transactionCardsMaximumRowsOrColumns = PreferredGridTransactionsPerRow;
-    public int TransactionCardsMaximumRowsOrColumns
-    {
-        get => _transactionCardsMaximumRowsOrColumns;
-        set => SetProperty(ref _transactionCardsMaximumRowsOrColumns, value);
-    }
+    [ObservableProperty]
+    public partial int TransactionCardsMaximumRowsOrColumns { get; set; } = PreferredGridTransactionsPerRow;
 
-    private double _transactionCardsMinItemWidth = TransactionCardOuterWidth;
-    public double TransactionCardsMinItemWidth
-    {
-        get => _transactionCardsMinItemWidth;
-        set => SetProperty(ref _transactionCardsMinItemWidth, value);
-    }
+    [ObservableProperty]
+    public partial double TransactionCardsMinItemWidth { get; set; } = TransactionCardOuterWidth;
 
-    private double _transactionCardsMinItemHeight = TransactionCardOuterHeight;
-    public double TransactionCardsMinItemHeight
-    {
-        get => _transactionCardsMinItemHeight;
-        set => SetProperty(ref _transactionCardsMinItemHeight, value);
-    }
+    [ObservableProperty]
+    public partial double TransactionCardsMinItemHeight { get; set; } = TransactionCardOuterHeight;
 
     public IconState NoTransactionsIconState { get; } = new()
     {
@@ -99,9 +77,9 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
 
     public PaginationControlViewModel PaginationViewModel { get; }
 
-    public PaginationModel Pagination => _pagination;
+    public PaginationModel Pagination { get; }
 
-    public bool HasTransactions => _filteredTransactions.Count > 0;
+    public bool HasTransactions => _transactions.HasItems;
 
     public IAsyncRelayCommand FilterCommand { get; }
 
@@ -109,43 +87,41 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
 
     public TransactionManagementPageViewModel(
         ILocalizationService localizationService,
-        IDialogService dialogService,
-        INotificationService notificationService,
+        TransactionManagementDialogCoordinator dialogs,
         ITransactionCatalogService transactionCatalogService,
-        ITransactionFilterService transactionFilterService,
         IResponsiveLayoutService responsiveLayoutService,
         TransactionModelFactory transactionModelFactory,
-        TransactionCardControlViewModelFactory cardControlViewModelFactory,
+        TransactionCardControlViewModelFactory cardFactory,
         PaginationControlViewModel paginationViewModel)
         : base(localizationService)
     {
-        _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-        _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
-        _transactionFilterService = transactionFilterService ?? throw new ArgumentNullException(nameof(transactionFilterService));
+        _dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
         _responsiveLayoutService = responsiveLayoutService ?? throw new ArgumentNullException(nameof(responsiveLayoutService));
-        _cardControlViewModelFactory = cardControlViewModelFactory ?? throw new ArgumentNullException(nameof(cardControlViewModelFactory));
+        _cardFactory = cardFactory ?? throw new ArgumentNullException(nameof(cardFactory));
         PaginationViewModel = paginationViewModel ?? throw new ArgumentNullException(nameof(paginationViewModel));
         ArgumentNullException.ThrowIfNull(transactionCatalogService);
         ArgumentNullException.ThrowIfNull(transactionModelFactory);
 
-        _pagination = new PaginationModel
-        {
-            CurrentPage = 1,
-            PageSize = PageSize,
-            MaxVisiblePageButtons = 4,
-        };
+        Pagination = new PaginationModel { CurrentPage = 1, PageSize = PageSize, MaxVisiblePageButtons = 4 };
+        PaginationViewModel.Pagination = Pagination;
+        _queryState = new ManagementQueryState<TransactionFilter, ManagementSortState>(
+            new TransactionFilter(),
+            new ManagementSortState(nameof(TransactionModel.CreatedAt), "desc"));
 
-        PaginationViewModel.Pagination = _pagination;
-        _pagination.PropertyChanged += HandlePaginationPropertyChanged;
-
-        FilterCommand = new AsyncRelayCommand(OpenFilterDialogAsync);
-        ClearSearchCommand = new RelayCommand(ClearSearch);
-
-        _allTransactions = transactionCatalogService
+        List<TransactionModel> transactions = transactionCatalogService
             .GetTransactions()
             .Select(transactionModelFactory.Create)
             .ToList();
-        _cardViewModelsByTransaction = [];
+        _transactions = new ManagementCollectionController<TransactionModel, TransactionCardControlViewModel>(
+            transactions,
+            Pagination,
+            PagedTransactionCards,
+            QueryTransactions,
+            CreateCardViewModel);
+        _transactions.Refreshed += HandleTransactionsRefreshed;
+
+        FilterCommand = new AsyncRelayCommand(OpenFilterDialogAsync);
+        ClearSearchCommand = new RelayCommand(ClearSearch);
 
         RefreshLocalizedText();
         _isInitialized = true;
@@ -167,12 +143,8 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
             return;
         }
 
-        _pagination.PropertyChanged -= HandlePaginationPropertyChanged;
-        foreach (TransactionCardControlViewModel viewModel in _cardViewModelsByTransaction.Values)
-        {
-            viewModel.Dispose();
-        }
-
+        _transactions.Refreshed -= HandleTransactionsRefreshed;
+        _transactions.Dispose();
         PaginationViewModel.Dispose();
         _isDisposed = true;
         base.Dispose();
@@ -185,6 +157,7 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
             return;
         }
 
+        _queryState.SearchText = value;
         ApplyFiltersAndSorting(resetToFirstPage: true);
     }
 
@@ -207,27 +180,12 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
         TransactionCardsMaximumRowsOrColumns = layout.Columns;
         TransactionCardsMinItemWidth = layout.ItemWidth;
         TransactionCardsMinItemHeight = layout.ItemHeight;
+        _transactions.SetPageSize(layout.PageSize);
     }
 
-    private void HandlePaginationPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private Task OpenFilterDialogAsync()
     {
-        if (e.PropertyName is nameof(PaginationModel.CurrentPage) or
-            nameof(PaginationModel.PageSize) or
-            nameof(PaginationModel.TotalItems))
-        {
-            RefreshPagedTransactions();
-        }
-    }
-
-    private async Task OpenFilterDialogAsync()
-    {
-        await _dialogService.ShowDialogAsync(
-            "TransactionFilter",
-            new TransactionFilterDialogRequest
-            {
-                InitialCriteria = BuildCurrentFilterCriteria(),
-                OnSubmittedAsync = HandleFilterSubmittedAsync,
-            });
+        return _dialogs.OpenFilterAsync(_queryState.Filter, HandleFilterSubmittedAsync);
     }
 
     private void ClearSearch()
@@ -237,24 +195,17 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
 
     private Task HandleFilterSubmittedAsync(TransactionFilter criteria)
     {
-        _activePaymentMethodFilter = criteria.PaymentMethod;
-        _activeAmountMinFilter = criteria.AmountMin;
-        _activeAmountMaxFilter = criteria.AmountMax;
-        _activeDateFromFilter = criteria.DateFrom;
-        _activeDateToFilter = criteria.DateTo;
-
+        _queryState.Filter = criteria;
         ApplyFiltersAndSorting(resetToFirstPage: true);
         return Task.CompletedTask;
     }
 
     private Task HandleShowDetailAsync(TransactionModel transaction)
     {
-        return _dialogService.ShowDialogAsync(
-            "TransactionDetail",
-            new TransactionDetailDialogRequest { Model = transaction });
+        return _dialogs.OpenDetailAsync(transaction);
     }
 
-    private Task HandleTogglePaymentMethodAsync(TransactionModel transaction)
+    private static Task HandleTogglePaymentMethodAsync(TransactionModel transaction)
     {
         transaction.PaymentMethod = transaction.PaymentMethod == PaymentMethod.Cash
             ? PaymentMethod.Banking
@@ -264,135 +215,87 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
 
     private void ApplyFiltersAndSorting(bool resetToFirstPage)
     {
-        IReadOnlyList<TransactionModel> filtered = ApplyDomainFilter();
+        _queryState.SearchText = SearchText;
+        _transactions.Refresh(resetToFirstPage);
+    }
 
-        if (!string.IsNullOrWhiteSpace(SearchText))
+    private IReadOnlyList<TransactionModel> QueryTransactions(IEnumerable<TransactionModel> source)
+    {
+        IEnumerable<TransactionModel> transactions = ApplyTransactionFilter(source, _queryState.Filter);
+
+        if (!string.IsNullOrWhiteSpace(_queryState.SearchText))
         {
-            filtered = filtered
-                .Where(MatchesSearch)
-                .ToList();
+            transactions = transactions.Where(MatchesSearch);
         }
 
-        _filteredTransactions = filtered
-            .OrderByDescending(t => t.CreatedAt)
+        return transactions
+            .OrderByDescending(transaction => transaction.CreatedAt)
             .ToList();
-
-        _pagination.TotalItems = _filteredTransactions.Count;
-
-        if (resetToFirstPage)
-        {
-            if (_pagination.CurrentPage != 1)
-            {
-                _pagination.CurrentPage = 1;
-                return;
-            }
-
-            RefreshPagedTransactions();
-            return;
-        }
-
-        RefreshPagedTransactions();
     }
 
-    private IReadOnlyList<TransactionModel> ApplyDomainFilter()
+    private static IEnumerable<TransactionModel> ApplyTransactionFilter(
+        IEnumerable<TransactionModel> source,
+        TransactionFilter filter)
     {
-        TransactionFilter criteria = BuildCurrentFilterCriteria();
-        IEnumerable<TransactionModel> result = _allTransactions;
-
-        if (criteria.PaymentMethod.HasValue)
+        if (filter.PaymentMethod.HasValue)
         {
-            result = result.Where(t => t.PaymentMethod == criteria.PaymentMethod.Value);
+            source = source.Where(transaction => transaction.PaymentMethod == filter.PaymentMethod.Value);
         }
 
-        if (criteria.AmountMin.HasValue)
+        if (filter.AmountMin.HasValue)
         {
-            result = result.Where(t => t.TotalAmount >= criteria.AmountMin.Value);
+            source = source.Where(transaction => transaction.TotalAmount >= filter.AmountMin.Value);
         }
 
-        if (criteria.AmountMax.HasValue)
+        if (filter.AmountMax.HasValue)
         {
-            result = result.Where(t => t.TotalAmount <= criteria.AmountMax.Value);
+            source = source.Where(transaction => transaction.TotalAmount <= filter.AmountMax.Value);
         }
 
-        if (criteria.DateFrom.HasValue)
+        if (filter.DateFrom.HasValue)
         {
-            result = result.Where(t => t.CreatedAt >= criteria.DateFrom.Value);
+            source = source.Where(transaction => transaction.CreatedAt >= filter.DateFrom.Value);
         }
 
-        if (criteria.DateTo.HasValue)
+        if (filter.DateTo.HasValue)
         {
-            result = result.Where(t => t.CreatedAt <= criteria.DateTo.Value);
+            source = source.Where(transaction => transaction.CreatedAt <= filter.DateTo.Value);
         }
 
-        return result.ToList();
-    }
-
-    private TransactionFilter BuildCurrentFilterCriteria()
-    {
-        return new TransactionFilter
-        {
-            PaymentMethod = _activePaymentMethodFilter,
-            AmountMin = _activeAmountMinFilter,
-            AmountMax = _activeAmountMaxFilter,
-            DateFrom = _activeDateFromFilter,
-            DateTo = _activeDateToFilter,
-        };
+        return source;
     }
 
     private bool MatchesSearch(TransactionModel transaction)
     {
-        return LocalizationService.Culture.CompareInfo.IndexOf(transaction.Code, SearchText, CompareOptions.IgnoreCase) >= 0
-            || LocalizationService.Culture.CompareInfo.IndexOf(transaction.CustomerName, SearchText, CompareOptions.IgnoreCase) >= 0
-            || LocalizationService.Culture.CompareInfo.IndexOf(transaction.MemberId ?? "", SearchText, CompareOptions.IgnoreCase) >= 0;
-    }
-
-    private void RefreshPagedTransactions()
-    {
-        PagedTransactionCards.Clear();
-
-        int startIndex = Math.Max(0, (_pagination.CurrentPage - 1) * _pagination.PageSize);
-        foreach (TransactionModel transaction in _filteredTransactions.Skip(startIndex).Take(_pagination.PageSize))
-        {
-            PagedTransactionCards.Add(GetOrCreateCardViewModel(transaction));
-        }
-
-        OnPropertyChanged(nameof(HasTransactions));
-        UpdatePageMetadata();
+        return ManagementCollectionFlow.ContainsSearchText(LocalizationService.Culture, transaction.Code, _queryState.SearchText)
+            || ManagementCollectionFlow.ContainsSearchText(LocalizationService.Culture, transaction.CustomerName, _queryState.SearchText)
+            || ManagementCollectionFlow.ContainsSearchText(LocalizationService.Culture, transaction.MemberId, _queryState.SearchText);
     }
 
     private void UpdatePageMetadata()
     {
-        int totalItems = _filteredTransactions.Count;
-        int startItem = totalItems == 0 ? 0 : ((_pagination.CurrentPage - 1) * _pagination.PageSize) + 1;
-        int endItem = totalItems == 0 ? 0 : Math.Min(_pagination.CurrentPage * _pagination.PageSize, totalItems);
-        int totalPages = Math.Max(1, (int)Math.Ceiling(totalItems / (double)Math.Max(_pagination.PageSize, 1)));
-
+        PageInfoSnapshot pageInfo = _transactions.BuildPageInfo();
         PageInfoText = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("TransactionManagementPagePageInfoFormat"),
-            startItem,
-            endItem,
-            totalItems,
-            _pagination.CurrentPage,
-            totalPages);
+            pageInfo.StartItem,
+            pageInfo.EndItem,
+            pageInfo.TotalItems,
+            pageInfo.CurrentPage,
+            pageInfo.TotalPages);
     }
 
     private TransactionCardControlViewModel CreateCardViewModel(TransactionModel transaction)
     {
-        return _cardControlViewModelFactory.Create(
+        return _cardFactory.Create(
             transaction,
             HandleShowDetailAsync,
             HandleTogglePaymentMethodAsync);
     }
 
-    private TransactionCardControlViewModel GetOrCreateCardViewModel(TransactionModel transaction)
+    private void HandleTransactionsRefreshed()
     {
-        if (!_cardViewModelsByTransaction.TryGetValue(transaction, out TransactionCardControlViewModel? viewModel))
-        {
-            viewModel = CreateCardViewModel(transaction);
-            _cardViewModelsByTransaction[transaction] = viewModel;
-        }
-
-        return viewModel;
+        OnPropertyChanged(nameof(HasTransactions));
+        UpdatePageMetadata();
     }
 }

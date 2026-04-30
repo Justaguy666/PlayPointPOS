@@ -92,7 +92,12 @@ public class RegisterUserUseCase
         return new RegisterResult
         {
             Success = true,
-            Account = newAccount,
+            Account = new AccountSummary
+            {
+                Id = newAccount.Id,
+                Email = newAccount.Email,
+                ShopName = newAccount.ShopName,
+            },
             Message = "Registration successful"
         };
     }

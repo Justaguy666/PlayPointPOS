@@ -4,9 +4,9 @@ using Application.Navigation;
 using Application.Navigation.Requests;
 using Application.Services;
 using Application.UseCases.Auth;
+using Application.UseCases.Auth.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Domain.Entities;
 using WinUI.ViewModels;
 
 namespace WinUI.ViewModels.Dialogs;
@@ -73,9 +73,9 @@ public partial class LoginViewModel : LocalizedViewModelBase
     public partial bool HasError { get; set; }
 
     private event Action? CloseRequestedInternal;
-    private event Action<Account>? LoginSucceededInternal;
+    private event Action<AccountSummary>? LoginSucceededInternal;
 
-    public Account? LoggedInAccount { get; private set; }
+    public AccountSummary? LoggedInAccount { get; private set; }
 
     public bool IsNotLoggingIn => !IsLoggingIn;
     public bool CanLoginExecute => CanLogin();
@@ -86,7 +86,7 @@ public partial class LoginViewModel : LocalizedViewModelBase
         remove => CloseRequestedInternal -= value;
     }
 
-    public event Action<Account>? LoginSucceeded
+    public event Action<AccountSummary>? LoginSucceeded
     {
         add => LoginSucceededInternal += value;
         remove => LoginSucceededInternal -= value;
@@ -176,7 +176,7 @@ public partial class LoginViewModel : LocalizedViewModelBase
     {
         CloseRequestedInternal?.Invoke();
         await Task.Yield();
-        await _dialogService.ShowDialogAsync("ForgotPassword");
+        await _dialogService.ShowDialogAsync(DialogKey.ForgotPassword);
     }
 
     private bool CanOpenForgotPassword() => !IsLoggingIn;

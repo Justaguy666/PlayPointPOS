@@ -25,7 +25,9 @@
 
             <controls:LogoControl x:Name="Logo"
                                   Width="450"
-                                  Height="250" />
+                                  Height="250"
+                                  BrandNameText="{x:Bind ViewModel.BrandNameText, Mode=OneWay}"
+                                  BrandSubtitleText="{x:Bind ViewModel.BrandSubtitleText, Mode=OneWay}" />
 
             <TextBlock
                 x:Name="WelcomeText"

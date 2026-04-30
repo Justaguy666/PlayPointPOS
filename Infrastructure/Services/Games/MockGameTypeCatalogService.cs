@@ -1,6 +1,5 @@
+using Application.Games;
 using Application.Services.Games;
-using Domain.Entities;
-using System.Collections.Generic;
 
 namespace Infrastructure.Services.Games;
 

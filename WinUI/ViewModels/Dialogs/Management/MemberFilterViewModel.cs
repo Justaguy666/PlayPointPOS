@@ -8,7 +8,6 @@ using Application.Members;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Domain.Entities;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
 using WinUI.ViewModels;

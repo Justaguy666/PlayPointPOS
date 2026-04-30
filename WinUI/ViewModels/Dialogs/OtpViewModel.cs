@@ -215,7 +215,7 @@ public partial class OtpViewModel : LocalizedViewModelBase
     {
         CloseRequestedInternal?.Invoke();
         await Task.Yield();
-        await _dialogService.ShowDialogAsync("ForgotPassword");
+        await _dialogService.ShowDialogAsync(DialogKey.ForgotPassword);
     }
 
     [RelayCommand]

@@ -1,5 +1,3 @@
-using Domain.Entities;
-
 namespace Application.Members;
 
 public static class MemberRankProgressCalculator

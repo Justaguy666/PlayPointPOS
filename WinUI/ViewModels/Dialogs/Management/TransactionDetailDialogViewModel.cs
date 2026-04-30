@@ -1,8 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
 using Application.Services;
+using Application.Transactions;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Domain.Entities;
 using Domain.Enums;
 using WinUI.UIModels.Management;
 
@@ -68,7 +68,7 @@ public partial class TransactionDetailDialogViewModel : LocalizedViewModelBase
             model.Code);
 
         Lines.Clear();
-        foreach (TransactionLine line in model.Lines)
+        foreach (TransactionLineRecord line in model.Lines)
         {
             string description = line.Type switch
             {

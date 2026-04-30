@@ -23,6 +23,7 @@ namespace WinUI;
 public sealed partial class MainWindow : Window
 {
     private readonly ILocalizationService _localizationService;
+    private readonly IApplicationLifetimeService _applicationLifetimeService;
     public MainViewModel ViewModel { get; }
     public NavbarControlViewModel NavbarViewModel { get; }
     public NotificationControlViewModel NotificationViewModel { get; }
@@ -33,13 +34,15 @@ public sealed partial class MainWindow : Window
         MainViewModel viewModel,
         NavbarControlViewModel navbarViewModel,
         NotificationControlViewModel notificationViewModel,
-        ILocalizationService localizationService)
+        ILocalizationService localizationService,
+        IApplicationLifetimeService applicationLifetimeService)
     {
         InitializeComponent();
         ViewModel = viewModel;
         NavbarViewModel = navbarViewModel;
         NotificationViewModel = notificationViewModel;
         _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
+        _applicationLifetimeService = applicationLifetimeService ?? throw new ArgumentNullException(nameof(applicationLifetimeService));
 
         UpdateLocalizedText();
         _localizationService.LanguageChanged += HandleLanguageChanged;
@@ -63,7 +66,7 @@ public sealed partial class MainWindow : Window
         {
             _localizationService.LanguageChanged -= HandleLanguageChanged;
             SizeChanged -= HandleWindowSizeChanged;
-            Environment.Exit(0);
+            _applicationLifetimeService.Exit();
         };
     }
 

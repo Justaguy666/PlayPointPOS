@@ -1,6 +1,7 @@
 using Application.Services;
-using Domain.Entities;
+using Application.Transactions;
 using System;
+using System.Linq;
 
 namespace WinUI.Services.Factories;
 
@@ -22,7 +23,7 @@ public sealed class TransactionModelFactory
         _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
     }
 
-    public UIModels.Management.TransactionModel Create(Transaction transaction)
+    public UIModels.Management.TransactionModel Create(TransactionRecord transaction)
     {
         ArgumentNullException.ThrowIfNull(transaction);
 
@@ -38,7 +39,7 @@ public sealed class TransactionModelFactory
             DiscountAmount = transaction.DiscountAmount,
             TotalAmount = transaction.TotalAmount,
             CreatedAt = transaction.CreatedAt,
-            Lines = transaction.Lines,
+            Lines = transaction.Lines.ToList(),
         };
     }
 

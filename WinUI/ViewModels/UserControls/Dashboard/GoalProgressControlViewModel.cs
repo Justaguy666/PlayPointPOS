@@ -41,6 +41,9 @@ public partial class GoalProgressControlViewModel : LocalizedViewModelBase
     public partial string MemberTargetLabel { get; set; } = string.Empty;
 
     [ObservableProperty]
+    public partial string ValueSeparatorText { get; set; } = "/";
+
+    [ObservableProperty]
     public partial int RevenueTargetCurrentValue { get; set; } = 285;
 
     [ObservableProperty]
@@ -97,15 +100,24 @@ public partial class GoalProgressControlViewModel : LocalizedViewModelBase
         RevenueTargetLabel = LocalizationService.GetString("GoalProgressRevenueTargetLabel");
         CustomerTargetLabel = LocalizationService.GetString("GoalProgressCustomerTargetLabel");
         MemberTargetLabel = LocalizationService.GetString("GoalProgressMemberTargetLabel");
+        ValueSeparatorText = GetLocalizedText("ValueSeparatorText", "/");
 
         RefreshCompletionTexts();
+    }
+
+    private string GetLocalizedText(string key, string fallback)
+    {
+        string value = LocalizationService.GetString(key);
+        return string.IsNullOrWhiteSpace(value) || value.StartsWith("[", StringComparison.Ordinal)
+            ? fallback
+            : value;
     }
 
     [RelayCommand]
     private Task EditGoalsAsync()
     {
         return _dialogService.ShowDialogAsync(
-            "GoalKpi",
+            DialogKey.GoalKpi,
             new GoalKpiDialogRequest
             {
                 RevenueGoalValue = RevenueTargetGoalValue,

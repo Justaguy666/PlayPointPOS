@@ -59,9 +59,9 @@ public class AuthUseCaseTests
 
         Assert.True(result.Success);
         Assert.NotNull(result.Account);
-        Assert.NotEqual("secret-123", result.Account!.PasswordHash);
-        Assert.True(passwordHasher.VerifyPassword("secret-123", result.Account.PasswordHash));
-        Assert.Contains(await repository.GetAllAsync(), account => account.Email == "new@playpoint.test");
+        Account persistedAccount = Assert.Single(await repository.GetAllAsync(), account => account.Email == "new@playpoint.test");
+        Assert.NotEqual("secret-123", persistedAccount.PasswordHash);
+        Assert.True(passwordHasher.VerifyPassword("secret-123", persistedAccount.PasswordHash));
     }
 
     private sealed class InMemoryAccountRepository : IRepository<Account>

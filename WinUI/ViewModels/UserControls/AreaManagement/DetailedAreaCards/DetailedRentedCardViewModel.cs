@@ -293,7 +293,7 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
 
     private Task OpenPaymentDialogAsync()
     {
-        return _dialogService.ShowDialogAsync("Payment", Model);
+        return _dialogService.ShowDialogAsync(DialogKey.Payment, Model);
     }
 
     private Task AddGameAsync()

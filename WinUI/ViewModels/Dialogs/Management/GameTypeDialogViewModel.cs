@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Domain.Entities;
+using Application.Games;
 
 namespace WinUI.ViewModels.Dialogs.Management;
 

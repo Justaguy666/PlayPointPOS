@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Interfaces;
+using Application.Members;
 using Application.Services;
+using Application.Services.Members;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Domain.Entities;
 using Domain.Enums;
 using WinUI.Helpers;
 using WinUI.Services.Factories;
@@ -19,7 +19,7 @@ namespace WinUI.ViewModels.Dialogs.Management;
 
 public partial class ReservationViewModel : UpsertDialogViewModelBase
 {
-    private readonly IRepository<Member> _memberRepository;
+    private readonly IMemberLookupService _memberLookupService;
     private readonly ILocalizationPreferencesService _localizationPreferencesService;
     private readonly IDialogService _dialogService;
     private readonly AreaModelFactory _areaModelFactory;
@@ -33,17 +33,17 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
     public ReservationViewModel(
         ILocalizationService localizationService,
         ILocalizationPreferencesService localizationPreferencesService,
-        IRepository<Member> memberRepository,
+        IMemberLookupService memberLookupService,
         IDialogService dialogService,
         AreaModelFactory areaModelFactory,
         UpsertDialogMode mode)
         : base(localizationService, mode)
     {
-        _memberRepository = memberRepository ?? throw new ArgumentNullException(nameof(memberRepository));
+        _memberLookupService = memberLookupService ?? throw new ArgumentNullException(nameof(memberLookupService));
         _localizationPreferencesService = localizationPreferencesService ?? throw new ArgumentNullException(nameof(localizationPreferencesService));
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _areaModelFactory = areaModelFactory ?? throw new ArgumentNullException(nameof(areaModelFactory));
-        Members = new ObservableCollection<Member>();
+        Members = [];
         LoadMembers();
         ApplyModel(_targetModel);
     }
@@ -65,7 +65,7 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanSubmit))]
-    public partial Member? SelectedMember { get; set; }
+    public partial MemberLookupItem? SelectedMember { get; set; }
 
     [ObservableProperty]
     public partial string CustomerNameLabelText { get; set; } = string.Empty;
@@ -137,7 +137,7 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
 
     protected override string EditTitleLocKey => "ReservationDialogEditTitleText";
 
-    public ObservableCollection<Member> Members { get; }
+    public ObservableCollection<MemberLookupItem> Members { get; }
 
     public bool CanSubmit => TryGetParsedFormValues(out _, out _, out _, out _);
 
@@ -306,7 +306,7 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
 
     partial void OnIsMemberChanged(bool value) => NotifyFormStateChanged();
 
-    partial void OnSelectedMemberChanged(Member? value) => NotifyFormStateChanged();
+    partial void OnSelectedMemberChanged(MemberLookupItem? value) => NotifyFormStateChanged();
 
     public void ApplyReservationDateSelection(DateTimeOffset selectedDate)
     {
@@ -377,7 +377,7 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
 
     private void ApplyModel(AreaModel model)
     {
-        Member? selectedMember = FindMemberById(model.MemberId);
+        MemberLookupItem? selectedMember = FindMemberById(model.MemberId);
         IsMember = selectedMember is not null;
         SelectedMember = selectedMember;
         CustomerName = model.CustomerName;
@@ -405,19 +405,14 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
 
     private void LoadMembers()
     {
-        var members = _memberRepository.GetAllAsync().GetAwaiter().GetResult()
-            .Where(member => member.IsActive)
-            .OrderBy(member => member.FullName)
-            .ToList();
-
         Members.Clear();
-        foreach (Member member in members)
+        foreach (MemberLookupItem member in _memberLookupService.GetActiveMembers())
         {
             Members.Add(member);
         }
     }
 
-    private Member? FindMemberById(string? memberId)
+    private MemberLookupItem? FindMemberById(string? memberId)
     {
         if (string.IsNullOrWhiteSpace(memberId))
         {

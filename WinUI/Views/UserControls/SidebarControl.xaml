@@ -79,6 +79,8 @@
                                           Height="52"
                                           HorizontalAlignment="Left"
                                           VerticalAlignment="Center"
+                                          BrandNameText="{Binding BrandNameText}"
+                                          BrandSubtitleText="{Binding BrandSubtitleText}"
                                           Visibility="{Binding IsSidebarExpanded, Converter={StaticResource SidebarBoolToVisible}}" />
                 </Grid>
             </Border>

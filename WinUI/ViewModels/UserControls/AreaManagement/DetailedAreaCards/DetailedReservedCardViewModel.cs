@@ -175,7 +175,7 @@ public partial class DetailedReservedCardViewModel : LocalizedViewModelBase, IDe
     private Task ExecuteEditReservationAsync()
     {
         return _dialogService.ShowDialogAsync(
-            "Reservation",
+            DialogKey.Reservation,
             new ReservationDialogRequest
             {
                 Mode = UpsertDialogMode.Edit,

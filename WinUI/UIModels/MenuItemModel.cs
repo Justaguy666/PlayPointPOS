@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WinUI.UIModels.Enums;
 
@@ -10,7 +11,7 @@ public partial class MenuItemModel : ObservableObject
 
     public IconKind Icon { get; set; }
 
-    public string DialogKey { get; set; } = string.Empty;
+    public DialogKey? DialogKey { get; set; }
 
     public ICommand? OnMenuItemSelectedCommand { get; set; }
 

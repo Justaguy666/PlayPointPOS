@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Domain.Entities;
+using Application.Games;
 using Domain.Enums;
 using WinUI.Services.Factories;
 using WinUI.UIModels;

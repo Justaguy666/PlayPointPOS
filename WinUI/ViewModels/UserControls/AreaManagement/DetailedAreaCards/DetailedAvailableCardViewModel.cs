@@ -64,13 +64,13 @@ public partial class DetailedAvailableCardViewModel : LocalizedViewModelBase, ID
 
     private Task OpenStartSessionDialogAsync()
     {
-        return _dialogService.ShowDialogAsync("StartSession", Model);
+        return _dialogService.ShowDialogAsync(DialogKey.StartSession, Model);
     }
 
     private Task OpenReservationDialogAsync()
     {
         return _dialogService.ShowDialogAsync(
-            "Reservation",
+            DialogKey.Reservation,
             new ReservationDialogRequest
             {
                 Mode = UpsertDialogMode.Add,

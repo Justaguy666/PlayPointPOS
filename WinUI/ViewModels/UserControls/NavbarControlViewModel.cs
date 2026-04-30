@@ -39,6 +39,12 @@ public partial class NavbarControlViewModel : LocalizedViewModelBase
     public partial string ChangePasswordButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
+    public partial string BrandNameText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string BrandSubtitleText { get; set; } = string.Empty;
+
+    [ObservableProperty]
     public partial string ToggleSidebarToolTipText { get; set; } = string.Empty;
 
     public double SidebarWidth => IsSidebarExpanded ? ExpandedSidebarWidthValue : CollapsedSidebarWidthValue;
@@ -76,6 +82,9 @@ public partial class NavbarControlViewModel : LocalizedViewModelBase
 
     protected override void RefreshLocalizedText()
     {
+        BrandNameText = LocalizationService.GetString("BrandNameText");
+        BrandSubtitleText = LocalizationService.GetString("BrandSubtitleText");
+
         foreach (var navItem in NavigationItems)
         {
             navItem.Label = LocalizationService.GetString(navItem.LabelResourceKey);
@@ -160,6 +169,6 @@ public partial class NavbarControlViewModel : LocalizedViewModelBase
 
     private async Task OnChangePassword()
     {
-        await _dialogService.ShowDialogAsync("Otp");
+        await _dialogService.ShowDialogAsync(DialogKey.Otp);
     }
 }

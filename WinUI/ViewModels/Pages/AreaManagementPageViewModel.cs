@@ -13,9 +13,11 @@ using Microsoft.UI.Xaml.Media;
 using WinUI.Resources;
 using WinUI.Services.Layout;
 using WinUI.Services.Factories;
+using WinUI.Services.Management;
 using WinUI.UIModels;
 using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
+using WinUI.ViewModels.Common;
 using WinUI.ViewModels.AreaManagement.SummarizedAreaCards;
 using WinUI.ViewModels.Dialogs.Management;
 using Application.Services.Areas;
@@ -30,10 +32,10 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
     private const double AreaCardOuterHeight = 168;
     private const double AreaCardsColumnSpacing = 8;
 
-    private readonly IDialogService _dialogService;
-    private readonly INotificationService _notificationService;
+    private readonly AreaManagementDialogCoordinator _dialogs;
     private readonly IAreaFilterService _areaFilterService;
     private readonly IResponsiveLayoutService _responsiveLayoutService;
+    private readonly AreaDraftFactory _draftFactory;
     private readonly AreaManagementCardViewModelFactory _areaCardViewModelFactory;
     private readonly Brush _selectedFilterBackgroundBrush;
     private readonly Brush _selectedFilterForegroundBrush;
@@ -41,17 +43,10 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
     private readonly Brush _unselectedFilterForegroundBrush;
     private readonly List<AreaModel> _allAreaModels;
     private readonly List<ISummarizedAreaCardViewModel> _allSummarizedAreaCardViewModels;
+    private readonly ManagementQueryState<AreaFilterCriteria, PlayAreaType?> _queryState;
     private ISummarizedAreaCardViewModel? _selectedSummarizedAreaCardViewModel;
     private IDisposable? _detailedAreaCardDisposable;
     private bool _isDisposed;
-    private PlayAreaType? _activeAreaFilterType;
-    private PlayAreaStatus? _activeStatusFilter;
-    private TimeSpan? _activeStartTimeFromFilter;
-    private TimeSpan? _activeStartTimeToFilter;
-    private int? _activeCapacityMinFilter;
-    private int? _activeCapacityMaxFilter;
-    private decimal? _activeHourlyPriceMinFilter;
-    private decimal? _activeHourlyPriceMaxFilter;
 
     [ObservableProperty]
     public partial string ListHeaderText { get; set; } = string.Empty;
@@ -116,11 +111,11 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
     [ObservableProperty]
     public partial Brush RoomFilterForegroundBrush { get; set; } = new SolidColorBrush(AppColors.Black);
 
-    public bool IsAllAreasFilterSelected => _activeAreaFilterType is null;
+    public bool IsAllAreasFilterSelected => _queryState.Sort is null;
 
-    public bool IsTableFilterSelected => _activeAreaFilterType == PlayAreaType.Table;
+    public bool IsTableFilterSelected => _queryState.Sort == PlayAreaType.Table;
 
-    public bool IsRoomFilterSelected => _activeAreaFilterType == PlayAreaType.Room;
+    public bool IsRoomFilterSelected => _queryState.Sort == PlayAreaType.Room;
 
     public IconState NoAreasIconState { get; } = new()
     {
@@ -161,19 +156,19 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
 
     public AreaManagementPageViewModel(
         ILocalizationService localizationService,
-        IDialogService dialogService,
-        INotificationService notificationService,
+        AreaManagementDialogCoordinator dialogs,
         IAreaCatalogService areaCatalogService,
         IAreaFilterService areaFilterService,
         IResponsiveLayoutService responsiveLayoutService,
         AreaModelFactory areaModelFactory,
+        AreaDraftFactory draftFactory,
         AreaManagementCardViewModelFactory areaCardViewModelFactory)
         : base(localizationService)
     {
-        _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-        _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        _dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
         _areaFilterService = areaFilterService ?? throw new ArgumentNullException(nameof(areaFilterService));
         _responsiveLayoutService = responsiveLayoutService ?? throw new ArgumentNullException(nameof(responsiveLayoutService));
+        _draftFactory = draftFactory ?? throw new ArgumentNullException(nameof(draftFactory));
         _areaCardViewModelFactory = areaCardViewModelFactory ?? throw new ArgumentNullException(nameof(areaCardViewModelFactory));
         ArgumentNullException.ThrowIfNull(areaCatalogService);
         ArgumentNullException.ThrowIfNull(areaModelFactory);
@@ -182,6 +177,9 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         _selectedFilterForegroundBrush = AppResourceLookup.GetBrush("WhiteBrush", AppColors.White);
         _unselectedFilterBackgroundBrush = AppResourceLookup.GetBrush("TransparentBrush", AppColors.Transparent);
         _unselectedFilterForegroundBrush = AppResourceLookup.GetBrush("BlackBrush", AppColors.Black);
+        _queryState = new ManagementQueryState<AreaFilterCriteria, PlayAreaType?>(
+            new AreaFilterCriteria(),
+            null);
 
         AddAreaCommand = new AsyncRelayCommand(ExecuteAddAreaAsync);
         FilterAreaCommand = new AsyncRelayCommand(OpenAreaFilterDialogAsync);
@@ -275,42 +273,12 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
 
     private Task OpenAreaFilterDialogAsync()
     {
-        return _dialogService.ShowDialogAsync(
-            "AreaFilter",
-            new AreaFilterDialogRequest
-            {
-                InitialCriteria = new AreaFilterCriteria
-                {
-                    Status = _activeStatusFilter,
-                    StartTimeFrom = _activeStartTimeFromFilter,
-                    StartTimeTo = _activeStartTimeToFilter,
-                    CapacityMin = _activeCapacityMinFilter,
-                    CapacityMax = _activeCapacityMaxFilter,
-                    HourlyPriceMin = _activeHourlyPriceMinFilter,
-                    HourlyPriceMax = _activeHourlyPriceMaxFilter,
-                },
-                OnSubmittedAsync = HandleAreaFilterSubmittedAsync,
-            });
+        return _dialogs.OpenFilterAsync(_queryState.Filter, HandleAreaFilterSubmittedAsync);
     }
 
     private Task ExecuteAddAreaAsync()
     {
-        var area = new AreaModel
-        {
-            Status = PlayAreaStatus.Available,
-            PlayAreaType = PlayAreaType.Table,
-            MaxCapacity = 2,
-            HourlyPrice = 30000m,
-        };
-
-        return _dialogService.ShowDialogAsync(
-            "Area",
-            new AreaDialogRequest
-            {
-                Mode = UpsertDialogMode.Add,
-                Model = area,
-                OnSubmittedAsync = HandleAreaCreatedAsync,
-            });
+        return _dialogs.OpenAddAsync(_draftFactory.Create(), HandleAreaCreatedAsync);
     }
 
     private Task ExecuteEditAreaAsync(ISummarizedAreaCardViewModel? areaCardViewModel)
@@ -323,14 +291,7 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
             return Task.CompletedTask;
         }
 
-        return _dialogService.ShowDialogAsync(
-            "Area",
-            new AreaDialogRequest
-            {
-                Mode = UpsertDialogMode.Edit,
-                Model = selectedAreaCardViewModel.Model,
-                OnSubmittedAsync = HandleAreaUpdatedAsync,
-            });
+        return _dialogs.OpenEditAsync(selectedAreaCardViewModel.Model, HandleAreaUpdatedAsync);
     }
  
     private Task ExecuteDeleteAreaAsync(ISummarizedAreaCardViewModel? areaCardViewModel)
@@ -357,26 +318,13 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
 
         SelectSummarizedAreaCard(areaCardViewModel);
 
-        bool isConfirmed = await _dialogService.ShowConfirmationAsync(
-            titleKey: "ConfirmDeleteAreaTitle",
-            messageKey: "ConfirmDeleteAreaMessage",
-            confirmButtonTextKey: "ConfirmDeleteAreaButton",
-            cancelButtonTextKey: "CancelButtonText");
-
-        if (!isConfirmed)
+        if (!await _dialogs.ConfirmDeleteAsync())
         {
             return;
         }
 
         RemoveArea(areaCardViewModel);
-
-        await _notificationService.SendAsync(
-            LocalizationService.GetString("AreaDeletedSuccessTitle"),
-            string.Format(
-                LocalizationService.Culture,
-                LocalizationService.GetString("AreaDeletedSuccessMessage"),
-                areaCardViewModel.Model.AreaName),
-            NotificationType.Success);
+        await _dialogs.NotifyDeletedAsync(areaCardViewModel.Model);
     }
 
     private Task ApplyAllAreasFilterAsync()
@@ -428,18 +376,19 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
 
     private void ApplyAreaFilter(PlayAreaType? playAreaType)
     {
-        _activeAreaFilterType = playAreaType;
+        _queryState.Sort = playAreaType;
+        AreaFilterCriteria criteria = _queryState.Filter;
 
         PlayAreaFilter filter = new()
         {
             AreaType = playAreaType,
-            Status = _activeStatusFilter,
-            StartTimeFrom = _activeStartTimeFromFilter,
-            StartTimeTo = _activeStartTimeToFilter,
-            CapacityMin = _activeCapacityMinFilter,
-            CapacityMax = _activeCapacityMaxFilter,
-            HourlyPriceMin = _activeHourlyPriceMinFilter,
-            HourlyPriceMax = _activeHourlyPriceMaxFilter,
+            Status = criteria.Status,
+            StartTimeFrom = criteria.StartTimeFrom,
+            StartTimeTo = criteria.StartTimeTo,
+            CapacityMin = criteria.CapacityMin,
+            CapacityMax = criteria.CapacityMax,
+            HourlyPriceMin = criteria.HourlyPriceMin,
+            HourlyPriceMax = criteria.HourlyPriceMax,
         };
 
         var filteredAreas = _areaFilterService.Apply(_allAreaModels, filter, LocalizationService.TimeZone);
@@ -478,9 +427,9 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
 
     private void RefreshAreaFilterButtonState()
     {
-        bool isAllAreasSelected = _activeAreaFilterType is null;
-        bool isTableSelected = _activeAreaFilterType == PlayAreaType.Table;
-        bool isRoomSelected = _activeAreaFilterType == PlayAreaType.Room;
+        bool isAllAreasSelected = _queryState.Sort is null;
+        bool isTableSelected = _queryState.Sort == PlayAreaType.Table;
+        bool isRoomSelected = _queryState.Sort == PlayAreaType.Room;
 
         AllAreasFilterBackgroundBrush = isAllAreasSelected ? _selectedFilterBackgroundBrush : _unselectedFilterBackgroundBrush;
         AllAreasFilterForegroundBrush = isAllAreasSelected ? _selectedFilterForegroundBrush : _unselectedFilterForegroundBrush;
@@ -542,7 +491,7 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
             SelectSummarizedAreaCard(null);
         }
 
-        ApplyAreaFilter(_activeAreaFilterType);
+        ApplyAreaFilter(_queryState.Sort);
 
         if (areaCardViewModel is IDisposable disposable)
         {
@@ -558,7 +507,7 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         var summarizedAreaCardViewModel = CreateSummarizedAreaCardViewModel(area);
         _allSummarizedAreaCardViewModels.Add(summarizedAreaCardViewModel);
 
-        ApplyAreaFilter(_activeAreaFilterType);
+        ApplyAreaFilter(_queryState.Sort);
 
         if (SummarizedAreaCardViewModels.Contains(summarizedAreaCardViewModel))
         {
@@ -610,7 +559,7 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
             OnPropertyChanged(nameof(SelectedSummarizedAreaCardViewModel));
         }
 
-        ApplyAreaFilter(_activeAreaFilterType);
+        ApplyAreaFilter(_queryState.Sort);
 
         if (wasSelected)
         {
@@ -626,7 +575,7 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
 
     private Task HandleAreaUpdatedAsync(AreaModel area)
     {
-        ApplyAreaFilter(_activeAreaFilterType);
+        ApplyAreaFilter(_queryState.Sort);
 
         if (_selectedSummarizedAreaCardViewModel?.Model == area)
         {
@@ -640,14 +589,8 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
 
     private Task HandleAreaFilterSubmittedAsync(AreaFilterCriteria criteria)
     {
-        _activeStatusFilter = criteria.Status;
-        _activeStartTimeFromFilter = criteria.StartTimeFrom;
-        _activeStartTimeToFilter = criteria.StartTimeTo;
-        _activeCapacityMinFilter = criteria.CapacityMin;
-        _activeCapacityMaxFilter = criteria.CapacityMax;
-        _activeHourlyPriceMinFilter = criteria.HourlyPriceMin;
-        _activeHourlyPriceMaxFilter = criteria.HourlyPriceMax;
-        ApplyAreaFilter(_activeAreaFilterType);
+        _queryState.Filter = criteria;
+        ApplyAreaFilter(_queryState.Sort);
         return Task.CompletedTask;
     }
 

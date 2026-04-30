@@ -1,6 +1,5 @@
 using Application.Members;
 using Application.Services.Members;
-using Domain.Entities;
 
 namespace Infrastructure.Services.Members;
 

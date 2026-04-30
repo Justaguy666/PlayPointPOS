@@ -1,7 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Domain.Entities;
+using Application.Games;
 
 namespace WinUI.ViewModels.Dialogs.Management;
 

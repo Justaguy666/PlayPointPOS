@@ -96,7 +96,7 @@ public partial class ForgotPasswordViewModel : LocalizedViewModelBase
 
             CloseRequestedInternal?.Invoke();
             await Task.Yield();
-            await _dialogService.ShowDialogAsync("Otp");
+            await _dialogService.ShowDialogAsync(DialogKey.Otp);
         }
         finally
         {
@@ -109,7 +109,7 @@ public partial class ForgotPasswordViewModel : LocalizedViewModelBase
     {
         CloseRequestedInternal?.Invoke();
         await Task.Yield();
-        await _dialogService.ShowDialogAsync("Login");
+        await _dialogService.ShowDialogAsync(DialogKey.Login);
     }
 
     [RelayCommand]

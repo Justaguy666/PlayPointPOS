@@ -2,9 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Application.Services;
 using Application.UseCases.Auth;
+using Application.UseCases.Auth.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Domain.Entities;
 using WinUI.Helpers.Validations;
 using WinUI.ViewModels;
 
@@ -80,9 +80,9 @@ public partial class RegisterViewModel : LocalizedViewModelBase
     public partial bool HasError { get; set; }
 
     private event Action? CloseRequestedInternal;
-    private event Action<Account>? RegisterSucceededInternal;
+    private event Action<AccountSummary>? RegisterSucceededInternal;
 
-    public Account? RegisteredAccount { get; private set; }
+    public AccountSummary? RegisteredAccount { get; private set; }
 
     public bool IsNotRegistering => !IsRegistering;
     public bool IsNotResetting => !IsResetting;
@@ -95,7 +95,7 @@ public partial class RegisterViewModel : LocalizedViewModelBase
         remove => CloseRequestedInternal -= value;
     }
 
-    public event Action<Account>? RegisterSucceeded
+    public event Action<AccountSummary>? RegisterSucceeded
     {
         add => RegisterSucceededInternal += value;
         remove => RegisterSucceededInternal -= value;
@@ -157,7 +157,7 @@ public partial class RegisterViewModel : LocalizedViewModelBase
             CloseRequestedInternal?.Invoke();
             await Task.Yield();
             await _dialogService.ShowDialogAsync(
-                "Otp",
+                DialogKey.Otp,
                 new OtpDialogRequest
                 {
                     Mode = OtpDialogMode.VerifyRegistration,

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Games;
-using Domain.Entities;
 
 namespace WinUI.ViewModels.Dialogs.Management;
 

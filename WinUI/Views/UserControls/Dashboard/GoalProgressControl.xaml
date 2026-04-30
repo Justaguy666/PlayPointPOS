@@ -87,7 +87,7 @@
                                HorizontalAlignment="Right"
                                Foreground="{StaticResource BlackBrush}">
                         <Run Text="{Binding RevenueTargetCurrentValue}" />
-                        <Run x:Name="RevenueSeparatorRun" />
+                        <Run Text="{Binding ValueSeparatorText}" />
                         <Run Text="{Binding RevenueTargetGoalValue}" />
                     </TextBlock>
                 </Grid>
@@ -132,7 +132,7 @@
                                HorizontalAlignment="Right"
                                Foreground="{StaticResource BlackBrush}">
                         <Run Text="{Binding CustomerTargetCurrentValue}" />
-                        <Run x:Name="CustomerSeparatorRun" />
+                        <Run Text="{Binding ValueSeparatorText}" />
                         <Run Text="{Binding CustomerTargetGoalValue}" />
                     </TextBlock>
                 </Grid>
@@ -177,7 +177,7 @@
                                HorizontalAlignment="Right"
                                Foreground="{StaticResource BlackBrush}">
                         <Run Text="{Binding MemberTargetCurrentValue}" />
-                        <Run x:Name="MemberSeparatorRun" />
+                        <Run Text="{Binding ValueSeparatorText}" />
                         <Run Text="{Binding MemberTargetGoalValue}" />
                     </TextBlock>
                 </Grid>

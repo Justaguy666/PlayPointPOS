@@ -1,5 +1,3 @@
-using Domain.Entities;
-
 namespace Application.UseCases.Auth.Contracts;
 
 /// <summary>
@@ -16,7 +14,7 @@ public class LoginResult
     /// <summary>
     /// The authenticated account (null if login failed).
     /// </summary>
-    public Account? Account { get; set; }
+    public AccountSummary? Account { get; set; }
 
     /// <summary>
     /// User-friendly message (e.g., "Login successful" or "Invalid credentials").

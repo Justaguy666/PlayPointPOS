@@ -8,7 +8,6 @@ using Application.Games;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Domain.Entities;
 using Domain.Enums;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;

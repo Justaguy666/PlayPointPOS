@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Games;
@@ -10,17 +8,17 @@ using Application.Services;
 using Application.Services.Games;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Domain.Entities;
 using Domain.Enums;
 using Microsoft.UI.Xaml.Media;
 using Windows.UI;
 using WinUI.Resources;
 using WinUI.Services.Factories;
 using WinUI.Services.Layout;
+using WinUI.Services.Management;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
 using WinUI.UIModels.Management;
-using WinUI.ViewModels.Dialogs.Management;
+using WinUI.ViewModels.Common;
 using WinUI.ViewModels.UserControls;
 using WinUI.ViewModels.UserControls.Games;
 
@@ -44,27 +42,18 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
     private const int GridRowsPerPage = 3;
     private const int CompactGridPageSize = 10;
 
-    private readonly IDialogService _dialogService;
-    private readonly INotificationService _notificationService;
+    private readonly GameManagementDialogCoordinator _dialogs;
     private readonly IGameFilterService _gameFilterService;
     private readonly IResponsiveLayoutService _responsiveLayoutService;
-    private readonly GameModelFactory _gameModelFactory;
-    private readonly GameCardControlViewModelFactory _gameCardControlViewModelFactory;
+    private readonly GameDraftFactory _draftFactory;
+    private readonly GameCardControlViewModelFactory _cardFactory;
+    private readonly List<GameType> _allGameTypes;
+    private readonly ManagementQueryState<BoardGameFilter, ManagementSortState> _queryState;
+    private readonly ManagementCollectionController<GameModel, object> _games;
     private readonly Brush _selectedBackgroundBrush;
     private readonly Brush _selectedForegroundBrush;
     private readonly Brush _unselectedBackgroundBrush;
     private readonly Brush _unselectedForegroundBrush;
-    private readonly List<GameModel> _allGames;
-    private readonly List<GameType> _allGameTypes;
-    private readonly Dictionary<GameModel, GridGameCardControlViewModel> _gridCardViewModelsByGame;
-    private readonly Dictionary<GameModel, ListGameCardControlViewModel> _listCardViewModelsByGame;
-    private readonly PaginationModel _pagination;
-    private IReadOnlyList<GameModel> _filteredGames = [];
-    private GameType? _activeGameTypeFilter;
-    private GameDifficulty? _activeDifficultyFilter;
-    private int? _activePlayerCountFilter;
-    private decimal? _activeHourlyPriceMinFilter;
-    private decimal? _activeHourlyPriceMaxFilter;
     private bool _isUpdatingSelectionOptions;
     private bool _isInitialized;
     private bool _isDisposed;
@@ -72,26 +61,14 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
     [ObservableProperty]
     public partial bool IsGridView { get; set; } = true;
 
-    private int _gridGamesMaximumRowsOrColumns = 5;
-    public int GridGamesMaximumRowsOrColumns
-    {
-        get => _gridGamesMaximumRowsOrColumns;
-        set => SetProperty(ref _gridGamesMaximumRowsOrColumns, value);
-    }
+    [ObservableProperty]
+    public partial int GridGamesMaximumRowsOrColumns { get; set; } = PreferredGridGamesPerRow;
 
-    private double _gridGamesMinItemWidth = 300;
-    public double GridGamesMinItemWidth
-    {
-        get => _gridGamesMinItemWidth;
-        set => SetProperty(ref _gridGamesMinItemWidth, value);
-    }
+    [ObservableProperty]
+    public partial double GridGamesMinItemWidth { get; set; } = GameCardOuterWidth;
 
-    private double _gridGamesMinItemHeight = 460;
-    public double GridGamesMinItemHeight
-    {
-        get => _gridGamesMinItemHeight;
-        set => SetProperty(ref _gridGamesMinItemHeight, value);
-    }
+    [ObservableProperty]
+    public partial double GridGamesMinItemHeight { get; set; } = GameCardOuterHeight;
 
     [ObservableProperty]
     public partial string SearchText { get; set; } = string.Empty;
@@ -113,7 +90,6 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     [ObservableProperty]
     public partial string FilterButtonText { get; set; } = string.Empty;
-
 
     [ObservableProperty]
     public partial string PageInfoText { get; set; } = string.Empty;
@@ -151,40 +127,24 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
     [ObservableProperty]
     public partial Brush ListButtonForegroundBrush { get; set; } = new SolidColorBrush(AppColors.Black);
 
+    [ObservableProperty]
+    public partial Color GridButtonBackgroundHoverColor { get; set; } = AppColors.OrangeFocus;
+
+    [ObservableProperty]
+    public partial Color GridButtonForegroundHoverColor { get; set; } = AppColors.White;
+
+    [ObservableProperty]
+    public partial Color ListButtonBackgroundHoverColor { get; set; } = AppColors.VeryLightGray;
+
+    [ObservableProperty]
+    public partial Color ListButtonForegroundHoverColor { get; set; } = AppColors.Black;
+
     public IconState NoGamesIconState { get; } = new()
     {
         Kind = IconKind.Dice,
         Size = 52,
         AlwaysFilled = true,
     };
-
-    private Color _gridButtonBackgroundHoverColor = AppColors.OrangeFocus;
-    public Color GridButtonBackgroundHoverColor
-    {
-        get => _gridButtonBackgroundHoverColor;
-        set => SetProperty(ref _gridButtonBackgroundHoverColor, value);
-    }
-
-    private Color _gridButtonForegroundHoverColor = AppColors.White;
-    public Color GridButtonForegroundHoverColor
-    {
-        get => _gridButtonForegroundHoverColor;
-        set => SetProperty(ref _gridButtonForegroundHoverColor, value);
-    }
-
-    private Color _listButtonBackgroundHoverColor = AppColors.VeryLightGray;
-    public Color ListButtonBackgroundHoverColor
-    {
-        get => _listButtonBackgroundHoverColor;
-        set => SetProperty(ref _listButtonBackgroundHoverColor, value);
-    }
-
-    private Color _listButtonForegroundHoverColor = AppColors.Black;
-    public Color ListButtonForegroundHoverColor
-    {
-        get => _listButtonForegroundHoverColor;
-        set => SetProperty(ref _listButtonForegroundHoverColor, value);
-    }
 
     public ObservableCollection<GridGameCardControlViewModel> PagedGridGameCards { get; } = [];
 
@@ -196,11 +156,11 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     public PaginationControlViewModel PaginationViewModel { get; }
 
-    public PaginationModel Pagination => _pagination;
+    public PaginationModel Pagination { get; }
 
     public IconKind SearchIconKind => IconKind.Search;
 
-    public bool HasGames => _filteredGames.Count > 0;
+    public bool HasGames => _games.HasItems;
 
     public IRelayCommand ToggleGridViewCommand { get; }
 
@@ -216,66 +176,59 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     public GameManagementPageViewModel(
         ILocalizationService localizationService,
-        IDialogService dialogService,
-        INotificationService notificationService,
+        GameManagementDialogCoordinator dialogs,
         IGameCatalogService gameCatalogService,
         IGameTypeCatalogService gameTypeCatalogService,
         IGameFilterService gameFilterService,
         IResponsiveLayoutService responsiveLayoutService,
         GameModelFactory gameModelFactory,
-        GameCardControlViewModelFactory gameCardControlViewModelFactory,
+        GameDraftFactory draftFactory,
+        GameCardControlViewModelFactory cardFactory,
         PaginationControlViewModel paginationViewModel)
         : base(localizationService)
     {
-        _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-        _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        _dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
         _gameFilterService = gameFilterService ?? throw new ArgumentNullException(nameof(gameFilterService));
         _responsiveLayoutService = responsiveLayoutService ?? throw new ArgumentNullException(nameof(responsiveLayoutService));
-        _gameModelFactory = gameModelFactory ?? throw new ArgumentNullException(nameof(gameModelFactory));
-        _gameCardControlViewModelFactory = gameCardControlViewModelFactory ?? throw new ArgumentNullException(nameof(gameCardControlViewModelFactory));
+        _draftFactory = draftFactory ?? throw new ArgumentNullException(nameof(draftFactory));
+        _cardFactory = cardFactory ?? throw new ArgumentNullException(nameof(cardFactory));
         PaginationViewModel = paginationViewModel ?? throw new ArgumentNullException(nameof(paginationViewModel));
         ArgumentNullException.ThrowIfNull(gameCatalogService);
         ArgumentNullException.ThrowIfNull(gameTypeCatalogService);
+        ArgumentNullException.ThrowIfNull(gameModelFactory);
 
         _selectedBackgroundBrush = AppResourceLookup.GetBrush("OrangeFocusBrush", AppColors.OrangeFocus);
         _selectedForegroundBrush = AppResourceLookup.GetBrush("WhiteBrush", AppColors.White);
         _unselectedBackgroundBrush = AppResourceLookup.GetBrush("WhiteBrush", AppColors.White);
         _unselectedForegroundBrush = AppResourceLookup.GetBrush("BlackBrush", AppColors.Black);
 
-        _pagination = new PaginationModel
-        {
-            CurrentPage = 1,
-            PageSize = GridPageSize,
-            MaxVisiblePageButtons = 4,
-        };
+        Pagination = new PaginationModel { CurrentPage = 1, PageSize = GridPageSize, MaxVisiblePageButtons = 4 };
+        PaginationViewModel.Pagination = Pagination;
+        _queryState = new ManagementQueryState<BoardGameFilter, ManagementSortState>(
+            new BoardGameFilter(),
+            new ManagementSortState(SortFieldName, SortAscending));
 
-        PaginationViewModel.Pagination = _pagination;
-        _pagination.PropertyChanged += HandlePaginationPropertyChanged;
+        _allGameTypes = gameTypeCatalogService.GetGameTypes().ToList();
+        List<GameModel> games = gameCatalogService.GetGames()
+            .Select(gameModelFactory.Create)
+            .ToList();
+        _games = new ManagementCollectionController<GameModel, object>(
+            games,
+            Pagination,
+            ClearPagedGameCards,
+            AddPagedGameCard,
+            QueryGames,
+            CreateActiveCard,
+            () => IsGridView ? "grid" : "list");
+        _games.Refreshed += HandleGamesRefreshed;
 
-        GridIconState = new IconState { Kind = IconKind.Grid, Size = 24, AlwaysFilled = true };
-        ListIconState = new IconState { Kind = IconKind.List, Size = 24, AlwaysFilled = false };
-
-        GridButtonBackgroundBrush = _selectedBackgroundBrush;
-        GridButtonForegroundBrush = _selectedForegroundBrush;
-        ListButtonBackgroundBrush = _unselectedBackgroundBrush;
-        ListButtonForegroundBrush = _unselectedForegroundBrush;
-
+        ApplyViewToggleState();
         ToggleGridViewCommand = new RelayCommand(ExecuteToggleGridView);
         ToggleListViewCommand = new RelayCommand(ExecuteToggleListView);
         FilterCommand = new AsyncRelayCommand(OpenFilterDialogAsync);
         AddGameCommand = new AsyncRelayCommand(ExecuteAddGameAsync);
         ManageGameTypesCommand = new AsyncRelayCommand(ExecuteManageGameTypesAsync);
         ClearSearchCommand = new RelayCommand(ClearSearch);
-
-        _allGameTypes = gameTypeCatalogService
-            .GetGameTypes()
-            .ToList();
-        _allGames = gameCatalogService
-            .GetGames()
-            .Select(_gameModelFactory.Create)
-            .ToList();
-        _gridCardViewModelsByGame = [];
-        _listCardViewModelsByGame = [];
 
         RefreshLocalizedText();
         _isInitialized = true;
@@ -291,7 +244,6 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
         SortFieldPlaceholderText = LocalizationService.GetString("GameManagementPageSortFieldComboBox.PlaceholderText");
         SortDirectionPlaceholderText = LocalizationService.GetString("GameManagementPageSortDirectionComboBox.PlaceholderText");
         NoGamesText = LocalizationService.GetString("GameManagementPageNoGamesText");
-
         RefreshSortOptions();
         UpdatePageMetadata();
     }
@@ -303,17 +255,8 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
             return;
         }
 
-        _pagination.PropertyChanged -= HandlePaginationPropertyChanged;
-        foreach (GridGameCardControlViewModel viewModel in _gridCardViewModelsByGame.Values)
-        {
-            viewModel.Dispose();
-        }
-
-        foreach (ListGameCardControlViewModel viewModel in _listCardViewModelsByGame.Values)
-        {
-            viewModel.Dispose();
-        }
-
+        _games.Refreshed -= HandleGamesRefreshed;
+        _games.Dispose();
         PaginationViewModel.Dispose();
         _isDisposed = true;
         base.Dispose();
@@ -321,33 +264,16 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     partial void OnSearchTextChanged(string value)
     {
-        if (!_isInitialized)
+        if (_isInitialized)
         {
-            return;
+            _queryState.SearchText = value;
+            ApplyFiltersAndSorting(resetToFirstPage: true);
         }
-
-        ApplyFiltersAndSorting(resetToFirstPage: true);
     }
 
-    partial void OnSelectedSortFieldChanged(string? value)
-    {
-        if (!_isInitialized || _isUpdatingSelectionOptions)
-        {
-            return;
-        }
+    partial void OnSelectedSortFieldChanged(string? value) => HandleSortChanged();
 
-        ApplyFiltersAndSorting(resetToFirstPage: true);
-    }
-
-    partial void OnSelectedSortDirectionChanged(string? value)
-    {
-        if (!_isInitialized || _isUpdatingSelectionOptions)
-        {
-            return;
-        }
-
-        ApplyFiltersAndSorting(resetToFirstPage: true);
-    }
+    partial void OnSelectedSortDirectionChanged(string? value) => HandleSortChanged();
 
     public void UpdateGridGamesLayout(double availableWidth)
     {
@@ -371,34 +297,19 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
         if (IsGridView)
         {
-            SetPageSize(layout.PageSize);
+            _games.SetPageSize(layout.PageSize);
         }
     }
 
-    private void SetPageSize(int newPageSize)
+    private void HandleSortChanged()
     {
-        if (_pagination.PageSize == newPageSize)
+        if (!_isInitialized || _isUpdatingSelectionOptions)
         {
             return;
         }
 
-        _pagination.PageSize = newPageSize;
-
-        int totalPages = Math.Max(1, (int)Math.Ceiling(_filteredGames.Count / (double)Math.Max(_pagination.PageSize, 1)));
-        if (_pagination.CurrentPage > totalPages)
-        {
-            _pagination.CurrentPage = totalPages;
-        }
-    }
-
-    private void HandlePaginationPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName is nameof(PaginationModel.CurrentPage) or
-            nameof(PaginationModel.PageSize) or
-            nameof(PaginationModel.TotalItems))
-        {
-            RefreshPagedGames();
-        }
+        SyncSortState();
+        ApplyFiltersAndSorting(resetToFirstPage: true);
     }
 
     private void ExecuteToggleGridView()
@@ -409,23 +320,11 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
         }
 
         IsGridView = true;
-        GridIconState = new IconState { Kind = IconKind.Grid, Size = 24, AlwaysFilled = true };
-        ListIconState = new IconState { Kind = IconKind.List, Size = 24, AlwaysFilled = false };
-
-        GridButtonBackgroundBrush = _selectedBackgroundBrush;
-        GridButtonForegroundBrush = _selectedForegroundBrush;
-        ListButtonBackgroundBrush = _unselectedBackgroundBrush;
-        ListButtonForegroundBrush = _unselectedForegroundBrush;
-
-        GridButtonBackgroundHoverColor = AppColors.OrangeFocus;
-        GridButtonForegroundHoverColor = AppColors.White;
-        ListButtonBackgroundHoverColor = AppColors.VeryLightGray;
-        ListButtonForegroundHoverColor = AppColors.Black;
-
-        SetPageSize(GridGamesMaximumRowsOrColumns >= 3
+        ApplyViewToggleState();
+        _games.SetPageSize(GridGamesMaximumRowsOrColumns >= 3
             ? GridGamesMaximumRowsOrColumns * GridRowsPerPage
             : CompactGridPageSize);
-        RefreshPagedGames();
+        _games.RefreshPage();
     }
 
     private void ExecuteToggleListView()
@@ -436,72 +335,28 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
         }
 
         IsGridView = false;
-        GridIconState = new IconState { Kind = IconKind.Grid, Size = 24, AlwaysFilled = false };
-        ListIconState = new IconState { Kind = IconKind.List, Size = 24, AlwaysFilled = true };
-
-        GridButtonBackgroundBrush = _unselectedBackgroundBrush;
-        GridButtonForegroundBrush = _unselectedForegroundBrush;
-        ListButtonBackgroundBrush = _selectedBackgroundBrush;
-        ListButtonForegroundBrush = _selectedForegroundBrush;
-
-        GridButtonBackgroundHoverColor = AppColors.VeryLightGray;
-        GridButtonForegroundHoverColor = AppColors.Black;
-        ListButtonBackgroundHoverColor = AppColors.OrangeFocus;
-        ListButtonForegroundHoverColor = AppColors.White;
-
-        SetPageSize(ListPageSize);
-        RefreshPagedGames();
+        ApplyViewToggleState();
+        _games.SetPageSize(ListPageSize);
+        _games.RefreshPage();
     }
 
-    private async Task OpenFilterDialogAsync()
+    private Task OpenFilterDialogAsync()
     {
-        await _dialogService.ShowDialogAsync(
-            "GameFilter",
-            new GameFilterDialogRequest
-            {
-                AvailableGameTypes = _allGameTypes,
-                InitialCriteria = BuildCurrentFilterCriteria(),
-                OnSubmittedAsync = HandleFilterSubmittedAsync,
-            });
+        return _dialogs.OpenFilterAsync(_allGameTypes, _queryState.Filter, HandleFilterSubmittedAsync);
     }
 
-    private async Task ExecuteAddGameAsync()
+    private Task ExecuteAddGameAsync()
     {
-        await _dialogService.ShowDialogAsync(
-            "Game",
-            new GameDialogRequest
-            {
-                Mode = UpsertDialogMode.Add,
-                Model = CreateNewGameDraft(),
-                AvailableGameTypes = _allGameTypes,
-                OnSubmittedAsync = HandleGameCreatedAsync,
-            });
+        return _dialogs.OpenAddAsync(_draftFactory.Create(_allGameTypes), _allGameTypes, HandleGameCreatedAsync);
     }
 
-    private async Task ExecuteManageGameTypesAsync()
+    private Task ExecuteManageGameTypesAsync()
     {
-        var gameTypesCollection = new ObservableCollection<GameType>(_allGameTypes);
-
-        await _dialogService.ShowDialogAsync(
-            "GameType",
-            new GameTypeDialogRequest
-            {
-                GameTypes = gameTypesCollection,
-                OnGameTypeAddedAsync = gameType =>
-                {
-                    if (!_allGameTypes.Contains(gameType))
-                    {
-                        _allGameTypes.Add(gameType);
-                    }
-                    return Task.CompletedTask;
-                },
-                OnGameTypeDeletedAsync = gameType =>
-                {
-                    _allGameTypes.Remove(gameType);
-                    return Task.CompletedTask;
-                },
-                OnGameTypeUpdatedAsync = gameType => Task.CompletedTask
-            });
+        return _dialogs.OpenGameTypesAsync(
+            new ObservableCollection<GameType>(_allGameTypes),
+            HandleGameTypeAddedAsync,
+            HandleGameTypeDeletedAsync,
+            HandleGameTypeUpdatedAsync);
     }
 
     private void ClearSearch()
@@ -511,55 +366,25 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     private Task HandleEditGameAsync(GameModel game)
     {
-        if (game is null)
-        {
-            return Task.CompletedTask;
-        }
-
-        return _dialogService.ShowDialogAsync(
-            "Game",
-            new GameDialogRequest
-            {
-                Mode = UpsertDialogMode.Edit,
-                Model = game,
-                AvailableGameTypes = _allGameTypes,
-                OnSubmittedAsync = HandleGameUpdatedAsync,
-            });
+        return game is null
+            ? Task.CompletedTask
+            : _dialogs.OpenEditAsync(game, _allGameTypes, HandleGameUpdatedAsync);
     }
 
     private async Task HandleDeleteGameAsync(GameModel game)
     {
-        if (game is null)
+        if (game is null || !await _dialogs.ConfirmDeleteAsync())
         {
             return;
         }
 
-        bool isConfirmed = await _dialogService.ShowConfirmationAsync(
-            titleKey: "ConfirmDeleteGameTitle",
-            messageKey: "ConfirmDeleteGameMessage",
-            confirmButtonTextKey: "ConfirmDeleteGameButton",
-            cancelButtonTextKey: "CancelButtonText");
-
-        if (!isConfirmed)
+        if (!_games.Remove(game))
         {
             return;
         }
 
-        if (!_allGames.Remove(game))
-        {
-            return;
-        }
-
-        RemoveCardViewModelsForGame(game);
         ApplyFiltersAndSorting(resetToFirstPage: false);
-
-        await _notificationService.SendAsync(
-            LocalizationService.GetString("GameDeletedSuccessTitle"),
-            string.Format(
-                LocalizationService.Culture,
-                LocalizationService.GetString("GameDeletedSuccessMessage"),
-                game.Name),
-            NotificationType.Success);
+        await _dialogs.NotifyDeletedAsync(game);
     }
 
     private void HandleIncreaseStock(GameModel game)
@@ -569,110 +394,93 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     private void HandleDecreaseStock(GameModel game)
     {
-        if (game.StockQuantity <= 0)
+        if (game.StockQuantity > 0)
         {
-            return;
+            game.StockQuantity -= 1;
         }
-
-        game.StockQuantity -= 1;
     }
 
     private Task HandleFilterSubmittedAsync(BoardGameFilter criteria)
     {
-        _activeGameTypeFilter = criteria.GameType;
-        _activeDifficultyFilter = criteria.GameDifficulty;
-        _activePlayerCountFilter = criteria.PlayerCount;
-        _activeHourlyPriceMinFilter = criteria.HourlyPriceMin;
-        _activeHourlyPriceMaxFilter = criteria.HourlyPriceMax;
-
+        _queryState.Filter = criteria;
         ApplyFiltersAndSorting(resetToFirstPage: true);
         return Task.CompletedTask;
     }
 
     private async Task HandleGameCreatedAsync(GameModel game)
     {
-        if (!_allGames.Contains(game))
+        if (!_games.Contains(game))
         {
-            _allGames.Insert(0, game);
-            AddCardViewModelsForGame(game);
+            _games.Insert(0, game);
         }
 
         ApplyFiltersAndSorting(resetToFirstPage: true);
-
-        await _notificationService.SendAsync(
-            LocalizationService.GetString("GameCreatedSuccessTitle"),
-            string.Format(
-                LocalizationService.Culture,
-                LocalizationService.GetString("GameCreatedSuccessMessage"),
-                game.Name),
-            NotificationType.Success);
+        await _dialogs.NotifyCreatedAsync(game);
     }
 
     private async Task HandleGameUpdatedAsync(GameModel game)
     {
         ApplyFiltersAndSorting(resetToFirstPage: false);
+        await _dialogs.NotifyUpdatedAsync(game);
+    }
 
-        await _notificationService.SendAsync(
-            LocalizationService.GetString("GameUpdatedSuccessTitle"),
-            string.Format(
-                LocalizationService.Culture,
-                LocalizationService.GetString("GameUpdatedSuccessMessage"),
-                game.Name),
-            NotificationType.Success);
+    private Task HandleGameTypeAddedAsync(GameType gameType)
+    {
+        if (!_allGameTypes.Contains(gameType))
+        {
+            _allGameTypes.Add(gameType);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private Task HandleGameTypeDeletedAsync(GameType gameType)
+    {
+        _allGameTypes.Remove(gameType);
+        if (IsSameGameType(_queryState.Filter.GameType, gameType))
+        {
+            _queryState.Filter = _queryState.Filter with { GameType = null };
+            ApplyFiltersAndSorting(resetToFirstPage: true);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private Task HandleGameTypeUpdatedAsync(GameType gameType)
+    {
+        ApplyFiltersAndSorting(resetToFirstPage: false);
+        return Task.CompletedTask;
     }
 
     private void ApplyFiltersAndSorting(bool resetToFirstPage)
     {
-        IReadOnlyList<GameModel> filteredGames = _gameFilterService.Apply(_allGames, BuildCurrentFilterCriteria());
-
-        if (!string.IsNullOrWhiteSpace(SearchText))
-        {
-            filteredGames = filteredGames
-                .Where(MatchesSearch)
-                .ToList();
-        }
-
-        _filteredGames = SortGames(filteredGames);
-        _pagination.TotalItems = _filteredGames.Count;
-
-        if (resetToFirstPage)
-        {
-            if (_pagination.CurrentPage != 1)
-            {
-                _pagination.CurrentPage = 1;
-                return;
-            }
-
-            RefreshPagedGames();
-            return;
-        }
-
-        RefreshPagedGames();
+        _queryState.SearchText = SearchText;
+        SyncSortState();
+        _games.Refresh(resetToFirstPage);
     }
 
-    private BoardGameFilter BuildCurrentFilterCriteria()
+    private IReadOnlyList<GameModel> QueryGames(IEnumerable<GameModel> source)
     {
-        return new BoardGameFilter
+        IEnumerable<GameModel> games = _gameFilterService.Apply(source, _queryState.Filter);
+
+        if (!string.IsNullOrWhiteSpace(_queryState.SearchText))
         {
-            GameType = _activeGameTypeFilter,
-            GameDifficulty = _activeDifficultyFilter,
-            PlayerCount = _activePlayerCountFilter,
-            HourlyPriceMin = _activeHourlyPriceMinFilter,
-            HourlyPriceMax = _activeHourlyPriceMaxFilter,
-        };
+            games = games.Where(MatchesSearch);
+        }
+
+        return SortGames(games);
     }
 
     private bool MatchesSearch(GameModel game)
     {
-        return LocalizationService.Culture.CompareInfo.IndexOf(game.Name, SearchText, CompareOptions.IgnoreCase) >= 0
-            || LocalizationService.Culture.CompareInfo.IndexOf(game.GameType.Name, SearchText, CompareOptions.IgnoreCase) >= 0;
+        return ManagementCollectionFlow.ContainsSearchText(LocalizationService.Culture, game.Name, _queryState.SearchText)
+            || ManagementCollectionFlow.ContainsSearchText(LocalizationService.Culture, game.GameType.Name, _queryState.SearchText);
     }
 
     private IReadOnlyList<GameModel> SortGames(IEnumerable<GameModel> games)
     {
-        bool isDescending = string.Equals(SelectedSortDirection, SortDescending, StringComparison.Ordinal);
-
-        IOrderedEnumerable<GameModel> orderedGames = (SelectedSortField ?? SortFieldName) switch
+        bool isDescending = string.Equals(_queryState.Sort.Direction, SortDescending, StringComparison.Ordinal);
+        IOrderedEnumerable<GameModel> orderedGames = (_queryState.Sort.Field ?? SortFieldName) switch
         {
             SortFieldPrice => isDescending
                 ? games.OrderByDescending(game => game.HourlyPrice).ThenBy(game => game.Name, StringComparer.CurrentCultureIgnoreCase)
@@ -694,28 +502,6 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
         return orderedGames.ToList();
     }
 
-    private void RefreshPagedGames()
-    {
-        PagedGridGameCards.Clear();
-        PagedListGameCards.Clear();
-
-        int startIndex = Math.Max(0, (_pagination.CurrentPage - 1) * _pagination.PageSize);
-        foreach (GameModel game in _filteredGames.Skip(startIndex).Take(_pagination.PageSize))
-        {
-            if (IsGridView)
-            {
-                PagedGridGameCards.Add(GetOrCreateGridCardViewModel(game));
-            }
-            else
-            {
-                PagedListGameCards.Add(GetOrCreateListCardViewModel(game));
-            }
-        }
-
-        OnPropertyChanged(nameof(HasGames));
-        UpdatePageMetadata();
-    }
-
     private void RefreshSortOptions()
     {
         _isUpdatingSelectionOptions = true;
@@ -724,8 +510,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
         {
             string currentSortField = SelectedSortField ?? SortFieldName;
             string currentSortDirection = SelectedSortDirection ?? SortAscending;
-
-            ReplaceOptions(
+            ManagementCollectionFlow.ReplaceOptions(
                 SortFieldOptions,
                 [
                     new LocalizationOptionModel { Value = SortFieldName, DisplayName = LocalizationService.GetString("GameManagementPageSortFieldNameOption") },
@@ -734,20 +519,16 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
                     new LocalizationOptionModel { Value = SortFieldStock, DisplayName = LocalizationService.GetString("GameManagementPageSortFieldStockOption") },
                     new LocalizationOptionModel { Value = SortFieldPlayers, DisplayName = LocalizationService.GetString("GameManagementPageSortFieldPlayersOption") },
                 ]);
-
-            ReplaceOptions(
+            ManagementCollectionFlow.ReplaceOptions(
                 SortDirectionOptions,
                 [
                     new LocalizationOptionModel { Value = SortAscending, DisplayName = LocalizationService.GetString("GameManagementPageSortDirectionAscendingOption") },
                     new LocalizationOptionModel { Value = SortDescending, DisplayName = LocalizationService.GetString("GameManagementPageSortDirectionDescendingOption") },
                 ]);
 
-            SelectedSortField = SortFieldOptions.Any(option => option.Value == currentSortField)
-                ? currentSortField
-                : SortFieldName;
-            SelectedSortDirection = SortDirectionOptions.Any(option => option.Value == currentSortDirection)
-                ? currentSortDirection
-                : SortAscending;
+            SelectedSortField = SortFieldOptions.Any(option => option.Value == currentSortField) ? currentSortField : SortFieldName;
+            SelectedSortDirection = SortDirectionOptions.Any(option => option.Value == currentSortDirection) ? currentSortDirection : SortAscending;
+            SyncSortState();
         }
         finally
         {
@@ -757,112 +538,71 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     private void UpdatePageMetadata()
     {
-        int totalItems = _filteredGames.Count;
-        int startItem = totalItems == 0 ? 0 : ((_pagination.CurrentPage - 1) * _pagination.PageSize) + 1;
-        int endItem = totalItems == 0 ? 0 : Math.Min(_pagination.CurrentPage * _pagination.PageSize, totalItems);
-        int totalPages = Math.Max(1, (int)Math.Ceiling(totalItems / (double)Math.Max(_pagination.PageSize, 1)));
-
+        PageInfoSnapshot pageInfo = _games.BuildPageInfo();
         PageInfoText = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("GameManagementPagePageInfoFormat"),
-            startItem,
-            endItem,
-            totalItems,
-            _pagination.CurrentPage,
-            totalPages);
+            pageInfo.StartItem,
+            pageInfo.EndItem,
+            pageInfo.TotalItems,
+            pageInfo.CurrentPage,
+            pageInfo.TotalPages);
     }
 
-    private GridGameCardControlViewModel CreateGridCardViewModel(GameModel game)
+    private void ApplyViewToggleState()
     {
-        return _gameCardControlViewModelFactory.CreateGrid(
-            game,
-            HandleEditGameAsync,
-            HandleDeleteGameAsync,
-            HandleIncreaseStock,
-            HandleDecreaseStock);
+        GridIconState = new IconState { Kind = IconKind.Grid, Size = 24, AlwaysFilled = IsGridView };
+        ListIconState = new IconState { Kind = IconKind.List, Size = 24, AlwaysFilled = !IsGridView };
+        GridButtonBackgroundBrush = IsGridView ? _selectedBackgroundBrush : _unselectedBackgroundBrush;
+        GridButtonForegroundBrush = IsGridView ? _selectedForegroundBrush : _unselectedForegroundBrush;
+        ListButtonBackgroundBrush = IsGridView ? _unselectedBackgroundBrush : _selectedBackgroundBrush;
+        ListButtonForegroundBrush = IsGridView ? _unselectedForegroundBrush : _selectedForegroundBrush;
+        GridButtonBackgroundHoverColor = IsGridView ? AppColors.OrangeFocus : AppColors.VeryLightGray;
+        GridButtonForegroundHoverColor = IsGridView ? AppColors.White : AppColors.Black;
+        ListButtonBackgroundHoverColor = IsGridView ? AppColors.VeryLightGray : AppColors.OrangeFocus;
+        ListButtonForegroundHoverColor = IsGridView ? AppColors.Black : AppColors.White;
     }
 
-    private ListGameCardControlViewModel CreateListCardViewModel(GameModel game)
+    private object CreateActiveCard(GameModel game)
     {
-        return _gameCardControlViewModelFactory.CreateList(
-            game,
-            HandleEditGameAsync,
-            HandleDeleteGameAsync,
-            HandleIncreaseStock,
-            HandleDecreaseStock);
+        return IsGridView
+            ? _cardFactory.CreateGrid(game, HandleEditGameAsync, HandleDeleteGameAsync, HandleIncreaseStock, HandleDecreaseStock)
+            : _cardFactory.CreateList(game, HandleEditGameAsync, HandleDeleteGameAsync, HandleIncreaseStock, HandleDecreaseStock);
     }
 
-    private void AddCardViewModelsForGame(GameModel game)
+    private void ClearPagedGameCards()
     {
-        if (IsGridView)
+        PagedGridGameCards.Clear();
+        PagedListGameCards.Clear();
+    }
+
+    private void AddPagedGameCard(object card)
+    {
+        if (card is GridGameCardControlViewModel gridCard)
         {
-            _gridCardViewModelsByGame[game] = CreateGridCardViewModel(game);
+            PagedGridGameCards.Add(gridCard);
         }
-        else
+        else if (card is ListGameCardControlViewModel listCard)
         {
-            _listCardViewModelsByGame[game] = CreateListCardViewModel(game);
-        }
-    }
-
-    private void RemoveCardViewModelsForGame(GameModel game)
-    {
-        if (_gridCardViewModelsByGame.Remove(game, out GridGameCardControlViewModel? gridViewModel))
-        {
-            gridViewModel.Dispose();
-        }
-
-        if (_listCardViewModelsByGame.Remove(game, out ListGameCardControlViewModel? listViewModel))
-        {
-            listViewModel.Dispose();
+            PagedListGameCards.Add(listCard);
         }
     }
 
-    private GameModel CreateNewGameDraft()
+    private void HandleGamesRefreshed()
     {
-        return new GameModel
-        {
-            Name = string.Empty,
-            GameType = _allGameTypes.FirstOrDefault() ?? new GameType { Name = string.Empty },
-            GameDifficulty = GameDifficulty.Medium,
-            MinPlayers = 2,
-            MaxPlayers = 4,
-            HourlyPrice = 0m,
-            StockQuantity = 1,
-            BorrowedQuantity = 0,
-            ImageUri = "ms-appx:///Assets/Mock.png",
-        };
+        OnPropertyChanged(nameof(HasGames));
+        UpdatePageMetadata();
     }
 
-    private static void ReplaceOptions(
-        ObservableCollection<LocalizationOptionModel> collection,
-        IReadOnlyList<LocalizationOptionModel> items)
+    private void SyncSortState()
     {
-        collection.Clear();
-        foreach (LocalizationOptionModel item in items)
-        {
-            collection.Add(item);
-        }
+        _queryState.Sort = new ManagementSortState(SelectedSortField, SelectedSortDirection);
     }
 
-    private GridGameCardControlViewModel GetOrCreateGridCardViewModel(GameModel game)
+    private static bool IsSameGameType(GameType? left, GameType? right)
     {
-        if (!_gridCardViewModelsByGame.TryGetValue(game, out GridGameCardControlViewModel? viewModel))
-        {
-            viewModel = CreateGridCardViewModel(game);
-            _gridCardViewModelsByGame[game] = viewModel;
-        }
-
-        return viewModel;
-    }
-
-    private ListGameCardControlViewModel GetOrCreateListCardViewModel(GameModel game)
-    {
-        if (!_listCardViewModelsByGame.TryGetValue(game, out ListGameCardControlViewModel? viewModel))
-        {
-            viewModel = CreateListCardViewModel(game);
-            _listCardViewModelsByGame[game] = viewModel;
-        }
-
-        return viewModel;
+        return left is not null
+            && right is not null
+            && string.Equals(left.Name, right.Name, StringComparison.OrdinalIgnoreCase);
     }
 }

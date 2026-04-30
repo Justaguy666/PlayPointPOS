@@ -82,7 +82,12 @@ public class LoginUserUseCase
         return new LoginResult
         {
             Success = true,
-            Account = account,
+            Account = new AccountSummary
+            {
+                Id = account.Id,
+                Email = account.Email,
+                ShopName = account.ShopName,
+            },
             Message = "Login successful"
         };
     }

@@ -1,4 +1,4 @@
-using Domain.Entities;
+using Application.Members;
 
 namespace Application.Services.Members;
 

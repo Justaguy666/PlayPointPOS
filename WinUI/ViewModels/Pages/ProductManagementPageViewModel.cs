@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Products;
@@ -16,10 +14,11 @@ using Windows.UI;
 using WinUI.Resources;
 using WinUI.Services.Factories;
 using WinUI.Services.Layout;
+using WinUI.Services.Management;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
 using WinUI.UIModels.Management;
-using WinUI.ViewModels.Dialogs.Management;
+using WinUI.ViewModels.Common;
 using WinUI.ViewModels.UserControls;
 using WinUI.ViewModels.UserControls.Products;
 
@@ -41,24 +40,17 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
     private const int GridRowsPerPage = 3;
     private const int CompactGridPageSize = 10;
 
-    private readonly IDialogService _dialogService;
-    private readonly INotificationService _notificationService;
+    private readonly ProductManagementDialogCoordinator _dialogs;
     private readonly IProductFilterService _productFilterService;
     private readonly IResponsiveLayoutService _responsiveLayoutService;
-    private readonly ProductModelFactory _productModelFactory;
-    private readonly ProductCardControlViewModelFactory _productCardControlViewModelFactory;
+    private readonly ProductDraftFactory _draftFactory;
+    private readonly ProductCardControlViewModelFactory _cardFactory;
+    private readonly ManagementQueryState<ProductFilter, ManagementSortState> _queryState;
+    private readonly ManagementCollectionController<ProductModel, object> _products;
     private readonly Brush _selectedBackgroundBrush;
     private readonly Brush _selectedForegroundBrush;
     private readonly Brush _unselectedBackgroundBrush;
     private readonly Brush _unselectedForegroundBrush;
-    private readonly List<ProductModel> _allProducts;
-    private readonly Dictionary<ProductModel, GridProductCardControlViewModel> _gridCardViewModelsByProduct;
-    private readonly Dictionary<ProductModel, ListProductCardControlViewModel> _listCardViewModelsByProduct;
-    private readonly PaginationModel _pagination;
-    private IReadOnlyList<ProductModel> _filteredProducts = [];
-    private ProductType? _activeProductTypeFilter;
-    private decimal? _activePriceMinFilter;
-    private decimal? _activePriceMaxFilter;
     private bool _isUpdatingSelectionOptions;
     private bool _isInitialized;
     private bool _isDisposed;
@@ -66,26 +58,14 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
     [ObservableProperty]
     public partial bool IsGridView { get; set; } = true;
 
-    private int _gridProductsMaximumRowsOrColumns = 5;
-    public int GridProductsMaximumRowsOrColumns
-    {
-        get => _gridProductsMaximumRowsOrColumns;
-        set => SetProperty(ref _gridProductsMaximumRowsOrColumns, value);
-    }
+    [ObservableProperty]
+    public partial int GridProductsMaximumRowsOrColumns { get; set; } = PreferredGridProductsPerRow;
 
-    private double _gridProductsMinItemWidth = 300;
-    public double GridProductsMinItemWidth
-    {
-        get => _gridProductsMinItemWidth;
-        set => SetProperty(ref _gridProductsMinItemWidth, value);
-    }
+    [ObservableProperty]
+    public partial double GridProductsMinItemWidth { get; set; } = ProductCardOuterWidth;
 
-    private double _gridProductsMinItemHeight = 400;
-    public double GridProductsMinItemHeight
-    {
-        get => _gridProductsMinItemHeight;
-        set => SetProperty(ref _gridProductsMinItemHeight, value);
-    }
+    [ObservableProperty]
+    public partial double GridProductsMinItemHeight { get; set; } = ProductCardOuterHeight;
 
     [ObservableProperty]
     public partial string SearchText { get; set; } = string.Empty;
@@ -124,7 +104,7 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
     public partial IconState ListIconState { get; set; }
 
     [ObservableProperty]
-    public partial IconState FilterIconState { get; set; } = new() { Kind = IconKind.Filter, Size = 20, AlwaysFilled = false };
+    public partial IconState FilterIconState { get; set; } = new() { Kind = IconKind.Filter, Size = 20 };
 
     [ObservableProperty]
     public partial IconState AddIconState { get; set; } = new() { Kind = IconKind.Add, Size = 20, AlwaysFilled = true };
@@ -141,40 +121,15 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
     [ObservableProperty]
     public partial Brush ListButtonForegroundBrush { get; set; } = new SolidColorBrush(AppColors.Black);
 
-    public IconState NoProductsIconState { get; } = new()
-    {
-        Kind = IconKind.Product,
-        Size = 52,
-        AlwaysFilled = true,
-    };
+    public IconState NoProductsIconState { get; } = new() { Kind = IconKind.Product, Size = 52, AlwaysFilled = true };
 
-    private Color _gridButtonBackgroundHoverColor = AppColors.OrangeFocus;
-    public Color GridButtonBackgroundHoverColor
-    {
-        get => _gridButtonBackgroundHoverColor;
-        set => SetProperty(ref _gridButtonBackgroundHoverColor, value);
-    }
+    public Color GridButtonBackgroundHoverColor { get; set; } = AppColors.OrangeFocus;
 
-    private Color _gridButtonForegroundHoverColor = AppColors.White;
-    public Color GridButtonForegroundHoverColor
-    {
-        get => _gridButtonForegroundHoverColor;
-        set => SetProperty(ref _gridButtonForegroundHoverColor, value);
-    }
+    public Color GridButtonForegroundHoverColor { get; set; } = AppColors.White;
 
-    private Color _listButtonBackgroundHoverColor = AppColors.VeryLightGray;
-    public Color ListButtonBackgroundHoverColor
-    {
-        get => _listButtonBackgroundHoverColor;
-        set => SetProperty(ref _listButtonBackgroundHoverColor, value);
-    }
+    public Color ListButtonBackgroundHoverColor { get; set; } = AppColors.VeryLightGray;
 
-    private Color _listButtonForegroundHoverColor = AppColors.Black;
-    public Color ListButtonForegroundHoverColor
-    {
-        get => _listButtonForegroundHoverColor;
-        set => SetProperty(ref _listButtonForegroundHoverColor, value);
-    }
+    public Color ListButtonForegroundHoverColor { get; set; } = AppColors.Black;
 
     public ObservableCollection<GridProductCardControlViewModel> PagedGridProductCards { get; } = [];
 
@@ -186,11 +141,11 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
 
     public PaginationControlViewModel PaginationViewModel { get; }
 
-    public PaginationModel Pagination => _pagination;
+    public PaginationModel Pagination { get; }
 
     public IconKind SearchIconKind => IconKind.Search;
 
-    public bool HasProducts => _filteredProducts.Count > 0;
+    public bool HasProducts => _products.HasItems;
 
     public IRelayCommand ToggleGridViewCommand { get; }
 
@@ -204,43 +159,51 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
 
     public ProductManagementPageViewModel(
         ILocalizationService localizationService,
-        IDialogService dialogService,
-        INotificationService notificationService,
+        ProductManagementDialogCoordinator dialogs,
         IProductCatalogService productCatalogService,
         IProductFilterService productFilterService,
         IResponsiveLayoutService responsiveLayoutService,
         ProductModelFactory productModelFactory,
-        ProductCardControlViewModelFactory productCardControlViewModelFactory,
+        ProductDraftFactory draftFactory,
+        ProductCardControlViewModelFactory cardFactory,
         PaginationControlViewModel paginationViewModel)
         : base(localizationService)
     {
-        _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-        _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        _dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
         _productFilterService = productFilterService ?? throw new ArgumentNullException(nameof(productFilterService));
         _responsiveLayoutService = responsiveLayoutService ?? throw new ArgumentNullException(nameof(responsiveLayoutService));
-        _productModelFactory = productModelFactory ?? throw new ArgumentNullException(nameof(productModelFactory));
-        _productCardControlViewModelFactory = productCardControlViewModelFactory ?? throw new ArgumentNullException(nameof(productCardControlViewModelFactory));
+        _draftFactory = draftFactory ?? throw new ArgumentNullException(nameof(draftFactory));
+        _cardFactory = cardFactory ?? throw new ArgumentNullException(nameof(cardFactory));
         PaginationViewModel = paginationViewModel ?? throw new ArgumentNullException(nameof(paginationViewModel));
         ArgumentNullException.ThrowIfNull(productCatalogService);
+        ArgumentNullException.ThrowIfNull(productModelFactory);
 
         _selectedBackgroundBrush = AppResourceLookup.GetBrush("OrangeFocusBrush", AppColors.OrangeFocus);
         _selectedForegroundBrush = AppResourceLookup.GetBrush("WhiteBrush", AppColors.White);
         _unselectedBackgroundBrush = AppResourceLookup.GetBrush("WhiteBrush", AppColors.White);
         _unselectedForegroundBrush = AppResourceLookup.GetBrush("BlackBrush", AppColors.Black);
 
-        _pagination = new PaginationModel
-        {
-            CurrentPage = 1,
-            PageSize = GridPageSize,
-            MaxVisiblePageButtons = 4,
-        };
+        Pagination = new PaginationModel { CurrentPage = 1, PageSize = GridPageSize, MaxVisiblePageButtons = 4 };
+        PaginationViewModel.Pagination = Pagination;
+        _queryState = new ManagementQueryState<ProductFilter, ManagementSortState>(
+            new ProductFilter(),
+            new ManagementSortState(SortFieldName, SortAscending));
 
-        PaginationViewModel.Pagination = _pagination;
-        _pagination.PropertyChanged += HandlePaginationPropertyChanged;
+        List<ProductModel> products = productCatalogService.GetProducts()
+            .Select(productModelFactory.Create)
+            .ToList();
+        _products = new ManagementCollectionController<ProductModel, object>(
+            products,
+            Pagination,
+            ClearPagedProductCards,
+            AddPagedProductCard,
+            QueryProducts,
+            CreateActiveCard,
+            () => IsGridView ? "grid" : "list");
+        _products.Refreshed += HandleProductsRefreshed;
 
         GridIconState = new IconState { Kind = IconKind.Grid, Size = 24, AlwaysFilled = true };
-        ListIconState = new IconState { Kind = IconKind.List, Size = 24, AlwaysFilled = false };
-
+        ListIconState = new IconState { Kind = IconKind.List, Size = 24 };
         GridButtonBackgroundBrush = _selectedBackgroundBrush;
         GridButtonForegroundBrush = _selectedForegroundBrush;
         ListButtonBackgroundBrush = _unselectedBackgroundBrush;
@@ -251,13 +214,6 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
         FilterCommand = new AsyncRelayCommand(OpenFilterDialogAsync);
         AddProductCommand = new AsyncRelayCommand(ExecuteAddProductAsync);
         ClearSearchCommand = new RelayCommand(ClearSearch);
-
-        _allProducts = productCatalogService
-            .GetProducts()
-            .Select(_productModelFactory.Create)
-            .ToList();
-        _gridCardViewModelsByProduct = [];
-        _listCardViewModelsByProduct = [];
 
         RefreshLocalizedText();
         _isInitialized = true;
@@ -272,7 +228,6 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
         SortFieldPlaceholderText = LocalizationService.GetString("ProductManagementPageSortFieldComboBox.PlaceholderText");
         SortDirectionPlaceholderText = LocalizationService.GetString("ProductManagementPageSortDirectionComboBox.PlaceholderText");
         NoProductsText = LocalizationService.GetString("ProductManagementPageNoProductsText");
-
         RefreshSortOptions();
         UpdatePageMetadata();
     }
@@ -280,21 +235,10 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
     public new void Dispose()
     {
         if (_isDisposed)
-        {
             return;
-        }
 
-        _pagination.PropertyChanged -= HandlePaginationPropertyChanged;
-        foreach (GridProductCardControlViewModel viewModel in _gridCardViewModelsByProduct.Values)
-        {
-            viewModel.Dispose();
-        }
-
-        foreach (ListProductCardControlViewModel viewModel in _listCardViewModelsByProduct.Values)
-        {
-            viewModel.Dispose();
-        }
-
+        _products.Refreshed -= HandleProductsRefreshed;
+        _products.Dispose();
         PaginationViewModel.Dispose();
         _isDisposed = true;
         base.Dispose();
@@ -302,40 +246,21 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
 
     partial void OnSearchTextChanged(string value)
     {
-        if (!_isInitialized)
+        if (_isInitialized)
         {
-            return;
+            _queryState.SearchText = value;
+            ApplyFiltersAndSorting(resetToFirstPage: true);
         }
-
-        ApplyFiltersAndSorting(resetToFirstPage: true);
     }
 
-    partial void OnSelectedSortFieldChanged(string? value)
-    {
-        if (!_isInitialized || _isUpdatingSelectionOptions)
-        {
-            return;
-        }
+    partial void OnSelectedSortFieldChanged(string? value) => HandleSortChanged();
 
-        ApplyFiltersAndSorting(resetToFirstPage: true);
-    }
-
-    partial void OnSelectedSortDirectionChanged(string? value)
-    {
-        if (!_isInitialized || _isUpdatingSelectionOptions)
-        {
-            return;
-        }
-
-        ApplyFiltersAndSorting(resetToFirstPage: true);
-    }
+    partial void OnSelectedSortDirectionChanged(string? value) => HandleSortChanged();
 
     public void UpdateGridProductsLayout(double availableWidth)
     {
         if (availableWidth <= 0)
-        {
             return;
-        }
 
         CardGridLayout layout = _responsiveLayoutService.CalculateCardGrid(
             availableWidth,
@@ -352,109 +277,51 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
 
         if (IsGridView)
         {
-            SetPageSize(layout.PageSize);
+            _products.SetPageSize(layout.PageSize);
         }
     }
 
-    private void SetPageSize(int newPageSize)
+    private void HandleSortChanged()
     {
-        if (_pagination.PageSize == newPageSize)
-        {
+        if (!_isInitialized || _isUpdatingSelectionOptions)
             return;
-        }
 
-        _pagination.PageSize = newPageSize;
-
-        int totalPages = Math.Max(1, (int)Math.Ceiling(_filteredProducts.Count / (double)Math.Max(_pagination.PageSize, 1)));
-        if (_pagination.CurrentPage > totalPages)
-        {
-            _pagination.CurrentPage = totalPages;
-        }
-    }
-
-    private void HandlePaginationPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName is nameof(PaginationModel.CurrentPage) or
-            nameof(PaginationModel.PageSize) or
-            nameof(PaginationModel.TotalItems))
-        {
-            RefreshPagedProducts();
-        }
+        SyncSortState();
+        ApplyFiltersAndSorting(resetToFirstPage: true);
     }
 
     private void ExecuteToggleGridView()
     {
         if (IsGridView)
-        {
             return;
-        }
 
         IsGridView = true;
-        GridIconState = new IconState { Kind = IconKind.Grid, Size = 24, AlwaysFilled = true };
-        ListIconState = new IconState { Kind = IconKind.List, Size = 24, AlwaysFilled = false };
-
-        GridButtonBackgroundBrush = _selectedBackgroundBrush;
-        GridButtonForegroundBrush = _selectedForegroundBrush;
-        ListButtonBackgroundBrush = _unselectedBackgroundBrush;
-        ListButtonForegroundBrush = _unselectedForegroundBrush;
-
-        GridButtonBackgroundHoverColor = AppColors.OrangeFocus;
-        GridButtonForegroundHoverColor = AppColors.White;
-        ListButtonBackgroundHoverColor = AppColors.VeryLightGray;
-        ListButtonForegroundHoverColor = AppColors.Black;
-
-        SetPageSize(GridProductsMaximumRowsOrColumns >= 3
+        ApplyViewToggleState();
+        _products.SetPageSize(GridProductsMaximumRowsOrColumns >= 3
             ? GridProductsMaximumRowsOrColumns * GridRowsPerPage
             : CompactGridPageSize);
-        RefreshPagedProducts();
+        _products.RefreshPage();
     }
 
     private void ExecuteToggleListView()
     {
         if (!IsGridView)
-        {
             return;
-        }
 
         IsGridView = false;
-        GridIconState = new IconState { Kind = IconKind.Grid, Size = 24, AlwaysFilled = false };
-        ListIconState = new IconState { Kind = IconKind.List, Size = 24, AlwaysFilled = true };
-
-        GridButtonBackgroundBrush = _unselectedBackgroundBrush;
-        GridButtonForegroundBrush = _unselectedForegroundBrush;
-        ListButtonBackgroundBrush = _selectedBackgroundBrush;
-        ListButtonForegroundBrush = _selectedForegroundBrush;
-
-        GridButtonBackgroundHoverColor = AppColors.VeryLightGray;
-        GridButtonForegroundHoverColor = AppColors.Black;
-        ListButtonBackgroundHoverColor = AppColors.OrangeFocus;
-        ListButtonForegroundHoverColor = AppColors.White;
-
-        SetPageSize(ListPageSize);
-        RefreshPagedProducts();
+        ApplyViewToggleState();
+        _products.SetPageSize(ListPageSize);
+        _products.RefreshPage();
     }
 
-    private async Task OpenFilterDialogAsync()
+    private Task OpenFilterDialogAsync()
     {
-        await _dialogService.ShowDialogAsync(
-            "ProductFilter",
-            new ProductFilterDialogRequest
-            {
-                InitialCriteria = BuildCurrentFilterCriteria(),
-                OnSubmittedAsync = HandleFilterSubmittedAsync,
-            });
+        return _dialogs.OpenFilterAsync(_queryState.Filter, HandleFilterSubmittedAsync);
     }
 
-    private async Task ExecuteAddProductAsync()
+    private Task ExecuteAddProductAsync()
     {
-        await _dialogService.ShowDialogAsync(
-            "Product",
-            new ProductDialogRequest
-            {
-                Mode = UpsertDialogMode.Add,
-                Model = CreateNewProductDraft(),
-                OnSubmittedAsync = HandleProductCreatedAsync,
-            });
+        return _dialogs.OpenAddAsync(_draftFactory.Create(), HandleProductCreatedAsync);
     }
 
     private void ClearSearch()
@@ -464,150 +331,77 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
 
     private Task HandleEditProductAsync(ProductModel product)
     {
-        if (product is null)
-        {
-            return Task.CompletedTask;
-        }
-
-        return _dialogService.ShowDialogAsync(
-            "Product",
-            new ProductDialogRequest
-            {
-                Mode = UpsertDialogMode.Edit,
-                Model = product,
-                OnSubmittedAsync = HandleProductUpdatedAsync,
-            });
+        return product is null
+            ? Task.CompletedTask
+            : _dialogs.OpenEditAsync(product, HandleProductUpdatedAsync);
     }
 
     private async Task HandleDeleteProductAsync(ProductModel product)
     {
-        if (product is null)
-        {
+        if (product is null || !await _dialogs.ConfirmDeleteAsync())
             return;
-        }
 
-        bool isConfirmed = await _dialogService.ShowConfirmationAsync(
-            titleKey: "ConfirmDeleteProductTitle",
-            messageKey: "ConfirmDeleteProductMessage",
-            confirmButtonTextKey: "ConfirmDeleteProductButton",
-            cancelButtonTextKey: "CancelButtonText");
-
-        if (!isConfirmed)
-        {
+        if (!_products.Remove(product))
             return;
-        }
 
-        if (!_allProducts.Remove(product))
-        {
-            return;
-        }
-
-        RemoveCardViewModelsForProduct(product);
         ApplyFiltersAndSorting(resetToFirstPage: false);
-
-        await _notificationService.SendAsync(
-            LocalizationService.GetString("ProductDeletedSuccessTitle"),
-            string.Format(
-                LocalizationService.Culture,
-                LocalizationService.GetString("ProductDeletedSuccessMessage"),
-                product.Name),
-            NotificationType.Success);
+        await _dialogs.NotifyDeletedAsync(product);
     }
 
     private Task HandleFilterSubmittedAsync(ProductFilter criteria)
     {
-        _activeProductTypeFilter = criteria.ProductType;
-        _activePriceMinFilter = criteria.PriceMin;
-        _activePriceMaxFilter = criteria.PriceMax;
-
+        _queryState.Filter = criteria;
         ApplyFiltersAndSorting(resetToFirstPage: true);
         return Task.CompletedTask;
     }
 
     private async Task HandleProductCreatedAsync(ProductModel product)
     {
-        if (!_allProducts.Contains(product))
+        if (!_products.Contains(product))
         {
-            _allProducts.Insert(0, product);
-            AddCardViewModelsForProduct(product);
+            _products.Insert(0, product);
         }
 
         ApplyFiltersAndSorting(resetToFirstPage: true);
-
-        await _notificationService.SendAsync(
-            LocalizationService.GetString("ProductCreatedSuccessTitle"),
-            string.Format(
-                LocalizationService.Culture,
-                LocalizationService.GetString("ProductCreatedSuccessMessage"),
-                product.Name),
-            NotificationType.Success);
+        await _dialogs.NotifyCreatedAsync(product);
     }
 
     private async Task HandleProductUpdatedAsync(ProductModel product)
     {
         ApplyFiltersAndSorting(resetToFirstPage: false);
-
-        await _notificationService.SendAsync(
-            LocalizationService.GetString("ProductUpdatedSuccessTitle"),
-            string.Format(
-                LocalizationService.Culture,
-                LocalizationService.GetString("ProductUpdatedSuccessMessage"),
-                product.Name),
-            NotificationType.Success);
+        await _dialogs.NotifyUpdatedAsync(product);
     }
 
     private void ApplyFiltersAndSorting(bool resetToFirstPage)
     {
-        IReadOnlyList<ProductModel> filteredProducts = _productFilterService.Apply(_allProducts, BuildCurrentFilterCriteria());
-
-        if (!string.IsNullOrWhiteSpace(SearchText))
-        {
-            filteredProducts = filteredProducts
-                .Where(MatchesSearch)
-                .ToList();
-        }
-
-        _filteredProducts = SortProducts(filteredProducts);
-        _pagination.TotalItems = _filteredProducts.Count;
-
-        if (resetToFirstPage)
-        {
-            if (_pagination.CurrentPage != 1)
-            {
-                _pagination.CurrentPage = 1;
-                return;
-            }
-
-            RefreshPagedProducts();
-            return;
-        }
-
-        RefreshPagedProducts();
+        _queryState.SearchText = SearchText;
+        SyncSortState();
+        _products.Refresh(resetToFirstPage);
     }
 
-    private ProductFilter BuildCurrentFilterCriteria()
+    private IReadOnlyList<ProductModel> QueryProducts(IEnumerable<ProductModel> source)
     {
-        return new ProductFilter
+        IEnumerable<ProductModel> products = _productFilterService.Apply(source, _queryState.Filter);
+
+        if (!string.IsNullOrWhiteSpace(_queryState.SearchText))
         {
-            ProductType = _activeProductTypeFilter,
-            PriceMin = _activePriceMinFilter,
-            PriceMax = _activePriceMaxFilter,
-        };
+            products = products.Where(MatchesSearch);
+        }
+
+        return SortProducts(products);
     }
 
     private bool MatchesSearch(ProductModel product)
     {
         string productTypeDisplayName = GetProductTypeDisplayName(product.ProductType);
-
-        return LocalizationService.Culture.CompareInfo.IndexOf(product.Name, SearchText, CompareOptions.IgnoreCase) >= 0
-            || LocalizationService.Culture.CompareInfo.IndexOf(productTypeDisplayName, SearchText, CompareOptions.IgnoreCase) >= 0;
+        return ManagementCollectionFlow.ContainsSearchText(LocalizationService.Culture, product.Name, _queryState.SearchText)
+            || ManagementCollectionFlow.ContainsSearchText(LocalizationService.Culture, productTypeDisplayName, _queryState.SearchText);
     }
 
     private IReadOnlyList<ProductModel> SortProducts(IEnumerable<ProductModel> products)
     {
-        bool isDescending = string.Equals(SelectedSortDirection, SortDescending, StringComparison.Ordinal);
-
-        IOrderedEnumerable<ProductModel> orderedProducts = (SelectedSortField ?? SortFieldName) switch
+        bool isDescending = string.Equals(_queryState.Sort.Direction, SortDescending, StringComparison.Ordinal);
+        IOrderedEnumerable<ProductModel> orderedProducts = (_queryState.Sort.Field ?? SortFieldName) switch
         {
             SortFieldType => isDescending
                 ? products.OrderByDescending(product => product.ProductType).ThenBy(product => product.Name, StringComparer.CurrentCultureIgnoreCase)
@@ -623,28 +417,6 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
         return orderedProducts.ToList();
     }
 
-    private void RefreshPagedProducts()
-    {
-        PagedGridProductCards.Clear();
-        PagedListProductCards.Clear();
-
-        int startIndex = Math.Max(0, (_pagination.CurrentPage - 1) * _pagination.PageSize);
-        foreach (ProductModel product in _filteredProducts.Skip(startIndex).Take(_pagination.PageSize))
-        {
-            if (IsGridView)
-            {
-                PagedGridProductCards.Add(GetOrCreateGridCardViewModel(product));
-            }
-            else
-            {
-                PagedListProductCards.Add(GetOrCreateListCardViewModel(product));
-            }
-        }
-
-        OnPropertyChanged(nameof(HasProducts));
-        UpdatePageMetadata();
-    }
-
     private void RefreshSortOptions()
     {
         _isUpdatingSelectionOptions = true;
@@ -654,7 +426,7 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
             string currentSortField = SelectedSortField ?? SortFieldName;
             string currentSortDirection = SelectedSortDirection ?? SortAscending;
 
-            ReplaceOptions(
+            ManagementCollectionFlow.ReplaceOptions(
                 SortFieldOptions,
                 [
                     new LocalizationOptionModel { Value = SortFieldName, DisplayName = LocalizationService.GetString("ProductManagementPageSortFieldNameOption") },
@@ -662,19 +434,16 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
                     new LocalizationOptionModel { Value = SortFieldPrice, DisplayName = LocalizationService.GetString("ProductManagementPageSortFieldPriceOption") },
                 ]);
 
-            ReplaceOptions(
+            ManagementCollectionFlow.ReplaceOptions(
                 SortDirectionOptions,
                 [
                     new LocalizationOptionModel { Value = SortAscending, DisplayName = LocalizationService.GetString("ProductManagementPageSortDirectionAscendingOption") },
                     new LocalizationOptionModel { Value = SortDescending, DisplayName = LocalizationService.GetString("ProductManagementPageSortDirectionDescendingOption") },
                 ]);
 
-            SelectedSortField = SortFieldOptions.Any(option => option.Value == currentSortField)
-                ? currentSortField
-                : SortFieldName;
-            SelectedSortDirection = SortDirectionOptions.Any(option => option.Value == currentSortDirection)
-                ? currentSortDirection
-                : SortAscending;
+            SelectedSortField = SortFieldOptions.Any(option => option.Value == currentSortField) ? currentSortField : SortFieldName;
+            SelectedSortDirection = SortDirectionOptions.Any(option => option.Value == currentSortDirection) ? currentSortDirection : SortAscending;
+            SyncSortState();
         }
         finally
         {
@@ -684,72 +453,65 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
 
     private void UpdatePageMetadata()
     {
-        int totalItems = _filteredProducts.Count;
-        int startItem = totalItems == 0 ? 0 : ((_pagination.CurrentPage - 1) * _pagination.PageSize) + 1;
-        int endItem = totalItems == 0 ? 0 : Math.Min(_pagination.CurrentPage * _pagination.PageSize, totalItems);
-        int totalPages = Math.Max(1, (int)Math.Ceiling(totalItems / (double)Math.Max(_pagination.PageSize, 1)));
-
+        PageInfoSnapshot pageInfo = _products.BuildPageInfo();
         PageInfoText = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("ProductManagementPagePageInfoFormat"),
-            startItem,
-            endItem,
-            totalItems,
-            _pagination.CurrentPage,
-            totalPages);
+            pageInfo.StartItem,
+            pageInfo.EndItem,
+            pageInfo.TotalItems,
+            pageInfo.CurrentPage,
+            pageInfo.TotalPages);
     }
 
-    private GridProductCardControlViewModel CreateGridCardViewModel(ProductModel product)
+    private void ApplyViewToggleState()
     {
-        return _productCardControlViewModelFactory.CreateGrid(
-            product,
-            HandleEditProductAsync,
-            HandleDeleteProductAsync);
+        GridIconState = new IconState { Kind = IconKind.Grid, Size = 24, AlwaysFilled = IsGridView };
+        ListIconState = new IconState { Kind = IconKind.List, Size = 24, AlwaysFilled = !IsGridView };
+        GridButtonBackgroundBrush = IsGridView ? _selectedBackgroundBrush : _unselectedBackgroundBrush;
+        GridButtonForegroundBrush = IsGridView ? _selectedForegroundBrush : _unselectedForegroundBrush;
+        ListButtonBackgroundBrush = IsGridView ? _unselectedBackgroundBrush : _selectedBackgroundBrush;
+        ListButtonForegroundBrush = IsGridView ? _unselectedForegroundBrush : _selectedForegroundBrush;
+        GridButtonBackgroundHoverColor = IsGridView ? AppColors.OrangeFocus : AppColors.VeryLightGray;
+        GridButtonForegroundHoverColor = IsGridView ? AppColors.White : AppColors.Black;
+        ListButtonBackgroundHoverColor = IsGridView ? AppColors.VeryLightGray : AppColors.OrangeFocus;
+        ListButtonForegroundHoverColor = IsGridView ? AppColors.Black : AppColors.White;
     }
 
-    private ListProductCardControlViewModel CreateListCardViewModel(ProductModel product)
+    private object CreateActiveCard(ProductModel product)
     {
-        return _productCardControlViewModelFactory.CreateList(
-            product,
-            HandleEditProductAsync,
-            HandleDeleteProductAsync);
+        return IsGridView
+            ? _cardFactory.CreateGrid(product, HandleEditProductAsync, HandleDeleteProductAsync)
+            : _cardFactory.CreateList(product, HandleEditProductAsync, HandleDeleteProductAsync);
     }
 
-    private void AddCardViewModelsForProduct(ProductModel product)
+    private void ClearPagedProductCards()
     {
-        if (IsGridView)
+        PagedGridProductCards.Clear();
+        PagedListProductCards.Clear();
+    }
+
+    private void AddPagedProductCard(object card)
+    {
+        if (card is GridProductCardControlViewModel gridCard)
         {
-            _gridCardViewModelsByProduct[product] = CreateGridCardViewModel(product);
+            PagedGridProductCards.Add(gridCard);
         }
-        else
+        else if (card is ListProductCardControlViewModel listCard)
         {
-            _listCardViewModelsByProduct[product] = CreateListCardViewModel(product);
-        }
-    }
-
-    private void RemoveCardViewModelsForProduct(ProductModel product)
-    {
-        if (_gridCardViewModelsByProduct.Remove(product, out GridProductCardControlViewModel? gridViewModel))
-        {
-            gridViewModel.Dispose();
-        }
-
-        if (_listCardViewModelsByProduct.Remove(product, out ListProductCardControlViewModel? listViewModel))
-        {
-            listViewModel.Dispose();
+            PagedListProductCards.Add(listCard);
         }
     }
 
-    private ProductModel CreateNewProductDraft()
+    private void HandleProductsRefreshed()
     {
-        return new ProductModel
-        {
-            Name = string.Empty,
-            ProductType = ProductType.Food,
-            Price = 0m,
-            StockQuantity = 0,
-            ImageUri = "ms-appx:///Assets/Mock.png",
-        };
+        OnPropertyChanged(nameof(HasProducts));
+        UpdatePageMetadata();
+    }
+
+    private void SyncSortState()
+    {
+        _queryState.Sort = new ManagementSortState(SelectedSortField, SelectedSortDirection);
     }
 
     private string GetProductTypeDisplayName(ProductType productType)
@@ -759,38 +521,5 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
             ProductType.Drink => LocalizationService.GetString("ProductTypeDrinkText"),
             _ => LocalizationService.GetString("ProductTypeFoodText"),
         };
-    }
-
-    private static void ReplaceOptions(
-        ObservableCollection<LocalizationOptionModel> collection,
-        IReadOnlyList<LocalizationOptionModel> items)
-    {
-        collection.Clear();
-        foreach (LocalizationOptionModel item in items)
-        {
-            collection.Add(item);
-        }
-    }
-
-    private GridProductCardControlViewModel GetOrCreateGridCardViewModel(ProductModel product)
-    {
-        if (!_gridCardViewModelsByProduct.TryGetValue(product, out GridProductCardControlViewModel? viewModel))
-        {
-            viewModel = CreateGridCardViewModel(product);
-            _gridCardViewModelsByProduct[product] = viewModel;
-        }
-
-        return viewModel;
-    }
-
-    private ListProductCardControlViewModel GetOrCreateListCardViewModel(ProductModel product)
-    {
-        if (!_listCardViewModelsByProduct.TryGetValue(product, out ListProductCardControlViewModel? viewModel))
-        {
-            viewModel = CreateListCardViewModel(product);
-            _listCardViewModelsByProduct[product] = viewModel;
-        }
-
-        return viewModel;
     }
 }

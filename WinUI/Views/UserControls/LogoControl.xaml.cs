@@ -1,6 +1,5 @@
 using System;
-using Application.Services;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Animation;
@@ -9,17 +8,39 @@ namespace WinUI.Views.UserControls;
 
 public sealed partial class LogoControl : UserControl
 {
-    private readonly ILocalizationService? _localizationService;
     private Storyboard? _rotateStoryboard;
 
     public LogoControl()
     {
         InitializeComponent();
-        _localizationService = App.Host?.Services.GetService<ILocalizationService>();
         CreateStoryboard();
-        RefreshLocalizedText();
-        SubscribeToLocalization();
     }
+
+    public string BrandNameText
+    {
+        get => (string)GetValue(BrandNameTextProperty);
+        set => SetValue(BrandNameTextProperty, value);
+    }
+
+    public static readonly DependencyProperty BrandNameTextProperty =
+        DependencyProperty.Register(
+            nameof(BrandNameText),
+            typeof(string),
+            typeof(LogoControl),
+            new PropertyMetadata("PlayPoint"));
+
+    public string BrandSubtitleText
+    {
+        get => (string)GetValue(BrandSubtitleTextProperty);
+        set => SetValue(BrandSubtitleTextProperty, value);
+    }
+
+    public static readonly DependencyProperty BrandSubtitleTextProperty =
+        DependencyProperty.Register(
+            nameof(BrandSubtitleText),
+            typeof(string),
+            typeof(LogoControl),
+            new PropertyMetadata("BOARDGAME POS"));
 
     private void CreateStoryboard()
     {
@@ -49,45 +70,4 @@ public sealed partial class LogoControl : UserControl
         DotsRotate.Angle = 0;
     }
 
-    private void SubscribeToLocalization()
-    {
-        if (_localizationService is null)
-        {
-            return;
-        }
-
-        _localizationService.LanguageChanged += HandleLanguageChanged;
-        Unloaded += HandleUnloaded;
-    }
-
-    private void HandleLanguageChanged()
-    {
-        RefreshLocalizedText();
-    }
-
-    private void HandleUnloaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-    {
-        Unloaded -= HandleUnloaded;
-        if (_localizationService is not null)
-        {
-            _localizationService.LanguageChanged -= HandleLanguageChanged;
-        }
-    }
-
-    private void RefreshLocalizedText()
-    {
-        BrandNameTextBlock.Text = GetLocalizedText("BrandNameText", "PlayPoint");
-        BrandSubtitleTextBlock.Text = GetLocalizedText("BrandSubtitleText", "BOARDGAME POS");
-    }
-
-    private string GetLocalizedText(string key, string fallback)
-    {
-        if (_localizationService is null)
-        {
-            return fallback;
-        }
-
-        string value = _localizationService.GetString(key);
-        return string.IsNullOrWhiteSpace(value) || value.StartsWith("[", StringComparison.Ordinal) ? fallback : value;
-    }
 }

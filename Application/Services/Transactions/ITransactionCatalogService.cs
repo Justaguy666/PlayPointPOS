@@ -1,8 +1,8 @@
-using Domain.Entities;
+using Application.Transactions;
 
 namespace Application.Services.Transactions;
 
 public interface ITransactionCatalogService
 {
-    IReadOnlyList<Transaction> GetTransactions();
+    IReadOnlyList<TransactionRecord> GetTransactions();
 }

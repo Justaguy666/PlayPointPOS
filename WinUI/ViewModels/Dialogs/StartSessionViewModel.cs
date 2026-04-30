@@ -1,12 +1,12 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
-using Application.Interfaces;
+using Application.Members;
 using Application.Services;
+using Application.Services.Members;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Domain.Entities;
+using Domain.Enums;
 using WinUI.UIModels.Management;
 using WinUI.ViewModels;
 
@@ -14,17 +14,17 @@ namespace WinUI.ViewModels.Dialogs;
 
 public partial class StartSessionViewModel : LocalizedViewModelBase
 {
-    private readonly IRepository<Member> _memberRepository;
+    private readonly IMemberLookupService _memberLookupService;
     private AreaModel? _model;
     private event Action? CloseRequestedInternal;
 
     public StartSessionViewModel(
         ILocalizationService localizationService,
-        IRepository<Member> memberRepository)
+        IMemberLookupService memberLookupService)
         : base(localizationService)
     {
-        _memberRepository = memberRepository ?? throw new ArgumentNullException(nameof(memberRepository));
-        Members = new ObservableCollection<Member>();
+        _memberLookupService = memberLookupService ?? throw new ArgumentNullException(nameof(memberLookupService));
+        Members = [];
         LoadMembers();
         RefreshLocalizedText();
     }
@@ -48,7 +48,7 @@ public partial class StartSessionViewModel : LocalizedViewModelBase
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanConfirm))]
-    public partial Member? SelectedMember { get; set; }
+    public partial MemberLookupItem? SelectedMember { get; set; }
 
     [ObservableProperty]
     public partial string CapacityLabelText { get; set; } = string.Empty;
@@ -69,7 +69,7 @@ public partial class StartSessionViewModel : LocalizedViewModelBase
     [ObservableProperty]
     public partial string ValidationMessageText { get; set; } = string.Empty;
 
-    public ObservableCollection<Member> Members { get; }
+    public ObservableCollection<MemberLookupItem> Members { get; }
 
     public bool ShowMemberSelection => IsMember;
 
@@ -152,7 +152,7 @@ public partial class StartSessionViewModel : LocalizedViewModelBase
         _model.SessionPausedAt = null;
         _model.SessionPausedDuration = TimeSpan.Zero;
         _model.TotalAmount = 0m;
-        _model.Status = Domain.Enums.PlayAreaStatus.Rented;
+        _model.Status = PlayAreaStatus.Rented;
 
         CloseRequestedInternal?.Invoke();
         return Task.CompletedTask;
@@ -166,13 +166,8 @@ public partial class StartSessionViewModel : LocalizedViewModelBase
 
     private void LoadMembers()
     {
-        var members = _memberRepository.GetAllAsync().GetAwaiter().GetResult()
-            .Where(member => member.IsActive)
-            .OrderBy(member => member.FullName)
-            .ToList();
-
         Members.Clear();
-        foreach (Member member in members)
+        foreach (MemberLookupItem member in _memberLookupService.GetActiveMembers())
         {
             Members.Add(member);
         }
@@ -243,7 +238,7 @@ public partial class StartSessionViewModel : LocalizedViewModelBase
 
     partial void OnIsMemberChanged(bool value) => UpdateValidationState();
 
-    partial void OnSelectedMemberChanged(Member? value) => UpdateValidationState();
+    partial void OnSelectedMemberChanged(MemberLookupItem? value) => UpdateValidationState();
 
     partial void OnCapacityTextChanged(string value) => UpdateValidationState();
 }

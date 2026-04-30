@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Domain.Entities;
+using Application.Members;
 using Microsoft.UI.Xaml.Media;
 using Windows.UI;
 using WinUI.UIModels;

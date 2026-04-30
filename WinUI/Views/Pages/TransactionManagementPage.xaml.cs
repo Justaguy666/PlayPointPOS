@@ -1,5 +1,4 @@
 using System;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using WinUI.Helpers;
@@ -12,9 +11,9 @@ public sealed partial class TransactionManagementPage : Page
 {
     public TransactionManagementPageViewModel ViewModel { get; }
 
-    public TransactionManagementPage()
+    public TransactionManagementPage(TransactionManagementPageViewModel viewModel)
     {
-        ViewModel = App.Host!.Services.GetRequiredService<TransactionManagementPageViewModel>();
+        ViewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
         DataContext = ViewModel;
         InitializeComponent();
 

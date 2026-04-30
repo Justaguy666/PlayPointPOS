@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Domain.Entities;
+using Application.Games;
 using WinUI.UIModels.Enums;
 using WinUI.UIModels.Management;
 

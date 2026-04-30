@@ -1,5 +1,3 @@
-using Domain.Entities;
-
 namespace Application.UseCases.Auth.Contracts;
 
 /// <summary>
@@ -16,7 +14,7 @@ public class RegisterResult
     /// <summary>
     /// The newly created account (null if registration failed).
     /// </summary>
-    public Account? Account { get; set; }
+    public AccountSummary? Account { get; set; }
 
     /// <summary>
     /// User-friendly message (e.g., "Registration successful" or "Email already registered").

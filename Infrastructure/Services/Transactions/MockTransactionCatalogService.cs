@@ -1,4 +1,5 @@
 using Application.Services.Transactions;
+using Application.Transactions;
 using Domain.Entities;
 using Domain.Enums;
 
@@ -13,7 +14,30 @@ public sealed class MockTransactionCatalogService : ITransactionCatalogService
         _transactions = GenerateMockTransactions();
     }
 
-    public IReadOnlyList<Transaction> GetTransactions() => _transactions.AsReadOnly();
+    public IReadOnlyList<TransactionRecord> GetTransactions()
+    {
+        return _transactions
+            .Select(transaction => new TransactionRecord
+            {
+                Code = transaction.Code,
+                MemberId = transaction.MemberId,
+                PaymentMethod = transaction.PaymentMethod,
+                SubtotalAmount = transaction.SubtotalAmount,
+                DiscountAmount = transaction.DiscountAmount,
+                TotalAmount = transaction.TotalAmount,
+                CreatedAt = transaction.CreatedAt,
+                Lines = transaction.Lines
+                    .Select(line => new TransactionLineRecord
+                    {
+                        Type = line.Type,
+                        ItemName = line.ItemName,
+                        Quantity = line.Quantity,
+                        TotalAmount = line.TotalAmount,
+                    })
+                    .ToList(),
+            })
+            .ToList();
+    }
 
     private static List<Transaction> GenerateMockTransactions()
     {

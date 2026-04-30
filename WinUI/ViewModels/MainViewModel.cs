@@ -23,6 +23,12 @@ public partial class MainViewModel : ObservableObject
     public partial string TodayRevenue { get; set; } = string.Empty;
 
     [ObservableProperty]
+    public partial string BrandNameText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string BrandSubtitleText { get; set; } = string.Empty;
+
+    [ObservableProperty]
     public partial string ActiveAreas { get; set; } = "4/9";
 
     [ObservableProperty]
@@ -60,6 +66,8 @@ public partial class MainViewModel : ObservableObject
 
     private void UpdateHeaderTexts()
     {
+        BrandNameText = _localizationService.GetString("BrandNameText");
+        BrandSubtitleText = _localizationService.GetString("BrandSubtitleText");
         TodayRevenueLabelText = _localizationService.GetString("HeaderTodayRevenueLabel");
         ActiveAreasLabelText = _localizationService.GetString("HeaderActiveAreasLabel");
         ReservedAreasLabelText = _localizationService.GetString("HeaderReservedAreasLabel");

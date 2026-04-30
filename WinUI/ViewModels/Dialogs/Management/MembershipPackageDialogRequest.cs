@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
-using Domain.Entities;
+using Application.Members;
 
 namespace WinUI.ViewModels.Dialogs.Management;
 

@@ -45,6 +45,8 @@
                               Width="170" Height="60" 
                               Margin="0,0,20,0" 
                               HorizontalAlignment="Right" 
-                              VerticalAlignment="Center" />
+                              VerticalAlignment="Center"
+                              BrandNameText="{Binding BrandNameText}"
+                              BrandSubtitleText="{Binding BrandSubtitleText}" />
     </Grid>
 </UserControl>

@@ -1,6 +1,5 @@
 using Application.Members;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Domain.Entities;
 using System;
 
 namespace WinUI.UIModels.Management;

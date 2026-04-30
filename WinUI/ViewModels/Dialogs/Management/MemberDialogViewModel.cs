@@ -7,7 +7,6 @@ using Application.Members;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Domain.Entities;
 using WinUI.Helpers.Validations;
 using WinUI.Services.Factories;
 using WinUI.UIModels;

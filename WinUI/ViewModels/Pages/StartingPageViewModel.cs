@@ -14,6 +14,13 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
     private readonly IAppInfoService _appInfo;
     private readonly IDialogService _dialogService;
     private readonly IConfigurationService _configService;
+    private readonly IApplicationLifetimeService _applicationLifetimeService;
+
+    [ObservableProperty]
+    public partial string BrandNameText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string BrandSubtitleText { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string WelcomeText { get; set; } = string.Empty;
@@ -33,12 +40,14 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
         ILocalizationService localizationService,
         IAppInfoService appInfo,
         IDialogService dialogService,
-        IConfigurationService configService)
+        IConfigurationService configService,
+        IApplicationLifetimeService applicationLifetimeService)
         : base(localizationService)
     {
         _appInfo = appInfo;
         _dialogService = dialogService;
         _configService = configService;
+        _applicationLifetimeService = applicationLifetimeService;
 
         OnMenuItemSelectedCommand = new AsyncRelayCommand<MenuItemModel?>(OnMenuItemSelectedAsync);
 
@@ -48,6 +57,8 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
 
     protected override void RefreshLocalizedText()
     {
+        BrandNameText = LocalizationService.GetString("BrandNameText");
+        BrandSubtitleText = LocalizationService.GetString("BrandSubtitleText");
         WelcomeText = LocalizationService.GetString("WelcomeText");
 
         AppVersionText = string.Format(
@@ -65,7 +76,7 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
         {
             LabelResourceKey = "ConfigMenuItemText",
             Icon = IconKind.Config,
-            DialogKey = "Config",
+            DialogKey = Application.Services.DialogKey.Config,
             HideWhenConfigured = true,
             OnMenuItemSelectedCommand = OnMenuItemSelectedCommand,
         };
@@ -73,7 +84,7 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
         {
             LabelResourceKey = "RegisterMenuItemText",
             Icon = IconKind.Register,
-            DialogKey = "Register",
+            DialogKey = Application.Services.DialogKey.Register,
             RequiresConfig = true,
             OnMenuItemSelectedCommand = OnMenuItemSelectedCommand,
         };
@@ -81,7 +92,7 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
         {
             LabelResourceKey = "LoginMenuItemText",
             Icon = IconKind.Login,
-            DialogKey = "Login",
+            DialogKey = Application.Services.DialogKey.Login,
             RequiresConfig = true,
             OnMenuItemSelectedCommand = OnMenuItemSelectedCommand,
         };
@@ -140,12 +151,15 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
 
             if (isConfirmed)
             {
-                Environment.Exit(0);
+                _applicationLifetimeService.Exit();
             }
             return;
         }
 
-        await _dialogService.ShowDialogAsync(selectedItem.DialogKey);
+        if (selectedItem.DialogKey is DialogKey dialogKey)
+        {
+            await _dialogService.ShowDialogAsync(dialogKey);
+        }
 
         UpdateMenuVisibility();
     }
