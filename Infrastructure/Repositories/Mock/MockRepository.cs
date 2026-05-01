@@ -3,6 +3,8 @@ using Domain.Entities;
 
 namespace Infrastructure.Repositories.Mock;
 
+// TODO: Thay thế toàn bộ MockRepository này bằng ApiRepository khi Backend API đã sẵn sàng. [Ticket: TBD]
+// Hiện tại dùng List trong RAM để UI có thể test luồng chạy độc lập.
 public class MockRepository<T> : IRepository<T> where T : BaseEntity
 {
     protected readonly List<T> _items = new();

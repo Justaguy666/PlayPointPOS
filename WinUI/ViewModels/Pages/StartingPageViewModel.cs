@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
+using WinUI.Services.Dialogs;
 
 namespace WinUI.ViewModels.Pages;
 
@@ -76,7 +77,7 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
         {
             LabelResourceKey = "ConfigMenuItemText",
             Icon = IconKind.Config,
-            DialogKey = Application.Services.DialogKey.Config,
+            DialogKey = DialogKey.Config,
             HideWhenConfigured = true,
             OnMenuItemSelectedCommand = OnMenuItemSelectedCommand,
         };
@@ -84,7 +85,7 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
         {
             LabelResourceKey = "RegisterMenuItemText",
             Icon = IconKind.Register,
-            DialogKey = Application.Services.DialogKey.Register,
+            DialogKey = DialogKey.Register,
             RequiresConfig = true,
             OnMenuItemSelectedCommand = OnMenuItemSelectedCommand,
         };
@@ -92,7 +93,7 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
         {
             LabelResourceKey = "LoginMenuItemText",
             Icon = IconKind.Login,
-            DialogKey = Application.Services.DialogKey.Login,
+            DialogKey = DialogKey.Login,
             RequiresConfig = true,
             OnMenuItemSelectedCommand = OnMenuItemSelectedCommand,
         };

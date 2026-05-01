@@ -35,6 +35,8 @@
             </Border.Background>
         </Border>
 
+        <!-- WORKAROUND: Khởi tạo một Grid trống để đóng vai trò làm vùng kéo thả (Drag Region) cho cửa sổ. 
+             Nếu không có Grid này, Custom TitleBar của WinUI 3 sẽ bị lỗi không thể kéo để di chuyển (drag-to-move). -->
         <Grid x:Name="TitleBarDragRegion" Grid.Row="0" Grid.ColumnSpan="2">
             <Grid.Background>
                 <Binding Path="ViewModel.IsNavigationVisible" ElementName="WindowRoot" Converter="{StaticResource BoolToGradientBrushConverter}" />

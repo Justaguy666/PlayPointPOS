@@ -1,4 +1,4 @@
-namespace Application.Services;
+namespace WinUI.Services.Dialogs;
 
 public enum DialogKey
 {

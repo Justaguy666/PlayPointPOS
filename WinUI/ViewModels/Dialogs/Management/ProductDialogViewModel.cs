@@ -12,12 +12,14 @@ using WinUI.Services.Factories;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
 using WinUI.UIModels.Management;
+using WinUI.Services.Dialogs;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
 
 namespace WinUI.ViewModels.Dialogs.Management;
 
 public partial class ProductDialogViewModel : UpsertDialogViewModelBase
 {
-    private const string DefaultImageUri = "ms-appx:///Assets/Mock.png";
     private const string ProductTypeFoodValue = "food";
     private const string ProductTypeDrinkValue = "drink";
 
@@ -93,6 +95,7 @@ public partial class ProductDialogViewModel : UpsertDialogViewModelBase
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanSubmit))]
     [NotifyPropertyChangedFor(nameof(ImagePreviewSource))]
+    [NotifyPropertyChangedFor(nameof(HasImagePreview))]
     public partial string ImageUriText { get; set; } = string.Empty;
 
     [ObservableProperty]
@@ -107,9 +110,39 @@ public partial class ProductDialogViewModel : UpsertDialogViewModelBase
 
     public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
 
-    public string ImagePreviewSource => string.IsNullOrWhiteSpace(ImageUriText)
-        ? DefaultImageUri
-        : ImageUriText;
+    public bool HasImagePreview => !string.IsNullOrWhiteSpace(ImageUriText);
+
+    public ImageSource? ImagePreviewSource => CreateImageSource(ImageUriText);
+
+    public IconState ImagePlaceholderIconState { get; } = new()
+    {
+        Kind = IconKind.Product,
+        Size = 32,
+        AlwaysFilled = true,
+    };
+
+    private static ImageSource? CreateImageSource(string? uriText)
+    {
+        if (string.IsNullOrWhiteSpace(uriText))
+        {
+            return null;
+        }
+
+        string trimmed = uriText.Trim();
+        if (!Uri.TryCreate(trimmed, UriKind.Absolute, out Uri? uri))
+        {
+            return null;
+        }
+
+        try
+        {
+            return new BitmapImage(uri);
+        }
+        catch
+        {
+            return null;
+        }
+    }
 
     public bool CanSubmit => TryGetParsedFormValues(
         out _,
@@ -311,7 +344,7 @@ public partial class ProductDialogViewModel : UpsertDialogViewModelBase
         {
             ProductType = ProductType.Food,
             StockQuantity = 0,
-            ImageUri = DefaultImageUri,
+            ImageUri = string.Empty,
         };
     }
 
@@ -345,7 +378,7 @@ public partial class ProductDialogViewModel : UpsertDialogViewModelBase
     {
         trimmedName = ProductName?.Trim() ?? string.Empty;
         productType = ResolveSelectedProductType();
-        imageUri = string.IsNullOrWhiteSpace(ImageUriText) ? DefaultImageUri : ImageUriText.Trim();
+        imageUri = ImageUriText?.Trim() ?? string.Empty;
 
         if (string.IsNullOrWhiteSpace(trimmedName) || string.IsNullOrWhiteSpace(SelectedProductTypeValue))
         {
@@ -392,10 +425,7 @@ public partial class ProductDialogViewModel : UpsertDialogViewModelBase
 
     private static string NormalizeEditableImageUri(string? imageUri)
     {
-        return string.IsNullOrWhiteSpace(imageUri)
-               || string.Equals(imageUri, DefaultImageUri, StringComparison.OrdinalIgnoreCase)
-            ? string.Empty
-            : imageUri;
+        return imageUri?.Trim() ?? string.Empty;
     }
 
     private static void ReplaceOptions(

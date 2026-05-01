@@ -16,7 +16,7 @@ public sealed class ProductModelFactory
             Price = source.Price,
             ProductType = source.Type,
             StockQuantity = source.StockQuantity,
-            ImageUri = string.IsNullOrWhiteSpace(source.ImageUri) ? "ms-appx:///Assets/Mock.png" : source.ImageUri,
+            ImageUri = source.ImageUri?.Trim() ?? string.Empty,
         };
     }
 

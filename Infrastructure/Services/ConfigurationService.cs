@@ -53,6 +53,9 @@ public class ConfigurationService : IConfigurationService, ILocalizationPreferen
 
             if (data.RememberMe)
             {
+                // SECURITY: Mặc dù ApiKey đang được lưu vào file JSON cục bộ, nhưng vì ứng dụng chạy trên
+                // máy POS của thu ngân nên tạm thời chấp nhận rủi ro vật lý. 
+                // TODO: Nên mã hóa (Encrypt) chuỗi này bằng Windows Data Protection API (DPAPI) ở các phiên bản sau.
                 ApiKey = data.ApiKey ?? string.Empty;
             }
         }

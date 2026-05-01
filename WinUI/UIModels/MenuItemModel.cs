@@ -2,6 +2,7 @@ using System.Windows.Input;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WinUI.UIModels.Enums;
+using WinUI.Services.Dialogs;
 
 namespace WinUI.UIModels;
 

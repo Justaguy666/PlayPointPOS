@@ -11,7 +11,6 @@ public class PlayAreaUnit : BaseEntity
     public int MaxOccupancy { get; set; }
     public int CurrentOccupancy { get; set; }
     public decimal HourlyPrice { get; set; }
-    public bool IsActive { get; set; } = true;
     public int DisplayOrder { get; set; }
     public string? CurrentSessionId { get; set; }
     public string? CurrentReservationId { get; set; }

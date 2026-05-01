@@ -1,7 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.UI.Xaml.Controls;
 using Application.Navigation;
-using Infrastructure.Services.Navigation;
 using WinUI.ViewModels;
 using WinUI.ViewModels.UserControls;
 using WinUI.Views.Pages;
@@ -17,11 +18,12 @@ public class WinUINavigationService : INavigationService
     private Frame? _frame;
     private MainViewModel? _mainViewModel;
     private NavbarControlViewModel? _navbarViewModel;
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IReadOnlyDictionary<Type, INavigationRoute> _routesByRequestType;
 
-    public WinUINavigationService(IServiceProvider serviceProvider)
+    public WinUINavigationService(IEnumerable<INavigationRoute> routes)
     {
-        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+        ArgumentNullException.ThrowIfNull(routes);
+        _routesByRequestType = routes.ToDictionary(route => route.RequestType);
     }
 
     public void SetFrame(object frame)
@@ -42,14 +44,12 @@ public class WinUINavigationService : INavigationService
     {
         var requestType = request.GetType();
 
-        if (!NavigationMap.Map.TryGetValue(requestType, out var pageType))
+        if (!_routesByRequestType.TryGetValue(requestType, out INavigationRoute? route))
         {
             throw new InvalidOperationException($"No mapping found for navigation request of type {requestType.Name}");
         }
 
-        // Create page instance using DI container to support constructor injection
-        var pageInstance = (Page?)_serviceProvider.GetService(pageType)
-            ?? throw new InvalidOperationException($"Failed to create instance of page type {pageType.Name}");
+        Page pageInstance = route.CreatePage();
 
         // Set Frame.Content directly (avoids XAML instantiation issues with DI constructors)
         if (_frame != null)

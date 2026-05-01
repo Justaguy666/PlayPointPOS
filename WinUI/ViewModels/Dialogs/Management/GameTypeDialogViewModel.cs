@@ -8,6 +8,7 @@ using Application.Services.Games;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Application.Games;
+using WinUI.Services.Dialogs;
 
 namespace WinUI.ViewModels.Dialogs.Management;
 

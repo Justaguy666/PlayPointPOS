@@ -17,7 +17,6 @@ public sealed class RepositoryMemberLookupService : IMemberLookupService
     public IReadOnlyList<MemberLookupItem> GetActiveMembers()
     {
         return _memberRepository.GetAllAsync().GetAwaiter().GetResult()
-            .Where(member => member.IsActive)
             .OrderBy(member => member.FullName)
             .Select(member => new MemberLookupItem
             {

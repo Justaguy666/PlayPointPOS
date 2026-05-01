@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -10,9 +12,12 @@ using Domain.Enums;
 using Microsoft.UI.Dispatching;
 using WinUI.UIModels;
 using WinUI.UIModels.Management;
-using WinUI.UIModels.Enums;
 using Application.Services.Areas;
+using Application.Services.Games;
+using Application.Services.Products;
 using WinUI.ViewModels.Dialogs.Management;
+using WinUI.Services.Dialogs;
+using WinUI.UIModels.Enums;
 
 namespace WinUI.ViewModels.AreaManagement.DetailedAreaCards;
 
@@ -21,6 +26,8 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
     private readonly IAreaSessionService _areaSessionService;
+    private readonly IGameCatalogService _gameCatalogService;
+    private readonly IProductCatalogService _productCatalogService;
     private readonly DispatcherQueueTimer? _timer;
     private bool _isDisposed;
 
@@ -29,19 +36,23 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
         IDialogService dialogService,
         INotificationService notificationService,
         IAreaSessionService areaSessionService,
+        IGameCatalogService gameCatalogService,
+        IProductCatalogService productCatalogService,
         AreaModel model)
         : base(localizationService)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         _areaSessionService = areaSessionService ?? throw new ArgumentNullException(nameof(areaSessionService));
+        _gameCatalogService = gameCatalogService ?? throw new ArgumentNullException(nameof(gameCatalogService));
+        _productCatalogService = productCatalogService ?? throw new ArgumentNullException(nameof(productCatalogService));
         Model = model ?? throw new ArgumentNullException(nameof(model));
         Model.PropertyChanged += HandleModelPropertyChanged;
 
         PaidCommand = new AsyncRelayCommand(OpenPaymentDialogAsync);
         EndSessionCommand = new AsyncRelayCommand(ToggleSessionAsync);
-        AddGameCommand = new AsyncRelayCommand(AddGameAsync);
-        AddProductCommand = new AsyncRelayCommand(AddProductAsync);
+        AddGameCommand = new RelayCommand<AvailableServiceItemModel>(AddGame);
+        AddProductCommand = new RelayCommand<AvailableServiceItemModel>(AddProduct);
 
         var dispatcherQueue = DispatcherQueue.GetForCurrentThread();
         if (dispatcherQueue is not null)
@@ -129,7 +140,7 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
     public partial string AddGameButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial IReadOnlyList<ServiceInSessionModel> GameServicesInSession { get; set; } = Array.Empty<ServiceInSessionModel>();
+    public partial ObservableCollection<ServiceInSessionModel> GameServicesInSession { get; set; } = new();
 
     [ObservableProperty]
     public partial string GameServicesCurrentTotalPriceLabelText { get; set; } = string.Empty;
@@ -144,7 +155,7 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
     public partial string AddProductButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial IReadOnlyList<ServiceInSessionModel> ProductServicesInSession { get; set; } = Array.Empty<ServiceInSessionModel>();
+    public partial ObservableCollection<ServiceInSessionModel> ProductServicesInSession { get; set; } = new();
 
     [ObservableProperty]
     public partial string ProductServicesTotalPriceLabelText { get; set; } = string.Empty;
@@ -158,13 +169,55 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
     [ObservableProperty]
     public partial string CurrentTotalPriceText { get; set; } = string.Empty;
 
+    [ObservableProperty]
+    public partial string GameSearchPlaceholderText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string ProductSearchPlaceholderText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string GameSearchText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string ProductSearchText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string FoodPivotHeaderText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string DrinkPivotHeaderText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string AddItemButtonText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string NoDataText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasNoGames))]
+    public partial IReadOnlyList<AvailableServiceItemModel> AvailableGames { get; set; } = Array.Empty<AvailableServiceItemModel>();
+
+    public bool HasNoGames => AvailableGames.Count == 0;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasNoFoods))]
+    public partial IReadOnlyList<AvailableServiceItemModel> AvailableFoods { get; set; } = Array.Empty<AvailableServiceItemModel>();
+
+    public bool HasNoFoods => AvailableFoods.Count == 0;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasNoDrinks))]
+    public partial IReadOnlyList<AvailableServiceItemModel> AvailableDrinks { get; set; } = Array.Empty<AvailableServiceItemModel>();
+
+    public bool HasNoDrinks => AvailableDrinks.Count == 0;
+
     public IAsyncRelayCommand PaidCommand { get; }
 
     public IAsyncRelayCommand EndSessionCommand { get; }
 
-    public IAsyncRelayCommand AddGameCommand { get; }
+    public IRelayCommand<AvailableServiceItemModel> AddGameCommand { get; }
 
-    public IAsyncRelayCommand AddProductCommand { get; }
+    public IRelayCommand<AvailableServiceItemModel> AddProductCommand { get; }
 
     protected override void RefreshLocalizedText()
     {
@@ -199,9 +252,14 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
 
         CurrentTotalPriceLabelText = LocalizationService.GetString("CurrentTotalPriceLabelText");
 
-        GameServicesInSession = BuildGameServices();
-        ProductServicesInSession = BuildProductServices();
+        GameSearchPlaceholderText = LocalizationService.GetString("DetailedRentedCardGameSearchPlaceholder");
+        ProductSearchPlaceholderText = LocalizationService.GetString("DetailedRentedCardProductSearchPlaceholder");
+        FoodPivotHeaderText = LocalizationService.GetString("DetailedRentedCardFoodPivotHeader");
+        DrinkPivotHeaderText = LocalizationService.GetString("DetailedRentedCardDrinkPivotHeader");
+        AddItemButtonText = LocalizationService.GetString("DetailedRentedCardAddItemButtonText");
+        NoDataText = LocalizationService.GetString("DetailedRentedCardNoDataText");
 
+        RefreshAvailableServices();
         UpdateDynamicTexts();
     }
 
@@ -229,24 +287,42 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
         Dispose();
     }
 
-    private IReadOnlyList<ServiceInSessionModel> BuildGameServices()
-    {
-        return Array.Empty<ServiceInSessionModel>();
-    }
 
-    private IReadOnlyList<ServiceInSessionModel> BuildProductServices()
+
+    private void RefreshAvailableServices()
     {
-        return Array.Empty<ServiceInSessionModel>();
+        var games = _gameCatalogService.GetGames();
+        AvailableGames = games.Select(g => new AvailableServiceItemModel(
+            g, 
+            g.Name, 
+            LocalizationService.FormatCurrency(g.HourlyPrice) + "/h")).ToList();
+
+        var products = _productCatalogService.GetProducts();
+        AvailableFoods = products
+            .Where(p => p.Type == ProductType.Food)
+            .Select(p => new AvailableServiceItemModel(
+                p, 
+                p.Name, 
+                LocalizationService.FormatCurrency(p.Price))).ToList();
+
+        AvailableDrinks = products
+            .Where(p => p.Type == ProductType.Drink)
+            .Select(p => new AvailableServiceItemModel(
+                p, 
+                p.Name, 
+                LocalizationService.FormatCurrency(p.Price))).ToList();
     }
 
     private void HandleTimerTick(DispatcherQueueTimer sender, object args)
     {
-        if (_isDisposed)
-        {
-            return;
-        }
-
+        if (_isDisposed) return;
+        
         UpdateDynamicTexts();
+        foreach (var game in GameServicesInSession)
+        {
+            game.RefreshTimer();
+        }
+        UpdateTotals();
     }
 
     private void UpdateDynamicTexts()
@@ -269,9 +345,6 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
             elapsedTime.Seconds);
 
         AreaSessionTotalPriceText = LocalizationService.FormatCurrency(areaSessionTotal);
-        GameServicesCurrentTotalPriceText = LocalizationService.FormatCurrency(gameServicesTotal);
-        ProductServicesTotalPriceText = LocalizationService.FormatCurrency(productServicesTotal);
-        CurrentTotalPriceText = LocalizationService.FormatCurrency(currentTotal);
         Model.TotalAmount = currentTotal;
     }
 
@@ -297,26 +370,86 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
         return _dialogService.ShowDialogAsync(new PaymentDialogRequest { Model = Model });
     }
 
-    private Task AddGameAsync()
+    private void AddGame(AvailableServiceItemModel? item)
     {
-        return NotifyFeatureUnavailableAsync(
-            GameServicesTitleText,
-            "AreaSessionAddGameUnavailableMessage");
+        if (item is null) return;
+        
+        GameServicesInSession.Add(new ServiceInSessionModel(
+            LocalizationService,
+            item.Name,
+            ServiceInSessionModel.ServiceType.Game,
+            null,
+            1,
+            ((Application.Games.GameRecord)item.Record).HourlyPrice,
+            UpdateTotals,
+            RemoveGame,
+            HandleStopGameRequestedAsync
+        ));
+        UpdateTotals();
     }
 
-    private Task AddProductAsync()
+    private async Task HandleStopGameRequestedAsync(ServiceInSessionModel game)
     {
-        return NotifyFeatureUnavailableAsync(
-            ProductServicesTitleText,
-            "AreaSessionAddProductUnavailableMessage");
+        bool confirmed = await _dialogService.ShowConfirmationAsync(
+            "StopGameConfirmTitle",
+            "StopGameConfirmMessage",
+            "StopGameConfirmButtonText",
+            "CancelButtonText");
+        if (confirmed)
+        {
+            game.EndTime = DateTime.Now;
+            game.Refresh();
+            UpdateTotals();
+        }
     }
 
-    private Task NotifyFeatureUnavailableAsync(string title, string messageKey)
+    private void RemoveGame(ServiceInSessionModel game)
     {
-        return _notificationService.SendAsync(
-            title,
-            LocalizationService.GetString(messageKey),
-            NotificationType.Info);
+        GameServicesInSession.Remove(game);
+        UpdateTotals();
+    }
+
+    private void AddProduct(AvailableServiceItemModel? item)
+    {
+        if (item is null) return;
+        
+        var product = (Application.Products.ProductRecord)item.Record;
+        var existing = ProductServicesInSession.FirstOrDefault(p => p.Service == product.Name);
+        if (existing is not null)
+        {
+            existing.IncrementQuantityCommand.Execute(null);
+        }
+        else
+        {
+            ProductServicesInSession.Add(new ServiceInSessionModel(
+                LocalizationService,
+                product.Name,
+                ServiceInSessionModel.ServiceType.Product,
+                null,
+                1,
+                product.Price,
+                UpdateTotals,
+                RemoveProduct
+            ));
+        }
+        UpdateTotals();
+    }
+
+    private void RemoveProduct(ServiceInSessionModel product)
+    {
+        ProductServicesInSession.Remove(product);
+        UpdateTotals();
+    }
+
+    private void UpdateTotals()
+    {
+        var gameTotal = GameServicesInSession.Sum(g => g.TotalPrice);
+        GameServicesCurrentTotalPriceText = LocalizationService.FormatCurrency(gameTotal);
+
+        var productTotal = ProductServicesInSession.Sum(p => p.TotalPrice);
+        ProductServicesTotalPriceText = LocalizationService.FormatCurrency(productTotal);
+
+        CurrentTotalPriceText = LocalizationService.FormatCurrency(gameTotal + productTotal);
     }
 
     private Task ToggleSessionAsync()
@@ -334,6 +467,11 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
     private void HandleModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (_isDisposed)
+        {
+            return;
+        }
+
+        if (e.PropertyName == nameof(Model.TotalAmount))
         {
             return;
         }

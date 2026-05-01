@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Application.Services;
 using WinUI.ViewModels;
+using WinUI.Services.Dialogs;
 
 namespace WinUI.ViewModels.Dialogs;
 

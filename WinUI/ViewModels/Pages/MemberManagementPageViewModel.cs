@@ -88,6 +88,8 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
         AlwaysFilled = true,
     };
 
+    // PERF: Bắt buộc dùng ObservableCollection cho ListView/ItemsRepeater để UI tự động render lại (Re-render) 
+    // các item bị thay đổi thay vì phải xóa toàn bộ control và vẽ lại từ đầu, giúp tăng FPS khi scroll hoặc phân trang.
     public ObservableCollection<MemberCardControlViewModel> PagedMemberCards { get; } = [];
 
     public ObservableCollection<LocalizationOptionModel> SortFieldOptions { get; } = [];

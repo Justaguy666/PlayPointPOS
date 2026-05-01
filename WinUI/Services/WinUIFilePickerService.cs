@@ -8,11 +8,11 @@ namespace WinUI.Services;
 
 public sealed class WinUIFilePickerService : IFilePickerService
 {
-    private readonly MainWindow _mainWindow;
+    private readonly Func<MainWindow> _getMainWindow;
 
-    public WinUIFilePickerService(MainWindow mainWindow)
+    public WinUIFilePickerService(Func<MainWindow> getMainWindow)
     {
-        _mainWindow = mainWindow ?? throw new ArgumentNullException(nameof(mainWindow));
+        _getMainWindow = getMainWindow ?? throw new ArgumentNullException(nameof(getMainWindow));
     }
 
     public async Task<string?> PickImageFileUriAsync()
@@ -24,7 +24,8 @@ public sealed class WinUIFilePickerService : IFilePickerService
         picker.FileTypeFilter.Add(".webp");
         picker.FileTypeFilter.Add(".bmp");
 
-        nint windowHandle = WindowNative.GetWindowHandle(_mainWindow);
+        var mainWindow = _getMainWindow();
+        nint windowHandle = WindowNative.GetWindowHandle(mainWindow);
         InitializeWithWindow.Initialize(picker, windowHandle);
 
         var file = await picker.PickSingleFileAsync();

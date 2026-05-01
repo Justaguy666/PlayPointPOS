@@ -3,26 +3,25 @@ using Application.UseCases.Auth.Contracts;
 namespace Application.Services;
 
 /// <summary>
-/// Application-level facade for authentication operations.
-/// Coordinates between Views, Use Cases, and Infrastructure.
-/// This is the primary entry point for authentication business logic.
+/// Cửa ngõ (Facade) điều phối các thao tác xác thực người dùng (Login/Register) ở tầng Application.
+/// // WHY: Gom nhóm Use Cases lại giúp tầng UI gọi API xác thực gọn gàng hơn mà không phải phụ thuộc vào quá nhiều class lẻ.
 /// </summary>
 public interface IAuthenticationApplication
 {
     /// <summary>
-    /// Authenticates a user with email and password.
+    /// Xác thực người dùng bằng email và mật khẩu.
     /// </summary>
-    /// <param name="email">User's email</param>
-    /// <param name="password">User's plain-text password (will be hashed for comparison)</param>
-    /// <returns>LoginResult with success status and authenticated account (if successful)</returns>
+    /// <param name="email">Email đăng nhập của người dùng.</param>
+    /// <param name="password">Mật khẩu chưa mã hóa (sẽ được đối chiếu bằng <see cref="IPasswordHasher"/>).</param>
+    /// <returns>Đối tượng LoginResult chứa trạng thái và thông tin tài khoản nếu thành công.</returns>
     Task<LoginResult> LoginAsync(string email, string password);
 
     /// <summary>
-    /// Registers a new user account.
+    /// Đăng ký tài khoản mới.
     /// </summary>
-    /// <param name="email">User's email (must be unique)</param>
-    /// <param name="password">User's password (will be hashed for storage)</param>
-    /// <param name="language">User's preferred language (e.g., "en-US", "vi-VN")</param>
-    /// <returns>RegisterResult with success status and message</returns>
+    /// <param name="email">Email đăng ký (yêu cầu là duy nhất trong hệ thống).</param>
+    /// <param name="password">Mật khẩu đăng ký (sẽ được băm trước khi lưu trữ).</param>
+    /// <param name="language">Ngôn ngữ mặc định của người dùng (ví dụ: "en-US", "vi-VN").</param>
+    /// <returns>Đối tượng RegisterResult chứa trạng thái và thông báo lỗi (nếu có).</returns>
     Task<RegisterResult> RegisterAsync(string email, string password, string language);
 }

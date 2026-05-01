@@ -32,8 +32,20 @@
                     CornerRadius="14"
                     Background="{StaticResource AntiqueWhiteBrush}"
                     VerticalAlignment="Center">
-                <Image Source="{Binding ImageUri}"
-                       Stretch="UniformToFill" />
+                <Grid>
+                    <Image Source="{Binding ImageUri}"
+                           Stretch="UniformToFill"
+                           Visibility="{Binding HasImage, Converter={StaticResource BoolToVisible}}" />
+
+                    <PathIcon Width="30"
+                              Height="30"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Foreground="{StaticResource SecondaryGrayBrush}"
+                              Opacity="0.45"
+                              Visibility="{Binding HasImage, Converter={StaticResource BoolToInvisible}}"
+                              Data="{Binding ImagePlaceholderIconState, Converter={StaticResource IconConverter}}" />
+                </Grid>
             </Border>
 
             <StackPanel Grid.Column="1"

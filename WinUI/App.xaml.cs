@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using Windows.ApplicationModel;
 using WinUI.Composition;
+using WinUI.Services.Dialogs;
 
 namespace WinUI;
 
@@ -39,9 +40,6 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddPlayPointServices(context.Configuration, configPath);
                 })
                 .Build();
-
-            NavigationRouteRegistry.RegisterRoutes();
-
             var configuration = Host.Services.GetRequiredService<IConfiguration>();
             var language = configuration["AppSettings:Language"] ?? LocalizationPreferences.DefaultLanguage;
             Microsoft.Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = language;
@@ -75,8 +73,8 @@ public partial class App : Microsoft.UI.Xaml.Application
 
             if (_window is MainWindow mainWindow)
             {
-                var toastService = Host.Services.GetRequiredService<Infrastructure.Services.Notification.ToastNotificationService>();
-                toastService.NotificationRequested += (title, message, type)
+                var notificationEvents = Host.Services.GetRequiredService<INotificationEventSource>();
+                notificationEvents.NotificationRequested += (title, message, type)
                     => mainWindow.DispatcherQueue.TryEnqueue(() => mainWindow.ShowNotification(title, message, type));
             }
         }
@@ -87,8 +85,13 @@ public partial class App : Microsoft.UI.Xaml.Application
         }
     }
 
+    // WHY: Hàm này giải quyết vấn đề tìm file config appsettings.json.
+    // Nếu ứng dụng chạy dạng Packaged (MSIX), root sẽ nằm ở InstalledLocation.
+    // Nếu chạy dạng Unpackaged (Debug F5 trong Visual Studio), root phải dò lùi lại từ bin folder.
     private static string ResolveContentRoot()
     {
+        // WORKAROUND: TryGetInstalledLocationPath có thể văng Exception nếu ứng dụng không chạy dạng Packaged,
+        // do đó bắt buộc phải bọc try-catch bên trong hàm đó.
         string? packagedRoot = TryGetInstalledLocationPath();
         if (!string.IsNullOrWhiteSpace(packagedRoot))
         {

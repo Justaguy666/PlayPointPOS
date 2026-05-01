@@ -1,23 +1,23 @@
 namespace Application.Services;
 
 /// <summary>
-/// Interface for password hashing and verification.
-/// Implementations should use secure algorithms like BCrypt.
+/// Giao diện xử lý việc băm (hash) và xác thực mật khẩu.
+/// // SECURITY: Bắt buộc phải implement bằng các thuật toán an toàn mạnh như BCrypt hoặc Argon2.
 /// </summary>
 public interface IPasswordHasher
 {
     /// <summary>
-    /// Hashes a plain-text password securely.
+    /// Băm mật khẩu dạng plain-text một cách an toàn để lưu vào cơ sở dữ liệu.
     /// </summary>
-    /// <param name="plainPassword">The plain-text password to hash</param>
-    /// <returns>The hashed password (can be safely stored in database)</returns>
+    /// <param name="plainPassword">Mật khẩu nguyên bản chưa mã hóa.</param>
+    /// <returns>Chuỗi mật khẩu đã được băm (có kèm salt tự động sinh).</returns>
     string HashPassword(string plainPassword);
 
     /// <summary>
-    /// Verifies a plain-text password against a stored hash.
+    /// Xác thực mật khẩu người dùng nhập vào so với chuỗi hash trong cơ sở dữ liệu.
     /// </summary>
-    /// <param name="plainPassword">The plain-text password to verify</param>
-    /// <param name="hash">The stored hash to verify against</param>
-    /// <returns>True if password matches hash; false otherwise</returns>
+    /// <param name="plainPassword">Mật khẩu người dùng nhập.</param>
+    /// <param name="hash">Mật khẩu đã băm (lấy từ DB).</param>
+    /// <returns>True nếu mật khẩu khớp, ngược lại False.</returns>
     bool VerifyPassword(string plainPassword, string hash);
 }

@@ -7,6 +7,8 @@ namespace WinUI.ViewModels.Pages;
 
 public sealed class DashboardPageViewModel : IDisposable
 {
+    // WHY: Sử dụng hardcode data (Mock) tạm thời để thiết kế Layout và DataBinding. 
+    // TODO: Thay thế bằng dữ liệu thật từ API khi kết nối với Backend (Ticket: TBD).
     private const decimal TodayRevenueAmount = 12_450_000m;
     private const int TodayGameSessionCount = 234;
     private const int TodayCustomerCount = 156;
@@ -136,6 +138,8 @@ public sealed class DashboardPageViewModel : IDisposable
 
         _isDisposed = true;
 
+        // WORKAROUND: Bắt buộc gọi Dispose() thủ công cho các ViewModels con 
+        // để unsubscribe các sự kiện (Messenger/Event), tránh rò rỉ bộ nhớ (memory leak) điển hình của WinUI 3.
         foreach (var viewModel in _ownedViewModels)
         {
             viewModel.Dispose();

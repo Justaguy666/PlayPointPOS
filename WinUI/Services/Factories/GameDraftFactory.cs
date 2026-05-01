@@ -20,7 +20,7 @@ public sealed class GameDraftFactory
             HourlyPrice = 0m,
             StockQuantity = 1,
             BorrowedQuantity = 0,
-            ImageUri = "ms-appx:///Assets/Mock.png",
+            ImageUri = string.Empty,
         };
     }
 }

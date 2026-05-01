@@ -187,7 +187,7 @@
     <value>Key...</value>
   </data>
   <data name="ConfigDialogRememberMeLabelText" xml:space="preserve">
-    <value>Ghi nhớ</value>
+    <value>Ghi nhớ cho lần sau</value>
   </data>
   <data name="ConfigDialogSaveButtonText" xml:space="preserve">
     <value>Lưu</value>
@@ -1017,6 +1017,21 @@
   <data name="AddGameButtonText" xml:space="preserve">
 		<value>Thêm</value>
 	</data>
+  <data name="StopGameConfirmTitle" xml:space="preserve">
+    <value>Kết thúc game</value>
+  </data>
+  <data name="StopGameConfirmMessage" xml:space="preserve">
+    <value>Bạn có chắc muốn kết thúc game này không? Hành động này không thể hoàn tác.</value>
+  </data>
+  <data name="StopGameConfirmButtonText" xml:space="preserve">
+    <value>Kết thúc</value>
+  </data>
+  <data name="StartGameButtonText" xml:space="preserve">
+    <value>Bắt đầu</value>
+  </data>
+  <data name="StopGameButtonText" xml:space="preserve">
+    <value>Kết thúc</value>
+  </data>
   <data name="AreaSessionAddGameUnavailableMessage" xml:space="preserve">
 		<value>Chưa hỗ trợ thêm game vào phiên đang hoạt động.</value>
 	</data>
@@ -1904,5 +1919,23 @@
   </data>
   <data name="TransactionWalkInCustomerName" xml:space="preserve">
     <value>Khách vãng lai</value>
+  </data>
+  <data name="DetailedRentedCardGameSearchPlaceholder" xml:space="preserve">
+    <value>Tìm kiếm game...</value>
+  </data>
+  <data name="DetailedRentedCardProductSearchPlaceholder" xml:space="preserve">
+    <value>Tìm kiếm món ăn, thức uống...</value>
+  </data>
+  <data name="DetailedRentedCardFoodPivotHeader" xml:space="preserve">
+    <value>Món ăn</value>
+  </data>
+  <data name="DetailedRentedCardDrinkPivotHeader" xml:space="preserve">
+    <value>Nước uống</value>
+  </data>
+  <data name="DetailedRentedCardAddItemButtonText" xml:space="preserve">
+    <value>Thêm</value>
+  </data>
+  <data name="DetailedRentedCardNoDataText" xml:space="preserve">
+    <value>Không tồn tại</value>
   </data>
 </root>

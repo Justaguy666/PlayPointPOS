@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
 using WinUI.Resources;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
@@ -89,6 +90,10 @@ public abstract partial class GameCardControlViewModelBase : LocalizedViewModelB
 
     public string ImageUri => Model.ImageUri;
 
+    public ImageSource? ImageSource => CreateImageSource(Model.ImageUri);
+
+    public bool HasImage => !string.IsNullOrWhiteSpace(Model.ImageUri);
+
     public string TypeDisplayName => Model.GameType?.Name ?? string.Empty;
 
     public string PlayerRangeText => $"{Model.MinPlayers}-{Model.MaxPlayers}";
@@ -107,6 +112,13 @@ public abstract partial class GameCardControlViewModelBase : LocalizedViewModelB
     {
         Kind = IconKind.Member,
         Size = 20,
+        AlwaysFilled = true,
+    };
+
+    public IconState ImagePlaceholderIconState { get; } = new()
+    {
+        Kind = IconKind.Game,
+        Size = 32,
         AlwaysFilled = true,
     };
 
@@ -176,6 +188,8 @@ public abstract partial class GameCardControlViewModelBase : LocalizedViewModelB
                 break;
             case nameof(GameModel.ImageUri):
                 OnPropertyChanged(nameof(ImageUri));
+                OnPropertyChanged(nameof(ImageSource));
+                OnPropertyChanged(nameof(HasImage));
                 break;
             case nameof(GameModel.GameType):
                 OnPropertyChanged(nameof(TypeDisplayName));
@@ -194,6 +208,29 @@ public abstract partial class GameCardControlViewModelBase : LocalizedViewModelB
             case nameof(GameModel.GameDifficulty):
                 RefreshLocalizedText();
                 break;
+        }
+    }
+
+    private static ImageSource? CreateImageSource(string? uriText)
+    {
+        if (string.IsNullOrWhiteSpace(uriText))
+        {
+            return null;
+        }
+
+        string trimmed = uriText.Trim();
+        if (!Uri.TryCreate(trimmed, UriKind.Absolute, out Uri? uri))
+        {
+            return null;
+        }
+
+        try
+        {
+            return new BitmapImage(uri);
+        }
+        catch
+        {
+            return null;
         }
     }
 
@@ -221,6 +258,7 @@ public abstract partial class GameCardControlViewModelBase : LocalizedViewModelB
     {
         OnPropertyChanged(nameof(Name));
         OnPropertyChanged(nameof(ImageUri));
+        OnPropertyChanged(nameof(HasImage));
         OnPropertyChanged(nameof(TypeDisplayName));
         OnPropertyChanged(nameof(PlayerRangeText));
         OnPropertyChanged(nameof(StockSummaryText));

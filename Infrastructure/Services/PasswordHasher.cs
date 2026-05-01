@@ -4,26 +4,23 @@ using BC = BCrypt.Net.BCrypt;
 namespace Infrastructure.Services;
 
 /// <summary>
-/// Password hasher using BCrypt algorithm.
-/// BCrypt is designed for secure password hashing with built-in salt and work factor.
+/// Trình băm mật khẩu sử dụng thuật toán BCrypt.
+/// // SECURITY: BCrypt tự động sinh Salt ngẫu nhiên và dùng WorkFactor để chống brute-force attack.
 /// </summary>
 public class PasswordHasher : IPasswordHasher
 {
     /// <summary>
-    /// Hashes a plain-text password using BCrypt with work factor 12.
-    /// Work factor 12 provides good security (as of 2024) while maintaining reasonable performance.
+    /// Băm mật khẩu plain-text bằng BCrypt với WorkFactor = 12.
     /// </summary>
     public string HashPassword(string plainPassword)
     {
-        // BCrypt.Net-Next with work factor 12: ~100-150ms on modern hardware
-        // Higher = more secure but slower; lower = faster but less secure
-        // 12 is recommended as of 2024
+        // NOTE: WorkFactor 12 tốn khoảng 100-200ms trên CPU hiện đại. 
+        // Đây là mức cân bằng hoàn hảo giữa hiệu năng và bảo mật (chuẩn năm 2024).
         return BC.HashPassword(plainPassword, workFactor: 12);
     }
 
     /// <summary>
-    /// Verifies a plain-text password against a BCrypt hash.
-    /// Falls back to plain-text comparison for migration from old plain-text passwords.
+    /// Xác thực mật khẩu plain-text với mã băm.
     /// </summary>
     public bool VerifyPassword(string plainPassword, string hash)
     {

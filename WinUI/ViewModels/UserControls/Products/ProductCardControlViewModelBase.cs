@@ -63,7 +63,16 @@ public abstract partial class ProductCardControlViewModelBase : LocalizedViewMod
 
     public string ImageUri => Model.ImageUri;
 
+    public bool HasImage => !string.IsNullOrWhiteSpace(Model.ImageUri);
+
     public Brush TypeBadgeForeground => _typeBadgeForegroundBrush;
+
+    public IconState ImagePlaceholderIconState { get; } = new()
+    {
+        Kind = IconKind.Product,
+        Size = 32,
+        AlwaysFilled = true,
+    };
 
     public IconState EditIconState { get; } = new()
     {
@@ -123,6 +132,7 @@ public abstract partial class ProductCardControlViewModelBase : LocalizedViewMod
                 break;
             case nameof(ProductModel.ImageUri):
                 OnPropertyChanged(nameof(ImageUri));
+                OnPropertyChanged(nameof(HasImage));
                 break;
             case nameof(ProductModel.Price):
             case nameof(ProductModel.ProductType):
@@ -145,5 +155,6 @@ public abstract partial class ProductCardControlViewModelBase : LocalizedViewMod
     {
         OnPropertyChanged(nameof(Name));
         OnPropertyChanged(nameof(ImageUri));
+        OnPropertyChanged(nameof(HasImage));
     }
 }

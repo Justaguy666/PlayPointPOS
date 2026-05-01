@@ -1017,6 +1017,21 @@
   <data name="AddGameButtonText" xml:space="preserve">
 		<value>Add</value>
 	</data>
+  <data name="StopGameConfirmTitle" xml:space="preserve">
+    <value>Stop game</value>
+  </data>
+  <data name="StopGameConfirmMessage" xml:space="preserve">
+    <value>Are you sure you want to stop this game? This action cannot be undone.</value>
+  </data>
+  <data name="StopGameConfirmButtonText" xml:space="preserve">
+    <value>Stop game</value>
+  </data>
+  <data name="StartGameButtonText" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="StopGameButtonText" xml:space="preserve">
+    <value>Stop</value>
+  </data>
   <data name="AreaSessionAddGameUnavailableMessage" xml:space="preserve">
 		<value>Adding borrowed games to an active session is not available yet.</value>
 	</data>
@@ -1904,5 +1919,23 @@
   </data>
   <data name="TransactionWalkInCustomerName" xml:space="preserve">
     <value>Walk-in customer</value>
+  </data>
+  <data name="DetailedRentedCardGameSearchPlaceholder" xml:space="preserve">
+    <value>Search games...</value>
+  </data>
+  <data name="DetailedRentedCardProductSearchPlaceholder" xml:space="preserve">
+    <value>Search foods, drinks...</value>
+  </data>
+  <data name="DetailedRentedCardFoodPivotHeader" xml:space="preserve">
+    <value>Food</value>
+  </data>
+  <data name="DetailedRentedCardDrinkPivotHeader" xml:space="preserve">
+    <value>Drink</value>
+  </data>
+  <data name="DetailedRentedCardAddItemButtonText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="DetailedRentedCardNoDataText" xml:space="preserve">
+    <value>Not found</value>
   </data>
 </root>

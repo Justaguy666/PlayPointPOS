@@ -13,7 +13,7 @@ public sealed class ProductDraftFactory
             ProductType = ProductType.Food,
             Price = 0m,
             StockQuantity = 0,
-            ImageUri = "ms-appx:///Assets/Mock.png",
+            ImageUri = string.Empty,
         };
     }
 }

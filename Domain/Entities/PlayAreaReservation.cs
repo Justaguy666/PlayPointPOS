@@ -13,5 +13,4 @@ public class PlayAreaReservation : BaseEntity
     public int PartySize { get; set; }
     public DateTime ReservedFrom { get; set; }
     public DateTime ReservedUntil { get; set; }
-    public string Notes { get; set; } = string.Empty;
 }

@@ -13,6 +13,8 @@
     d:DataContext="{d:DesignInstance Type=vm:ReservationViewModel, IsDesignTimeCreatable=False}"
     Style="{StaticResource StandardFormDialogStyle}">
 
+    <!-- NOTE: Khai báo ResourceDictionary bên trong Dialog thay vì App.xaml 
+         để giảm tải bộ nhớ chung (chỉ nạp các Style/Template này khi Dialog được mở). -->
     <ContentDialog.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

@@ -10,11 +10,4 @@
                 AlignmentX="Left"
                 AlignmentY="Top" />
     
-    <!-- Mock Images -->
-    <ImageBrush x:Key="MockBrush"
-                ImageSource="ms-appx:///Assets/Mock.png"
-                Stretch="UniformToFill" 
-                AlignmentX="Center"
-                AlignmentY="Center" />
-
 </ResourceDictionary>

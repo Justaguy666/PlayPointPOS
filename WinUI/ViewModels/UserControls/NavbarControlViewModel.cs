@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
+using WinUI.Services.Dialogs;
 
 namespace WinUI.ViewModels.UserControls;
 

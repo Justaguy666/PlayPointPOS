@@ -15,7 +15,7 @@ public sealed class GameModel : ObservableObject, IGameFilterable
     private GameDifficulty _gameDifficulty;
     private int _stockQuantity;
     private int _borrowedQuantity;
-    private string _imageUri = "ms-appx:///Assets/Mock.png";
+    private string _imageUri = string.Empty;
 
     public string Name
     {
@@ -81,6 +81,6 @@ public sealed class GameModel : ObservableObject, IGameFilterable
     public string ImageUri
     {
         get => _imageUri;
-        set => SetProperty(ref _imageUri, string.IsNullOrWhiteSpace(value) ? "ms-appx:///Assets/Mock.png" : value);
+        set => SetProperty(ref _imageUri, value?.Trim() ?? string.Empty);
     }
 }

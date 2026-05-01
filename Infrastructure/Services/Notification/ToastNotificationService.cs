@@ -4,7 +4,7 @@ using Application.Services;
 
 namespace Infrastructure.Services.Notification;
 
-public class ToastNotificationService : INotificationService
+public class ToastNotificationService : INotificationService, INotificationEventSource
 {
     public event Action<string, string, NotificationType>? NotificationRequested;
 

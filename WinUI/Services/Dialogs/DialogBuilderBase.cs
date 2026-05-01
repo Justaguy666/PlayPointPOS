@@ -1,19 +1,11 @@
 using System;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 
 namespace WinUI.Services.Dialogs;
 
 public abstract class ParameterlessDialogBuilder : IDialogDefinition
 {
-    private readonly IServiceProvider _provider;
-
-    protected ParameterlessDialogBuilder(IServiceProvider provider)
-    {
-        _provider = provider ?? throw new ArgumentNullException(nameof(provider));
-    }
-
-    public abstract Application.Services.DialogKey Key { get; }
+    public abstract DialogKey Key { get; }
 
     public Type? RequestType => null;
 
@@ -25,12 +17,6 @@ public abstract class ParameterlessDialogBuilder : IDialogDefinition
         }
 
         return CreateCore();
-    }
-
-    protected T Resolve<T>()
-        where T : notnull
-    {
-        return _provider.GetRequiredService<T>();
     }
 
     protected abstract ContentDialog CreateCore();
@@ -45,14 +31,7 @@ public abstract class ParameterlessDialogBuilder : IDialogDefinition
 public abstract class OptionalDialogBuilder<TRequest> : IDialogDefinition
     where TRequest : class
 {
-    private readonly IServiceProvider _provider;
-
-    protected OptionalDialogBuilder(IServiceProvider provider)
-    {
-        _provider = provider ?? throw new ArgumentNullException(nameof(provider));
-    }
-
-    public abstract Application.Services.DialogKey Key { get; }
+    public abstract DialogKey Key { get; }
 
     public Type? RequestType => typeof(TRequest);
 
@@ -71,12 +50,6 @@ public abstract class OptionalDialogBuilder<TRequest> : IDialogDefinition
         throw CreateRequestTypeException(typeof(TRequest), request.GetType());
     }
 
-    protected T Resolve<T>()
-        where T : notnull
-    {
-        return _provider.GetRequiredService<T>();
-    }
-
     protected abstract ContentDialog CreateCore(TRequest? request);
 
     protected InvalidOperationException CreateRequestTypeException(Type expectedType, Type actualType)
@@ -89,14 +62,7 @@ public abstract class OptionalDialogBuilder<TRequest> : IDialogDefinition
 public abstract class RequiredDialogBuilder<TRequest> : IDialogBuilder<TRequest>
     where TRequest : class
 {
-    private readonly IServiceProvider _provider;
-
-    protected RequiredDialogBuilder(IServiceProvider provider)
-    {
-        _provider = provider ?? throw new ArgumentNullException(nameof(provider));
-    }
-
-    public abstract Application.Services.DialogKey Key { get; }
+    public abstract DialogKey Key { get; }
 
     public Type? RequestType => typeof(TRequest);
 
@@ -111,12 +77,6 @@ public abstract class RequiredDialogBuilder<TRequest> : IDialogBuilder<TRequest>
     }
 
     public abstract ContentDialog Create(TRequest request);
-
-    protected T Resolve<T>()
-        where T : notnull
-    {
-        return _provider.GetRequiredService<T>();
-    }
 
     protected InvalidOperationException CreateRequestTypeException(Type expectedType, Type? actualType)
     {

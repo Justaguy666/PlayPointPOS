@@ -1,11 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using WinUI.UIModels.Enums;
 using Application.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System.Threading.Tasks;
 using WinUI.UIModels;
+using WinUI.UIModels.Enums;
 
 namespace WinUI.ViewModels.Dialogs.Management;
 
@@ -16,13 +13,13 @@ public abstract partial class UpsertDialogViewModelBase : LocalizedViewModelBase
     public bool IsEdit => Mode == UpsertDialogMode.Edit;
 
     [ObservableProperty]
-    private string _submitButtonText;
+    public partial string SubmitButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private string _title;
+    public partial string Title { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private IconState _icon;
+    public partial IconState Icon { get; set; } = new();
 
     protected UpsertDialogViewModelBase(
         ILocalizationService localizationService,

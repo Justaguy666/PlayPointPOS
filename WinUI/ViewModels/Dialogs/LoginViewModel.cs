@@ -8,6 +8,7 @@ using Application.UseCases.Auth.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WinUI.ViewModels;
+using WinUI.Services.Dialogs;
 
 namespace WinUI.ViewModels.Dialogs;
 

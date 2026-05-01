@@ -7,6 +7,7 @@ using WinUI.UIModels;
 using WinUI.UIModels.Enums;
 using WinUI.ViewModels.Dialogs.Dashboard;
 using WinUI.ViewModels;
+using WinUI.Services.Dialogs;
 
 namespace WinUI.ViewModels.UserControls.Dashboard;
 

@@ -12,6 +12,7 @@ using Microsoft.UI.Xaml.Media;
 using Windows.UI;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
+using WinUI.Services.Dialogs;
 
 namespace WinUI.ViewModels.Dialogs.Management;
 

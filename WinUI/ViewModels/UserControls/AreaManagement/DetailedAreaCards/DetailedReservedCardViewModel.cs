@@ -12,6 +12,7 @@ using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
 using WinUI.ViewModels.Dialogs.Management;
 using Application.Services.Areas;
+using WinUI.Services.Dialogs;
 
 namespace WinUI.ViewModels.AreaManagement.DetailedAreaCards;
 

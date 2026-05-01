@@ -66,8 +66,20 @@
                             Background="{StaticResource AntiqueWhiteBrush}"
                             BorderBrush="{StaticResource LighterGrayBrush}"
                             BorderThickness="1">
-                        <Image Source="{x:Bind ViewModel.ImagePreviewSource, Mode=OneWay}"
-                               Stretch="UniformToFill" />
+                        <Grid>
+                            <Image Source="{x:Bind ViewModel.ImagePreviewSource, Mode=OneWay}"
+                                   Stretch="UniformToFill"
+                                   Visibility="{x:Bind ViewModel.HasImagePreview, Mode=OneWay, Converter={StaticResource BoolToVisible}}" />
+
+                            <PathIcon Width="42"
+                                      Height="42"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Foreground="{StaticResource SecondaryGrayBrush}"
+                                      Opacity="0.45"
+                                      Visibility="{x:Bind ViewModel.HasImagePreview, Mode=OneWay, Converter={StaticResource BoolToInvisible}}"
+                                      Data="{x:Bind ViewModel.ImagePlaceholderIconState, Mode=OneWay, Converter={StaticResource IconConverter}}" />
+                        </Grid>
                     </Border>
 
                     <Grid ColumnSpacing="12">

@@ -1,3 +1,4 @@
+using System;
 using Application.Areas;
 using Application.Games;
 using Application.Interfaces;
@@ -22,11 +23,17 @@ using WinUI.Services.Dialogs;
 using WinUI.Services.Factories;
 using WinUI.Services.Layout;
 using WinUI.Services.Management;
+using WinUI.ViewModels.Dialogs;
+using WinUI.ViewModels.Dialogs.Dashboard;
+using WinUI.ViewModels.Dialogs.Management;
 
 namespace WinUI.Composition;
 
 internal static class PlayPointServiceCollectionExtensions
 {
+    // WHY: Đây là Composition Root của toàn bộ ứng dụng. 
+    // Tập trung đăng ký Dependency Injection (DI) tại đây giúp WinUI project không cần reference trực tiếp 
+    // đến cụ thể các implementations ở tầng Infrastructure (tuân thủ Dependency Inversion).
     public static IServiceCollection AddPlayPointServices(
         this IServiceCollection services,
         IConfiguration configuration,
@@ -46,6 +53,7 @@ internal static class PlayPointServiceCollectionExtensions
         services.AddFactories();
         services.AddViewModels();
         services.AddViews();
+        services.AddNavigationRoutes();
 
         return services;
     }
@@ -64,6 +72,8 @@ internal static class PlayPointServiceCollectionExtensions
                 defaultPreferences.TimeZone));
         services.AddSingleton<IAppInfoService, WinUIAppInfoService>();
         services.AddSingleton<IApplicationLifetimeService, WinUIApplicationLifetimeService>();
+        services.AddSingleton<Func<MainWindow>>(sp => () => sp.GetRequiredService<MainWindow>());
+        services.AddSingleton<Func<IFilePickerService>>(sp => () => sp.GetRequiredService<IFilePickerService>());
         services.AddSingleton<IFilePickerService, WinUIFilePickerService>();
         services.AddSingleton<IDateTimeService, Infrastructure.Services.DateTimeService>();
         services.AddSingleton<INavigationService, WinUINavigationService>();
@@ -92,16 +102,37 @@ internal static class PlayPointServiceCollectionExtensions
         services.AddSingleton<Infrastructure.Services.Notification.ToastNotificationService>();
         services.AddSingleton<INotificationService>(sp =>
             sp.GetRequiredService<Infrastructure.Services.Notification.ToastNotificationService>());
+        services.AddSingleton<INotificationEventSource>(sp =>
+            sp.GetRequiredService<Infrastructure.Services.Notification.ToastNotificationService>());
 
         services.AddSingleton<IPasswordHasher, Infrastructure.Services.PasswordHasher>();
         services.AddSingleton<IResponsiveLayoutService, ResponsiveLayoutService>();
         services.AddDialogBuilders();
+        services.AddDialogServiceFactories();
         services.AddSingleton<IDialogFactory, DialogRegistry>();
         services.AddSingleton<IDialogService, WinUIDialogService>();
     }
 
     private static void AddDialogBuilders(this IServiceCollection services)
     {
+        services.AddDialogViewModelFactory<ConfigViewModel>();
+        services.AddDialogViewModelFactory<RegisterViewModel>();
+        services.AddDialogViewModelFactory<LoginViewModel>();
+        services.AddDialogViewModelFactory<ForgotPasswordViewModel>();
+        services.AddDialogViewModelFactory<OtpViewModel>();
+        services.AddDialogViewModelFactory<StartSessionViewModel>();
+        services.AddDialogViewModelFactory<AreaFilterViewModel>();
+        services.AddDialogViewModelFactory<PaymentViewModel>();
+        services.AddDialogViewModelFactory<GameFilterViewModel>();
+        services.AddDialogViewModelFactory<GameTypeDialogViewModel>();
+        services.AddDialogViewModelFactory<ProductFilterViewModel>();
+        services.AddDialogViewModelFactory<MemberFilterViewModel>();
+        services.AddDialogViewModelFactory<MembershipPackageDialogViewModel>();
+        services.AddDialogViewModelFactory<MembershipPackageEditDialogViewModel>();
+        services.AddDialogViewModelFactory<GoalKpiDialogViewModel>();
+        services.AddDialogViewModelFactory<TransactionDetailDialogViewModel>();
+        services.AddDialogViewModelFactory<TransactionFilterDialogViewModel>();
+
         services.AddDialogBuilder<ConfigDialogBuilder>();
         services.AddDialogBuilder<RegisterDialogBuilder>();
         services.AddDialogBuilder<LoginDialogBuilder>();
@@ -130,6 +161,17 @@ internal static class PlayPointServiceCollectionExtensions
         where TBuilder : class, IDialogDefinition
     {
         services.AddSingleton<IDialogDefinition, TBuilder>();
+    }
+
+    private static void AddDialogServiceFactories(this IServiceCollection services)
+    {
+        services.AddSingleton<Func<IDialogService>>(sp => () => sp.GetRequiredService<IDialogService>());
+    }
+
+    private static void AddDialogViewModelFactory<TViewModel>(this IServiceCollection services)
+        where TViewModel : notnull
+    {
+        services.AddSingleton<Func<TViewModel>>(sp => () => sp.GetRequiredService<TViewModel>());
     }
 
     private static void AddRepositories(this IServiceCollection services)

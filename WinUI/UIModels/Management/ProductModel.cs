@@ -11,7 +11,7 @@ public sealed class ProductModel : ObservableObject, IProductFilterable
     private decimal _price;
     private ProductType _productType;
     private int _stockQuantity;
-    private string _imageUri = "ms-appx:///Assets/Mock.png";
+    private string _imageUri = string.Empty;
 
     public string Name
     {
@@ -40,6 +40,6 @@ public sealed class ProductModel : ObservableObject, IProductFilterable
     public string ImageUri
     {
         get => _imageUri;
-        set => SetProperty(ref _imageUri, string.IsNullOrWhiteSpace(value) ? "ms-appx:///Assets/Mock.png" : value);
+        set => SetProperty(ref _imageUri, value?.Trim() ?? string.Empty);
     }
 }

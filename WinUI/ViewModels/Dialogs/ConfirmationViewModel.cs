@@ -10,19 +10,19 @@ public partial class ConfirmationViewModel : ObservableObject
     private readonly Action<bool> _setResultAction;
 
     [ObservableProperty]
-    private string _titleText;
+    public partial string TitleText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private string _messageText;
+    public partial string MessageText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private string _confirmButtonText;
+    public partial string ConfirmButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private string _cancelButtonText;
+    public partial string CancelButtonText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private bool _showCancelButton;
+    public partial bool ShowCancelButton { get; set; }
 
     public ConfirmationViewModel(
         string title, 
@@ -32,11 +32,11 @@ public partial class ConfirmationViewModel : ObservableObject
         bool showCancelButton,
         Action<bool> setResultAction)
     {
-        _titleText = title;
-        _messageText = message;
-        _confirmButtonText = confirmButtonText;
-        _cancelButtonText = cancelButtonText;
-        _showCancelButton = showCancelButton;
+        TitleText = title;
+        MessageText = message;
+        ConfirmButtonText = confirmButtonText;
+        CancelButtonText = cancelButtonText;
+        ShowCancelButton = showCancelButton;
         _setResultAction = setResultAction;
     }
 
