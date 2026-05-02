@@ -13,7 +13,8 @@ function optional(name: string, fallback: string): string {
 export const env = {
     port: optional("PORT", "4000"),
     databaseUrl: required("DATABASE_URL"),
-    jwtSecret: required("JWT_SECRET"),
+    jwtAccessSecret: required("JWT_ACCESS_SECRET"),
+    jwtRefreshSecret: required("JWT_REFRESH_SECRET"),
     smtpHost: required("SMTP_HOST"),
     smtpPort: Number(optional("SMTP_PORT", "587")),
     smtpUser: required("SMTP_USER"),

@@ -7,9 +7,12 @@ import { RegisterShopInput } from "../types/RegisterShopInput.js";
 import { SendOtpInput } from "../types/SendOtpInput.js";
 import { MutationResponse } from "../types/MutationResponse.js";
 import { ShopMutationResponse } from "../types/ShopMutationResponse.js";
+import { LoginShopInput } from "../types/LoginShopInput.js";
 import { checkOtp } from "../utils/checkOtp.js";
 import { sendOtpEmail } from "../services/mailer.js";
 import { env } from "../../config/env.js";
+import { Session } from "../entities/Session.js";
+import { generateToken } from "../utils/auth.js";
 
 @Resolver()
 export class ShopResolver {
@@ -48,7 +51,7 @@ export class ShopResolver {
 
     @Mutation(() => ShopMutationResponse)
     async register(
-        @Arg("input", () => RegisterShopInput) input: RegisterShopInput
+        @Arg("input") input: RegisterShopInput
     ): Promise<ShopMutationResponse> {
         try {
             const { email, password, otp } = input;
@@ -64,8 +67,48 @@ export class ShopResolver {
 
             await record!.remove();
 
-            return { code: 201, success: true, message: "Shop registered successfully", shop: newShop };
+            return { code: 201, success: true, message: "Shop registered successfully" };
         } catch {
+            return { code: 500, success: false, message: "Internal server error" };
+        }
+    }
+
+    @Mutation(() => ShopMutationResponse)
+    async login(
+        @Arg("input") input: LoginShopInput
+    ): Promise<ShopMutationResponse> {
+        try {
+            const { email, password } = input;
+
+            const isExistingShop = await Shop.findOne({ where: { Email: email } });
+            if (!isExistingShop) {
+                return { code: 400, success: false, message: "Invalid email or password" };
+            }
+
+            const isPasswordValid = await argon2.verify(isExistingShop.HashedPassword, password);
+            if (!isPasswordValid) {
+                return { code: 400, success: false, message: "Invalid email or password" };
+            }
+
+            const isExistingSession = await Session.findOne({ where: { ShopID: isExistingShop.ID } });
+            if (isExistingSession) await isExistingSession.remove();
+
+            const accessToken = generateToken(isExistingShop.ID, "access", "15m");
+            const refreshToken = generateToken(isExistingShop.ID, "refresh", "30d");
+            const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
+            await Session.create({ ShopID: isExistingShop.ID, Token: refreshToken, ExpiresAt: expiresAt }).save();
+
+            return { 
+                code: 200, 
+                success: true, 
+                message: "Login successful", 
+                shopId: isExistingShop.ID, 
+                accessToken: accessToken, 
+                refreshToken: refreshToken
+            };
+        } catch (err) {
+            console.error("login error:", err);
             return { code: 500, success: false, message: "Internal server error" };
         }
     }
