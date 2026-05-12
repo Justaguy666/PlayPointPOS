@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using Application.Areas;
 using Application.Games;
 using Application.Members;
@@ -16,6 +17,7 @@ using Application.Services.Areas;
 using Application.Services.Transactions;
 using Domain.Entities;
 using Infrastructure.Repositories.Mock;
+using Infrastructure.Services.Auth;
 using Infrastructure.Services.Navigation;
 using Infrastructure.Services.Members;
 using Microsoft.Extensions.Configuration;
@@ -72,6 +74,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                             defaultPreferences.Currency,
                             defaultPreferences.TimeZone));
                     services.AddSingleton<IAppInfoService, WinUIAppInfoService>();
+                    services.AddSingleton<HttpClient>();
                     services.AddSingleton<IDateTimeService, Infrastructure.Services.DateTimeService>();
                     services.AddSingleton<INavigationService, WinUINavigationService>();
                     //services.AddSingleton<IAnalyticsService, Infrastructure.Services.Analytics.AnalyticsService>();
@@ -98,6 +101,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddSingleton<INotificationService>(sp => sp.GetRequiredService<Infrastructure.Services.Notification.ToastNotificationService>());
 
                     services.AddSingleton<IPasswordHasher, Infrastructure.Services.PasswordHasher>();
+                    services.AddSingleton<IAuthApiService, GraphQLAuthApiService>();
 
                     services.AddSingleton<Func<string, object?, ContentDialog?>>(provider => (dialogKey, parameter) =>
                     {

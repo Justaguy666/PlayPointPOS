@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Application.Services;
 using Application.UseCases.Auth.Contracts;
+using Domain.Entities;
 
 namespace Infrastructure.Services.Auth;
 
@@ -126,7 +127,7 @@ public sealed class GraphQLAuthApiService : IAuthApiService
         {
             Success = true,
             Message = payload.Message ?? "Login successful.",
-            Account = new AccountSummary
+            Account = new Account
             {
                 Id = payload.GetShopId(),
                 Email = email,
@@ -172,7 +173,7 @@ public sealed class GraphQLAuthApiService : IAuthApiService
         {
             Success = true,
             Message = payload.Message ?? "Registration successful.",
-            Account = new AccountSummary
+            Account = new Account
             {
                 Id = payload.GetShopId(),
                 Email = email,
