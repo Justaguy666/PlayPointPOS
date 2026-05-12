@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Application.Navigation;
 using Application.Navigation.Requests;
 using Application.Services;
-using Application.UseCases.Auth;
+using Application.UseCases.Auth.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
@@ -14,7 +14,7 @@ namespace WinUI.ViewModels.Dialogs;
 public partial class LoginViewModel : LocalizedViewModelBase
 {
     private readonly IDialogService _dialogService;
-    private readonly LoginUserUseCase _loginUseCase;
+    private readonly IAuthApiService _authApiService;
     private readonly INavigationService _navigationService;
     private readonly INotificationService _notificationService;
     private readonly MainViewModel _mainViewModel;
@@ -95,14 +95,14 @@ public partial class LoginViewModel : LocalizedViewModelBase
     public LoginViewModel(
         ILocalizationService localizationService,
         IDialogService dialogService,
-        LoginUserUseCase loginUseCase,
+        IAuthApiService authApiService,
         INavigationService navigationService,
         INotificationService notificationService,
         MainViewModel mainViewModel)
         : base(localizationService)
     {
         _dialogService = dialogService;
-        _loginUseCase = loginUseCase;
+        _authApiService = authApiService;
         _navigationService = navigationService;
         _notificationService = notificationService;
         _mainViewModel = mainViewModel;
@@ -132,7 +132,7 @@ public partial class LoginViewModel : LocalizedViewModelBase
 
         try
         {
-            var result = await _loginUseCase.ExecuteAsync(Email, Password);
+            LoginResult result = await _authApiService.LoginAsync(Email.Trim(), Password);
 
             if (result.Success)
             {
@@ -140,11 +140,9 @@ public partial class LoginViewModel : LocalizedViewModelBase
                 LoginSucceededInternal?.Invoke(result.Account!);
                 CloseRequestedInternal?.Invoke();
 
-                // Navigate to Dashboard
                 _mainViewModel.IsNavigationVisible = true;
                 _navigationService.Navigate(new NavigateToDashboard());
 
-                // Toast notification
                 await _notificationService.SendAsync(
                     LocalizationService.GetString("LoginSuccessTitle"),
                     string.Format(LocalizationService.GetString("LoginSuccessMessage"), result.Account!.Email),

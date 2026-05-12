@@ -13,6 +13,7 @@ public partial class OtpViewModel : LocalizedViewModelBase
     private OtpDialogMode _mode = OtpDialogMode.ResetPassword;
     private string _pendingEmail = string.Empty;
     private Func<Task>? _verifiedCallback;
+    private Func<string, Task>? _verifiedWithOtpCallback;
 
     [ObservableProperty]
     public partial string TitleText { get; set; } = string.Empty;
@@ -152,6 +153,7 @@ public partial class OtpViewModel : LocalizedViewModelBase
         _mode = request?.Mode ?? OtpDialogMode.ResetPassword;
         _pendingEmail = request?.PendingEmail ?? string.Empty;
         _verifiedCallback = request?.OnVerifiedAsync;
+        _verifiedWithOtpCallback = request?.OnVerifiedWithOtpAsync;
 
         OtpCode = string.Empty;
         NewPassword = string.Empty;
@@ -203,6 +205,12 @@ public partial class OtpViewModel : LocalizedViewModelBase
         CloseRequestedInternal?.Invoke();
 
         await Task.Yield();
+
+        if (_verifiedWithOtpCallback is not null)
+        {
+            await _verifiedWithOtpCallback(OtpCode.Trim());
+            return;
+        }
 
         if (_verifiedCallback is not null)
         {

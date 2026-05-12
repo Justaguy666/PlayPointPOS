@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Application.Services;
 using WinUI.ViewModels;
 
 namespace WinUI.ViewModels.Dialogs;
@@ -27,15 +27,15 @@ public partial class ConfigViewModel : LocalizedViewModelBase
     public partial string ServerAddress { get; set; }
 
     [ObservableProperty]
-    public partial string ApiKeyLabelText { get; set; } = string.Empty;
+    public partial string PortLabelText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ApiKeyPlaceholderText { get; set; } = string.Empty;
+    public partial string PortPlaceholderText { get; set; } = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
     [NotifyPropertyChangedFor(nameof(CanSaveExecute))]
-    public partial string ApiKey { get; set; }
+    public partial string Port { get; set; }
 
     [ObservableProperty]
     public partial bool RememberMe { get; set; }
@@ -62,7 +62,6 @@ public partial class ConfigViewModel : LocalizedViewModelBase
     private event Action? CloseRequestedInternal;
 
     public bool IsNotSaving => !IsSaving;
-
     public bool CanSaveExecute => CanSave();
 
     public event Action? CloseRequested
@@ -78,7 +77,7 @@ public partial class ConfigViewModel : LocalizedViewModelBase
         _configService = configService;
 
         ServerAddress = _configService.ServerAddress;
-        ApiKey = _configService.ApiKey;
+        Port = _configService.Port.ToString();
         RememberMe = _configService.RememberMe;
 
         RefreshLocalizedText();
@@ -89,8 +88,8 @@ public partial class ConfigViewModel : LocalizedViewModelBase
         TitleText = LocalizationService.GetString("ConfigDialogTitleText");
         ServerAddressLabelText = LocalizationService.GetString("ConfigDialogServerAddressLabelText");
         ServerAddressPlaceholderText = LocalizationService.GetString("ConfigDialogServerAddressPlaceholderText");
-        ApiKeyLabelText = LocalizationService.GetString("ConfigDialogApiKeyLabelText");
-        ApiKeyPlaceholderText = LocalizationService.GetString("ConfigDialogApiKeyPlaceholderText");
+        PortLabelText = LocalizationService.GetString("ConfigDialogPortLabelText");
+        PortPlaceholderText = LocalizationService.GetString("ConfigDialogPortPlaceholderText");
         RememberMeLabelText = LocalizationService.GetString("ConfigDialogRememberMeLabelText");
         SaveButtonText = LocalizationService.GetString("ConfigDialogSaveButtonText");
         CloseTooltipText = LocalizationService.GetString("CloseTooltipText");
@@ -102,7 +101,10 @@ public partial class ConfigViewModel : LocalizedViewModelBase
         IsSaving = true;
         try
         {
-            await _configService.SaveAsync(ServerAddress, ApiKey, RememberMe);
+            if (!TryGetPort(out int port))
+                return;
+
+            await _configService.SaveAsync(ServerAddress.Trim(), port, RememberMe);
 
             Confirmed = true;
             CloseRequestedInternal?.Invoke();
@@ -127,7 +129,10 @@ public partial class ConfigViewModel : LocalizedViewModelBase
     private bool CanSave() =>
         !IsSaving &&
         !string.IsNullOrWhiteSpace(ServerAddress) &&
-        !string.IsNullOrWhiteSpace(ApiKey);
+        TryGetPort(out _);
 
     private bool CanClose() => !IsSaving;
+
+    private bool TryGetPort(out int port) =>
+        int.TryParse(Port, out port) && port is >= 1 and <= 65535;
 }

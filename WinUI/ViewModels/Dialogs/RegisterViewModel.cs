@@ -1,7 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using Application.Navigation;
+using Application.Navigation.Requests;
 using Application.Services;
-using Application.UseCases.Auth;
+using Application.UseCases.Auth.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
@@ -13,8 +15,10 @@ namespace WinUI.ViewModels.Dialogs;
 public partial class RegisterViewModel : LocalizedViewModelBase
 {
     private readonly IDialogService _dialogService;
-    private readonly RegisterUserUseCase _registerUseCase;
+    private readonly IAuthApiService _authApiService;
+    private readonly INavigationService _navigationService;
     private readonly INotificationService _notificationService;
+    private readonly MainViewModel _mainViewModel;
 
     [ObservableProperty]
     public partial string TitleText { get; set; } = string.Empty;
@@ -104,13 +108,17 @@ public partial class RegisterViewModel : LocalizedViewModelBase
     public RegisterViewModel(
         ILocalizationService localizationService,
         IDialogService dialogService,
-        RegisterUserUseCase registerUseCase,
-        INotificationService notificationService)
+        IAuthApiService authApiService,
+        INavigationService navigationService,
+        INotificationService notificationService,
+        MainViewModel mainViewModel)
         : base(localizationService)
     {
         _dialogService = dialogService;
-        _registerUseCase = registerUseCase;
+        _authApiService = authApiService;
+        _navigationService = navigationService;
         _notificationService = notificationService;
+        _mainViewModel = mainViewModel;
 
         RefreshLocalizedText();
     }
@@ -154,6 +162,14 @@ public partial class RegisterViewModel : LocalizedViewModelBase
 
             string email = Email.Trim();
             string password = Password;
+            AuthOperationResult sendOtpResult = await _authApiService.SendRegistrationOtpAsync(email);
+            if (!sendOtpResult.Success)
+            {
+                HasError = true;
+                ErrorMessage = sendOtpResult.Message;
+                return;
+            }
+
             CloseRequestedInternal?.Invoke();
             await Task.Yield();
             await _dialogService.ShowDialogAsync(
@@ -162,7 +178,7 @@ public partial class RegisterViewModel : LocalizedViewModelBase
                 {
                     Mode = OtpDialogMode.VerifyRegistration,
                     PendingEmail = email,
-                    OnVerifiedAsync = () => CompleteRegistrationAsync(email, password)
+                    OnVerifiedWithOtpAsync = otpCode => CompleteRegistrationAsync(email, password, otpCode)
                 });
         }
         catch (Exception ex)
@@ -175,14 +191,16 @@ public partial class RegisterViewModel : LocalizedViewModelBase
         }
     }
 
-    private async Task CompleteRegistrationAsync(string email, string password)
+    private async Task CompleteRegistrationAsync(string email, string password, string otpCode)
     {
-        var result = await _registerUseCase.ExecuteAsync(email, password);
+        RegisterResult result = await _authApiService.RegisterAsync(email, password, otpCode);
 
         if (result.Success)
         {
             RegisteredAccount = result.Account;
             RegisterSucceededInternal?.Invoke(result.Account!);
+            _mainViewModel.IsNavigationVisible = true;
+            _navigationService.Navigate(new NavigateToDashboard());
 
             await _notificationService.SendAsync(
                 LocalizationService.GetString("RegisterSuccessTitle"),

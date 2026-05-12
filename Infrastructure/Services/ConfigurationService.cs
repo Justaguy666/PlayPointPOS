@@ -5,6 +5,9 @@ namespace Infrastructure.Services;
 
 public class ConfigurationService : IConfigurationService, ILocalizationPreferencesService
 {
+    private const int DefaultPort = 4000;
+    private const string DefaultServerAddress = "http://localhost";
+
     private readonly string _configFilePath;
 
     private static readonly JsonSerializerOptions _jsonOptions = new()
@@ -13,10 +16,13 @@ public class ConfigurationService : IConfigurationService, ILocalizationPreferen
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     };
 
-    public string ServerAddress { get; private set; } = string.Empty;
-    public string ApiKey { get; private set; } = string.Empty;
+    public string ServerAddress { get; private set; } = DefaultServerAddress;
+    public int Port { get; private set; } = DefaultPort;
     public bool RememberMe { get; private set; }
-    public bool IsConfigured => !string.IsNullOrWhiteSpace(ServerAddress) && !string.IsNullOrWhiteSpace(ApiKey);
+    public bool IsConfigured =>
+        !string.IsNullOrWhiteSpace(ServerAddress) &&
+        IsValidPort(Port);
+
     public LocalizationPreferences Preferences { get; private set; }
 
     public ConfigurationService(string configFilePath, LocalizationPreferences? defaultPreferences = null)
@@ -40,14 +46,12 @@ public class ConfigurationService : IConfigurationService, ILocalizationPreferen
             if (data == null)
                 return;
 
-            ServerAddress = data.ServerAddress ?? string.Empty;
+            ServerAddress = string.IsNullOrWhiteSpace(data.ServerAddress)
+                ? DefaultServerAddress
+                : data.ServerAddress;
+            Port = IsValidPort(data.Port) ? data.Port : DefaultPort;
             RememberMe = data.RememberMe;
             Preferences = ClonePreferences(data.LocalizationPreferences, Preferences);
-
-            if (data.RememberMe)
-            {
-                ApiKey = data.ApiKey ?? string.Empty;
-            }
         }
         catch
         {
@@ -55,16 +59,16 @@ public class ConfigurationService : IConfigurationService, ILocalizationPreferen
         }
     }
 
-    public async Task SaveAsync(string serverAddress, string apiKey, bool rememberMe)
+    public async Task SaveAsync(string serverAddress, int port, bool rememberMe)
     {
         ServerAddress = serverAddress;
-        ApiKey = apiKey;
+        Port = port;
         RememberMe = rememberMe;
 
         var data = new ConfigData
         {
             ServerAddress = serverAddress,
-            ApiKey = rememberMe ? apiKey : string.Empty,
+            Port = port,
             RememberMe = rememberMe,
             LocalizationPreferences = ClonePreferences(Preferences),
         };
@@ -86,7 +90,7 @@ public class ConfigurationService : IConfigurationService, ILocalizationPreferen
         var data = new ConfigData
         {
             ServerAddress = ServerAddress,
-            ApiKey = RememberMe ? ApiKey : string.Empty,
+            Port = Port,
             RememberMe = RememberMe,
             LocalizationPreferences = ClonePreferences(Preferences),
         };
@@ -124,10 +128,12 @@ public class ConfigurationService : IConfigurationService, ILocalizationPreferen
         };
     }
 
+    private static bool IsValidPort(int port) => port is >= 1 and <= 65535;
+
     private class ConfigData
     {
         public string ServerAddress { get; set; } = string.Empty;
-        public string ApiKey { get; set; } = string.Empty;
+        public int Port { get; set; } = DefaultPort;
         public bool RememberMe { get; set; }
         public LocalizationPreferences LocalizationPreferences { get; set; } = new();
     }

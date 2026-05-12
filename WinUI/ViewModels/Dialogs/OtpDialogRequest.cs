@@ -10,4 +10,6 @@ public sealed class OtpDialogRequest
     public string PendingEmail { get; init; } = string.Empty;
 
     public Func<Task>? OnVerifiedAsync { get; init; }
+
+    public Func<string, Task>? OnVerifiedWithOtpAsync { get; init; }
 }

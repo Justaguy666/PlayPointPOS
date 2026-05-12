@@ -19,23 +19,8 @@ public sealed partial class ConfigDialog : ContentDialog
         DataContext = ViewModel;
         InitializeComponent();
 
-        if (!string.IsNullOrEmpty(ViewModel.ApiKey))
-        {
-            ApiKeyBox.Password = ViewModel.ApiKey;
-        }
-
         ViewModel.CloseRequested += HandleCloseRequested;
         Closed += HandleClosed;
-    }
-
-    private void ApiKeyBox_PasswordChanged(object sender, RoutedEventArgs e)
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
-
-        ViewModel.ApiKey = ApiKeyBox.Password;
     }
 
     private void HandleCloseRequested()

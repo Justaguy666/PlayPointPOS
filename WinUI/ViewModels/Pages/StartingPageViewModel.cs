@@ -66,7 +66,6 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
             LabelResourceKey = "ConfigMenuItemText",
             Icon = IconKind.Config,
             DialogKey = "Config",
-            HideWhenConfigured = true,
             OnMenuItemSelectedCommand = OnMenuItemSelectedCommand,
         };
         var register = new MenuItemModel
@@ -74,7 +73,6 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
             LabelResourceKey = "RegisterMenuItemText",
             Icon = IconKind.Register,
             DialogKey = "Register",
-            RequiresConfig = true,
             OnMenuItemSelectedCommand = OnMenuItemSelectedCommand,
         };
         var login = new MenuItemModel
@@ -82,7 +80,6 @@ public partial class StartingPageViewModel : LocalizedViewModelBase
             LabelResourceKey = "LoginMenuItemText",
             Icon = IconKind.Login,
             DialogKey = "Login",
-            RequiresConfig = true,
             OnMenuItemSelectedCommand = OnMenuItemSelectedCommand,
         };
         var exit = new MenuItemModel

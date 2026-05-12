@@ -9,7 +9,7 @@
     <ContentDialog.Resources>
         <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/FormInputStateResources.xaml" />
     </ContentDialog.Resources>
-    
+
     <Grid x:Name="RootGrid"
           Style="{StaticResource DialogFormRootGridStyle}">
         <Grid.RowDefinitions>
@@ -19,7 +19,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
         <Grid Grid.Row="0"
               Style="{StaticResource DialogHeaderContainerStyle}">
             <Grid.ColumnDefinitions>
@@ -49,16 +48,13 @@
             </Button>
         </Grid>
 
-        <!-- Divider -->
         <controls:DividerControl Grid.Row="1"
                                  Style="{StaticResource DialogHeaderDividerStyle}"/>
 
-        <!-- Content -->
         <StackPanel Grid.Row="2"
                     Style="{StaticResource DialogFormContentPanelStyle}">
-            <!-- Server Address -->
             <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                <TextBlock Text="{x:Bind ViewModel.ServerAddressLabelText, Mode=OneWay}" 
+                <TextBlock Text="{x:Bind ViewModel.ServerAddressLabelText, Mode=OneWay}"
                            Style="{StaticResource DialogFormLabelTextStyle}"/>
                 <TextBox x:Name="ServerAddressBox"
                          PlaceholderText="{x:Bind ViewModel.ServerAddressPlaceholderText, Mode=OneWay}"
@@ -66,20 +62,18 @@
                          Style="{StaticResource DialogFormTextBoxStyle}" />
             </StackPanel>
 
-            <!-- API Key -->
             <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
-                <TextBlock Text="{x:Bind ViewModel.ApiKeyLabelText, Mode=OneWay}" 
+                <TextBlock Text="{x:Bind ViewModel.PortLabelText, Mode=OneWay}"
                            Style="{StaticResource DialogFormLabelTextStyle}"/>
-                <PasswordBox x:Name="ApiKeyBox"
-                             PlaceholderText="{x:Bind ViewModel.ApiKeyPlaceholderText, Mode=OneWay}"
-                             PasswordChanged="ApiKeyBox_PasswordChanged"
-                             Style="{StaticResource DialogFormPasswordBoxStyle}" />
+                <TextBox x:Name="PortBox"
+                         PlaceholderText="{x:Bind ViewModel.PortPlaceholderText, Mode=OneWay}"
+                         Text="{x:Bind ViewModel.Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         InputScope="Number"
+                         Style="{StaticResource DialogFormTextBoxStyle}" />
             </StackPanel>
 
-            <!-- Divider -->
             <controls:DividerControl Style="{StaticResource DialogSectionDividerStyle}"/>
 
-            <!-- Footer -->
             <Grid Margin="0,8,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
