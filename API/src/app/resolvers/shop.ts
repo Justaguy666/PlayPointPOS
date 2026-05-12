@@ -1,7 +1,6 @@
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import argon2 from "argon2";
-import jwt from "jsonwebtoken";
-import { Shop } from "../entities/Shop.js";
+import { Shop } from "../entities/shop.js";
 import { OTP } from "../entities/OTP.js";
 import { RegisterShopInput } from "../types/RegisterShopInput.js";
 import { SendOtpInput } from "../types/SendOtpInput.js";
@@ -10,8 +9,7 @@ import { ShopMutationResponse } from "../types/ShopMutationResponse.js";
 import { LoginShopInput } from "../types/LoginShopInput.js";
 import { checkOtp } from "../utils/checkOtp.js";
 import { sendOtpEmail } from "../services/mailer.js";
-import { env } from "../../config/env.js";
-import { Session } from "../entities/Session.js";
+import { AuthSession } from "../entities/AuthSession.js";
 import { generateToken } from "../utils/auth.js";
 
 @Resolver()
@@ -51,10 +49,15 @@ export class ShopResolver {
 
     @Mutation(() => ShopMutationResponse)
     async register(
-        @Arg("input") input: RegisterShopInput
+        @Arg("input", () => RegisterShopInput) input: RegisterShopInput
     ): Promise<ShopMutationResponse> {
         try {
             const { email, password, otp } = input;
+
+            const existingShop = await Shop.findOne({ where: { Email: email } });
+            if (existingShop) {
+                return { code: 400, success: false, message: "Email already registered" };
+            }
 
             const { valid, error, record } = await checkOtp(email, otp);
             if (!valid) {
@@ -67,15 +70,29 @@ export class ShopResolver {
 
             await record!.remove();
 
-            return { code: 201, success: true, message: "Shop registered successfully" };
-        } catch {
+            const accessToken = generateToken(newShop.ID, "access", "15m");
+            const refreshToken = generateToken(newShop.ID, "refresh", "30d");
+            const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
+            await AuthSession.create({ ShopID: newShop.ID, Token: refreshToken, ExpiresAt: expiresAt }).save();
+
+            return {
+                code: 201,
+                success: true,
+                message: "Shop registered successfully",
+                shopId: newShop.ID,
+                accessToken,
+                refreshToken,
+            };
+        } catch (err) {
+            console.error("register error:", err);
             return { code: 500, success: false, message: "Internal server error" };
         }
     }
 
     @Mutation(() => ShopMutationResponse)
     async login(
-        @Arg("input") input: LoginShopInput
+        @Arg("input", () => LoginShopInput) input: LoginShopInput
     ): Promise<ShopMutationResponse> {
         try {
             const { email, password } = input;
@@ -90,14 +107,14 @@ export class ShopResolver {
                 return { code: 400, success: false, message: "Invalid email or password" };
             }
 
-            const isExistingSession = await Session.findOne({ where: { ShopID: isExistingShop.ID } });
+            const isExistingSession = await AuthSession.findOne({ where: { ShopID: isExistingShop.ID } });
             if (isExistingSession) await isExistingSession.remove();
 
             const accessToken = generateToken(isExistingShop.ID, "access", "15m");
             const refreshToken = generateToken(isExistingShop.ID, "refresh", "30d");
             const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
-            await Session.create({ ShopID: isExistingShop.ID, Token: refreshToken, ExpiresAt: expiresAt }).save();
+            await AuthSession.create({ ShopID: isExistingShop.ID, Token: refreshToken, ExpiresAt: expiresAt }).save();
 
             return { 
                 code: 200, 
