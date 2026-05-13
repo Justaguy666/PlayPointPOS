@@ -1,7 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Application.Navigation;
-using Application.Navigation.Requests;
 using Application.Services;
 using Application.UseCases.Auth.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -16,9 +14,7 @@ public partial class RegisterViewModel : LocalizedViewModelBase
 {
     private readonly IDialogService _dialogService;
     private readonly IAuthApiService _authApiService;
-    private readonly INavigationService _navigationService;
     private readonly INotificationService _notificationService;
-    private readonly MainViewModel _mainViewModel;
 
     [ObservableProperty]
     public partial string TitleText { get; set; } = string.Empty;
@@ -109,16 +105,12 @@ public partial class RegisterViewModel : LocalizedViewModelBase
         ILocalizationService localizationService,
         IDialogService dialogService,
         IAuthApiService authApiService,
-        INavigationService navigationService,
-        INotificationService notificationService,
-        MainViewModel mainViewModel)
+        INotificationService notificationService)
         : base(localizationService)
     {
         _dialogService = dialogService;
         _authApiService = authApiService;
-        _navigationService = navigationService;
         _notificationService = notificationService;
-        _mainViewModel = mainViewModel;
 
         RefreshLocalizedText();
     }
@@ -199,13 +191,14 @@ public partial class RegisterViewModel : LocalizedViewModelBase
         {
             RegisteredAccount = result.Account;
             RegisterSucceededInternal?.Invoke(result.Account!);
-            _mainViewModel.IsNavigationVisible = true;
-            _navigationService.Navigate(new NavigateToDashboard());
 
             await _notificationService.SendAsync(
                 LocalizationService.GetString("RegisterSuccessTitle"),
                 string.Format(LocalizationService.GetString("RegisterSuccessMessage"), result.Account!.Email),
                 NotificationType.Success);
+
+            Reset();
+            await _dialogService.ShowDialogAsync("Login");
             return;
         }
 

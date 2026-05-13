@@ -11,6 +11,8 @@ namespace WinUI.ViewModels.Dialogs;
 public partial class ForgotPasswordViewModel : LocalizedViewModelBase
 {
     private readonly IDialogService _dialogService;
+    private readonly IAuthApiService _authApiService;
+    private ForgotPasswordDialogMode _mode = ForgotPasswordDialogMode.ForgotPassword;
 
     [ObservableProperty]
     public partial string TitleText { get; set; } = string.Empty;
@@ -60,22 +62,33 @@ public partial class ForgotPasswordViewModel : LocalizedViewModelBase
 
     public ForgotPasswordViewModel(
         ILocalizationService localizationService,
-        IDialogService dialogService)
+        IDialogService dialogService,
+        IAuthApiService authApiService)
         : base(localizationService)
     {
         _dialogService = dialogService;
+        _authApiService = authApiService ?? throw new ArgumentNullException(nameof(authApiService));
 
         RefreshLocalizedText();
     }
 
     protected override void RefreshLocalizedText()
     {
-        TitleText = LocalizationService.GetString("ForgotPasswordDialogTitleText");
+        TitleText = LocalizationService.GetString(
+            _mode == ForgotPasswordDialogMode.ChangePassword
+                ? "ForgotPasswordDialogChangePasswordTitleText"
+                : "ForgotPasswordDialogTitleText");
         EmailLabelText = LocalizationService.GetString("ForgotPasswordDialogEmailLabelText");
         EmailPlaceholderText = LocalizationService.GetString("ForgotPasswordDialogEmailPlaceholderText");
         SendOtpButtonText = LocalizationService.GetString("ForgotPasswordDialogSendOtpButtonText");
         BackButtonText = LocalizationService.GetString("ForgotPasswordDialogBackButtonText");
         CloseTooltipText = LocalizationService.GetString("CloseTooltipText");
+    }
+
+    public void Configure(ForgotPasswordDialogRequest? request)
+    {
+        _mode = request?.Mode ?? ForgotPasswordDialogMode.ForgotPassword;
+        RefreshLocalizedText();
     }
 
     [RelayCommand(CanExecute = nameof(CanSendOtp))]
@@ -94,9 +107,24 @@ public partial class ForgotPasswordViewModel : LocalizedViewModelBase
                 return;
             }
 
+            string email = Email.Trim();
+            var sendOtpResult = await _authApiService.SendPasswordResetOtpAsync(email);
+            if (!sendOtpResult.Success)
+            {
+                HasError = true;
+                ErrorMessage = sendOtpResult.Message;
+                return;
+            }
+
             CloseRequestedInternal?.Invoke();
             await Task.Yield();
-            await _dialogService.ShowDialogAsync("Otp");
+            await _dialogService.ShowDialogAsync(
+                "Otp",
+                new OtpDialogRequest
+                {
+                    Mode = OtpDialogMode.ResetPassword,
+                    PendingEmail = email,
+                });
         }
         finally
         {

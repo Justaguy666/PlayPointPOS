@@ -12,6 +12,7 @@ public sealed class GameModelFactory
 
         return new GameModel
         {
+            Id = source.Id,
             Name = source.Name,
             HourlyPrice = source.HourlyPrice,
             MinPlayers = source.MinPlayers,
@@ -20,7 +21,7 @@ public sealed class GameModelFactory
             GameDifficulty = source.Difficulty,
             StockQuantity = source.StockQuantity,
             BorrowedQuantity = 0,
-            ImageUri = "ms-appx:///Assets/Mock.png",
+            ImageUri = string.IsNullOrWhiteSpace(source.ImageUri) ? "ms-appx:///Assets/Mock.png" : source.ImageUri,
         };
     }
 
@@ -30,6 +31,7 @@ public sealed class GameModelFactory
 
         return new GameModel
         {
+            Id = source.Id,
             Name = source.Name,
             HourlyPrice = source.HourlyPrice,
             MinPlayers = source.MinPlayers,

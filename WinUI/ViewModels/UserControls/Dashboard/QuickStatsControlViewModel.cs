@@ -10,11 +10,11 @@ namespace WinUI.ViewModels.UserControls.Dashboard;
 
 public partial class QuickStatsControlViewModel : LocalizedViewModelBase
 {
-    private const double AverageHoursPerAreaMetric = 2.5;
-    private const decimal AverageRevenuePerInvoiceMetric = 385_000m;
-    private const double ReturnRateMetric = 68;
-    private const double AreaUsageRateMetric = 68;
-    private const int NewMembersPerMonthMetric = 23;
+    private double _averageHoursPerAreaMetric;
+    private decimal _averageRevenuePerInvoiceMetric;
+    private double _returnRateMetric;
+    private double _areaUsageRateMetric;
+    private int _newMembersPerMonthMetric;
 
     [ObservableProperty]
     public partial string Title { get; set; } = string.Empty;
@@ -42,24 +42,24 @@ public partial class QuickStatsControlViewModel : LocalizedViewModelBase
         string averageHoursPerAreaValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardHourValueFormat"),
-            AverageHoursPerAreaMetric);
+            _averageHoursPerAreaMetric);
 
-        string averageRevenuePerInvoiceValue = LocalizationService.FormatCurrency(AverageRevenuePerInvoiceMetric);
+        string averageRevenuePerInvoiceValue = LocalizationService.FormatCurrency(_averageRevenuePerInvoiceMetric);
 
         string returnRateValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardPercentValueFormat"),
-            ReturnRateMetric);
+            _returnRateMetric);
 
         string areaUsageRateValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardPercentValueFormat"),
-            AreaUsageRateMetric);
+            _areaUsageRateMetric);
 
         string newMembersPerMonthValue = string.Format(
             LocalizationService.Culture,
             LocalizationService.GetString("DashboardSignedNumberValueFormat"),
-            NewMembersPerMonthMetric);
+            _newMembersPerMonthMetric);
 
         MetricRows =
         [
@@ -80,5 +80,20 @@ public partial class QuickStatsControlViewModel : LocalizedViewModelBase
                 newMembersPerMonthValue,
                 showDivider: false),
         ];
+    }
+
+    public void ApplyMetrics(
+        double averageHoursPerArea,
+        decimal averageRevenuePerInvoice,
+        double returnRate,
+        double areaUsageRate,
+        int newMembersPerMonth)
+    {
+        _averageHoursPerAreaMetric = averageHoursPerArea;
+        _averageRevenuePerInvoiceMetric = averageRevenuePerInvoice;
+        _returnRateMetric = returnRate;
+        _areaUsageRateMetric = areaUsageRate;
+        _newMembersPerMonthMetric = newMembersPerMonth;
+        RefreshLocalizedText();
     }
 }

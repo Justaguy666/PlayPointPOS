@@ -1,8 +1,9 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
 import argon2 from "argon2";
 import { Shop } from "../entities/shop.js";
 import { OTP } from "../entities/OTP.js";
 import { RegisterShopInput } from "../types/RegisterShopInput.js";
+import { ResetPasswordInput } from "../types/ResetPasswordInput.js";
 import { SendOtpInput } from "../types/SendOtpInput.js";
 import { MutationResponse } from "../types/MutationResponse.js";
 import { ShopMutationResponse } from "../types/ShopMutationResponse.js";
@@ -17,6 +18,47 @@ export class ShopResolver {
     @Query(() => [Shop])
     async shops() {
         return Shop.find();
+    }
+
+    @Query(() => Shop, { nullable: true })
+    async shopProfile(
+        @Arg("shopId", () => Int) shopId: number
+    ): Promise<Shop | null> {
+        return await Shop.findOne({ where: { ID: shopId } });
+    }
+
+    @Mutation(() => Shop)
+    async updateShopProfile(
+        @Arg("shopId", () => Int) shopId: number,
+        @Arg("name", () => String, { nullable: true }) name?: string,
+        @Arg("address", () => String, { nullable: true }) address?: string,
+        @Arg("email", () => String, { nullable: true }) email?: string,
+        @Arg("phoneNumber", () => String, { nullable: true }) phoneNumber?: string,
+    ): Promise<Shop> {
+        const shop = await Shop.findOne({ where: { ID: shopId } });
+        if (!shop) {
+            throw new Error("Shop not found.");
+        }
+
+        const normalizedName = name?.trim() ?? "";
+        const normalizedAddress = address?.trim() ?? "";
+        const normalizedEmail = email?.trim() ?? "";
+        const normalizedPhone = phoneNumber?.trim() ?? "";
+
+        if (normalizedEmail && normalizedEmail.toLowerCase() !== shop.Email.toLowerCase()) {
+            const existingByEmail = await Shop.findOne({ where: { Email: normalizedEmail } });
+            if (existingByEmail && existingByEmail.ID !== shopId) {
+                throw new Error("Email is already in use by another shop.");
+            }
+        }
+
+        shop.Name = normalizedName || shop.Name || "";
+        shop.Address = normalizedAddress || shop.Address || "";
+        shop.Email = normalizedEmail || shop.Email;
+        shop.PhoneNumber = normalizedPhone || shop.PhoneNumber || "";
+        await shop.save();
+
+        return shop;
     }
 
     @Mutation(() => MutationResponse)
@@ -43,6 +85,37 @@ export class ShopResolver {
             return { code: 200, success: true, message: "OTP sent to your email" };
         } catch (err) {
             console.error("sendOtp error:", err);
+            return { code: 500, success: false, message: "Internal server error" };
+        }
+    }
+
+    @Mutation(() => MutationResponse)
+    async sendPasswordResetOtp(
+        @Arg("input", () => SendOtpInput) input: SendOtpInput
+    ): Promise<MutationResponse> {
+        try {
+            const email = input.email?.trim() ?? "";
+            if (!email) {
+                return { code: 400, success: false, message: "Email is required." };
+            }
+
+            const existingShop = await Shop.findOne({ where: { Email: email } });
+            if (!existingShop) {
+                return { code: 404, success: false, message: "Shop account not found." };
+            }
+
+            const existingOtp = await OTP.findOne({ where: { Email: email } });
+            if (existingOtp) await existingOtp.remove();
+
+            const otp = Math.floor(100000 + Math.random() * 900000).toString();
+            const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+
+            await OTP.create({ Email: email, Otp: otp, ExpiresAt: expiresAt }).save();
+            await sendOtpEmail(email, otp);
+
+            return { code: 200, success: true, message: "OTP sent to your email" };
+        } catch (err) {
+            console.error("sendPasswordResetOtp error:", err);
             return { code: 500, success: false, message: "Internal server error" };
         }
     }
@@ -86,6 +159,42 @@ export class ShopResolver {
             };
         } catch (err) {
             console.error("register error:", err);
+            return { code: 500, success: false, message: "Internal server error" };
+        }
+    }
+
+    @Mutation(() => MutationResponse)
+    async resetPassword(
+        @Arg("input", () => ResetPasswordInput) input: ResetPasswordInput
+    ): Promise<MutationResponse> {
+        try {
+            const email = input.email?.trim() ?? "";
+            const otp = input.otp?.trim() ?? "";
+            const newPassword = input.newPassword?.trim() ?? "";
+
+            if (!email || !otp || !newPassword) {
+                return { code: 400, success: false, message: "Email, OTP, and new password are required." };
+            }
+
+            const shop = await Shop.findOne({ where: { Email: email } });
+            if (!shop) {
+                return { code: 404, success: false, message: "Shop account not found." };
+            }
+
+            const { valid, error, record } = await checkOtp(email, otp);
+            if (!valid) {
+                return { code: 400, success: false, message: error ?? "Invalid OTP" };
+            }
+
+            shop.HashedPassword = await argon2.hash(newPassword);
+            await shop.save();
+
+            await record!.remove();
+            await AuthSession.delete({ ShopID: shop.ID });
+
+            return { code: 200, success: true, message: "Password reset successfully." };
+        } catch (err) {
+            console.error("resetPassword error:", err);
             return { code: 500, success: false, message: "Internal server error" };
         }
     }

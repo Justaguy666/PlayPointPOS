@@ -15,8 +15,11 @@ public partial class LoginViewModel : LocalizedViewModelBase
 {
     private readonly IDialogService _dialogService;
     private readonly IAuthApiService _authApiService;
+    private readonly IAuthStateService _authStateService;
+    private readonly IConfigurationService _configurationService;
     private readonly INavigationService _navigationService;
     private readonly INotificationService _notificationService;
+    private readonly IManagementDataPreloadService _managementDataPreloadService;
     private readonly MainViewModel _mainViewModel;
 
     [ObservableProperty]
@@ -96,17 +99,25 @@ public partial class LoginViewModel : LocalizedViewModelBase
         ILocalizationService localizationService,
         IDialogService dialogService,
         IAuthApiService authApiService,
+        IAuthStateService authStateService,
+        IConfigurationService configurationService,
         INavigationService navigationService,
         INotificationService notificationService,
+        IManagementDataPreloadService managementDataPreloadService,
         MainViewModel mainViewModel)
         : base(localizationService)
     {
         _dialogService = dialogService;
         _authApiService = authApiService;
+        _authStateService = authStateService;
+        _configurationService = configurationService;
         _navigationService = navigationService;
         _notificationService = notificationService;
+        _managementDataPreloadService = managementDataPreloadService;
         _mainViewModel = mainViewModel;
 
+        Email = _configurationService.RememberedEmail;
+        RememberMe = _configurationService.RememberMe;
         RefreshLocalizedText();
     }
 
@@ -136,12 +147,16 @@ public partial class LoginViewModel : LocalizedViewModelBase
 
             if (result.Success)
             {
+                await _configurationService.SaveRememberedLoginAsync(Email.Trim(), RememberMe);
                 LoggedInAccount = result.Account;
+                _managementDataPreloadService.Clear();
+                _authStateService.ShopId = result.Account?.Id;
                 LoginSucceededInternal?.Invoke(result.Account!);
                 CloseRequestedInternal?.Invoke();
 
                 _mainViewModel.IsNavigationVisible = true;
                 _navigationService.Navigate(new NavigateToDashboard());
+                _ = _managementDataPreloadService.WarmUpAsync();
 
                 await _notificationService.SendAsync(
                     LocalizationService.GetString("LoginSuccessTitle"),

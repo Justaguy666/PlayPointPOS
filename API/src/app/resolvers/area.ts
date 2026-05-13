@@ -1,7 +1,7 @@
 import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
 import { MutationResponse } from "../types/MutationResponse.js";
-import { AreaDto, AreaInput } from "../types/management/area.js";
-import { createArea, deleteArea, getAreas, updateArea } from "../services/management/areaService.js";
+import { AreaDto, AreaInput, AreaSessionStartPayload } from "../types/management/area.js";
+import { createArea, deleteArea, getAreas, startAreaSession as insertAreaSession, updateArea } from "../services/management/areaService.js";
 
 @Resolver()
 export class AreaResolver {
@@ -30,5 +30,15 @@ export class AreaResolver {
     async deleteArea(@Arg("id", () => Int) id: number): Promise<MutationResponse> {
         await deleteArea(id);
         return { code: 200, success: true, message: "Area deleted successfully" };
+    }
+
+    @Mutation(() => AreaSessionStartPayload)
+    async startAreaSession(
+        @Arg("shopId", () => Int) shopId: number,
+        @Arg("areaId", () => Int) areaId: number,
+        @Arg("guestCount", () => Int) guestCount: number,
+        @Arg("memberId", () => Int, { nullable: true }) memberId?: number | null,
+    ): Promise<AreaSessionStartPayload> {
+        return insertAreaSession(shopId, areaId, guestCount, memberId ?? undefined);
     }
 }

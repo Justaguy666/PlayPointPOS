@@ -32,6 +32,7 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
 
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
+    private readonly IManagementApiService _managementApiService;
     private readonly IAreaFilterService _areaFilterService;
     private readonly AreaManagementCardViewModelFactory _areaCardViewModelFactory;
     private readonly Brush _selectedFilterBackgroundBrush;
@@ -162,6 +163,7 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         ILocalizationService localizationService,
         IDialogService dialogService,
         INotificationService notificationService,
+        IManagementApiService managementApiService,
         IAreaCatalogService areaCatalogService,
         IAreaFilterService areaFilterService,
         AreaModelFactory areaModelFactory,
@@ -170,6 +172,7 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        _managementApiService = managementApiService ?? throw new ArgumentNullException(nameof(managementApiService));
         _areaFilterService = areaFilterService ?? throw new ArgumentNullException(nameof(areaFilterService));
         _areaCardViewModelFactory = areaCardViewModelFactory ?? throw new ArgumentNullException(nameof(areaCardViewModelFactory));
         ArgumentNullException.ThrowIfNull(areaCatalogService);
@@ -365,6 +368,7 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
             return;
         }
 
+        await _managementApiService.DeleteAreaAsync(areaCardViewModel.Model.Id);
         RemoveArea(areaCardViewModel);
 
         await _notificationService.SendAsync(
@@ -448,6 +452,8 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
 
         if (SummarizedAreaCardViewModels.Contains(_selectedSummarizedAreaCardViewModel))
         {
+            ReplaceDetailedAreaCardViewModel(_areaCardViewModelFactory.CreateDetailed(_selectedSummarizedAreaCardViewModel));
+            NotifySelectedAreaCommandStateChanged();
             return;
         }
 
@@ -556,8 +562,11 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         }
     }
 
-    private Task HandleAreaCreatedAsync(AreaModel area)
+    private async Task HandleAreaCreatedAsync(AreaModel area)
     {
+        AreaRecord createdArea = await _managementApiService.CreateAreaAsync(ToAreaRecord(area));
+        ApplyAreaRecord(area, createdArea);
+
         _allAreaModels.Add(area);
         SubscribeToAreaModel(area);
 
@@ -571,7 +580,11 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
             SelectSummarizedAreaCard(summarizedAreaCardViewModel);
         }
 
-        return Task.CompletedTask;
+        await _notificationService.SendAsync(
+            "Đã thêm khu vực",
+            $"Đã thêm {area.AreaName} thành công.",
+            NotificationType.Success);
+
     }
 
     private void SubscribeToAreaModel(AreaModel area)
@@ -630,8 +643,11 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
         }
     }
 
-    private Task HandleAreaUpdatedAsync(AreaModel area)
+    private async Task HandleAreaUpdatedAsync(AreaModel area)
     {
+        AreaRecord updatedArea = await _managementApiService.UpdateAreaAsync(ToAreaRecord(area));
+        ApplyAreaRecord(area, updatedArea);
+
         ApplyAreaFilter(_activeAreaFilterType);
 
         if (_selectedSummarizedAreaCardViewModel?.Model == area)
@@ -641,7 +657,59 @@ public partial class AreaManagementPageViewModel : LocalizedViewModelBase
 
         NotifySelectedAreaCommandStateChanged();
 
-        return Task.CompletedTask;
+        await _notificationService.SendAsync(
+            "Đã cập nhật khu vực",
+            $"Đã lưu thay đổi cho {area.AreaName}.",
+            NotificationType.Success);
+    }
+
+    private static AreaRecord ToAreaRecord(AreaModel area)
+    {
+        return new AreaRecord
+        {
+            Id = area.Id,
+            AreaName = area.AreaName,
+            PlayAreaType = area.PlayAreaType,
+            Status = area.Status,
+            MaxCapacity = area.MaxCapacity,
+            HourlyPrice = area.HourlyPrice,
+            CustomerName = area.CustomerName,
+            PhoneNumber = area.PhoneNumber,
+            MemberId = area.MemberId,
+            CheckInDateTime = area.CheckInDateTime,
+            Capacity = area.Capacity,
+            StartTime = area.StartTime,
+            IsSessionPaused = area.IsSessionPaused,
+            SessionPausedAt = area.SessionPausedAt,
+            SessionPausedDuration = area.SessionPausedDuration,
+            TotalAmount = area.TotalAmount,
+            ActiveSessionId = area.ActiveSessionId,
+        };
+    }
+
+    private static void ApplyAreaRecord(AreaModel target, AreaRecord source)
+    {
+        target.Id = source.Id;
+        target.AreaName = source.AreaName;
+        target.PlayAreaType = source.PlayAreaType;
+        target.Status = source.Status;
+        target.MaxCapacity = source.MaxCapacity;
+        target.HourlyPrice = source.HourlyPrice;
+        target.CustomerName = source.CustomerName;
+        target.PhoneNumber = source.PhoneNumber;
+        target.MemberId = source.MemberId;
+        target.CheckInDateTime = source.CheckInDateTime;
+        target.Capacity = source.Capacity;
+        target.StartTime = source.StartTime;
+        target.IsSessionPaused = source.IsSessionPaused;
+        target.SessionPausedAt = source.SessionPausedAt;
+        target.SessionPausedDuration = source.SessionPausedDuration;
+        target.TotalAmount = source.TotalAmount;
+        target.ActiveSessionId = source.ActiveSessionId;
+        if (source.Status == PlayAreaStatus.Available)
+        {
+            target.PendingSessionLines.Clear();
+        }
     }
 
     private Task HandleAreaFilterSubmittedAsync(AreaFilterCriteria criteria)

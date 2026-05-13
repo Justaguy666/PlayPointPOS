@@ -7,11 +7,18 @@ namespace WinUI.UIModels.Management;
 
 public sealed class ProductModel : ObservableObject, IProductFilterable
 {
+    private string _id = string.Empty;
     private string _name = string.Empty;
     private decimal _price;
     private ProductType _productType;
     private int _stockQuantity;
     private string _imageUri = "ms-appx:///Assets/Mock.png";
+
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
 
     public string Name
     {

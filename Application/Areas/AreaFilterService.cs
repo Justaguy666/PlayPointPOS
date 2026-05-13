@@ -78,9 +78,12 @@ public sealed class AreaFilterService : IAreaFilterService
 
     private static DateTime ConvertUtcToConfiguredTime(DateTime value, string timeZone)
     {
-        DateTime utcValue = value.Kind == DateTimeKind.Utc
-            ? value
-            : value.ToUniversalTime();
+        DateTime utcValue = value.Kind switch
+        {
+            DateTimeKind.Utc => value,
+            DateTimeKind.Local => DateTime.SpecifyKind(value, DateTimeKind.Utc),
+            _ => DateTime.SpecifyKind(value, DateTimeKind.Utc),
+        };
         return utcValue.AddHours(ParseTimeZoneOffset(timeZone));
     }
 

@@ -254,6 +254,8 @@ public partial class MemberDialogViewModel : UpsertDialogViewModelBase
     private bool TryApplyToTargetModel(out MemberModel model)
     {
         model = _targetModel;
+        string preservedId = model.Id;
+        string preservedCode = model.Code;
 
         if (!TryGetParsedFormValues(out string trimmedName, out string trimmedPhoneNumber, out decimal totalSpentAmount))
         {
@@ -268,6 +270,8 @@ public partial class MemberDialogViewModel : UpsertDialogViewModelBase
         model.MembershipRank = preview.CurrentRank;
         model.NextMembershipRank = preview.NextRank;
         model.ProgressPercentage = preview.ProgressPercentage;
+        model.Id = preservedId;
+        model.Code = preservedCode;
 
         return true;
     }
@@ -276,6 +280,13 @@ public partial class MemberDialogViewModel : UpsertDialogViewModelBase
     {
         trimmedName = MemberName?.Trim() ?? string.Empty;
         trimmedPhoneNumber = PhoneNumberText?.Trim() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(TotalSpentText))
+        {
+            totalSpentAmount = 0m;
+            return !string.IsNullOrWhiteSpace(trimmedName)
+                && PhoneValidation.IsValid(trimmedPhoneNumber);
+        }
 
         if (string.IsNullOrWhiteSpace(trimmedName)
             || !PhoneValidation.IsValid(trimmedPhoneNumber)

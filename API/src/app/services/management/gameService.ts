@@ -1,6 +1,6 @@
 import { AppDataSource } from "../../../config/database.js";
 import { GameDto, GameInput, GameTypeDto, GameTypeInput } from "../../types/management/game.js";
-import { requireRow, toNumber, toStringValue, type SqlRow } from "./shared.js";
+import { requireRow, toNumberCell, toStringCell, type SqlRow } from "./shared.js";
 
 export async function getGameTypes(shopId: number): Promise<GameTypeDto[]> {
     const rows = await AppDataSource.query(`
@@ -10,7 +10,7 @@ export async function getGameTypes(shopId: number): Promise<GameTypeDto[]> {
         ORDER BY "Name" ASC
     `, [shopId]) as SqlRow[];
 
-    return rows.map((row) => ({ id: toStringValue(row.ID), name: toStringValue(row.Name) }));
+    return rows.map((row) => ({ id: toStringCell(row, "ID"), name: toStringCell(row, "Name") }));
 }
 
 export async function createGameType(shopId: number, input: GameTypeInput): Promise<GameTypeDto> {
@@ -21,7 +21,7 @@ export async function createGameType(shopId: number, input: GameTypeInput): Prom
     `, [shopId, input.name]) as SqlRow[];
 
     const row = requireRow(rows, "Game type");
-    return { id: toStringValue(row.ID), name: toStringValue(row.Name) };
+    return { id: toStringCell(row, "ID"), name: toStringCell(row, "Name") };
 }
 
 export async function updateGameType(id: number, input: GameTypeInput): Promise<GameTypeDto> {
@@ -33,7 +33,7 @@ export async function updateGameType(id: number, input: GameTypeInput): Promise<
     `, [id, input.name]) as SqlRow[];
 
     const row = requireRow(rows, "Game type", id);
-    return { id: toStringValue(row.ID), name: toStringValue(row.Name) };
+    return { id: toStringCell(row, "ID"), name: toStringCell(row, "Name") };
 }
 
 export async function deleteGameType(id: number): Promise<void> {
@@ -77,7 +77,7 @@ export async function createGame(shopId: number, input: GameInput): Promise<Game
 
     const gameRow = requireRow(rows, "Game");
     const categoryRows = await AppDataSource.query(`SELECT "Name" FROM "GameCategory" WHERE "ID" = $1`, [Number(input.gameTypeId)]) as SqlRow[];
-    return mapGameRow({ ...gameRow, CategoryName: requireRow(categoryRows, "Game type", Number(input.gameTypeId)).Name });
+    return mapGameRow({ ...gameRow, CategoryName: toStringCell(requireRow(categoryRows, "Game type", Number(input.gameTypeId)), "Name") });
 }
 
 export async function updateGame(id: number, input: GameInput): Promise<GameDto> {
@@ -97,7 +97,7 @@ export async function updateGame(id: number, input: GameInput): Promise<GameDto>
 
     const gameRow = requireRow(rows, "Game", id);
     const categoryRows = await AppDataSource.query(`SELECT "Name" FROM "GameCategory" WHERE "ID" = $1`, [Number(input.gameTypeId)]) as SqlRow[];
-    return mapGameRow({ ...gameRow, CategoryName: requireRow(categoryRows, "Game type", Number(input.gameTypeId)).Name });
+    return mapGameRow({ ...gameRow, CategoryName: toStringCell(requireRow(categoryRows, "Game type", Number(input.gameTypeId)), "Name") });
 }
 
 export async function deleteGame(id: number): Promise<void> {
@@ -112,15 +112,15 @@ export async function deleteGame(id: number): Promise<void> {
 
 function mapGameRow(row: SqlRow): GameDto {
     return {
-        id: toStringValue(row.ID),
-        name: toStringValue(row.Name),
-        hourlyPrice: toNumber(row.HourlyPrice),
-        minPlayers: toNumber(row.MinPlayer),
-        maxPlayers: toNumber(row.MaxPlayer),
-        gameTypeId: toStringValue(row.CategoryID),
-        gameTypeName: toStringValue(row.CategoryName),
-        difficulty: toStringValue(row.Difficulty),
-        stockQuantity: toNumber(row.StockQuantity),
-        imageUri: toStringValue(row.ImageUrl),
+        id: toStringCell(row, "ID"),
+        name: toStringCell(row, "Name"),
+        hourlyPrice: toNumberCell(row, "HourlyPrice"),
+        minPlayers: toNumberCell(row, "MinPlayer"),
+        maxPlayers: toNumberCell(row, "MaxPlayer"),
+        gameTypeId: toStringCell(row, "CategoryID"),
+        gameTypeName: toStringCell(row, "CategoryName"),
+        difficulty: toStringCell(row, "Difficulty"),
+        stockQuantity: toNumberCell(row, "StockQuantity"),
+        imageUri: toStringCell(row, "ImageUrl"),
     };
 }

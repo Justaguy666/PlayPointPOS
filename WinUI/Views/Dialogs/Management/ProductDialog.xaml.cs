@@ -50,7 +50,7 @@ public sealed partial class ProductDialog : ContentDialog
         var file = await picker.PickSingleFileAsync();
         if (file is not null)
         {
-            ViewModel.ImageUriText = new Uri(file.Path).AbsoluteUri;
+            await ViewModel.ApplyPickedImageFileAsync(file);
         }
     }
 

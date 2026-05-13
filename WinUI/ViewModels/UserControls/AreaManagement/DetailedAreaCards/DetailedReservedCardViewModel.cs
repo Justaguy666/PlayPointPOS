@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Threading.Tasks;
 using Application.Services;
+using Application.Areas;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
+using WinUI.Helpers;
 using WinUI.UIModels;
 using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
@@ -18,6 +22,8 @@ public partial class DetailedReservedCardViewModel : LocalizedViewModelBase, IDe
 {
     private readonly ILocalizationPreferencesService _localizationPreferencesService;
     private readonly IDialogService _dialogService;
+    private readonly IManagementApiService _managementApiService;
+    private readonly INotificationService _notificationService;
     private readonly DispatcherTimer _timer;
     private bool _isDisposed;
 
@@ -47,11 +53,15 @@ public partial class DetailedReservedCardViewModel : LocalizedViewModelBase, IDe
         ILocalizationService localizationService,
         ILocalizationPreferencesService localizationPreferencesService,
         IDialogService dialogService,
+        IManagementApiService managementApiService,
+        INotificationService notificationService,
         AreaModel model)
         : base(localizationService)
     {
         _localizationPreferencesService = localizationPreferencesService ?? throw new ArgumentNullException(nameof(localizationPreferencesService));
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _managementApiService = managementApiService ?? throw new ArgumentNullException(nameof(managementApiService));
+        _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         Model = model ?? throw new ArgumentNullException(nameof(model));
         Model.PropertyChanged += HandleModelPropertyChanged;
 
@@ -161,15 +171,97 @@ public partial class DetailedReservedCardViewModel : LocalizedViewModelBase, IDe
             return;
         }
 
-        DateTime sessionStartedAtUtc = DateTime.UtcNow;
+        if (!int.TryParse(Model.Id.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int areaId) || areaId <= 0)
+        {
+            await _notificationService.SendAsync(
+                LocalizationService.GetString("CheckInButtonText"),
+                LocalizationService.GetString("StartSessionInvalidAreaIdMessage"),
+                NotificationType.Warning);
+            return;
+        }
 
-        Model.StartTime = sessionStartedAtUtc;
-        Model.IsSessionPaused = false;
-        Model.SessionPausedAt = null;
-        Model.SessionPausedDuration = TimeSpan.Zero;
-        Model.TotalAmount = 0m;
-        Model.CheckInDateTime = null;
-        Model.Status = PlayAreaStatus.Rented;
+        int guestCount = Math.Max(1, Model.Capacity);
+
+        int? memberIdForStart = null;
+        if (!string.IsNullOrWhiteSpace(Model.MemberId)
+            && int.TryParse(
+                Model.MemberId.Trim(),
+                NumberStyles.Integer,
+                CultureInfo.InvariantCulture,
+                out int memberNumericId)
+            && memberNumericId > 0)
+        {
+            memberIdForStart = memberNumericId;
+        }
+
+        AreaSessionStartResult start;
+        try
+        {
+            start = await _managementApiService.StartAreaSessionAsync(areaId, guestCount, memberIdForStart);
+        }
+        catch (Exception ex)
+        {
+            await _notificationService.SendAsync(
+                LocalizationService.GetString("CheckInButtonText"),
+                string.Format(
+                    LocalizationService.Culture,
+                    LocalizationService.GetString("StartSessionServerErrorMessage"),
+                    ex.Message),
+                NotificationType.Error);
+            return;
+        }
+
+        AreaModel model = Model;
+        DispatcherQueue? dispatcher = DispatcherQueue.GetForCurrentThread();
+        if (dispatcher is not null)
+        {
+            dispatcher.TryEnqueue(() =>
+            {
+                dispatcher.TryEnqueue(() =>
+                {
+                    try
+                    {
+                        ApplyCheckInToModel(model, start);
+                    }
+                    catch (Exception ex)
+                    {
+                        SessionFlowDebugLog.Append("ReservedCheckIn.ApplyCheckInToModel", ex);
+                        _ = _notificationService.SendAsync(
+                            LocalizationService.GetString("StartSessionUnexpectedErrorTitle"),
+                            $"{ex}\n\nLog: {SessionFlowDebugLog.LogFilePath}",
+                            NotificationType.Error);
+                    }
+                });
+            });
+        }
+        else
+        {
+            try
+            {
+                ApplyCheckInToModel(model, start);
+            }
+            catch (Exception ex)
+            {
+                SessionFlowDebugLog.Append("ReservedCheckIn.ApplyCheckInToModel(sync)", ex);
+                _ = _notificationService.SendAsync(
+                    LocalizationService.GetString("StartSessionUnexpectedErrorTitle"),
+                    $"{ex}\n\nLog: {SessionFlowDebugLog.LogFilePath}",
+                    NotificationType.Error);
+            }
+        }
+    }
+
+    private static void ApplyCheckInToModel(AreaModel model, AreaSessionStartResult start)
+    {
+        model.ActiveSessionId = start.SessionId.ToString(CultureInfo.InvariantCulture);
+        model.StartTime = start.StartTimeUtc;
+        model.PendingSessionLines.Clear();
+        model.IsSessionPaused = false;
+        model.SessionPausedAt = null;
+        model.SessionPausedDuration = TimeSpan.Zero;
+        model.TotalAmount = 0m;
+        model.CheckInDateTime = null;
+        model.Status = PlayAreaStatus.Rented;
     }
 
     private Task ExecuteEditReservationAsync()

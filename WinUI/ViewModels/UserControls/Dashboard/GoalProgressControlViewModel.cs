@@ -124,6 +124,14 @@ public partial class GoalProgressControlViewModel : LocalizedViewModelBase
         return Task.CompletedTask;
     }
 
+    public void ApplyCurrentValues(int revenueCurrentValue, int customerCurrentValue, int memberCurrentValue)
+    {
+        RevenueTargetCurrentValue = Math.Max(0, revenueCurrentValue);
+        CustomerTargetCurrentValue = Math.Max(0, customerCurrentValue);
+        MemberTargetCurrentValue = Math.Max(0, memberCurrentValue);
+        RefreshCompletionTexts();
+    }
+
     partial void OnRevenueTargetCurrentValueChanged(int value) => RevenueTargetCompletionText = FormatCompletion(value, RevenueTargetGoalValue);
 
     partial void OnRevenueTargetGoalValueChanged(int value) => RevenueTargetCompletionText = FormatCompletion(RevenueTargetCurrentValue, value);

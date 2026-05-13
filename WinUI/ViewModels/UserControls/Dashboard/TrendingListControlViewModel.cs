@@ -8,6 +8,10 @@ namespace WinUI.ViewModels.UserControls.Dashboard;
 
 public partial class TrendingListControlViewModel : LocalizedViewModelBase
 {
+    private string _topGameName = string.Empty;
+    private string _topFoodName = string.Empty;
+    private string _topDrinkName = string.Empty;
+
     [ObservableProperty]
     public partial string Title { get; set; } = string.Empty;
 
@@ -47,10 +51,18 @@ public partial class TrendingListControlViewModel : LocalizedViewModelBase
     {
         Title = LocalizationService.GetString("TrendingListTitle");
         GameLabel = LocalizationService.GetString("TrendingListGameLabel");
-        GameName = LocalizationService.GetString("TrendingListGameName");
+        GameName = _topGameName;
         FoodLabel = LocalizationService.GetString("TrendingListFoodLabel");
-        FoodName = LocalizationService.GetString("TrendingListFoodName");
+        FoodName = _topFoodName;
         DrinkLabel = LocalizationService.GetString("TrendingListDrinkLabel");
-        DrinkName = LocalizationService.GetString("TrendingListDrinkName");
+        DrinkName = _topDrinkName;
+    }
+
+    public void ApplyTrending(string? topGameName, string? topFoodName, string? topDrinkName)
+    {
+        _topGameName = string.IsNullOrWhiteSpace(topGameName) ? "-" : topGameName.Trim();
+        _topFoodName = string.IsNullOrWhiteSpace(topFoodName) ? "-" : topFoodName.Trim();
+        _topDrinkName = string.IsNullOrWhiteSpace(topDrinkName) ? "-" : topDrinkName.Trim();
+        RefreshLocalizedText();
     }
 }

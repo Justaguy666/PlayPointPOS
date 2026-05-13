@@ -65,7 +65,7 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanSubmit))]
-    public partial Member? SelectedMember { get; set; }
+    public partial string? SelectedMemberId { get; set; }
 
     [ObservableProperty]
     public partial string CustomerNameLabelText { get; set; } = string.Empty;
@@ -304,9 +304,17 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
 
     partial void OnReservationCapacityChanged(string value) => NotifyFormStateChanged();
 
-    partial void OnIsMemberChanged(bool value) => NotifyFormStateChanged();
+    partial void OnIsMemberChanged(bool value)
+    {
+        if (!value)
+        {
+            SelectedMemberId = null;
+        }
 
-    partial void OnSelectedMemberChanged(Member? value) => NotifyFormStateChanged();
+        NotifyFormStateChanged();
+    }
+
+    partial void OnSelectedMemberIdChanged(string? value) => NotifyFormStateChanged();
 
     public void ApplyReservationDateSelection(DateTimeOffset selectedDate)
     {
@@ -379,7 +387,7 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
     {
         Member? selectedMember = FindMemberById(model.MemberId);
         IsMember = selectedMember is not null;
-        SelectedMember = selectedMember;
+        SelectedMemberId = selectedMember?.Id;
         CustomerName = model.CustomerName;
         PhoneNumber = model.PhoneNumber;
 
@@ -427,6 +435,16 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
         return Members.FirstOrDefault(member => string.Equals(member.Id, memberId, StringComparison.Ordinal));
     }
 
+    private Member? ResolveSelectedMember()
+    {
+        if (string.IsNullOrWhiteSpace(SelectedMemberId))
+        {
+            return null;
+        }
+
+        return Members.FirstOrDefault(m => string.Equals(m.Id, SelectedMemberId, StringComparison.Ordinal));
+    }
+
     private void UpdateReservationPriceText()
     {
         decimal reservationPrice = _targetModel.ReservationPrice > 0m
@@ -462,7 +480,7 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
 
         model.CustomerName = trimmedCustomerName;
         model.PhoneNumber = trimmedPhoneNumber;
-        model.MemberId = IsMember ? SelectedMember?.Id : null;
+        model.MemberId = IsMember ? ResolveSelectedMember()?.Id : null;
         model.CheckInDateTime = reservationDateTime;
         model.Capacity = capacity;
         model.StartTime = null;
@@ -496,15 +514,16 @@ public partial class ReservationViewModel : UpsertDialogViewModelBase
         out int capacity,
         out DateTime reservationDateTime)
     {
+        Member? member = ResolveSelectedMember();
         trimmedCustomerName = IsMember
-            ? SelectedMember?.FullName?.Trim() ?? string.Empty
+            ? member?.FullName?.Trim() ?? string.Empty
             : CustomerName?.Trim() ?? string.Empty;
         trimmedPhoneNumber = IsMember
-            ? SelectedMember?.PhoneNumber?.Trim() ?? string.Empty
+            ? member?.PhoneNumber?.Trim() ?? string.Empty
             : PhoneNumber?.Trim() ?? string.Empty;
         reservationDateTime = default;
 
-        if ((IsMember && SelectedMember is null)
+        if ((IsMember && member is null)
             || (!IsMember && string.IsNullOrWhiteSpace(trimmedCustomerName))
             || (!IsMember && string.IsNullOrWhiteSpace(trimmedPhoneNumber))
             || !ReservationDate.HasValue

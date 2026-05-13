@@ -8,6 +8,7 @@ namespace WinUI.UIModels.Management;
 
 public sealed class GameModel : ObservableObject, IGameFilterable
 {
+    private string _id = string.Empty;
     private string _name = string.Empty;
     private decimal _hourlyPrice;
     private int _minPlayers;
@@ -16,7 +17,14 @@ public sealed class GameModel : ObservableObject, IGameFilterable
     private GameDifficulty _gameDifficulty;
     private int _stockQuantity;
     private int _borrowedQuantity;
+    private bool _isStockUpdateInProgress;
     private string _imageUri = "ms-appx:///Assets/Mock.png";
+
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
 
     public string Name
     {
@@ -77,6 +85,12 @@ public sealed class GameModel : ObservableObject, IGameFilterable
     {
         get => _borrowedQuantity;
         set => SetProperty(ref _borrowedQuantity, Math.Clamp(value, 0, StockQuantity));
+    }
+
+    public bool IsStockUpdateInProgress
+    {
+        get => _isStockUpdateInProgress;
+        set => SetProperty(ref _isStockUpdateInProgress, value);
     }
 
     public string ImageUri

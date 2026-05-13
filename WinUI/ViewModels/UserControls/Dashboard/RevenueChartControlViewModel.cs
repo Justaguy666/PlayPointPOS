@@ -1,19 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Services;
+using Application.Services.Transactions;
 using Application.UseCases.Analytics.Contracts.Enums;
+using ClosedXML.Excel;
 using CommunityToolkit.Mvvm.Input;
+using Domain.Entities;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI;
 using Microsoft.UI.Xaml.Media;
 using Windows.UI;
+using Windows.Storage.Pickers;
 using WinUI.Resources;
 using WinUI.UIModels;
 using WinUI.UIModels.Dashboard;
 using WinUI.UIModels.Enums;
 using WinUI.ViewModels;
+using WinRT.Interop;
 
 namespace WinUI.ViewModels.UserControls.Dashboard;
 
@@ -24,6 +31,7 @@ public partial class RevenueChartControlViewModel : LocalizedViewModelBase
 
     private readonly INotificationService _notificationService;
     private readonly Dictionary<(ChartMetricType Metric, ChartRangeType Range), ChartDataset> _datasets;
+    private readonly IReadOnlyList<Transaction> _transactions;
     private readonly Brush _whiteBrush;
     private readonly Brush _orangeBrush;
     private readonly Brush _mutedTextBrush;
@@ -57,10 +65,13 @@ public partial class RevenueChartControlViewModel : LocalizedViewModelBase
 
     public RevenueChartControlViewModel(
         ILocalizationService localizationService,
-        INotificationService notificationService)
+        INotificationService notificationService,
+        ITransactionCatalogService transactionCatalogService)
         : base(localizationService)
     {
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        ArgumentNullException.ThrowIfNull(transactionCatalogService);
+        _transactions = transactionCatalogService.GetTransactions();
         _whiteBrush = AppResourceLookup.GetBrush("WhiteBrush", Colors.White);
         _orangeBrush = AppResourceLookup.GetBrush("PrimaryOrangeBrush", AppColors.PrimaryOrange);
         _mutedTextBrush = AppResourceLookup.GetBrush("DashboardMutedTextBrush", ColorHelper.FromArgb(255, 113, 128, 150));
@@ -167,16 +178,57 @@ public partial class RevenueChartControlViewModel : LocalizedViewModelBase
         ChartContentWidth = Math.Max(contentWidth, 360.0);
     }
 
-    private Task ExportAsync()
+    private async Task ExportAsync()
     {
-        string metricLabel = GetMetricLabel(_selectedMetric);
-        string message = string.Format(
-            LocalizationService.Culture,
-            GetLocalizedText("RevenueChartExportUnavailableMessage"),
-            metricLabel,
-            Subtitle);
+        try
+        {
+            var picker = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
+                SuggestedFileName = $"DashboardReport_{DateTime.Now:yyyyMMdd_HHmmss}",
+            };
+            picker.FileTypeChoices.Add("Excel Workbook (*.xlsx)", [".xlsx"]);
 
-        return _notificationService.SendAsync(Title, message, NotificationType.Info);
+            var window = App.Host?.Services.GetService<MainWindow>();
+            if (window is null)
+            {
+                await _notificationService.SendAsync(
+                    Title,
+                    "Cannot initialize export window handle.",
+                    NotificationType.Error);
+                return;
+            }
+
+            nint hwnd = WindowNative.GetWindowHandle(window);
+            InitializeWithWindow.Initialize(picker, hwnd);
+            var file = await picker.PickSaveFileAsync();
+            if (file is null)
+            {
+                return;
+            }
+
+            using var workbook = new XLWorkbook();
+            BuildOverviewSheet(workbook);
+            BuildProductQuantitySheet(workbook);
+            BuildRevenueProfitSheet(workbook);
+
+            await using Stream stream = await file.OpenStreamForWriteAsync();
+            stream.SetLength(0);
+            workbook.SaveAs(stream);
+            await stream.FlushAsync();
+
+            await _notificationService.SendAsync(
+                Title,
+                $"Exported report: {file.Path}",
+                NotificationType.Success);
+        }
+        catch (Exception ex)
+        {
+            await _notificationService.SendAsync(
+                Title,
+                $"Export failed: {ex.Message}",
+                NotificationType.Error);
+        }
     }
 
     private IReadOnlyList<ChartTabItemModel> CreateMetricTabs()
@@ -310,6 +362,22 @@ public partial class RevenueChartControlViewModel : LocalizedViewModelBase
 
     private Dictionary<(ChartMetricType Metric, ChartRangeType Range), ChartDataset> CreateDatasets()
     {
+        DateTime now = DateTime.Now;
+        DateTime weekStart = StartOfWeek(now.Date, DayOfWeek.Monday);
+        DateTime monthStart = new(now.Year, now.Month, 1);
+        int quarterStartMonth = ((now.Month - 1) / 3) * 3 + 1;
+        DateTime quarterStart = new(now.Year, quarterStartMonth, 1);
+        DateTime yearStart = new(now.Year, 1, 1);
+        List<Transaction> localizedTransactions = _transactions
+            .Select(t => new Transaction
+            {
+                CreatedAt = NormalizeToLocal(t.CreatedAt),
+                TotalAmount = t.TotalAmount,
+                CustomerName = t.CustomerName,
+                MemberId = t.MemberId,
+            })
+            .ToList();
+
         string[] todayLabels =
         [
             FormatHourLabel(8),
@@ -353,19 +421,149 @@ public partial class RevenueChartControlViewModel : LocalizedViewModelBase
             GetLocalizedText("RevenueChartYearNovShort"),
         ];
 
+        double[] revenueToday = todayLabels
+            .Select((_, index) =>
+            {
+                int hour = 8 + index * 2;
+                DateTime from = now.Date.AddHours(hour);
+                DateTime to = from.AddHours(2);
+                decimal amount = localizedTransactions
+                    .Where(t => t.CreatedAt >= from && t.CreatedAt < to)
+                    .Sum(t => t.TotalAmount);
+                return ToMillion(amount);
+            })
+            .ToArray();
+        double[] customerToday = todayLabels
+            .Select((_, index) =>
+            {
+                int hour = 8 + index * 2;
+                DateTime from = now.Date.AddHours(hour);
+                DateTime to = from.AddHours(2);
+                return (double)localizedTransactions
+                    .Where(t => t.CreatedAt >= from && t.CreatedAt < to)
+                    .Select(BuildCustomerIdentity)
+                    .Where(identity => !string.IsNullOrWhiteSpace(identity))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .Count();
+            })
+            .ToArray();
+
+        double[] revenueWeek = Enumerable.Range(0, 7)
+            .Select(offset =>
+            {
+                DateTime from = weekStart.AddDays(offset);
+                DateTime to = from.AddDays(1);
+                decimal amount = localizedTransactions
+                    .Where(t => t.CreatedAt >= from && t.CreatedAt < to)
+                    .Sum(t => t.TotalAmount);
+                return ToMillion(amount);
+            })
+            .ToArray();
+        double[] customerWeek = Enumerable.Range(0, 7)
+            .Select(offset =>
+            {
+                DateTime from = weekStart.AddDays(offset);
+                DateTime to = from.AddDays(1);
+                return (double)localizedTransactions
+                    .Where(t => t.CreatedAt >= from && t.CreatedAt < to)
+                    .Select(BuildCustomerIdentity)
+                    .Where(identity => !string.IsNullOrWhiteSpace(identity))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .Count();
+            })
+            .ToArray();
+
+        int daysInMonth = DateTime.DaysInMonth(now.Year, now.Month);
+        (int start, int end)[] monthRanges = [(1, 7), (8, 14), (15, 21), (22, daysInMonth)];
+        double[] revenueMonth = monthRanges
+            .Select(range =>
+            {
+                DateTime from = monthStart.AddDays(range.start - 1);
+                DateTime to = monthStart.AddDays(range.end);
+                decimal amount = localizedTransactions
+                    .Where(t => t.CreatedAt >= from && t.CreatedAt < to)
+                    .Sum(t => t.TotalAmount);
+                return ToMillion(amount);
+            })
+            .ToArray();
+        double[] customerMonth = monthRanges
+            .Select(range =>
+            {
+                DateTime from = monthStart.AddDays(range.start - 1);
+                DateTime to = monthStart.AddDays(range.end);
+                return (double)localizedTransactions
+                    .Where(t => t.CreatedAt >= from && t.CreatedAt < to)
+                    .Select(BuildCustomerIdentity)
+                    .Where(identity => !string.IsNullOrWhiteSpace(identity))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .Count();
+            })
+            .ToArray();
+
+        double[] revenueQuarter = Enumerable.Range(0, 3)
+            .Select(offset =>
+            {
+                DateTime from = quarterStart.AddMonths(offset);
+                DateTime to = from.AddMonths(1);
+                decimal amount = localizedTransactions
+                    .Where(t => t.CreatedAt >= from && t.CreatedAt < to)
+                    .Sum(t => t.TotalAmount);
+                return ToMillion(amount);
+            })
+            .ToArray();
+        double[] customerQuarter = Enumerable.Range(0, 3)
+            .Select(offset =>
+            {
+                DateTime from = quarterStart.AddMonths(offset);
+                DateTime to = from.AddMonths(1);
+                return (double)localizedTransactions
+                    .Where(t => t.CreatedAt >= from && t.CreatedAt < to)
+                    .Select(BuildCustomerIdentity)
+                    .Where(identity => !string.IsNullOrWhiteSpace(identity))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .Count();
+            })
+            .ToArray();
+
+        int[] months = [1, 3, 5, 7, 9, 11];
+        double[] revenueYear = months
+            .Select(month =>
+            {
+                DateTime from = yearStart.AddMonths(month - 1);
+                DateTime to = from.AddMonths(1);
+                decimal amount = localizedTransactions
+                    .Where(t => t.CreatedAt >= from && t.CreatedAt < to)
+                    .Sum(t => t.TotalAmount);
+                return ToMillion(amount);
+            })
+            .ToArray();
+        double[] customerYear = months
+            .Select(month =>
+            {
+                DateTime from = yearStart.AddMonths(month - 1);
+                DateTime to = from.AddMonths(1);
+                return (double)localizedTransactions
+                    .Where(t => t.CreatedAt >= from && t.CreatedAt < to)
+                    .Select(BuildCustomerIdentity)
+                    .Where(identity => !string.IsNullOrWhiteSpace(identity))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .Count();
+            })
+            .ToArray();
+
         return new Dictionary<(ChartMetricType Metric, ChartRangeType Range), ChartDataset>
         {
-            [(ChartMetricType.Revenue, ChartRangeType.Today)] = new(todayLabels, [0.6, 0.9, 1.2, 1.05, 1.36, 1.52, 1.28]),
-            [(ChartMetricType.Revenue, ChartRangeType.ThisWeek)] = new(weekLabels, [3.0, 3.28, 2.76, 3.39, 3.15, 3.48, 3.55]),
-            [(ChartMetricType.Revenue, ChartRangeType.ThisMonth)] = new(monthLabels, [12.4, 14.1, 13.2, 15.6]),
-            [(ChartMetricType.Revenue, ChartRangeType.ThisQuarter)] = new(quarterLabels, [52, 58, 61]),
-            [(ChartMetricType.Revenue, ChartRangeType.ThisYear)] = new(yearLabels, [110, 126, 118, 134, 140, 151]),
+            [(ChartMetricType.Revenue, ChartRangeType.Today)] = new(todayLabels, revenueToday),
+            [(ChartMetricType.Revenue, ChartRangeType.ThisWeek)] = new(weekLabels, revenueWeek),
+            [(ChartMetricType.Revenue, ChartRangeType.ThisMonth)] = new(monthLabels, revenueMonth),
+            [(ChartMetricType.Revenue, ChartRangeType.ThisQuarter)] = new(quarterLabels, revenueQuarter),
+            [(ChartMetricType.Revenue, ChartRangeType.ThisYear)] = new(yearLabels, revenueYear),
 
-            [(ChartMetricType.Customer, ChartRangeType.Today)] = new(todayLabels, [18, 22, 26, 24, 31, 35, 29]),
-            [(ChartMetricType.Customer, ChartRangeType.ThisWeek)] = new(weekLabels, [82, 96, 75, 104, 92, 110, 116]),
-            [(ChartMetricType.Customer, ChartRangeType.ThisMonth)] = new(monthLabels, [362, 388, 405, 432]),
-            [(ChartMetricType.Customer, ChartRangeType.ThisQuarter)] = new(quarterLabels, [1180, 1265, 1340]),
-            [(ChartMetricType.Customer, ChartRangeType.ThisYear)] = new(yearLabels, [2420, 2570, 2660, 2810, 2975, 3140]),
+            [(ChartMetricType.Customer, ChartRangeType.Today)] = new(todayLabels, customerToday),
+            [(ChartMetricType.Customer, ChartRangeType.ThisWeek)] = new(weekLabels, customerWeek),
+            [(ChartMetricType.Customer, ChartRangeType.ThisMonth)] = new(monthLabels, customerMonth),
+            [(ChartMetricType.Customer, ChartRangeType.ThisQuarter)] = new(quarterLabels, customerQuarter),
+            [(ChartMetricType.Customer, ChartRangeType.ThisYear)] = new(yearLabels, customerYear),
         };
     }
 
@@ -379,6 +577,167 @@ public partial class RevenueChartControlViewModel : LocalizedViewModelBase
 
     private string FormatHourLabel(int hour)
         => LocalizationService.FormatHourLabel(hour);
+
+    private void BuildOverviewSheet(XLWorkbook workbook)
+    {
+        var ws = workbook.Worksheets.Add("TongQuan");
+        ws.Cell(1, 1).Value = "Bao cao thong ke dashboard";
+        ws.Cell(2, 1).Value = "Muc tieu:";
+        ws.Cell(3, 1).Value = "- Theo doi tinh trang san pham va don hang";
+        ws.Cell(4, 1).Value = "- Theo doi xu huong kinh doanh";
+        ws.Cell(6, 1).Value = "Noi dung xuat:";
+        ws.Cell(7, 1).Value = "1) San pham va so luong ban theo ngay/tuan/thang/nam";
+        ws.Cell(8, 1).Value = "2) Doanh thu va loi nhuan uoc tinh theo ngay/tuan/thang/nam";
+        ws.Cell(10, 1).Value = $"GeneratedAt: {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+        ws.Column(1).Width = 90;
+    }
+
+    private void BuildProductQuantitySheet(XLWorkbook workbook)
+    {
+        var ws = workbook.Worksheets.Add("SanPham_SoLuong");
+        ws.Cell(1, 1).Value = "KyBaoCao";
+        ws.Cell(1, 2).Value = "MocThoiGian";
+        ws.Cell(1, 3).Value = "SanPham";
+        ws.Cell(1, 4).Value = "SoLuongBan";
+
+        int row = 2;
+        foreach (var period in GetPeriodKinds())
+        {
+            var rows = _transactions
+                .SelectMany(t => t.Lines.Select(line => new { Transaction = t, Line = line }))
+                .Where(x => x.Line.Type == Domain.Enums.TransactionLineType.ProductSale)
+                .Select(x => new
+                {
+                    PeriodKind = period.Name,
+                    PeriodKey = period.KeySelector(NormalizeToLocal(x.Transaction.CreatedAt)),
+                    ProductName = string.IsNullOrWhiteSpace(x.Line.ItemName) ? "Unknown" : x.Line.ItemName.Trim(),
+                    Quantity = x.Line.Quantity,
+                    GroupKey = $"{period.Name}|{period.KeySelector(NormalizeToLocal(x.Transaction.CreatedAt))}|{(string.IsNullOrWhiteSpace(x.Line.ItemName) ? "Unknown" : x.Line.ItemName.Trim())}",
+                })
+                .GroupBy(x => x.GroupKey, StringComparer.OrdinalIgnoreCase)
+                .Select(g => new
+                {
+                    PeriodKind = g.First().PeriodKind,
+                    PeriodKey = g.First().PeriodKey,
+                    ProductName = g.First().ProductName,
+                    Quantity = g.Sum(x => x.Quantity),
+                })
+                .OrderBy(x => x.PeriodKind, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(x => x.PeriodKey, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(x => x.ProductName, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            foreach (var item in rows)
+            {
+                ws.Cell(row, 1).Value = item.PeriodKind;
+                ws.Cell(row, 2).Value = item.PeriodKey;
+                ws.Cell(row, 3).Value = item.ProductName;
+                ws.Cell(row, 4).Value = item.Quantity;
+                row++;
+            }
+        }
+
+        ws.Columns().AdjustToContents();
+    }
+
+    private void BuildRevenueProfitSheet(XLWorkbook workbook)
+    {
+        var ws = workbook.Worksheets.Add("DoanhThu_LoiNhuan");
+        ws.Cell(1, 1).Value = "KyBaoCao";
+        ws.Cell(1, 2).Value = "MocThoiGian";
+        ws.Cell(1, 3).Value = "DoanhThuGop";
+        ws.Cell(1, 4).Value = "GiamGiaVaDieuChinh";
+        ws.Cell(1, 5).Value = "DoanhThuThuan";
+        ws.Cell(1, 6).Value = "LoiNhuanUocTinh";
+
+        int row = 2;
+        foreach (var period in GetPeriodKinds())
+        {
+            var rows = _transactions
+                .Select(t => new
+                {
+                    PeriodKind = period.Name,
+                    PeriodKey = period.KeySelector(NormalizeToLocal(t.CreatedAt)),
+                    GrossRevenue = t.SubtotalAmount,
+                    NetRevenue = t.TotalAmount,
+                    Adjustment = t.DiscountAmount + t.DepositRefund,
+                    GroupKey = $"{period.Name}|{period.KeySelector(NormalizeToLocal(t.CreatedAt))}",
+                })
+                .GroupBy(x => x.GroupKey, StringComparer.OrdinalIgnoreCase)
+                .Select(g => new
+                {
+                    PeriodKind = g.First().PeriodKind,
+                    PeriodKey = g.First().PeriodKey,
+                    GrossRevenue = g.Sum(x => x.GrossRevenue),
+                    Adjustment = g.Sum(x => x.Adjustment),
+                    NetRevenue = g.Sum(x => x.NetRevenue),
+                })
+                .OrderBy(x => x.PeriodKind, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(x => x.PeriodKey, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            foreach (var item in rows)
+            {
+                ws.Cell(row, 1).Value = item.PeriodKind;
+                ws.Cell(row, 2).Value = item.PeriodKey;
+                ws.Cell(row, 3).Value = item.GrossRevenue;
+                ws.Cell(row, 4).Value = item.Adjustment;
+                ws.Cell(row, 5).Value = item.NetRevenue;
+                ws.Cell(row, 6).Value = item.NetRevenue;
+                row++;
+            }
+        }
+
+        ws.Columns(3, 6).Style.NumberFormat.Format = "#,##0.00";
+        ws.Columns().AdjustToContents();
+    }
+
+    private static IReadOnlyList<(string Name, Func<DateTime, string> KeySelector)> GetPeriodKinds()
+    {
+        return
+        [
+            ("Ngay", date => date.ToString("yyyy-MM-dd")),
+            ("Tuan", date =>
+            {
+                DateTime weekStart = StartOfWeek(date.Date, DayOfWeek.Monday);
+                DateTime weekEnd = weekStart.AddDays(6);
+                return $"{weekStart:yyyy-MM-dd}..{weekEnd:yyyy-MM-dd}";
+            }),
+            ("Thang", date => date.ToString("yyyy-MM")),
+            ("Nam", date => date.ToString("yyyy")),
+        ];
+    }
+
+    private static DateTime NormalizeToLocal(DateTime value)
+    {
+        return value.Kind switch
+        {
+            DateTimeKind.Utc => value.ToLocalTime(),
+            DateTimeKind.Local => value,
+            _ => DateTime.SpecifyKind(value, DateTimeKind.Utc).ToLocalTime(),
+        };
+    }
+
+    private static string BuildCustomerIdentity(Transaction transaction)
+    {
+        string? memberId = transaction.MemberId?.Trim();
+        if (!string.IsNullOrWhiteSpace(memberId))
+        {
+            return $"member:{memberId}";
+        }
+
+        string customer = transaction.CustomerName?.Trim() ?? string.Empty;
+        return string.IsNullOrWhiteSpace(customer) ? string.Empty : $"customer:{customer}";
+    }
+
+    private static double ToMillion(decimal amount)
+        => (double)(amount / 1_000_000m);
+
+    private static DateTime StartOfWeek(DateTime date, DayOfWeek startOfWeek)
+    {
+        int diff = (7 + (date.DayOfWeek - startOfWeek)) % 7;
+        return date.AddDays(-diff).Date;
+    }
 
     private sealed record ChartDataset(IReadOnlyList<string> Labels, IReadOnlyList<double> Values);
 }

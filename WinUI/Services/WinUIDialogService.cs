@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Application.Services;
 using Microsoft.UI.Xaml;
@@ -30,22 +31,78 @@ public class WinUIDialogService : IDialogService
         }
     }
 
+    public XamlRoot? TryGetXamlRoot() => _rootElement?.XamlRoot;
+
     public async Task ShowDialogAsync(string dialogKey)
         => await ShowDialogAsync(dialogKey, null);
 
     public async Task ShowDialogAsync(string dialogKey, object? parameter)
     {
-        if (_rootElement?.XamlRoot == null)
+        const string tag = "[DialogService]";
+        try
         {
-            throw new InvalidOperationException("DialogService is not initialized with a valid root element.");
-        }
+            if (_rootElement?.XamlRoot is null)
+            {
+                Debug.WriteLine($"{tag} BOUNDARY-A: XamlRoot is null — IDialogService.Initialize was not called with a live FrameworkElement, or Content is not in the tree yet.");
+                return;
+            }
 
-        var dialog = _dialogFactory(dialogKey, parameter);
+            Debug.WriteLine($"{tag} BOUNDARY-B: dialogKey={dialogKey}, parameterType={parameter?.GetType().Name ?? "null"}");
 
-        if (dialog != null)
-        {
+            ContentDialog? dialog;
+            try
+            {
+                dialog = _dialogFactory(dialogKey, parameter);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{tag} BOUNDARY-C: factory threw for '{dialogKey}': {ex}");
+                await ShowSafeUserErrorAsync($"Tạo dialog thất bại ({dialogKey})\n{ex.Message}");
+                return;
+            }
+
+            if (dialog is null)
+            {
+                Debug.WriteLine($"{tag} BOUNDARY-D: factory returned null for '{dialogKey}'.");
+                await ShowSafeUserErrorAsync($"Không có dialog đăng ký cho '{dialogKey}'.");
+                return;
+            }
+
+            Debug.WriteLine($"{tag} BOUNDARY-E: showing {dialog.GetType().FullName} …");
             dialog.XamlRoot = _rootElement.XamlRoot;
-            await dialog.ShowAsync();
+
+            try
+            {
+                await dialog.ShowAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{tag} BOUNDARY-F: ShowAsync failed for '{dialogKey}': {ex}");
+                await ShowSafeUserErrorAsync($"Không mở được dialog ({dialogKey})\n{ex.Message}");
+                return;
+            }
+
+            Debug.WriteLine($"{tag} BOUNDARY-G: ShowAsync finished for '{dialogKey}'.");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"{tag} BOUNDARY-Z: unexpected: {ex}");
+            await ShowSafeUserErrorAsync(ex.Message);
+        }
+    }
+
+    private async Task ShowSafeUserErrorAsync(string message)
+    {
+        try
+        {
+            if (_rootElement?.XamlRoot is not null)
+            {
+                await ShowErrorAsync(message);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[DialogService] ShowErrorAsync failed: {ex}");
         }
     }
 

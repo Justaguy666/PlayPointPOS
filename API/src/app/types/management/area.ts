@@ -49,6 +49,18 @@ export class AreaDto {
 
     @Field(() => Float)
     totalAmount!: number;
+
+    @Field(() => Int, { nullable: true })
+    activeSessionId?: number;
+}
+
+@ObjectType()
+export class AreaSessionStartPayload {
+    @Field(() => Int)
+    sessionId!: number;
+
+    @Field(() => Date)
+    startTime!: Date;
 }
 
 @InputType()

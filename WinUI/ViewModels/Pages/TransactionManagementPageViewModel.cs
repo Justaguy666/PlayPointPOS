@@ -10,6 +10,7 @@ using Application.Services.Transactions;
 using Application.Transactions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Domain.Entities;
 using Domain.Enums;
 using WinUI.Services.Factories;
 using WinUI.UIModels;
@@ -32,6 +33,7 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
 
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
+    private readonly IManagementApiService _managementApiService;
     private readonly ITransactionFilterService _transactionFilterService;
     private readonly TransactionCardControlViewModelFactory _cardControlViewModelFactory;
     private readonly List<TransactionModel> _allTransactions;
@@ -110,6 +112,7 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
         ILocalizationService localizationService,
         IDialogService dialogService,
         INotificationService notificationService,
+        IManagementApiService managementApiService,
         ITransactionCatalogService transactionCatalogService,
         ITransactionFilterService transactionFilterService,
         TransactionModelFactory transactionModelFactory,
@@ -119,6 +122,7 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        _managementApiService = managementApiService ?? throw new ArgumentNullException(nameof(managementApiService));
         _transactionFilterService = transactionFilterService ?? throw new ArgumentNullException(nameof(transactionFilterService));
         _cardControlViewModelFactory = cardControlViewModelFactory ?? throw new ArgumentNullException(nameof(cardControlViewModelFactory));
         PaginationViewModel = paginationViewModel ?? throw new ArgumentNullException(nameof(paginationViewModel));
@@ -247,12 +251,14 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
             new TransactionDetailDialogRequest { Model = transaction });
     }
 
-    private Task HandleTogglePaymentMethodAsync(TransactionModel transaction)
+    private async Task HandleTogglePaymentMethodAsync(TransactionModel transaction)
     {
-        transaction.PaymentMethod = transaction.PaymentMethod == PaymentMethod.Cash
+        PaymentMethod nextPaymentMethod = transaction.PaymentMethod == PaymentMethod.Cash
             ? PaymentMethod.Banking
             : PaymentMethod.Cash;
-        return Task.CompletedTask;
+
+        Transaction updatedTransaction = await _managementApiService.UpdateTransactionPaymentMethodAsync(transaction.Id, nextPaymentMethod);
+        ApplyTransaction(transaction, updatedTransaction);
     }
 
     private void ApplyFiltersAndSorting(bool resetToFirstPage)
@@ -334,9 +340,16 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
 
     private bool MatchesSearch(TransactionModel transaction)
     {
-        return LocalizationService.Culture.CompareInfo.IndexOf(transaction.Code, SearchText, CompareOptions.IgnoreCase) >= 0
-            || LocalizationService.Culture.CompareInfo.IndexOf(transaction.CustomerName, SearchText, CompareOptions.IgnoreCase) >= 0
-            || LocalizationService.Culture.CompareInfo.IndexOf(transaction.MemberId ?? "", SearchText, CompareOptions.IgnoreCase) >= 0;
+        string lineItemNames = string.Join(' ', transaction.Lines.Select(line => line.ItemName));
+
+        return FullTextSearch.Matches(
+            SearchText,
+            transaction.Code,
+            transaction.CustomerName,
+            transaction.MemberId ?? string.Empty,
+            transaction.PaymentMethod.ToString(),
+            transaction.TotalAmount.ToString(CultureInfo.InvariantCulture),
+            lineItemNames);
     }
 
     private void RefreshPagedTransactions()
@@ -390,5 +403,20 @@ public partial class TransactionManagementPageViewModel : LocalizedViewModelBase
 
         int maxPossibleColumns = (int)((availableWidth + TransactionCardsColumnSpacing) / (TransactionCardOuterWidth + TransactionCardsColumnSpacing));
         return Math.Max(1, Math.Min(PreferredGridTransactionsPerRow, maxPossibleColumns));
+    }
+
+    private static void ApplyTransaction(TransactionModel target, Transaction source)
+    {
+        target.Id = source.Id;
+        target.Code = source.Code;
+        target.MemberId = source.MemberId;
+        target.CustomerName = source.CustomerName;
+        target.PaymentMethod = source.PaymentMethod;
+        target.SubtotalAmount = source.SubtotalAmount;
+        target.DepositRefund = source.DepositRefund;
+        target.DiscountAmount = source.DiscountAmount;
+        target.TotalAmount = source.TotalAmount;
+        target.CreatedAt = source.CreatedAt;
+        target.Lines = source.Lines;
     }
 }

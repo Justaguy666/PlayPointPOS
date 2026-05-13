@@ -4,6 +4,8 @@ namespace Application.Areas;
 
 public sealed record AreaRecord
 {
+    public string Id { get; init; } = string.Empty;
+
     public string AreaName { get; init; } = string.Empty;
 
     public PlayAreaType PlayAreaType { get; init; } = PlayAreaType.Table;
@@ -33,4 +35,6 @@ public sealed record AreaRecord
     public TimeSpan SessionPausedDuration { get; init; }
 
     public decimal TotalAmount { get; init; }
+
+    public string? ActiveSessionId { get; init; }
 }

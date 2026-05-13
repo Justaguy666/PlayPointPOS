@@ -103,7 +103,8 @@
                                        VerticalAlignment="Center" />
 
                             <Button Style="{StaticResource GameCardStockButtonStyle}"
-                                    Command="{Binding IncreaseStockCommand}">
+                                    Command="{Binding IncreaseStockCommand}"
+                                    IsEnabled="{Binding CanIncreaseStock}">
                                 <Button.Resources>
                                     <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/PrimaryActionButtonStateResources.xaml" />
                                 </Button.Resources>

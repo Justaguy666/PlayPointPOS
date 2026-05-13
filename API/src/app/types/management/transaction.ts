@@ -1,4 +1,4 @@
-import { Field, Float, ID, ObjectType } from "type-graphql";
+import { Field, Float, ID, InputType, Int, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class TransactionLineDto {
@@ -55,4 +55,37 @@ export class TransactionDto {
 
     @Field(() => [TransactionLineDto])
     lines!: TransactionLineDto[];
+}
+
+@InputType()
+export class CheckoutExtraLineInput {
+    @Field(() => String)
+    kind!: string;
+
+    @Field(() => Int)
+    catalogId!: number;
+
+    @Field(() => Float)
+    quantity!: number;
+
+    @Field(() => Float)
+    unitPrice!: number;
+}
+
+@InputType()
+export class AreaSessionCheckoutInput {
+    @Field(() => Int)
+    areaId!: number;
+
+    @Field(() => Int)
+    sessionId!: number;
+
+    @Field(() => String)
+    paymentMethod!: string;
+
+    @Field(() => Float)
+    areaServiceCharge!: number;
+
+    @Field(() => [CheckoutExtraLineInput])
+    extras!: CheckoutExtraLineInput[];
 }

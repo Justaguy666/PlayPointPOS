@@ -34,6 +34,7 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
 
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
+    private readonly IManagementApiService _managementApiService;
     private readonly IMemberFilterService _memberFilterService;
     private readonly MemberModelFactory _memberModelFactory;
     private readonly MemberCardControlViewModelFactory _memberCardControlViewModelFactory;
@@ -121,6 +122,7 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
         ILocalizationService localizationService,
         IDialogService dialogService,
         INotificationService notificationService,
+        IManagementApiService managementApiService,
         IMemberCatalogService memberCatalogService,
         IMembershipRankCatalogService membershipRankCatalogService,
         IMemberFilterService memberFilterService,
@@ -131,6 +133,7 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        _managementApiService = managementApiService ?? throw new ArgumentNullException(nameof(managementApiService));
         _memberFilterService = memberFilterService ?? throw new ArgumentNullException(nameof(memberFilterService));
         _memberModelFactory = memberModelFactory ?? throw new ArgumentNullException(nameof(memberModelFactory));
         _memberCardControlViewModelFactory = memberCardControlViewModelFactory ?? throw new ArgumentNullException(nameof(memberCardControlViewModelFactory));
@@ -281,32 +284,72 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
                 MembershipRanks = membershipRanksCollection,
                 OnMembershipRankAddedAsync = rank =>
                 {
-                    if (!_allMembershipRanks.Contains(rank))
-                    {
-                        _allMembershipRanks.Add(rank);
-                    }
-
-                    NormalizeMembershipRanks();
-                    RefreshMembershipStates();
-                    ApplyFiltersAndSorting(resetToFirstPage: false);
-                    return Task.CompletedTask;
+                    return HandleMembershipRankAddedAsync(rank);
                 },
                 OnMembershipRankDeletedAsync = rank =>
                 {
-                    _allMembershipRanks.Remove(rank);
-                    NormalizeMembershipRanks();
-                    RefreshMembershipStates();
-                    ApplyFiltersAndSorting(resetToFirstPage: false);
-                    return Task.CompletedTask;
+                    return HandleMembershipRankDeletedAsync(rank);
                 },
                 OnMembershipRankUpdatedAsync = rank =>
                 {
-                    NormalizeMembershipRanks();
-                    RefreshMembershipStates();
-                    ApplyFiltersAndSorting(resetToFirstPage: false);
-                    return Task.CompletedTask;
+                    return HandleMembershipRankUpdatedAsync(rank);
                 },
             });
+    }
+
+    private async Task HandleMembershipRankAddedAsync(MembershipRank rank)
+    {
+        MembershipRank createdRank = await _managementApiService.CreateMembershipRankAsync(rank);
+        ApplyMembershipRank(rank, createdRank);
+
+        if (!_allMembershipRanks.Contains(rank))
+        {
+            _allMembershipRanks.Add(rank);
+        }
+
+        NormalizeMembershipRanks();
+        RefreshMembershipStates();
+        ApplyFiltersAndSorting(resetToFirstPage: false);
+
+        await _notificationService.SendAsync(
+            "Đã thêm gói thành viên",
+            $"Đã thêm gói {rank.Name} thành công.",
+            NotificationType.Success);
+    }
+
+    private async Task HandleMembershipRankDeletedAsync(MembershipRank rank)
+    {
+        await _managementApiService.DeleteMembershipRankAsync(rank.Id);
+        _allMembershipRanks.Remove(rank);
+        NormalizeMembershipRanks();
+        RefreshMembershipStates();
+        ApplyFiltersAndSorting(resetToFirstPage: false);
+
+        await _notificationService.SendAsync(
+            "Đã xoá gói thành viên",
+            $"Đã xoá gói {rank.Name}.",
+            NotificationType.Success);
+    }
+
+    private async Task HandleMembershipRankUpdatedAsync(MembershipRank rank)
+    {
+        MembershipRank updatedRank = await _managementApiService.UpdateMembershipRankAsync(rank);
+        ApplyMembershipRank(rank, updatedRank);
+
+        MembershipRank? existingRank = _allMembershipRanks.FirstOrDefault(item => item.Id == rank.Id);
+        if (existingRank is not null && !ReferenceEquals(existingRank, rank))
+        {
+            ApplyMembershipRank(existingRank, rank);
+        }
+
+        NormalizeMembershipRanks();
+        RefreshMembershipStates();
+        ApplyFiltersAndSorting(resetToFirstPage: false);
+
+        await _notificationService.SendAsync(
+            "Đã cập nhật gói thành viên",
+            $"Đã lưu thay đổi cho gói {rank.Name}.",
+            NotificationType.Success);
     }
 
     private void ClearSearch()
@@ -350,6 +393,7 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
             return;
         }
 
+        await _managementApiService.DeleteMemberAsync(member.Id);
         if (!_allMembers.Remove(member))
         {
             return;
@@ -379,6 +423,8 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
 
     private async Task HandleMemberCreatedAsync(MemberModel member)
     {
+        MemberRecord createdMember = await _managementApiService.CreateMemberAsync(ToMemberRecord(member));
+        ApplyMemberRecord(member, createdMember);
         ApplyMembershipState(member);
 
         if (!_allMembers.Contains(member))
@@ -400,6 +446,8 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
 
     private async Task HandleMemberUpdatedAsync(MemberModel member)
     {
+        MemberRecord updatedMember = await _managementApiService.UpdateMemberAsync(ToMemberRecord(member));
+        ApplyMemberRecord(member, updatedMember);
         ApplyMembershipState(member);
         ApplyFiltersAndSorting(resetToFirstPage: false);
 
@@ -455,10 +503,13 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
     {
         string membershipRankName = member.MembershipRank?.Name ?? string.Empty;
 
-        return LocalizationService.Culture.CompareInfo.IndexOf(member.FullName, SearchText, CompareOptions.IgnoreCase) >= 0
-            || LocalizationService.Culture.CompareInfo.IndexOf(member.PhoneNumber, SearchText, CompareOptions.IgnoreCase) >= 0
-            || LocalizationService.Culture.CompareInfo.IndexOf(member.Code, SearchText, CompareOptions.IgnoreCase) >= 0
-            || LocalizationService.Culture.CompareInfo.IndexOf(membershipRankName, SearchText, CompareOptions.IgnoreCase) >= 0;
+        return FullTextSearch.Matches(
+            SearchText,
+            member.FullName,
+            member.PhoneNumber,
+            member.Code,
+            membershipRankName,
+            member.TotalSpentAmount.ToString(CultureInfo.InvariantCulture));
     }
 
     private IReadOnlyList<MemberModel> SortMembers(IEnumerable<MemberModel> members)
@@ -663,5 +714,39 @@ public partial class MemberManagementPageViewModel : LocalizedViewModelBase
         {
             collection.Add(item);
         }
+    }
+
+    private static MemberRecord ToMemberRecord(MemberModel member)
+    {
+        return new MemberRecord
+        {
+            Id = member.Id,
+            Code = member.Code,
+            FullName = member.FullName,
+            PhoneNumber = member.PhoneNumber,
+            TotalSpentAmount = member.TotalSpentAmount,
+            CurrentRank = member.MembershipRank ?? new MembershipRank(),
+        };
+    }
+
+    private static void ApplyMemberRecord(MemberModel target, MemberRecord source)
+    {
+        target.Id = source.Id;
+        target.Code = source.Code;
+        target.FullName = source.FullName;
+        target.PhoneNumber = source.PhoneNumber;
+        target.TotalSpentAmount = source.TotalSpentAmount;
+        target.MembershipRank = source.CurrentRank;
+    }
+
+    private static void ApplyMembershipRank(MembershipRank target, MembershipRank source)
+    {
+        target.Id = source.Id;
+        target.Name = source.Name;
+        target.Priority = source.Priority;
+        target.Color = source.Color;
+        target.DiscountRate = source.DiscountRate;
+        target.MinSpentAmount = source.MinSpentAmount;
+        target.IsDefault = source.IsDefault;
     }
 }

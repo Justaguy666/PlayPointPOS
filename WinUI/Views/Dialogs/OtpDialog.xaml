@@ -56,11 +56,28 @@
             <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}">
                 <TextBlock Text="{x:Bind ViewModel.OtpLabelText, Mode=OneWay}"
                            Style="{StaticResource DialogFormLabelTextStyle}"/>
-                <TextBox x:Name="OtpCodeBox"
-                         PlaceholderText="{x:Bind ViewModel.OtpPlaceholderText, Mode=OneWay}"
-                         Text="{x:Bind ViewModel.OtpCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         MaxLength="6"
-                         Style="{StaticResource DialogFormTextBoxStyle}" />
+                <Grid ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="OtpCodeBox"
+                             Grid.Column="0"
+                             PlaceholderText="{x:Bind ViewModel.OtpPlaceholderText, Mode=OneWay}"
+                             Text="{x:Bind ViewModel.OtpCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             MaxLength="6"
+                             Style="{StaticResource DialogFormTextBoxStyle}" />
+                    <Button Grid.Column="1"
+                            Command="{x:Bind ViewModel.SendOtpAgainCommand, Mode=OneWay}"
+                            IsEnabled="{x:Bind ViewModel.IsSendOtpEnabled, Mode=OneWay}"
+                            Visibility="{x:Bind ViewModel.ShowPasswordFields, Mode=OneWay, Converter={StaticResource BoolToVisible}}"
+                            Style="{StaticResource DialogCompactSecondaryButtonStyle}">
+                        <Button.Resources>
+                            <ResourceDictionary Source="ms-appx:///Resources/Styles/StateResources/SecondaryActionButtonStateResources.xaml" />
+                        </Button.Resources>
+                        <TextBlock Text="{x:Bind ViewModel.SendOtpButtonText, Mode=OneWay}" />
+                    </Button>
+                </Grid>
             </StackPanel>
 
             <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}"

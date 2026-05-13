@@ -4,7 +4,9 @@ using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using WinUI.Helpers;
 using WinUI.UIModels;
 using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
@@ -15,6 +17,7 @@ namespace WinUI.ViewModels.AreaManagement.DetailedAreaCards;
 public partial class DetailedAvailableCardViewModel : LocalizedViewModelBase, IDetailedAreaCardViewModel, IDisposable
 {
     private readonly IDialogService _dialogService;
+    private readonly INotificationService _notificationService;
     private bool _isDisposed;
 
     public string AreaName => Model.AreaName;
@@ -37,15 +40,19 @@ public partial class DetailedAvailableCardViewModel : LocalizedViewModelBase, ID
     public DetailedAvailableCardViewModel(
         ILocalizationService localizationService,
         IDialogService dialogService,
+        INotificationService notificationService,
         AreaModel model)
         : base(localizationService)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         Model = model ?? throw new ArgumentNullException(nameof(model));
         Model.PropertyChanged += HandleModelPropertyChanged;
 
         StartSessionCommand = new AsyncRelayCommand(OpenStartSessionDialogAsync);
-        ReserveCommand = new AsyncRelayCommand(OpenReservationDialogAsync);
+        ReserveCommand = new AsyncRelayCommand(
+            OpenReservationDialogAsync,
+            AsyncRelayCommandOptions.AllowConcurrentExecutions);
         RefreshLocalizedText();
     }
 
@@ -62,20 +69,45 @@ public partial class DetailedAvailableCardViewModel : LocalizedViewModelBase, ID
         ReserveButtonText = LocalizationService.GetString("ReserveButtonText");
     }
 
-    private Task OpenStartSessionDialogAsync()
+    private async Task OpenStartSessionDialogAsync()
     {
-        return _dialogService.ShowDialogAsync("StartSession", Model);
+        Debug.WriteLine($"[KhuVực>Mở] Command invoked. AreaId={Model.Id}, Name={Model.AreaName}, Type={Model.PlayAreaType}, Status={Model.Status}");
+        try
+        {
+            await _dialogService.ShowDialogAsync("StartSession", Model);
+
+            // Only flip status after dialog has fully returned to avoid WinUI teardown races.
+            if (!string.IsNullOrWhiteSpace(Model.ActiveSessionId)
+                && Model.StartTime is not null
+                && Model.Status != PlayAreaStatus.Rented)
+            {
+                Model.Status = PlayAreaStatus.Rented;
+            }
+        }
+        catch (Exception ex)
+        {
+            SessionFlowDebugLog.Append("DetailedAvailable.OpenStartSessionDialogAsync", ex);
+            Debug.WriteLine(ex.ToString());
+            await _notificationService.SendAsync(
+                LocalizationService.GetString("StartSessionUnexpectedErrorTitle"),
+                $"{ex}\n\nLog: {SessionFlowDebugLog.LogFilePath}",
+                NotificationType.Error);
+        }
+
+        Debug.WriteLine("[KhuVực>Mở] await ShowDialogAsync completed (see [DialogService] BOUNDARY-* lines).");
     }
 
-    private Task OpenReservationDialogAsync()
+    private async Task OpenReservationDialogAsync()
     {
-        return _dialogService.ShowDialogAsync(
+        Debug.WriteLine($"[KhuVực>Đặt chỗ] Command invoked. AreaId={Model.Id}, Name={Model.AreaName}, Type={Model.PlayAreaType}, Status={Model.Status}");
+        await _dialogService.ShowDialogAsync(
             "Reservation",
             new ReservationDialogRequest
             {
                 Mode = UpsertDialogMode.Add,
                 Model = Model,
             });
+        Debug.WriteLine("[KhuVực>Đặt chỗ] await ShowDialogAsync completed (see [DialogService] BOUNDARY-* lines).");
     }
 
     public new void Dispose()

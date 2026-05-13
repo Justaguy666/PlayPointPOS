@@ -12,6 +12,7 @@ public sealed class MemberModelFactory
 
         return new MemberModel
         {
+            Id = source.Id,
             Code = source.Code,
             FullName = source.FullName,
             PhoneNumber = source.PhoneNumber,
@@ -27,6 +28,7 @@ public sealed class MemberModelFactory
 
         return new MemberModel
         {
+            Id = source.Id,
             Code = source.Code,
             FullName = source.FullName,
             PhoneNumber = source.PhoneNumber,

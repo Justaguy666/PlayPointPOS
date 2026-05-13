@@ -174,11 +174,11 @@
   <data name="ConfigDialogServerAddressPlaceholderText" xml:space="preserve">
         <value>Server...</value>
     </data>
-  <data name="ConfigDialogApiKeyLabelText" xml:space="preserve">
-        <value>API key</value>
+  <data name="ConfigDialogPortLabelText" xml:space="preserve">
+        <value>Port</value>
     </data>
-  <data name="ConfigDialogApiKeyPlaceholderText" xml:space="preserve">
-        <value>Key...</value>
+  <data name="ConfigDialogPortPlaceholderText" xml:space="preserve">
+        <value>Port...</value>
     </data>
   <data name="ConfigDialogRememberMeLabelText" xml:space="preserve">
         <value>Remember me</value>
@@ -212,6 +212,9 @@
     </data>
   <data name="ForgotPasswordDialogTitleText" xml:space="preserve">
         <value>Forgot password</value>
+    </data>
+  <data name="ForgotPasswordDialogChangePasswordTitleText" xml:space="preserve">
+        <value>Change password</value>
     </data>
   <data name="ForgotPasswordDialogEmailLabelText" xml:space="preserve">
         <value>Recovery email</value>
@@ -254,6 +257,12 @@
     </data>
   <data name="OtpDialogVerifyButtonText" xml:space="preserve">
         <value>Reset</value>
+    </data>
+  <data name="OtpDialogSendButtonText" xml:space="preserve">
+        <value>Send</value>
+    </data>
+  <data name="OtpDialogResendCooldownFormat" xml:space="preserve">
+        <value>Resend ({0}s)</value>
     </data>
   <data name="OtpDialogPasswordMismatchText" xml:space="preserve">
         <value>Confirm password does not match.</value>
@@ -1025,6 +1034,45 @@
 	</data>
   <data name="AreaSessionAddProductUnavailableMessage" xml:space="preserve">
 		<value>Adding food and drinks to an active session is not available yet.</value>
+	</data>
+  <data name="SessionSalePickGameTitle" xml:space="preserve">
+		<value>Pick a board game</value>
+	</data>
+  <data name="SessionSalePickProductTitle" xml:space="preserve">
+		<value>Pick a product</value>
+	</data>
+  <data name="SessionSaleQuantityLabel" xml:space="preserve">
+		<value>Quantity</value>
+	</data>
+  <data name="SessionSalePickerConfirm" xml:space="preserve">
+		<value>Add</value>
+	</data>
+  <data name="PaymentCheckoutMissingSessionMessage" xml:space="preserve">
+		<value>This play session is not synced with the server (missing session id). Start the session again or reload areas.</value>
+	</data>
+  <data name="PaymentCheckoutFailedTitle" xml:space="preserve">
+		<value>Checkout failed</value>
+	</data>
+  <data name="PaymentCheckoutFailedMessage" xml:space="preserve">
+		<value>Could not complete checkout: {0}</value>
+	</data>
+  <data name="StartSessionServerErrorMessage" xml:space="preserve">
+		<value>Could not start session on the server: {0}</value>
+	</data>
+  <data name="StartSessionInvalidAreaIdMessage" xml:space="preserve">
+		<value>Invalid area id.</value>
+	</data>
+  <data name="StartSessionLoadMembersFailedMessage" xml:space="preserve">
+		<value>Could not load members: {0}</value>
+	</data>
+  <data name="StartSessionUnexpectedErrorTitle" xml:space="preserve">
+		<value>Open session failed</value>
+	</data>
+  <data name="StartSessionUnexpectedErrorMessage" xml:space="preserve">
+		<value>{0}
+
+See log file:
+{1}</value>
 	</data>
   <data name="ProductServicesTotalPriceLabelText" xml:space="preserve">
 		<value>Food/drink total:</value>

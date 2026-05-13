@@ -11,17 +11,14 @@ namespace WinUI.ViewModels.UserControls.Settings;
 
 public partial class ShopInformationCardControlViewModel : LocalizedViewModelBase
 {
-    private const string DefaultShopName = "PlayPoint Board Game Cafe";
-    private const string DefaultAddress = "123 Nguyen Hue, District 1, Ho Chi Minh City";
-    private const string DefaultEmail = "hello@playpoint.vn";
-    private const string DefaultPhone = "0789 608 537";
-
+    private readonly IConfigurationService _configurationService;
+    private readonly IManagementApiService _managementApiService;
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
-    private string _appliedShopName = DefaultShopName;
-    private string _appliedAddress = DefaultAddress;
-    private string _appliedEmail = DefaultEmail;
-    private string _appliedPhone = DefaultPhone;
+    private string _appliedShopName = string.Empty;
+    private string _appliedAddress = string.Empty;
+    private string _appliedEmail = string.Empty;
+    private string _appliedPhone = string.Empty;
     private bool _isApplying;
 
     [ObservableProperty]
@@ -35,7 +32,7 @@ public partial class ShopInformationCardControlViewModel : LocalizedViewModelBas
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
-    public partial string ShopName { get; set; } = DefaultShopName;
+    public partial string ShopName { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string AddressLabel { get; set; } = string.Empty;
@@ -45,7 +42,7 @@ public partial class ShopInformationCardControlViewModel : LocalizedViewModelBas
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
-    public partial string Address { get; set; } = DefaultAddress;
+    public partial string Address { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string EmailLabel { get; set; } = string.Empty;
@@ -55,7 +52,7 @@ public partial class ShopInformationCardControlViewModel : LocalizedViewModelBas
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
-    public partial string Email { get; set; } = DefaultEmail;
+    public partial string Email { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string PhoneLabel { get; set; } = string.Empty;
@@ -65,7 +62,7 @@ public partial class ShopInformationCardControlViewModel : LocalizedViewModelBas
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
-    public partial string Phone { get; set; } = DefaultPhone;
+    public partial string Phone { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string ApplyButtonText { get; set; } = string.Empty;
@@ -84,14 +81,20 @@ public partial class ShopInformationCardControlViewModel : LocalizedViewModelBas
 
     public ShopInformationCardControlViewModel(
         ILocalizationService localizationService,
+        IConfigurationService configurationService,
+        IManagementApiService managementApiService,
         IDialogService dialogService,
         INotificationService notificationService)
         : base(localizationService)
     {
+        _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
+        _managementApiService = managementApiService ?? throw new ArgumentNullException(nameof(managementApiService));
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        LoadShopProfileFromConfig();
         RefreshLocalizedText();
         StoreAppliedValues();
+        _ = LoadShopProfileFromBackendAsync();
     }
 
     protected override void RefreshLocalizedText()
@@ -170,6 +173,24 @@ public partial class ShopInformationCardControlViewModel : LocalizedViewModelBas
 
     private async Task ApplyChangesAsync()
     {
+        string normalizedShopName = Normalize(ShopName);
+        string normalizedAddress = Normalize(Address);
+        string normalizedEmail = Normalize(Email);
+        string normalizedPhone = Normalize(Phone);
+
+        ShopProfile updatedProfile = await _managementApiService.UpdateShopProfileAsync(new ShopProfile
+        {
+            ShopName = normalizedShopName,
+            Address = normalizedAddress,
+            Email = normalizedEmail,
+            Phone = normalizedPhone,
+        });
+        await _configurationService.SaveShopProfileAsync(updatedProfile);
+
+        ShopName = Normalize(updatedProfile.ShopName);
+        Address = Normalize(updatedProfile.Address);
+        Email = Normalize(updatedProfile.Email);
+        Phone = Normalize(updatedProfile.Phone);
         StoreAppliedValues();
 
         await _notificationService.SendAsync(
@@ -204,6 +225,62 @@ public partial class ShopInformationCardControlViewModel : LocalizedViewModelBas
 
     private static string Normalize(string? value)
         => value?.Trim() ?? string.Empty;
+
+    private void LoadShopProfileFromConfig()
+    {
+        ShopProfile profile = _configurationService.ShopProfile;
+        ShopName = Normalize(profile.ShopName);
+        Address = Normalize(profile.Address);
+        Email = Normalize(profile.Email);
+        Phone = Normalize(profile.Phone);
+
+        if (string.IsNullOrWhiteSpace(Email))
+        {
+            Email = Normalize(_configurationService.RememberedEmail);
+        }
+    }
+
+    private async Task LoadShopProfileFromBackendAsync()
+    {
+        try
+        {
+            ShopProfile profileFromBackend = await _managementApiService.GetShopProfileAsync();
+            if (string.IsNullOrWhiteSpace(profileFromBackend.ShopName)
+                && string.IsNullOrWhiteSpace(profileFromBackend.Address)
+                && string.IsNullOrWhiteSpace(profileFromBackend.Email)
+                && string.IsNullOrWhiteSpace(profileFromBackend.Phone))
+            {
+                return;
+            }
+
+            ShopName = Normalize(profileFromBackend.ShopName);
+            Address = Normalize(profileFromBackend.Address);
+            Email = Normalize(profileFromBackend.Email);
+            Phone = Normalize(profileFromBackend.Phone);
+
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                Email = Normalize(_configurationService.RememberedEmail);
+            }
+
+            StoreAppliedValues();
+            await _configurationService.SaveShopProfileAsync(new ShopProfile
+            {
+                ShopName = ShopName,
+                Address = Address,
+                Email = Email,
+                Phone = Phone,
+            });
+        }
+        catch
+        {
+            // Keep local configuration values when backend profile is temporarily unavailable.
+        }
+        finally
+        {
+            ApplyCommand.NotifyCanExecuteChanged();
+        }
+    }
 
     private void ValidateEmail()
     {

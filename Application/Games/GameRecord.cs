@@ -5,6 +5,7 @@ namespace Application.Games;
 
 public sealed record GameRecord
 {
+    public string Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public decimal HourlyPrice { get; set; }
     public int MinPlayers { get; set; }
@@ -12,4 +13,5 @@ public sealed record GameRecord
     public required GameType Type { get; set; }
     public GameDifficulty Difficulty { get; set; }
     public int StockQuantity { get; set; }
+    public string ImageUri { get; set; } = "ms-appx:///Assets/Mock.png";
 }

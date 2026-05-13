@@ -52,7 +52,7 @@ public abstract partial class GameCardControlViewModelBase : LocalizedViewModelB
 
         EditCommand = new AsyncRelayCommand(ExecuteEditAsync);
         DeleteCommand = new AsyncRelayCommand(ExecuteDeleteAsync);
-        IncreaseStockCommand = new RelayCommand(ExecuteIncreaseStock);
+        IncreaseStockCommand = new RelayCommand(ExecuteIncreaseStock, () => CanIncreaseStock);
         DecreaseStockCommand = new RelayCommand(ExecuteDecreaseStock, () => CanDecreaseStock);
 
         Model.PropertyChanged += HandleModelPropertyChanged;
@@ -95,7 +95,9 @@ public abstract partial class GameCardControlViewModelBase : LocalizedViewModelB
 
     public string StockSummaryText => $"{Model.BorrowedQuantity}/{Model.StockQuantity}";
 
-    public bool CanDecreaseStock => Model.StockQuantity > 0;
+    public bool CanIncreaseStock => !Model.IsStockUpdateInProgress;
+
+    public bool CanDecreaseStock => !Model.IsStockUpdateInProgress && Model.StockQuantity > 0;
 
     public Brush TypeBadgeBackground => _typeBadgeBackgroundBrush;
 
@@ -187,7 +189,15 @@ public abstract partial class GameCardControlViewModelBase : LocalizedViewModelB
             case nameof(GameModel.StockQuantity):
             case nameof(GameModel.BorrowedQuantity):
                 OnPropertyChanged(nameof(StockSummaryText));
+                OnPropertyChanged(nameof(CanIncreaseStock));
                 OnPropertyChanged(nameof(CanDecreaseStock));
+                IncreaseStockCommand.NotifyCanExecuteChanged();
+                DecreaseStockCommand.NotifyCanExecuteChanged();
+                break;
+            case nameof(GameModel.IsStockUpdateInProgress):
+                OnPropertyChanged(nameof(CanIncreaseStock));
+                OnPropertyChanged(nameof(CanDecreaseStock));
+                IncreaseStockCommand.NotifyCanExecuteChanged();
                 DecreaseStockCommand.NotifyCanExecuteChanged();
                 break;
             case nameof(GameModel.HourlyPrice):
@@ -224,7 +234,9 @@ public abstract partial class GameCardControlViewModelBase : LocalizedViewModelB
         OnPropertyChanged(nameof(TypeDisplayName));
         OnPropertyChanged(nameof(PlayerRangeText));
         OnPropertyChanged(nameof(StockSummaryText));
+        OnPropertyChanged(nameof(CanIncreaseStock));
         OnPropertyChanged(nameof(CanDecreaseStock));
+        IncreaseStockCommand.NotifyCanExecuteChanged();
         DecreaseStockCommand.NotifyCanExecuteChanged();
     }
 }

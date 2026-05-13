@@ -1,6 +1,6 @@
 import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
-import { TransactionDto } from "../types/management/transaction.js";
-import { getTransactions, updateTransactionPaymentMethod } from "../services/management/transactionService.js";
+import { TransactionDto, AreaSessionCheckoutInput } from "../types/management/transaction.js";
+import { getTransactions, updateTransactionPaymentMethod, persistAreaSessionCheckout } from "../services/management/transactionService.js";
 
 @Resolver()
 export class TransactionResolver {
@@ -10,10 +10,10 @@ export class TransactionResolver {
     }
 
     @Mutation(() => TransactionDto)
-    async updateTransactionPaymentMethod(
-        @Arg("id", () => Int) id: number,
-        @Arg("paymentMethod", () => String) paymentMethod: string,
+    async createAreaSessionCheckout(
+        @Arg("shopId", () => Int) shopId: number,
+        @Arg("input", () => AreaSessionCheckoutInput) input: AreaSessionCheckoutInput,
     ): Promise<TransactionDto> {
-        return updateTransactionPaymentMethod(id, paymentMethod);
+        return persistAreaSessionCheckout(shopId, input);
     }
 }

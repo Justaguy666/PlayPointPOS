@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Application.Services;
+using Application.Transactions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
@@ -16,6 +20,9 @@ public partial class PaymentViewModel : LocalizedViewModelBase
 {
     private readonly IDialogService _dialogService;
     private readonly IAreaSessionService _areaSessionService;
+    private readonly IManagementApiService _managementApiService;
+    private readonly IManagementDataPreloadService _managementDataPreloadService;
+    private readonly INotificationService _notificationService;
     private AreaModel? _model;
     private event Action? CloseRequestedInternal;
 
@@ -25,11 +32,17 @@ public partial class PaymentViewModel : LocalizedViewModelBase
     public PaymentViewModel(
         ILocalizationService localizationService,
         IDialogService dialogService,
-        IAreaSessionService areaSessionService)
+        IAreaSessionService areaSessionService,
+        IManagementApiService managementApiService,
+        IManagementDataPreloadService managementDataPreloadService,
+        INotificationService notificationService)
         : base(localizationService)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _areaSessionService = areaSessionService ?? throw new ArgumentNullException(nameof(areaSessionService));
+        _managementApiService = managementApiService ?? throw new ArgumentNullException(nameof(managementApiService));
+        _managementDataPreloadService = managementDataPreloadService ?? throw new ArgumentNullException(nameof(managementDataPreloadService));
+        _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         RefreshLocalizedText();
     }
 
@@ -172,6 +185,63 @@ public partial class PaymentViewModel : LocalizedViewModelBase
             return;
         }
 
+        if (!int.TryParse(_model.Id.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int areaId)
+            || areaId <= 0
+            || !int.TryParse(_model.ActiveSessionId?.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int sessionId)
+            || sessionId <= 0)
+        {
+            DialogShowRequested?.Invoke();
+            await _notificationService.SendAsync(
+                LocalizationService.GetString("PaymentDialogTitleText"),
+                LocalizationService.GetString("PaymentCheckoutMissingSessionMessage"),
+                NotificationType.Warning);
+            return;
+        }
+
+        if (!Enum.TryParse(SelectedPaymentMethodValue, ignoreCase: true, out PaymentMethod paymentMethod))
+        {
+            paymentMethod = PaymentMethod.Cash;
+        }
+
+        TimeSpan elapsedTime = _areaSessionService.GetSessionElapsedTime(_model, DateTime.UtcNow);
+        decimal areaFee = _areaSessionService.CalculateAreaSessionTotal(_model, elapsedTime);
+
+        var extras = new List<AreaSessionCheckoutExtra>();
+        foreach (PendingSessionSaleLine line in _model.PendingSessionLines)
+        {
+            if (line.IsGame)
+            {
+                DateTime started = line.GameRentalStartUtc ?? DateTime.UtcNow;
+                decimal hours = (decimal)Math.Max(1d / 60d, (DateTime.UtcNow - started).TotalHours);
+                extras.Add(new AreaSessionCheckoutExtra("game", line.CatalogId, hours, line.UnitPrice));
+            }
+            else
+            {
+                extras.Add(new AreaSessionCheckoutExtra("product", line.CatalogId, line.ProductQuantity, line.UnitPrice));
+            }
+        }
+
+        try
+        {
+            await _managementApiService.CompleteAreaSessionCheckoutAsync(
+                new AreaSessionCheckoutArgs(areaId, sessionId, paymentMethod, areaFee, extras));
+
+            await _managementDataPreloadService.WarmUpAsync();
+        }
+        catch (Exception ex)
+        {
+            DialogShowRequested?.Invoke();
+            await _notificationService.SendAsync(
+                LocalizationService.GetString("PaymentCheckoutFailedTitle"),
+                string.Format(
+                    LocalizationService.Culture,
+                    LocalizationService.GetString("PaymentCheckoutFailedMessage"),
+                    ex.Message),
+                NotificationType.Error);
+            return;
+        }
+
+        _model.PendingSessionLines.Clear();
         _areaSessionService.CompletePayment(_model);
         CloseRequestedInternal?.Invoke();
     }
@@ -196,6 +266,19 @@ public partial class PaymentViewModel : LocalizedViewModelBase
         decimal areaFee = _areaSessionService.CalculateAreaSessionTotal(_model, elapsedTime);
         decimal productFee = 0m;
         decimal gameFee = 0m;
+        foreach (PendingSessionSaleLine line in _model.PendingSessionLines)
+        {
+            if (!line.IsGame)
+            {
+                productFee += line.UnitPrice * line.ProductQuantity;
+            }
+            else if (line.GameRentalStartUtc is DateTime startedUtc)
+            {
+                decimal hours = (decimal)Math.Max(1d / 60d, (DateTime.UtcNow - startedUtc).TotalHours);
+                gameFee += line.UnitPrice * hours;
+            }
+        }
+
         decimal deposit = 0m;
         decimal discount = 0m;
         decimal total = areaFee + productFee + gameFee - deposit - discount;

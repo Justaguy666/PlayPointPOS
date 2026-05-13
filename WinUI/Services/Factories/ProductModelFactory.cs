@@ -12,6 +12,7 @@ public sealed class ProductModelFactory
 
         return new ProductModel
         {
+            Id = source.Id,
             Name = source.Name,
             Price = source.Price,
             ProductType = source.Type,
@@ -26,6 +27,7 @@ public sealed class ProductModelFactory
 
         return new ProductModel
         {
+            Id = source.Id,
             Name = source.Name,
             Price = source.Price,
             ProductType = source.ProductType,

@@ -1,6 +1,6 @@
 import { AppDataSource } from "../../../config/database.js";
 import { MemberDto, MemberInput, MembershipDto, MembershipInput } from "../../types/management/member.js";
-import { requireRow, toNumber, toStringValue, type SqlRow } from "./shared.js";
+import { requireRow, toStringValue, toNumberCell, toStringCell, cell, type SqlRow } from "./shared.js";
 
 export async function getMemberships(shopId: number): Promise<MembershipDto[]> {
     const rows = await AppDataSource.query(`
@@ -21,7 +21,7 @@ export async function createMembership(shopId: number, input: MembershipInput): 
     `, [shopId, input.name, input.color, input.minSpentAmount, input.discountRate]) as SqlRow[];
 
     const row = requireRow(rows, "Membership");
-    const priority = await getMembershipPriority(shopId, toNumber(row.ID));
+    const priority = await getMembershipPriority(shopId, toNumberCell(row, "ID"));
     return mapMembershipRow(row, priority, priority === 1);
 }
 
@@ -37,7 +37,7 @@ export async function updateMembership(id: number, input: MembershipInput): Prom
     `, [id, input.name, input.color, input.minSpentAmount, input.discountRate]) as SqlRow[];
 
     const row = requireRow(rows, "Membership", id);
-    const priority = await getMembershipPriority(toNumber(row.ShopID), toNumber(row.ID));
+    const priority = await getMembershipPriority(toNumberCell(row, "ShopID"), toNumberCell(row, "ID"));
     return mapMembershipRow(row, priority, priority === 1);
 }
 
@@ -77,7 +77,7 @@ export async function createMember(shopId: number, input: MemberInput): Promise<
 export async function updateMember(id: number, input: MemberInput): Promise<MemberDto> {
     const shopRows = await AppDataSource.query(`SELECT "ShopID" FROM "Member" WHERE "ID" = $1`, [id]) as SqlRow[];
     const shopRow = requireRow(shopRows, "Member", id);
-    const shopId = toNumber(shopRow.ShopID);
+    const shopId = toNumberCell(shopRow, "ShopID");
     const membership = await resolveMembershipForSpentAsync(shopId, input.totalSpentAmount);
     const rows = await AppDataSource.query(`
         UPDATE "Member"
@@ -110,7 +110,7 @@ async function getMembershipPriority(shopId: number, membershipId: number): Prom
         ORDER BY "MinSpent" ASC, "ID" ASC
     `, [shopId]) as SqlRow[];
 
-    return rows.findIndex((item: SqlRow) => toNumber(item.ID) === membershipId) + 1;
+    return rows.findIndex((item: SqlRow) => toNumberCell(item, "ID") === membershipId) + 1;
 }
 
 async function resolveMembershipForSpentAsync(shopId: number, totalSpentAmount: number): Promise<{ id: number; name: string }> {
@@ -137,35 +137,36 @@ async function resolveMembershipForSpentAsync(shopId: number, totalSpentAmount: 
 
     let selected = requireRow(rows, "Membership");
     for (const row of rows) {
-        if (toNumber(row.MinSpent) <= totalSpentAmount) {
+        if (toNumberCell(row, "MinSpent") <= totalSpentAmount) {
             selected = row;
         }
     }
 
-    return { id: toNumber(selected.ID), name: toStringValue(selected.Name) };
+    return { id: toNumberCell(selected, "ID"), name: toStringCell(selected, "Name") };
 }
 
 function mapMembershipRow(row: SqlRow, priority: number, isDefault: boolean): MembershipDto {
     return {
-        id: toStringValue(row.ID),
-        name: toStringValue(row.Name),
-        color: toStringValue(row.Color),
-        minSpentAmount: toNumber(row.MinSpent),
-        discountRate: toNumber(row.DiscountPercent),
+        id: toStringCell(row, "ID"),
+        name: toStringCell(row, "Name"),
+        color: toStringCell(row, "Color"),
+        minSpentAmount: toNumberCell(row, "MinSpent"),
+        discountRate: toNumberCell(row, "DiscountPercent"),
         priority,
         isDefault,
     };
 }
 
 function mapMemberRow(row: SqlRow): MemberDto {
-    const memberId = toStringValue(row.ID);
+    const memberId = toStringCell(row, "ID");
+    const membershipIdRaw = cell(row, "MembershipID");
     return {
         id: memberId,
         code: `#${memberId.padStart(4, "0")}`,
-        fullName: toStringValue(row.Name),
-        phoneNumber: toStringValue(row.PhoneNumber),
-        totalSpentAmount: toNumber(row.TotalSpent),
-        membershipId: row.MembershipID ? toStringValue(row.MembershipID) : "",
-        membershipName: toStringValue(row.MembershipName),
+        fullName: toStringCell(row, "Name"),
+        phoneNumber: toStringCell(row, "PhoneNumber"),
+        totalSpentAmount: toNumberCell(row, "TotalSpent"),
+        membershipId: membershipIdRaw != null && String(membershipIdRaw) !== "" ? toStringValue(membershipIdRaw) : "",
+        membershipName: toStringCell(row, "MembershipName"),
     };
 }

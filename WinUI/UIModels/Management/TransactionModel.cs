@@ -8,6 +8,7 @@ namespace WinUI.UIModels.Management;
 
 public sealed partial class TransactionModel : ObservableObject
 {
+    private string _id = string.Empty;
     private string _code = string.Empty;
     private string? _memberId;
     private string _customerName = string.Empty;
@@ -18,6 +19,12 @@ public sealed partial class TransactionModel : ObservableObject
     private decimal _totalAmount;
     private DateTime _createdAt;
     private List<TransactionLine> _lines = [];
+
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
 
     public string Code
     {

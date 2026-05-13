@@ -1,7 +1,10 @@
 using System;
 using Application.Services;
 using Application.Services.Areas;
+using Application.Services.Products;
+using Application.Services.Games;
 using Domain.Enums;
+using WinUI.Services;
 using WinUI.UIModels.Management;
 using WinUI.ViewModels.AreaManagement.DetailedAreaCards;
 using WinUI.ViewModels.AreaManagement.SummarizedAreaCards;
@@ -14,7 +17,11 @@ public sealed class AreaManagementCardViewModelFactory
     private readonly ILocalizationPreferencesService _localizationPreferencesService;
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
+    private readonly IManagementApiService _managementApiService;
     private readonly IAreaSessionService _areaSessionService;
+    private readonly SessionSalePickerService _sessionSalePicker;
+    private readonly IProductCatalogService _productCatalogService;
+    private readonly IGameCatalogService _gameCatalogService;
     private readonly SummarizedAvailableCardViewModelFactory _availableCardViewModelFactory;
     private readonly SummarizedReservedCardViewModelFactory _reservedCardViewModelFactory;
     private readonly SummarizedRentedCardViewModelFactory _rentedCardViewModelFactory;
@@ -24,6 +31,10 @@ public sealed class AreaManagementCardViewModelFactory
         ILocalizationPreferencesService localizationPreferencesService,
         IDialogService dialogService,
         INotificationService notificationService,
+        IManagementApiService managementApiService,
+        SessionSalePickerService sessionSalePicker,
+        IProductCatalogService productCatalogService,
+        IGameCatalogService gameCatalogService,
         IAreaSessionService areaSessionService,
         SummarizedAvailableCardViewModelFactory availableCardViewModelFactory,
         SummarizedReservedCardViewModelFactory reservedCardViewModelFactory,
@@ -33,6 +44,10 @@ public sealed class AreaManagementCardViewModelFactory
         _localizationPreferencesService = localizationPreferencesService ?? throw new ArgumentNullException(nameof(localizationPreferencesService));
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        _managementApiService = managementApiService ?? throw new ArgumentNullException(nameof(managementApiService));
+        _sessionSalePicker = sessionSalePicker ?? throw new ArgumentNullException(nameof(sessionSalePicker));
+        _productCatalogService = productCatalogService ?? throw new ArgumentNullException(nameof(productCatalogService));
+        _gameCatalogService = gameCatalogService ?? throw new ArgumentNullException(nameof(gameCatalogService));
         _areaSessionService = areaSessionService ?? throw new ArgumentNullException(nameof(areaSessionService));
         _availableCardViewModelFactory = availableCardViewModelFactory ?? throw new ArgumentNullException(nameof(availableCardViewModelFactory));
         _reservedCardViewModelFactory = reservedCardViewModelFactory ?? throw new ArgumentNullException(nameof(reservedCardViewModelFactory));
@@ -52,24 +67,39 @@ public sealed class AreaManagementCardViewModelFactory
 
     public object? CreateDetailed(ISummarizedAreaCardViewModel? selectedCardViewModel)
     {
-        return selectedCardViewModel switch
+        if (selectedCardViewModel is null)
         {
-            SummarizedAvailableCardViewModel availableCardViewModel => new DetailedAvailableCardViewModel(
-                _localizationService,
-                _dialogService,
-                availableCardViewModel.Model),
-            SummarizedReservedCardViewModel reservedCardViewModel => new DetailedReservedCardViewModel(
-                _localizationService,
-                _localizationPreferencesService,
-                _dialogService,
-                reservedCardViewModel.Model),
-            SummarizedRentedCardViewModel rentedCardViewModel => new DetailedRentedCardViewModel(
+            return null;
+        }
+
+        AreaModel model = selectedCardViewModel.Model;
+        return selectedCardViewModel.Status switch
+        {
+            PlayAreaStatus.Available => new DetailedAvailableCardViewModel(
                 _localizationService,
                 _dialogService,
                 _notificationService,
+                model),
+            PlayAreaStatus.Reserved => new DetailedReservedCardViewModel(
+                _localizationService,
+                _localizationPreferencesService,
+                _dialogService,
+                _managementApiService,
+                _notificationService,
+                model),
+            PlayAreaStatus.Rented => new DetailedRentedCardViewModel(
+                _localizationService,
+                _dialogService,
                 _areaSessionService,
-                rentedCardViewModel.Model),
-            _ => null,
+                _sessionSalePicker,
+                _productCatalogService,
+                _gameCatalogService,
+                model),
+            _ => new DetailedAvailableCardViewModel(
+                _localizationService,
+                _dialogService,
+                _notificationService,
+                model),
         };
     }
 }

@@ -21,11 +21,11 @@
             <DataTemplate x:Key="MemberOptionTemplate"
                           x:DataType="entities:Member">
                 <StackPanel Spacing="2">
-                    <TextBlock Text="{x:Bind FullName}"
+                    <TextBlock Text="{x:Bind FullName, TargetNullValue=''}"
                                FontSize="{StaticResource ValueFontSize}"
                                FontWeight="SemiBold"
                                Foreground="{StaticResource BlackBrush}" />
-                    <TextBlock Text="{x:Bind PhoneNumber}"
+                    <TextBlock Text="{x:Bind PhoneNumber, TargetNullValue=''}"
                                FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{StaticResource DarkGrayBrush}" />
                 </StackPanel>
@@ -79,6 +79,7 @@
         <StackPanel Style="{StaticResource DialogFormContentPanelStyle}">
             <CheckBox Content="{x:Bind ViewModel.MemberToggleText, Mode=OneWay}"
                       IsChecked="{x:Bind ViewModel.IsMember, Mode=TwoWay}"
+                      IsThreeState="False"
                       Style="{StaticResource OrangeCheckBoxStyle}" />
 
             <StackPanel Style="{StaticResource DialogFormFieldPanelStyle}"
@@ -86,7 +87,8 @@
                 <TextBlock Text="{x:Bind ViewModel.MemberLabelText, Mode=OneWay}"
                            Style="{StaticResource DialogFormLabelTextStyle}" />
                 <ComboBox ItemsSource="{x:Bind ViewModel.Members, Mode=OneWay}"
-                          SelectedItem="{x:Bind ViewModel.SelectedMember, Mode=TwoWay}"
+                          SelectedValue="{x:Bind ViewModel.SelectedMemberId, Mode=TwoWay}"
+                          SelectedValuePath="Id"
                           ItemTemplate="{StaticResource MemberOptionTemplate}"
                           PlaceholderText="{x:Bind ViewModel.MemberPlaceholderText, Mode=OneWay}"
                           HorizontalAlignment="Stretch" />

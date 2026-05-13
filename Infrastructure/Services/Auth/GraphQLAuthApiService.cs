@@ -22,6 +22,16 @@ public sealed class GraphQLAuthApiService : IAuthApiService
         }
         """;
 
+    private const string SendPasswordResetOtpMutation = """
+        mutation SendPasswordResetOtp($input: SendOtpInput!) {
+          sendPasswordResetOtp(input: $input) {
+            code
+            success
+            message
+          }
+        }
+        """;
+
     private const string LoginMutation = """
         mutation Login($input: LoginShopInput!) {
           login(input: $input) {
@@ -48,6 +58,16 @@ public sealed class GraphQLAuthApiService : IAuthApiService
         }
         """;
 
+    private const string ResetPasswordMutation = """
+        mutation ResetPassword($input: ResetPasswordInput!) {
+          resetPassword(input: $input) {
+            code
+            success
+            message
+          }
+        }
+        """;
+
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
@@ -64,8 +84,13 @@ public sealed class GraphQLAuthApiService : IAuthApiService
 
     public async Task<AuthOperationResult> SendRegistrationOtpAsync(string email)
     {
-        GraphQLResponse<MutationEnvelope>? response = await PostAsync<MutationEnvelope>(
-            SendOtpMutation,
+        return await SendOtpAsync(email);
+    }
+
+    public async Task<AuthOperationResult> SendPasswordResetOtpAsync(string email)
+    {
+        GraphQLResponse<ResetOtpMutationEnvelope>? response = await PostAsync<ResetOtpMutationEnvelope>(
+            SendPasswordResetOtpMutation,
             new
             {
                 input = new
@@ -83,11 +108,42 @@ public sealed class GraphQLAuthApiService : IAuthApiService
             };
         }
 
-        MutationPayload? payload = response?.Data?.SendOtp;
+        MutationPayload? payload = response?.Data?.SendPasswordResetOtp;
         return new AuthOperationResult
         {
             Success = payload?.Success == true,
             Message = payload?.Message ?? "Unable to send OTP.",
+        };
+    }
+
+    public async Task<AuthOperationResult> ResetPasswordAsync(string email, string newPassword, string otpCode)
+    {
+        GraphQLResponse<ResetPasswordEnvelope>? response = await PostAsync<ResetPasswordEnvelope>(
+            ResetPasswordMutation,
+            new
+            {
+                input = new
+                {
+                    email,
+                    otp = otpCode,
+                    newPassword,
+                },
+            });
+
+        if (response?.Errors is { Length: > 0 })
+        {
+            return new AuthOperationResult
+            {
+                Success = false,
+                Message = response.Errors[0].Message,
+            };
+        }
+
+        MutationPayload? payload = response?.Data?.ResetPassword;
+        return new AuthOperationResult
+        {
+            Success = payload?.Success == true,
+            Message = payload?.Message ?? "Unable to reset password.",
         };
     }
 
@@ -211,6 +267,35 @@ public sealed class GraphQLAuthApiService : IAuthApiService
         return JsonSerializer.Deserialize<GraphQLResponse<TData>>(responseContent, JsonOptions);
     }
 
+    private async Task<AuthOperationResult> SendOtpAsync(string email)
+    {
+        GraphQLResponse<MutationEnvelope>? response = await PostAsync<MutationEnvelope>(
+            SendOtpMutation,
+            new
+            {
+                input = new
+                {
+                    email,
+                },
+            });
+
+        if (response?.Errors is { Length: > 0 })
+        {
+            return new AuthOperationResult
+            {
+                Success = false,
+                Message = response.Errors[0].Message,
+            };
+        }
+
+        MutationPayload? payload = response?.Data?.SendOtp;
+        return new AuthOperationResult
+        {
+            Success = payload?.Success == true,
+            Message = payload?.Message ?? "Unable to send OTP.",
+        };
+    }
+
     private string BuildEndpoint()
     {
         string serverAddress = _configurationService.ServerAddress?.Trim() ?? string.Empty;
@@ -272,6 +357,18 @@ public sealed class GraphQLAuthApiService : IAuthApiService
     {
         [JsonPropertyName("register")]
         public ShopMutationPayload? Register { get; init; }
+    }
+
+    private sealed class ResetPasswordEnvelope
+    {
+        [JsonPropertyName("resetPassword")]
+        public MutationPayload? ResetPassword { get; init; }
+    }
+
+    private sealed class ResetOtpMutationEnvelope
+    {
+        [JsonPropertyName("sendPasswordResetOtp")]
+        public MutationPayload? SendPasswordResetOtp { get; init; }
     }
 
     private class MutationPayload

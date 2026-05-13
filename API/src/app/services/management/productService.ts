@@ -1,10 +1,12 @@
 import { AppDataSource } from "../../../config/database.js";
 import { ProductDto, ProductInput } from "../../types/management/product.js";
-import { requireRow, toNumber, toStringValue, type SqlRow } from "./shared.js";
+import { requireRow, toNumberCell, toStringCell, type SqlRow } from "./shared.js";
 
 export async function getProducts(shopId: number): Promise<ProductDto[]> {
+    await ensureProductStockQuantityColumnAsync();
+
     const rows = await AppDataSource.query(`
-        SELECT "ID", "Name", "Type", "ImageUrl", "Price"
+        SELECT "ID", "Name", "Type", "ImageUrl", "Price", "StockQuantity"
         FROM "Product"
         WHERE "ShopID" = $1
         ORDER BY "ID" ASC
@@ -14,46 +16,58 @@ export async function getProducts(shopId: number): Promise<ProductDto[]> {
 }
 
 export async function createProduct(shopId: number, input: ProductInput): Promise<ProductDto> {
-    const rows = await AppDataSource.query(`
-        INSERT INTO "Product" ("ShopID", "Name", "Type", "ImageUrl", "Price")
-        VALUES ($1, $2, $3::"Product_Type_enum", $4, $5)
-        RETURNING "ID", "Name", "Type", "ImageUrl", "Price"
-    `, [shopId, input.name, input.productType, input.imageUri, input.price]) as SqlRow[];
+    await ensureProductStockQuantityColumnAsync();
 
-    return mapProductRow(requireRow(rows, "Product"), input.stockQuantity);
+    const rows = await AppDataSource.query(`
+        INSERT INTO "Product" ("ShopID", "Name", "Type", "ImageUrl", "Price", "StockQuantity")
+        VALUES ($1, $2, $3::"Product_Type_enum", $4, $5, $6)
+        RETURNING "ID", "Name", "Type", "ImageUrl", "Price", "StockQuantity"
+    `, [shopId, input.name, input.productType, input.imageUri, input.price, input.stockQuantity]) as SqlRow[];
+
+    return mapProductRow(requireRow(rows, "Product"));
 }
 
-export async function updateProduct(id: number, input: ProductInput): Promise<ProductDto> {
+export async function updateProduct(shopId: number, id: number, input: ProductInput): Promise<ProductDto> {
+    await ensureProductStockQuantityColumnAsync();
+
     const rows = await AppDataSource.query(`
         UPDATE "Product"
-        SET "Name" = $2,
-            "Type" = $3::"Product_Type_enum",
-            "ImageUrl" = $4,
-            "Price" = $5
-        WHERE "ID" = $1
-        RETURNING "ID", "Name", "Type", "ImageUrl", "Price"
-    `, [id, input.name, input.productType, input.imageUri, input.price]) as SqlRow[];
+        SET "Name" = $3,
+            "Type" = $4::"Product_Type_enum",
+            "ImageUrl" = $5,
+            "Price" = $6,
+            "StockQuantity" = $7
+        WHERE "ID" = $2 AND "ShopID" = $1
+        RETURNING "ID", "Name", "Type", "ImageUrl", "Price", "StockQuantity"
+    `, [shopId, id, input.name, input.productType, input.imageUri, input.price, input.stockQuantity]) as SqlRow[];
 
-    return mapProductRow(requireRow(rows, "Product", id), input.stockQuantity);
+    return mapProductRow(requireRow(rows, "Product", id));
 }
 
-export async function deleteProduct(id: number): Promise<void> {
+async function ensureProductStockQuantityColumnAsync(): Promise<void> {
+    await AppDataSource.query(`
+        ALTER TABLE "Product"
+        ADD COLUMN IF NOT EXISTS "StockQuantity" integer NOT NULL DEFAULT 0
+    `);
+}
+
+export async function deleteProduct(shopId: number, id: number): Promise<void> {
     const rows = await AppDataSource.query(`
         DELETE FROM "Product"
-        WHERE "ID" = $1
+        WHERE "ID" = $2 AND "ShopID" = $1
         RETURNING "ID"
-    `, [id]) as SqlRow[];
+    `, [shopId, id]) as SqlRow[];
 
     requireRow(rows, "Product", id);
 }
 
-function mapProductRow(row: SqlRow, stockQuantity = 0): ProductDto {
+function mapProductRow(row: SqlRow): ProductDto {
     return {
-        id: toStringValue(row.ID),
-        name: toStringValue(row.Name),
-        price: toNumber(row.Price),
-        productType: toStringValue(row.Type),
-        stockQuantity,
-        imageUri: toStringValue(row.ImageUrl),
+        id: toStringCell(row, "ID"),
+        name: toStringCell(row, "Name"),
+        price: toNumberCell(row, "Price"),
+        productType: toStringCell(row, "Type"),
+        stockQuantity: toNumberCell(row, "StockQuantity"),
+        imageUri: toStringCell(row, "ImageUrl"),
     };
 }

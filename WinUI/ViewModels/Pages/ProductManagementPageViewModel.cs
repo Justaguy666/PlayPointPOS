@@ -41,6 +41,7 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
 
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
+    private readonly IManagementApiService _managementApiService;
     private readonly IProductFilterService _productFilterService;
     private readonly ProductModelFactory _productModelFactory;
     private readonly ProductCardControlViewModelFactory _productCardControlViewModelFactory;
@@ -203,6 +204,7 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
         ILocalizationService localizationService,
         IDialogService dialogService,
         INotificationService notificationService,
+        IManagementApiService managementApiService,
         IProductCatalogService productCatalogService,
         IProductFilterService productFilterService,
         ProductModelFactory productModelFactory,
@@ -212,6 +214,7 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        _managementApiService = managementApiService ?? throw new ArgumentNullException(nameof(managementApiService));
         _productFilterService = productFilterService ?? throw new ArgumentNullException(nameof(productFilterService));
         _productModelFactory = productModelFactory ?? throw new ArgumentNullException(nameof(productModelFactory));
         _productCardControlViewModelFactory = productCardControlViewModelFactory ?? throw new ArgumentNullException(nameof(productCardControlViewModelFactory));
@@ -488,6 +491,7 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
             return;
         }
 
+        await _managementApiService.DeleteProductAsync(product.Id);
         if (!_allProducts.Remove(product))
         {
             return;
@@ -517,6 +521,9 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
 
     private async Task HandleProductCreatedAsync(ProductModel product)
     {
+        ProductRecord createdProduct = await _managementApiService.CreateProductAsync(ToProductRecord(product));
+        ApplyProductRecord(product, createdProduct);
+
         if (!_allProducts.Contains(product))
         {
             _allProducts.Insert(0, product);
@@ -536,6 +543,9 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
 
     private async Task HandleProductUpdatedAsync(ProductModel product)
     {
+        ProductRecord updatedProduct = await _managementApiService.UpdateProductAsync(ToProductRecord(product));
+        ApplyProductRecord(product, updatedProduct);
+
         ApplyFiltersAndSorting(resetToFirstPage: false);
 
         await _notificationService.SendAsync(
@@ -590,8 +600,12 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
     {
         string productTypeDisplayName = GetProductTypeDisplayName(product.ProductType);
 
-        return LocalizationService.Culture.CompareInfo.IndexOf(product.Name, SearchText, CompareOptions.IgnoreCase) >= 0
-            || LocalizationService.Culture.CompareInfo.IndexOf(productTypeDisplayName, SearchText, CompareOptions.IgnoreCase) >= 0;
+        return FullTextSearch.Matches(
+            SearchText,
+            product.Name,
+            productTypeDisplayName,
+            product.Price.ToString(CultureInfo.InvariantCulture),
+            product.StockQuantity.ToString(CultureInfo.InvariantCulture));
     }
 
     private IReadOnlyList<ProductModel> SortProducts(IEnumerable<ProductModel> products)
@@ -767,5 +781,36 @@ public partial class ProductManagementPageViewModel : LocalizedViewModelBase
 
         int maxPossibleColumns = (int)((availableWidth + ProductCardsColumnSpacing) / (ProductCardOuterWidth + ProductCardsColumnSpacing));
         return Math.Max(1, Math.Min(PreferredGridProductsPerRow, maxPossibleColumns));
+    }
+
+    private static ProductRecord ToProductRecord(ProductModel product)
+    {
+        return new ProductRecord
+        {
+            Id = product.Id,
+            Name = product.Name,
+            Price = product.Price,
+            Type = product.ProductType,
+            StockQuantity = product.StockQuantity,
+            ImageUri = product.ImageUri,
+        };
+    }
+
+    private static void ApplyProductRecord(ProductModel target, ProductRecord source)
+    {
+        target.Id = source.Id;
+        target.ProductType = source.Type;
+        target.StockQuantity = source.StockQuantity;
+
+        bool serverPayloadLooksIncomplete = string.IsNullOrWhiteSpace(source.Name) && source.Price == 0m;
+        if (serverPayloadLooksIncomplete
+            && (!string.IsNullOrWhiteSpace(target.Name) || target.Price > 0m))
+        {
+            return;
+        }
+
+        target.Name = source.Name;
+        target.Price = source.Price;
+        target.ImageUri = source.ImageUri;
     }
 }

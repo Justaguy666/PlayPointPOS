@@ -16,8 +16,10 @@ using Application.Services.Products;
 using Application.Services.Areas;
 using Application.Services.Transactions;
 using Domain.Entities;
+using Infrastructure.Repositories;
 using Infrastructure.Repositories.Mock;
 using Infrastructure.Services.Auth;
+using Infrastructure.Services.Management;
 using Infrastructure.Services.Navigation;
 using Infrastructure.Services.Members;
 using Microsoft.Extensions.Configuration;
@@ -83,18 +85,21 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddSingleton<Infrastructure.Services.ConfigurationService>(configurationService);
                     services.AddSingleton<IConfigurationService>(configurationService);
                     services.AddSingleton<ILocalizationPreferencesService>(configurationService);
-                    services.AddSingleton<IAreaCatalogService, Infrastructure.Services.Areas.MockAreaCatalogService>();
+                    services.AddSingleton<IManagementApiService, GraphQLManagementApiService>();
+                    services.AddSingleton<IManagementDataPreloadService>(sp => (GraphQLManagementApiService)sp.GetRequiredService<IManagementApiService>());
+                    services.AddSingleton<IAreaCatalogService, Infrastructure.Services.Areas.GraphQLAreaCatalogService>();
                     services.AddSingleton<IAreaFilterService, AreaFilterService>();
                     services.AddSingleton<IAreaSessionService, AreaSessionService>();
-                    services.AddSingleton<IGameTypeCatalogService, Infrastructure.Services.Games.MockGameTypeCatalogService>();
-                    services.AddSingleton<IGameCatalogService, Infrastructure.Services.Games.MockGameCatalogService>();
+                    services.AddSingleton<IGameTypeCatalogService, Infrastructure.Services.Games.GraphQLGameTypeCatalogService>();
+                    services.AddSingleton<IGameCatalogService, Infrastructure.Services.Games.GraphQLGameCatalogService>();
                     services.AddSingleton<IGameFilterService, GameFilterService>();
-                    services.AddSingleton<IProductCatalogService, Infrastructure.Services.Products.MockProductCatalogService>();
+                    services.AddSingleton<IProductCatalogService, Infrastructure.Services.Products.GraphQLProductCatalogService>();
                     services.AddSingleton<IProductFilterService, ProductFilterService>();
-                    services.AddSingleton<IMembershipRankCatalogService, MockMembershipRankCatalogService>();
-                    services.AddSingleton<IMemberCatalogService, MockMemberCatalogService>();
+                    services.AddSingleton<IMembershipRankCatalogService, GraphQLMembershipRankCatalogService>();
+                    services.AddSingleton<IMemberCatalogService, GraphQLMemberCatalogService>();
+                    services.AddSingleton<IRepository<Member>, GraphQLMemberRepository>();
                     services.AddSingleton<IMemberFilterService, MemberFilterService>();
-                    services.AddSingleton<ITransactionCatalogService, Infrastructure.Services.Transactions.MockTransactionCatalogService>();
+                    services.AddSingleton<ITransactionCatalogService, Infrastructure.Services.Transactions.GraphQLTransactionCatalogService>();
                     services.AddSingleton<ITransactionFilterService, TransactionFilterService>();
 
                     services.AddSingleton<Infrastructure.Services.Notification.ToastNotificationService>();
@@ -102,6 +107,7 @@ public partial class App : Microsoft.UI.Xaml.Application
 
                     services.AddSingleton<IPasswordHasher, Infrastructure.Services.PasswordHasher>();
                     services.AddSingleton<IAuthApiService, GraphQLAuthApiService>();
+                    services.AddSingleton<IAuthStateService, AuthStateService>();
 
                     services.AddSingleton<Func<string, object?, ContentDialog?>>(provider => (dialogKey, parameter) =>
                     {
@@ -110,7 +116,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                             "Config" => new ConfigDialog(provider.GetRequiredService<ViewModels.Dialogs.ConfigViewModel>()),
                             "Register" => new RegisterDialog(provider.GetRequiredService<ViewModels.Dialogs.RegisterViewModel>()),
                             "Login" => new LoginDialog(provider.GetRequiredService<ViewModels.Dialogs.LoginViewModel>()),
-                            "ForgotPassword" => new ForgotPasswordDialog(provider.GetRequiredService<ViewModels.Dialogs.ForgotPasswordViewModel>()),
+                            "ForgotPassword" => CreateForgotPasswordDialog(provider, parameter),
                             "Otp" => CreateOtpDialog(provider, parameter),
                             "Reservation" => CreateReservationDialog(provider, parameter),
                             "AreaFilter" => CreateAreaFilterDialog(provider, parameter),
@@ -142,7 +148,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddSingleton<IRepository<Account>, MockAccountRepository>();
                     services.AddSingleton<IRepository<BoardGame>, MockRepository<BoardGame>>();
                     services.AddSingleton<IRepository<Product>, MockRepository<Product>>();
-                    services.AddSingleton<IRepository<Member>>(_ => CreateMockMemberRepository());
+                    services.AddSingleton<IImageUploadService, Infrastructure.Services.Media.HttpImageUploadService>();
                     services.AddSingleton<IRepository<Membership>, MockRepository<Membership>>();
 
                     //services.AddSingleton<IAnalyticsProvider, Infrastructure.Services.Analytics.MockAnalyticsProvider>();
@@ -166,6 +172,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                     services.AddSingleton<SummarizedReservedCardViewModelFactory>();
                     services.AddSingleton<SummarizedRentedCardViewModelFactory>();
                     services.AddSingleton<AreaManagementCardViewModelFactory>();
+                    services.AddSingleton<SessionSalePickerService>();
                     
                     services.AddTransient<ViewModels.Dialogs.ConfigViewModel>();
                     services.AddTransient<ViewModels.Dialogs.LoginViewModel>();
@@ -353,6 +360,13 @@ public partial class App : Microsoft.UI.Xaml.Application
         return new OtpDialog(viewModel);
     }
 
+    private static ContentDialog CreateForgotPasswordDialog(IServiceProvider provider, object? parameter)
+    {
+        var viewModel = provider.GetRequiredService<ViewModels.Dialogs.ForgotPasswordViewModel>();
+        viewModel.Configure(parameter as ForgotPasswordDialogRequest);
+        return new ForgotPasswordDialog(viewModel);
+    }
+
     private static ContentDialog CreateReservationDialog(IServiceProvider provider, object? parameter)
     {
         var request = parameter switch
@@ -433,6 +447,7 @@ public partial class App : Microsoft.UI.Xaml.Application
             provider.GetRequiredService<ILocalizationService>(),
             provider.GetRequiredService<IDialogService>(),
             provider.GetRequiredService<GameModelFactory>(),
+            provider.GetRequiredService<IImageUploadService>(),
             request?.Mode ?? UIModels.Enums.UpsertDialogMode.Add);
         return new Views.Dialogs.Management.GameDialog(
             viewModel,
@@ -471,6 +486,7 @@ public partial class App : Microsoft.UI.Xaml.Application
             provider.GetRequiredService<ILocalizationService>(),
             provider.GetRequiredService<IDialogService>(),
             provider.GetRequiredService<ProductModelFactory>(),
+            provider.GetRequiredService<IImageUploadService>(),
             request?.Mode ?? UIModels.Enums.UpsertDialogMode.Add);
         return new Views.Dialogs.Management.ProductDialog(
             viewModel,
@@ -523,28 +539,4 @@ public partial class App : Microsoft.UI.Xaml.Application
             parameter as ViewModels.Dialogs.Dashboard.GoalKpiDialogRequest);
     }
 
-    private static IRepository<Member> CreateMockMemberRepository()
-    {
-        var repository = new MockRepository<Member>();
-
-        repository.AddAsync(new Member
-        {
-            FullName = "Nguyen Minh Anh",
-            PhoneNumber = "0901 234 567",
-        }).GetAwaiter().GetResult();
-
-        repository.AddAsync(new Member
-        {
-            FullName = "Tran Hoang Nam",
-            PhoneNumber = "0912 345 678",
-        }).GetAwaiter().GetResult();
-
-        repository.AddAsync(new Member
-        {
-            FullName = "Le Thu Ha",
-            PhoneNumber = "0987 654 321",
-        }).GetAwaiter().GetResult();
-
-        return repository;
-    }
 }

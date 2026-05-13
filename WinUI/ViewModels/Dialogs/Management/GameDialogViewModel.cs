@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Services;
@@ -9,6 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
 using Domain.Enums;
+using Windows.Storage;
 using WinUI.Services.Factories;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
@@ -25,6 +27,7 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
 
     private readonly IDialogService _dialogService;
     private readonly GameModelFactory _gameModelFactory;
+    private readonly IImageUploadService _imageUploadService;
     private IReadOnlyList<GameType> _availableGameTypes = [];
     private GameModel _targetModel = new();
     private GameModel _initialModel = new();
@@ -40,11 +43,13 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
         ILocalizationService localizationService,
         IDialogService dialogService,
         GameModelFactory gameModelFactory,
+        IImageUploadService imageUploadService,
         UpsertDialogMode mode)
         : base(localizationService, mode)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _gameModelFactory = gameModelFactory ?? throw new ArgumentNullException(nameof(gameModelFactory));
+        _imageUploadService = imageUploadService ?? throw new ArgumentNullException(nameof(imageUploadService));
         ApplyModel(_initialModel);
     }
 
@@ -202,6 +207,22 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
 
         RefreshSelectionOptions();
         ApplyModel(_initialModel);
+    }
+
+    public async Task ApplyPickedImageFileAsync(StorageFile file)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+        ErrorMessage = string.Empty;
+        try
+        {
+            await using Stream stream = (await file.OpenReadAsync()).AsStreamForRead();
+            string url = await _imageUploadService.UploadImageAsync(stream, file.Name).ConfigureAwait(true);
+            ImageUriText = url;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
     }
 
     public override Task SaveAsync() => SubmitAsync();
@@ -400,6 +421,7 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
     private bool TryApplyToTargetModel(out GameModel model)
     {
         model = _targetModel;
+        string preservedId = model.Id;
 
         if (!TryGetParsedFormValues(
                 out string trimmedName,
@@ -422,6 +444,7 @@ public partial class GameDialogViewModel : UpsertDialogViewModelBase
         model.HourlyPrice = hourlyPrice;
         model.ImageUri = imageUri;
         model.StockQuantity = stockQuantity;
+        model.Id = preservedId;
 
         return true;
     }

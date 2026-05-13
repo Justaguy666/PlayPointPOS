@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using Application.Areas;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Domain.Enums;
@@ -7,6 +8,7 @@ namespace WinUI.UIModels.Management;
 
 public sealed class AreaModel : ObservableObject, IAreaFilterable, IAreaSessionState
 {
+    private string _id = string.Empty;
     private string _areaName = string.Empty;
     private PlayAreaType _playAreaType = PlayAreaType.Table;
     private PlayAreaStatus _status = PlayAreaStatus.Available;
@@ -21,7 +23,22 @@ public sealed class AreaModel : ObservableObject, IAreaFilterable, IAreaSessionS
     private bool _isSessionPaused;
     private DateTime? _sessionPausedAt;
     private TimeSpan _sessionPausedDuration;
+    private string? _activeSessionId;
     private decimal _totalAmount;
+
+    public ObservableCollection<PendingSessionSaleLine> PendingSessionLines { get; } = new();
+
+    public string? ActiveSessionId
+    {
+        get => _activeSessionId;
+        set => SetProperty(ref _activeSessionId, value);
+    }
+
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
 
     public string AreaName
     {

@@ -1,13 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using Application.Services;
+using Application.Services.Products;
+using Application.Services.Games;
+using Application.Products;
+using Application.Games;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
 using Microsoft.UI.Dispatching;
+using WinUI.Services;
 using WinUI.UIModels;
 using WinUI.UIModels.Management;
 using WinUI.UIModels.Enums;
@@ -18,24 +25,31 @@ namespace WinUI.ViewModels.AreaManagement.DetailedAreaCards;
 public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDetailedAreaCardViewModel, IDisposable
 {
     private readonly IDialogService _dialogService;
-    private readonly INotificationService _notificationService;
     private readonly IAreaSessionService _areaSessionService;
+    private readonly SessionSalePickerService _sessionSalePicker;
+    private readonly IProductCatalogService _productCatalog;
+    private readonly IGameCatalogService _gameCatalog;
     private readonly DispatcherQueueTimer? _timer;
     private bool _isDisposed;
 
     public DetailedRentedCardViewModel(
         ILocalizationService localizationService,
         IDialogService dialogService,
-        INotificationService notificationService,
         IAreaSessionService areaSessionService,
+        SessionSalePickerService sessionSalePicker,
+        IProductCatalogService productCatalog,
+        IGameCatalogService gameCatalog,
         AreaModel model)
         : base(localizationService)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-        _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         _areaSessionService = areaSessionService ?? throw new ArgumentNullException(nameof(areaSessionService));
+        _sessionSalePicker = sessionSalePicker ?? throw new ArgumentNullException(nameof(sessionSalePicker));
+        _productCatalog = productCatalog ?? throw new ArgumentNullException(nameof(productCatalog));
+        _gameCatalog = gameCatalog ?? throw new ArgumentNullException(nameof(gameCatalog));
         Model = model ?? throw new ArgumentNullException(nameof(model));
         Model.PropertyChanged += HandleModelPropertyChanged;
+        Model.PendingSessionLines.CollectionChanged += HandlePendingLinesChanged;
 
         PaidCommand = new AsyncRelayCommand(OpenPaymentDialogAsync);
         EndSessionCommand = new AsyncRelayCommand(ToggleSessionAsync);
@@ -218,6 +232,7 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
         }
 
         Model.PropertyChanged -= HandleModelPropertyChanged;
+        Model.PendingSessionLines.CollectionChanged -= HandlePendingLinesChanged;
 
         _isDisposed = true;
         base.Dispose();
@@ -230,12 +245,109 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
 
     private IReadOnlyList<ServiceInSessionModel> BuildGameServices()
     {
-        return Array.Empty<ServiceInSessionModel>();
+        var list = new List<ServiceInSessionModel>();
+
+        foreach (PendingSessionSaleLine line in Model.PendingSessionLines.Where(l => l.IsGame))
+        {
+            DateTime? startLocal = line.GameRentalStartUtc is DateTime utcStart
+                ? ConvertUtcToConfiguredTime(utcStart)
+                : null;
+
+            list.Add(new ServiceInSessionModel(
+                LocalizationService,
+                line.DisplayName,
+                ServiceInSessionModel.ServiceType.Game,
+                startLocal,
+                null,
+                line.UnitPrice));
+        }
+
+        HashSet<int> rentedGameIds = Model.PendingSessionLines
+            .Where(l => l.IsGame)
+            .Select(l => l.CatalogId)
+            .ToHashSet();
+
+        foreach (GameRecord game in _gameCatalog.GetGames().OrderBy(g => g.Name))
+        {
+            if (!int.TryParse(game.Id?.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int gid) || gid <= 0)
+            {
+                continue;
+            }
+
+            if (game.StockQuantity <= 0)
+            {
+                continue;
+            }
+
+            if (rentedGameIds.Contains(gid))
+            {
+                continue;
+            }
+
+            list.Add(new ServiceInSessionModel(
+                LocalizationService,
+                game.Name,
+                ServiceInSessionModel.ServiceType.Game,
+                startTime: null,
+                quantity: null,
+                game.HourlyPrice));
+        }
+
+        return list;
     }
 
     private IReadOnlyList<ServiceInSessionModel> BuildProductServices()
     {
-        return Array.Empty<ServiceInSessionModel>();
+        var list = new List<ServiceInSessionModel>();
+
+        foreach (PendingSessionSaleLine line in Model.PendingSessionLines.Where(l => !l.IsGame))
+        {
+            list.Add(new ServiceInSessionModel(
+                LocalizationService,
+                line.DisplayName,
+                ServiceInSessionModel.ServiceType.Product,
+                null,
+                line.ProductQuantity,
+                line.UnitPrice));
+        }
+
+        HashSet<int> chargedProductIds = Model.PendingSessionLines
+            .Where(l => !l.IsGame)
+            .Select(l => l.CatalogId)
+            .ToHashSet();
+
+        foreach (ProductRecord product in _productCatalog.GetProducts().OrderBy(p => p.Name))
+        {
+            if (!int.TryParse(product.Id?.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int pid) || pid <= 0)
+            {
+                continue;
+            }
+
+            if (chargedProductIds.Contains(pid))
+            {
+                continue;
+            }
+
+            list.Add(new ServiceInSessionModel(
+                LocalizationService,
+                product.Name,
+                ServiceInSessionModel.ServiceType.Product,
+                null,
+                quantity: null,
+                product.Price));
+        }
+
+        return list;
+    }
+
+    private void HandlePendingLinesChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (_isDisposed)
+        {
+            return;
+        }
+
+        RefreshLocalizedText();
     }
 
     private void HandleTimerTick(DispatcherQueueTimer sender, object args)
@@ -271,13 +383,24 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
         GameServicesCurrentTotalPriceText = LocalizationService.FormatCurrency(gameServicesTotal);
         ProductServicesTotalPriceText = LocalizationService.FormatCurrency(productServicesTotal);
         CurrentTotalPriceText = LocalizationService.FormatCurrency(currentTotal);
-        Model.TotalAmount = currentTotal;
+        if (Model.TotalAmount != currentTotal)
+        {
+            Model.TotalAmount = currentTotal;
+        }
     }
 
     private DateTime ConvertUtcToConfiguredTime(DateTime value)
     {
-        DateTime utcValue = value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime();
-        return utcValue.AddHours(ParseTimeZoneOffset(LocalizationService.TimeZone));
+        DateTime utcValue = value.Kind switch
+        {
+            DateTimeKind.Utc => value,
+            // In this flow, timestamps from backend are UTC instants even when kind metadata is inconsistent.
+            DateTimeKind.Local => DateTime.SpecifyKind(value, DateTimeKind.Utc),
+            _ => DateTime.SpecifyKind(value, DateTimeKind.Utc),
+        };
+
+        int configuredOffset = ParseTimeZoneOffset(LocalizationService.TimeZone);
+        return utcValue.AddHours(configuredOffset);
     }
 
     private static int ParseTimeZoneOffset(string value)
@@ -296,26 +419,22 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
         return _dialogService.ShowDialogAsync("Payment", Model);
     }
 
-    private Task AddGameAsync()
+    private async Task AddGameAsync()
     {
-        return NotifyFeatureUnavailableAsync(
-            GameServicesTitleText,
-            "AreaSessionAddGameUnavailableMessage");
+        PendingSessionSaleLine? line = await _sessionSalePicker.PickGameAsync();
+        if (line is not null)
+        {
+            Model.PendingSessionLines.Add(line);
+        }
     }
 
-    private Task AddProductAsync()
+    private async Task AddProductAsync()
     {
-        return NotifyFeatureUnavailableAsync(
-            ProductServicesTitleText,
-            "AreaSessionAddProductUnavailableMessage");
-    }
-
-    private Task NotifyFeatureUnavailableAsync(string title, string messageKey)
-    {
-        return _notificationService.SendAsync(
-            title,
-            LocalizationService.GetString(messageKey),
-            NotificationType.Info);
+        PendingSessionSaleLine? line = await _sessionSalePicker.PickProductAsync();
+        if (line is not null)
+        {
+            Model.PendingSessionLines.Add(line);
+        }
     }
 
     private Task ToggleSessionAsync()
@@ -340,6 +459,13 @@ public partial class DetailedRentedCardViewModel : LocalizedViewModelBase, IDeta
     private void HandleModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (_isDisposed)
+        {
+            return;
+        }
+
+        // Guard against self-triggered recursion:
+        // UpdateDynamicTexts sets Model.TotalAmount, which raises PropertyChanged.
+        if (string.Equals(e.PropertyName, nameof(AreaModel.TotalAmount), StringComparison.Ordinal))
         {
             return;
         }

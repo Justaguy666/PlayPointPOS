@@ -294,6 +294,7 @@ public partial class AreaDialogViewModel : UpsertDialogViewModelBase
     private bool TryApplyToTargetModel(out AreaModel model)
     {
         model = _targetModel;
+        string preservedId = model.Id;
 
         if (!TryGetParsedFormValues(out string trimmedName, out int maxCapacity, out decimal hourlyPrice))
         {
@@ -304,6 +305,7 @@ public partial class AreaDialogViewModel : UpsertDialogViewModelBase
         model.PlayAreaType = SelectedPlayAreaType;
         model.MaxCapacity = maxCapacity;
         model.HourlyPrice = hourlyPrice;
+        model.Id = preservedId;
 
         return true;
     }

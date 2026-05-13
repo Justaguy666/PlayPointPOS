@@ -44,6 +44,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
+    private readonly IManagementApiService _managementApiService;
     private readonly IGameFilterService _gameFilterService;
     private readonly GameModelFactory _gameModelFactory;
     private readonly GameCardControlViewModelFactory _gameCardControlViewModelFactory;
@@ -215,6 +216,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
         ILocalizationService localizationService,
         IDialogService dialogService,
         INotificationService notificationService,
+        IManagementApiService managementApiService,
         IGameCatalogService gameCatalogService,
         IGameTypeCatalogService gameTypeCatalogService,
         IGameFilterService gameFilterService,
@@ -225,6 +227,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        _managementApiService = managementApiService ?? throw new ArgumentNullException(nameof(managementApiService));
         _gameFilterService = gameFilterService ?? throw new ArgumentNullException(nameof(gameFilterService));
         _gameModelFactory = gameModelFactory ?? throw new ArgumentNullException(nameof(gameModelFactory));
         _gameCardControlViewModelFactory = gameCardControlViewModelFactory ?? throw new ArgumentNullException(nameof(gameCardControlViewModelFactory));
@@ -480,19 +483,60 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
                 GameTypes = gameTypesCollection,
                 OnGameTypeAddedAsync = gameType =>
                 {
-                    if (!_allGameTypes.Contains(gameType))
-                    {
-                        _allGameTypes.Add(gameType);
-                    }
-                    return Task.CompletedTask;
+                    return HandleGameTypeAddedAsync(gameType);
                 },
                 OnGameTypeDeletedAsync = gameType =>
                 {
-                    _allGameTypes.Remove(gameType);
-                    return Task.CompletedTask;
+                    return HandleGameTypeDeletedAsync(gameType);
                 },
-                OnGameTypeUpdatedAsync = gameType => Task.CompletedTask
+                OnGameTypeUpdatedAsync = gameType =>
+                {
+                    return HandleGameTypeUpdatedAsync(gameType);
+                }
             });
+    }
+
+    private async Task HandleGameTypeAddedAsync(GameType gameType)
+    {
+        GameType createdGameType = await _managementApiService.CreateGameTypeAsync(gameType);
+        ApplyGameType(gameType, createdGameType);
+
+        if (!_allGameTypes.Contains(gameType))
+        {
+            _allGameTypes.Add(gameType);
+        }
+
+        await _notificationService.SendAsync(
+            "Đã thêm loại game",
+            $"Đã thêm loại game {gameType.Name} thành công.",
+            NotificationType.Success);
+    }
+
+    private async Task HandleGameTypeDeletedAsync(GameType gameType)
+    {
+        await _managementApiService.DeleteGameTypeAsync(gameType.Id);
+        _allGameTypes.Remove(gameType);
+
+        await _notificationService.SendAsync(
+            "Đã xoá loại game",
+            $"Đã xoá loại game {gameType.Name}.",
+            NotificationType.Success);
+    }
+
+    private async Task HandleGameTypeUpdatedAsync(GameType gameType)
+    {
+        GameType updatedGameType = await _managementApiService.UpdateGameTypeAsync(gameType);
+        ApplyGameType(gameType, updatedGameType);
+
+        foreach (GameModel game in _allGames.Where(game => game.GameType.Id == gameType.Id))
+        {
+            game.GameType = gameType;
+        }
+
+        await _notificationService.SendAsync(
+            "Đã cập nhật loại game",
+            $"Đã lưu thay đổi cho loại game {gameType.Name}.",
+            NotificationType.Success);
     }
 
     private void ClearSearch()
@@ -536,6 +580,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
             return;
         }
 
+        await _managementApiService.DeleteGameAsync(game.Id);
         if (!_allGames.Remove(game))
         {
             return;
@@ -555,7 +600,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     private void HandleIncreaseStock(GameModel game)
     {
-        game.StockQuantity += 1;
+        _ = UpdateStockAsync(game, game.StockQuantity + 1);
     }
 
     private void HandleDecreaseStock(GameModel game)
@@ -565,7 +610,7 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
             return;
         }
 
-        game.StockQuantity -= 1;
+        _ = UpdateStockAsync(game, game.StockQuantity - 1);
     }
 
     private Task HandleFilterSubmittedAsync(BoardGameFilter criteria)
@@ -582,6 +627,9 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     private async Task HandleGameCreatedAsync(GameModel game)
     {
+        GameRecord createdGame = await _managementApiService.CreateGameAsync(ToGameRecord(game));
+        ApplyGameRecord(game, createdGame);
+
         if (!_allGames.Contains(game))
         {
             _allGames.Insert(0, game);
@@ -601,6 +649,9 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     private async Task HandleGameUpdatedAsync(GameModel game)
     {
+        GameRecord updatedGame = await _managementApiService.UpdateGameAsync(ToGameRecord(game));
+        ApplyGameRecord(game, updatedGame);
+
         ApplyFiltersAndSorting(resetToFirstPage: false);
 
         await _notificationService.SendAsync(
@@ -655,8 +706,14 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
     private bool MatchesSearch(GameModel game)
     {
-        return LocalizationService.Culture.CompareInfo.IndexOf(game.Name, SearchText, CompareOptions.IgnoreCase) >= 0
-            || LocalizationService.Culture.CompareInfo.IndexOf(game.GameType.Name, SearchText, CompareOptions.IgnoreCase) >= 0;
+        return FullTextSearch.Matches(
+            SearchText,
+            game.Name,
+            game.GameType.Name,
+            game.GameDifficulty.ToString(),
+            $"{game.MinPlayers} {game.MaxPlayers}",
+            game.HourlyPrice.ToString(CultureInfo.InvariantCulture),
+            game.StockQuantity.ToString(CultureInfo.InvariantCulture));
     }
 
     private IReadOnlyList<GameModel> SortGames(IEnumerable<GameModel> games)
@@ -839,5 +896,96 @@ public partial class GameManagementPageViewModel : LocalizedViewModelBase
 
         int maxPossibleColumns = (int)((availableWidth + GameCardsColumnSpacing) / (GameCardOuterWidth + GameCardsColumnSpacing));
         return Math.Max(1, Math.Min(PreferredGridGamesPerRow, maxPossibleColumns));
+    }
+
+    private async Task UpdateStockAsync(GameModel game, int stockQuantity)
+    {
+        if (game.IsStockUpdateInProgress)
+        {
+            return;
+        }
+
+        string originalId = game.Id;
+        string originalName = game.Name;
+        int originalStock = game.StockQuantity;
+        try
+        {
+            game.IsStockUpdateInProgress = true;
+            game.StockQuantity = stockQuantity;
+            GameRecord updatedGame = await _managementApiService.UpdateGameAsync(ToGameRecord(game));
+            ValidateStockUpdateResult(originalId, originalName, stockQuantity, updatedGame);
+
+            // Updating stock should not blindly overwrite the rest of the card if the API
+            // ever returns a partial payload. We only trust the stock field here.
+            game.StockQuantity = updatedGame.StockQuantity;
+
+            await _notificationService.SendAsync(
+                "Đã cập nhật tồn kho",
+                $"Tồn kho của {originalName} hiện là {game.StockQuantity}.",
+                NotificationType.Success);
+        }
+        catch (Exception ex)
+        {
+            game.StockQuantity = originalStock;
+            await _dialogService.ShowErrorAsync(ex.Message);
+        }
+        finally
+        {
+            game.IsStockUpdateInProgress = false;
+        }
+    }
+
+    private static void ValidateStockUpdateResult(
+        string expectedGameId,
+        string expectedGameName,
+        int expectedStockQuantity,
+        GameRecord updatedGame)
+    {
+        if (!string.Equals(updatedGame.Id, expectedGameId, StringComparison.Ordinal))
+        {
+            throw new InvalidOperationException(
+                $"Máy chủ trả về sai game khi cập nhật tồn kho. Yêu cầu ID={expectedGameId}, nhưng nhận ID={updatedGame.Id}, tên='{updatedGame.Name}', tồn kho={updatedGame.StockQuantity}.");
+        }
+
+        if (updatedGame.StockQuantity != expectedStockQuantity)
+        {
+            throw new InvalidOperationException(
+                $"Máy chủ trả về tồn kho không khớp cho game {expectedGameName}. Dự kiến {expectedStockQuantity}, thực tế {updatedGame.StockQuantity}.");
+        }
+    }
+
+    private static GameRecord ToGameRecord(GameModel game)
+    {
+        return new GameRecord
+        {
+            Id = game.Id,
+            Name = game.Name,
+            HourlyPrice = game.HourlyPrice,
+            MinPlayers = game.MinPlayers,
+            MaxPlayers = game.MaxPlayers,
+            Type = game.GameType,
+            Difficulty = game.GameDifficulty,
+            StockQuantity = game.StockQuantity,
+            ImageUri = game.ImageUri,
+        };
+    }
+
+    private static void ApplyGameRecord(GameModel target, GameRecord source)
+    {
+        target.Id = source.Id;
+        target.Name = source.Name;
+        target.HourlyPrice = source.HourlyPrice;
+        target.MinPlayers = source.MinPlayers;
+        target.MaxPlayers = source.MaxPlayers;
+        target.GameType = source.Type;
+        target.GameDifficulty = source.Difficulty;
+        target.StockQuantity = source.StockQuantity;
+        target.ImageUri = source.ImageUri;
+    }
+
+    private static void ApplyGameType(GameType target, GameType source)
+    {
+        target.Id = source.Id;
+        target.Name = source.Name;
     }
 }

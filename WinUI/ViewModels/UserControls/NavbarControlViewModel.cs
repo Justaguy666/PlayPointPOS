@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
+using WinUI.ViewModels.Dialogs;
 
 namespace WinUI.ViewModels.UserControls;
 
@@ -19,6 +20,8 @@ public partial class NavbarControlViewModel : LocalizedViewModelBase
 
     private readonly INavigationService _navigationService;
     private readonly IDialogService _dialogService;
+    private readonly IAuthStateService _authStateService;
+    private readonly IManagementDataPreloadService _managementDataPreloadService;
 
     public ObservableCollection<NavbarItemModel> NavigationItems { get; } = [];
 
@@ -60,11 +63,15 @@ public partial class NavbarControlViewModel : LocalizedViewModelBase
     public NavbarControlViewModel(
         INavigationService navigationService,
         IDialogService dialogService,
+        IAuthStateService authStateService,
+        IManagementDataPreloadService managementDataPreloadService,
         ILocalizationService localizationService)
         : base(localizationService)
     {
         _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _authStateService = authStateService ?? throw new ArgumentNullException(nameof(authStateService));
+        _managementDataPreloadService = managementDataPreloadService ?? throw new ArgumentNullException(nameof(managementDataPreloadService));
         NavigateCommand = new RelayCommand<NavbarItemModel>(Navigate);
         ToggleSidebarCommand = new RelayCommand(ToggleSidebar);
         LogoutCommand = new AsyncRelayCommand(OnLogout);
@@ -154,12 +161,16 @@ public partial class NavbarControlViewModel : LocalizedViewModelBase
 
         if (isConfirmed)
         {
+            _managementDataPreloadService.Clear();
+            _authStateService.Clear();
             _navigationService.Navigate(new NavigateToStarting());
         }
     }
 
     private async Task OnChangePassword()
     {
-        await _dialogService.ShowDialogAsync("Otp");
+        await _dialogService.ShowDialogAsync(
+            "ForgotPassword",
+            new ForgotPasswordDialogRequest { Mode = ForgotPasswordDialogMode.ChangePassword });
     }
 }

@@ -47,7 +47,7 @@ public sealed class ServiceInSessionModel
         TotalPriceText = _localizationService.FormatCurrency(TotalPrice);
         ServiceInfo = GenerateServiceInfo();
         ActionPlaceholderText = _localizationService.GetString("ServiceActionPlaceholderText");
-        HasReturnAction = Type == ServiceType.Game;
+        HasReturnAction = Type == ServiceType.Game && startTime is not null;
         ReturnActionText = _localizationService.GetString("ReturnButtonText");
         EditActionText = _localizationService.GetString("EditButtonText");
         RemoveActionText = _localizationService.GetString("RemoveButtonText");
@@ -57,7 +57,14 @@ public sealed class ServiceInSessionModel
     {
         if (Type == ServiceType.Game)
         {
-            return (UnitPrice ?? 0m) * (decimal)(DateTime.Now - (StartTime ?? DateTime.Now)).TotalHours;
+            if (StartTime is null)
+            {
+                // Catalog rows (not yet rented) should display price info only, not accrue running cost.
+                return 0m;
+            }
+
+            double elapsedHours = (DateTime.Now - StartTime.Value).TotalHours;
+            return (UnitPrice ?? 0m) * (decimal)Math.Max(0d, elapsedHours);
         }
         else if (Type == ServiceType.Product)
         {
@@ -70,7 +77,12 @@ public sealed class ServiceInSessionModel
     {
         if (Type == ServiceType.Game)
         {
-            string startTimeText = StartTime?.ToString("HH:mm", _localizationService.Culture) ?? "--:--";
+            if (StartTime is null)
+            {
+                return _localizationService.FormatCurrency(UnitPrice ?? 0m);
+            }
+
+            string startTimeText = StartTime.Value.ToString("HH:mm", _localizationService.Culture);
 
             return string.Format(
                 _localizationService.Culture,
@@ -80,6 +92,11 @@ public sealed class ServiceInSessionModel
         else if (Type == ServiceType.Product)
         {
             var formattedUnitPrice = _localizationService.FormatCurrency(UnitPrice ?? 0m);
+            if (Quantity is null)
+            {
+                return formattedUnitPrice;
+            }
+
             return $"{formattedUnitPrice} x {Quantity}";
         }
         return string.Empty;

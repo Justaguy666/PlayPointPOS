@@ -7,6 +7,7 @@ namespace WinUI.UIModels.Management;
 
 public sealed partial class MemberModel : ObservableObject, IMemberFilterable
 {
+    private string _id = string.Empty;
     private string _code = string.Empty;
     private string _fullName = string.Empty;
     private string _phoneNumber = string.Empty;
@@ -14,6 +15,12 @@ public sealed partial class MemberModel : ObservableObject, IMemberFilterable
     private int _progressPercentage;
     private MembershipRank? _membershipRank;
     private MembershipRank? _nextMembershipRank;
+
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
 
     public string Code
     {

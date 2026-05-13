@@ -12,6 +12,8 @@ public interface IAreaSessionState
 
     string? MemberId { get; set; }
 
+    string? ActiveSessionId { get; set; }
+
     DateTime? CheckInDateTime { get; set; }
 
     int Capacity { get; set; }

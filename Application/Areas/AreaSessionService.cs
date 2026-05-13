@@ -85,13 +85,22 @@ public sealed class AreaSessionService : IAreaSessionService
         area.SessionPausedAt = null;
         area.SessionPausedDuration = TimeSpan.Zero;
         area.TotalAmount = 0m;
+        area.ActiveSessionId = null;
         area.Status = PlayAreaStatus.Available;
     }
 
+    /// <summary>
+    /// GraphQL/JSON payloads can carry UTC instants with non-UTC kinds (Local/Unspecified).
+    /// We normalize those as UTC to avoid applying timezone offset twice (+7h phantom duration in UTC+7).
+    /// </summary>
     private static DateTime NormalizeToUtc(DateTime value)
     {
-        return value.Kind == DateTimeKind.Utc
-            ? value
-            : value.ToUniversalTime();
+        return value.Kind switch
+        {
+            DateTimeKind.Utc => value,
+            // Treat Local as already-UTC instant for this domain flow (server stores UTC timestamps).
+            DateTimeKind.Local => DateTime.SpecifyKind(value, DateTimeKind.Utc),
+            _ => DateTime.SpecifyKind(value, DateTimeKind.Utc),
+        };
     }
 }

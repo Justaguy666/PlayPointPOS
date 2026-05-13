@@ -20,15 +20,19 @@ export class ProductResolver {
 
     @Mutation(() => ProductDto)
     async updateProduct(
+        @Arg("shopId", () => Int) shopId: number,
         @Arg("id", () => Int) id: number,
         @Arg("input", () => ProductInput) input: ProductInput,
     ): Promise<ProductDto> {
-        return updateProduct(id, input);
+        return updateProduct(shopId, id, input);
     }
 
     @Mutation(() => MutationResponse)
-    async deleteProduct(@Arg("id", () => Int) id: number): Promise<MutationResponse> {
-        await deleteProduct(id);
+    async deleteProduct(
+        @Arg("shopId", () => Int) shopId: number,
+        @Arg("id", () => Int) id: number,
+    ): Promise<MutationResponse> {
+        await deleteProduct(shopId, id);
         return { code: 200, success: true, message: "Product deleted successfully" };
     }
 }

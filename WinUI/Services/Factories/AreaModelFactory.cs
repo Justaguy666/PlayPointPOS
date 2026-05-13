@@ -12,6 +12,7 @@ public sealed class AreaModelFactory
 
         return new AreaModel
         {
+            Id = source.Id,
             AreaName = source.AreaName,
             PlayAreaType = source.PlayAreaType,
             Status = source.Status,
@@ -27,6 +28,7 @@ public sealed class AreaModelFactory
             SessionPausedAt = source.SessionPausedAt,
             SessionPausedDuration = source.SessionPausedDuration,
             TotalAmount = source.TotalAmount,
+            ActiveSessionId = source.ActiveSessionId,
         };
     }
 
@@ -34,8 +36,9 @@ public sealed class AreaModelFactory
     {
         ArgumentNullException.ThrowIfNull(source);
 
-        return new AreaModel
+        var clone = new AreaModel
         {
+            Id = source.Id,
             AreaName = source.AreaName,
             PlayAreaType = source.PlayAreaType,
             Status = source.Status,
@@ -51,6 +54,22 @@ public sealed class AreaModelFactory
             SessionPausedAt = source.SessionPausedAt,
             SessionPausedDuration = source.SessionPausedDuration,
             TotalAmount = source.TotalAmount,
+            ActiveSessionId = source.ActiveSessionId,
         };
+
+        foreach (PendingSessionSaleLine line in source.PendingSessionLines)
+        {
+            clone.PendingSessionLines.Add(new PendingSessionSaleLine
+            {
+                IsGame = line.IsGame,
+                CatalogId = line.CatalogId,
+                DisplayName = line.DisplayName,
+                UnitPrice = line.UnitPrice,
+                GameRentalStartUtc = line.GameRentalStartUtc,
+                ProductQuantity = line.ProductQuantity,
+            });
+        }
+
+        return clone;
     }
 }

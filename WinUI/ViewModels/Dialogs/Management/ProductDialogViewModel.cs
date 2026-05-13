@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Enums;
+using Windows.Storage;
 using WinUI.Services.Factories;
 using WinUI.UIModels;
 using WinUI.UIModels.Enums;
@@ -23,6 +25,7 @@ public partial class ProductDialogViewModel : UpsertDialogViewModelBase
 
     private readonly IDialogService _dialogService;
     private readonly ProductModelFactory _productModelFactory;
+    private readonly IImageUploadService _imageUploadService;
     private ProductModel _targetModel = new();
     private ProductModel _initialModel = new();
     private Func<ProductModel, Task>? _onSubmittedAsync;
@@ -37,11 +40,13 @@ public partial class ProductDialogViewModel : UpsertDialogViewModelBase
         ILocalizationService localizationService,
         IDialogService dialogService,
         ProductModelFactory productModelFactory,
+        IImageUploadService imageUploadService,
         UpsertDialogMode mode)
         : base(localizationService, mode)
     {
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         _productModelFactory = productModelFactory ?? throw new ArgumentNullException(nameof(productModelFactory));
+        _imageUploadService = imageUploadService ?? throw new ArgumentNullException(nameof(imageUploadService));
         ApplyModel(_initialModel);
     }
 
@@ -150,6 +155,22 @@ public partial class ProductDialogViewModel : UpsertDialogViewModelBase
 
         RefreshSelectionOptions();
         ApplyModel(_initialModel);
+    }
+
+    public async Task ApplyPickedImageFileAsync(StorageFile file)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+        ErrorMessage = string.Empty;
+        try
+        {
+            await using Stream stream = (await file.OpenReadAsync()).AsStreamForRead();
+            string url = await _imageUploadService.UploadImageAsync(stream, file.Name).ConfigureAwait(true);
+            ImageUriText = url;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
     }
 
     public override Task SaveAsync() => SubmitAsync();
@@ -298,6 +319,7 @@ public partial class ProductDialogViewModel : UpsertDialogViewModelBase
     private bool TryApplyToTargetModel(out ProductModel model)
     {
         model = _targetModel;
+        string preservedId = model.Id;
 
         if (!TryGetParsedFormValues(
                 out string trimmedName,
@@ -312,7 +334,7 @@ public partial class ProductDialogViewModel : UpsertDialogViewModelBase
         model.ProductType = productType;
         model.Price = price;
         model.ImageUri = imageUri;
-        model.StockQuantity = 0;
+        model.Id = preservedId;
 
         return true;
     }
